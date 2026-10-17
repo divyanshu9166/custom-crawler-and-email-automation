@@ -65,7 +65,7 @@ async def test_interrupted_run_context_and_streamed_results_are_preserved(db, se
         return [{'url': 'https://brand.example.com/', 'title': 'Coffee roaster'}]
     monkeypatch.setattr('outreach.providers.discover', search)
     with pytest.raises(asyncio.CancelledError):
-        await discover_leads(db, settings, 'coffee roaster', 'B', 'US', 1)
+        await discover_leads(db, settings, 'coffee roaster', 'B', 'US', 2)
     result = snapshot(db)
     assert result['runs'][0]['state'] == 'interrupted'
     assert result['runs'][0]['campaign'] == 'B' and result['runs'][0]['country_hint'] == 'US'

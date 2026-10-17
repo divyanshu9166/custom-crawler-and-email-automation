@@ -58,6 +58,29 @@ async def test_managed_dom_capture_excludes_private_shell_and_has_no_api_calls(m
     assert signal['indexed_signal_only'] is False
 
 
+@pytest.mark.parametrize('anchor,expected', [
+    ('<a href="https://www.linkedin.com/safety/go/?url=https%3A%2F%2Fbright-demo.com%2Fcontact%3Ftracking%3Ddiscarded">Website</a>', ['https://bright-demo.com/contact']),
+    ('<a href="https://www.linkedin.com/safety/go/">http://bright-demo.com</a>', ['http://bright-demo.com/']),
+    ('<a href="https://www.linkedin.com/safety/go/?url=javascript%3Aalert%281%29">Website</a>', []),
+    ('<a href="https://www.linkedin.com/safety/go/?url=https%3A%2F%2Fuser%3Asecret%40bright-demo.com">Website</a>', []),
+    ('<a href="https://www.linkedin.com/safety/go/">https://bright-demo.com/…</a>', []),
+    ('<a hidden href="https://www.linkedin.com/safety/go/?url=https%3A%2F%2Fbright-demo.com">Website</a>', []),
+])
+async def test_company_website_redirect_uses_only_explicit_visible_destinations(managed, monkeypatch, anchor, expected):
+    html = HTML.replace('<a href="https://bright-demo.com">Website</a>', anchor)
+    original = platform_browser.BrowserSession
+    class RedirectFixture(original):
+        async def __aenter__(self):
+            await super().__aenter__()
+            await self.context.unroute('**/*')
+            await self.context.route('**/*', lambda route: route.fulfill(status=200, body=html, content_type='text/html; charset=utf-8'))
+            return self
+    monkeypatch.setattr(platform_browser, 'BrowserSession', RedirectFixture)
+    result = await platform_browser.browser_snapshot(managed, 'https://www.linkedin.com/company/bright')
+    assert result['state'] == 'captured' and result['outgoing_websites'] == expected
+    assert all('/safety/go' not in link for link in result['public_links'])
+
+
 async def test_browser_discovery_integrates_into_existing_pipeline_without_searx(managed,monkeypatch):
     seen=[]
     async def discover(s,p,q,limit):

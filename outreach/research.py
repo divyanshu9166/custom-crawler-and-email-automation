@@ -365,7 +365,7 @@ async def discover_leads(db, settings, query, campaign, country_hint, limit):
     added = []
     def import_candidate(row):
         if len(set(added)) >= limit:
-            return
+            return True
         parts = urlsplit(row["url"])
         website = urlunsplit((parts.scheme, parts.netloc, "/", "", ""))
         try:
@@ -378,7 +378,8 @@ async def discover_leads(db, settings, query, campaign, country_hint, limit):
             if lid not in added:
                 added.append(lid)
         except ValueError:
-            return
+            return False
+        return len(added) >= limit
     def save_signal(signal):
         from .profiles import add_profile_lead
         match = db.one("SELECT id FROM leads WHERE domain=?", (domain_of(signal["website"]),)) if signal.get("website") else None
@@ -398,6 +399,7 @@ async def discover_leads(db, settings, query, campaign, country_hint, limit):
         provider = 'managed_browser:' + signal.get('platform', '') if snap.get('capture_method', '').startswith('managed_browser') else 'website'
         record(db, provider, 'company_profile', signal.get('source_url', ''), snap,
                lead_id=match['id'] if match else None, contacts=len(snap.get('published_emails', [])))
+        return len(added) >= limit
     try:
         rows, report = await prospect_candidates(settings, query, country_hint, limit,
                         on_candidate=import_candidate, on_signal=save_signal,

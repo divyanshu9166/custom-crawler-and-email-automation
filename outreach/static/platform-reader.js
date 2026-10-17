@@ -106,7 +106,14 @@
     if(a.href.startsWith('mailto:')){try{emails.push(decodeURIComponent(a.href.slice(7).split('?')[0]));}catch{}continue;}
     let value=a.href;
     try{
-      if(new URL(value).hostname==='t.co'&&/^(?:www\.)?[a-z0-9.-]+\.[a-z]{2,}(?:\/[^\s]*)?$/i.test(text(a)))value='https://'+text(a);
+      const wrapped=new URL(value);
+      if((wrapped.hostname==='linkedin.com'||wrapped.hostname.endsWith('.linkedin.com'))&&/^\/safety\/go\/?$/.test(wrapped.pathname)){
+        // Only a destination explicitly present in this visible field/link.
+        const destination=wrapped.searchParams.get('url'),label=text(a);
+        if(destination&&/^https?:\/\//i.test(destination))value=destination;
+        else if(/^https?:\/\/[^\s]+$/i.test(label)&&!/[\u2026]|\.{3}/.test(label))value=label;
+        else continue;
+      }else if(wrapped.hostname==='t.co'&&/^(?:www\.)?[a-z0-9.-]+\.[a-z]{2,}(?:\/[^\s]*)?$/i.test(text(a)))value='https://'+text(a);
       const link=new URL(value);if(['http:','https:'].includes(link.protocol)&&!link.username&&!link.password){link.search='';link.hash='';links.push(link.href);}
     }catch{ /* Opaque links stay opaque and are filtered server-side. */ }
   }

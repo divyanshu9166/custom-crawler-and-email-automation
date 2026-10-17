@@ -1,3 +1,26 @@
+# VPS discovery quota and company-link fixes — 18 October 2026
+
+The full suite passed **1213 tests in 365.84 seconds**, with one existing
+Starlette/httpx deprecation warning. A final rejected-candidate duplicate scenario was then
+reproduced as a failing regression and corrected: duplicate domains cannot satisfy the
+default quota after the consumer has declined their original candidate. All **154 affected
+discovery, managed-reader, first-workflow and complete-workflow cases passed in 42.72 seconds**
+after that adjustment. Ruff, the platform-reader JavaScript syntax check and diff checks passed.
+The full suite result precedes that last one-line adjustment; the focused result covers the
+final source. The 35-node source/test mapping was refreshed from the full-suite report.
+
+Discovery now stops once the consumer has retained its requested unique website/profile
+record count, preserving the last source event and distinguishing executed queries from
+planned queries. Visible LinkedIn company Website safety redirects now preserve explicit
+HTTP(S) destinations or complete URL labels before query removal. Controlled Chromium tests
+exclude hidden/truncated targets, non-HTTP destinations and embedded credentials.
+
+The user's VPS output establishes three retained prospects, partial website captures and
+rendered LinkedIn company evidence. It does not establish buyer qualification or safe email
+verification. DNS/connectivity failures and an unavailable Reacher backend require deployment
+checks; no VPS service, account session or data volume was changed here. No real recipient
+probe or outreach was performed. See [findings and limits](docs/LIVE_VPS_DISCOVERY_FIXES.md).
+
 # Python registry override for VPS build recovery — 17 October 2026
 
 Both app Dockerfiles now accept an optional `PYTHON_BASE_IMAGE` build argument, retaining

@@ -2,7 +2,7 @@
 
 **Email-writing boundary:** these tests use controlled AI/provider fixtures; they do not establish live model quality or mailbox delivery. Operational writing requires research-based AI with no template fallback. Legacy drafts cannot be approved. See [the writing correction](AI_EMAIL_WRITING.md) and [the current research upgrade](SOCIAL_RESEARCH_UPGRADE.md).
 
-Latest recheck: **35 / 35 nodes mapped to actual source and passing executed tests**. Full suite: **1194 passed**.
+Latest recheck: **35 / 35 nodes mapped to actual source and passing executed tests**. Full suite: **1213 passed**.
 
 The implementation is present for every node, with deliberate human gates. This does **not** mean all nodes are fully automatic or verified against real providers/clients. The dashboard supports eleven overview stages and all thirty-five detailed nodes with source/ownership, branch, hold and operator-recorded statuses.
 
@@ -162,7 +162,7 @@ Source: [outreach/research.py:140 — add_contact](../outreach/research.py), [ou
 
 ### F — Reacher verification
 
-Source: [outreach/research.py:417 — verify_contact](../outreach/research.py), [outreach/providers.py:190 — verify_email](../outreach/providers.py), [outreach/providers.py:166 — classify_reacher](../outreach/providers.py)
+Source: [outreach/research.py:419 — verify_contact](../outreach/research.py), [outreach/providers.py:190 — verify_email](../outreach/providers.py), [outreach/providers.py:166 — classify_reacher](../outreach/providers.py)
 
 - [test_reacher_adapter_contract](../tests/test_research.py) — 1 executed passing case(s), function line 91.
 - [test_reacher_contradictions](../tests/test_research.py) — 4 executed passing case(s), function line 19.
@@ -352,7 +352,19 @@ Source: [outreach/sales.py:91 — update_sales](../outreach/sales.py), [outreach
 - [test_legacy_approved_context_stays_unknown_instead_of_invented_historical_attribution](../tests/test_learning.py) — 1 executed passing case(s), function line 60.
 - [test_empty_learning_does_not_invent_rates_or_experiment_winners](../tests/test_learning.py) — 1 executed passing case(s), function line 20.
 
-## Actual current readiness
+## Latest VPS evidence — 18 October 2026
+
+The user's Operations output contains three retained prospect records, rendered LinkedIn
+company captures and a published official-website business email. The discovery job timed
+out after retaining those records; research continued with partial crawls, separate network
+errors and an unavailable verifier. The current changes correct discovery quota stopping and
+explicit LinkedIn website redirect extraction. The final duplicate-result quota adjustment
+is checked by the focused regression run recorded in VALIDATION.md, after the full suite above.
+These are local source checks, not proof that this update has been built on the VPS. Reacher
+container status is requested; the earlier local HTTP 404 below is not a diagnosis of that VPS.
+See [the current findings and boundaries](LIVE_VPS_DISCOVERY_FIXES.md).
+
+## Earlier local acceptance baseline
 
 Local discovery and rendered website research ran. The current records contain published website contacts without established fresh-safe verification. A LinkedIn profile lookup reused the found website but its snapshot was robots-denied. Sending stays disabled and paused; this audit did not approve recipients, probe real addresses or send external mail.
 

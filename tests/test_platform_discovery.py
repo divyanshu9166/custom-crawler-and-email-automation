@@ -75,7 +75,7 @@ async def test_failed_platform_queries_do_not_discard_successful_official_result
             raise TimeoutError()
         return [{'url':'https://bright-demo.com/','title':'Bright Studio'}]
     monkeypatch.setattr('outreach.providers.discover',search)
-    rows,report=await prospect_candidates(settings,'UK studio','UK',1)
+    rows,report=await prospect_candidates(settings,'UK studio','UK',2)
     assert len(rows)==1 and report['errors'][0]['error_type']=='TimeoutError'
 
 
@@ -142,7 +142,7 @@ async def test_late_cancellation_retains_discovered_candidate_and_unresolved_pla
     monkeypatch.setattr('outreach.providers.discover',search)
     monkeypatch.setattr('outreach.discovery.resolve_signal',resolve)
     with pytest.raises(asyncio.CancelledError):
-        await discover_leads(db,settings,'UK design company','A','UK',1)
+        await discover_leads(db,settings,'UK design company','A','UK',2)
     assert db.one('SELECT COUNT(*) n FROM leads')['n']==1
     assert db.one('SELECT COUNT(*) n FROM jobs WHERE kind="research"')['n']==1
     assert db.one('SELECT COUNT(*) n FROM events WHERE kind="prospect_signal"')['n']==1

@@ -492,6 +492,9 @@ async def resolve_signal(settings, row, country_hint, platforms):
 
 
 async def prospect_candidates(settings, query, country_hint, limit, on_signal=None, on_candidate=None, on_progress=None):
+    # Consumers may return True once their retained website/profile record
+    # quota is met. False means they own that mixed-record budget; None keeps
+    # the default unique-website budget for observers and read-only callers.
     if country_hint not in {"US", "UK"}:
         raise ValueError("Choose the US or UK discovery market")
     settings = settings.model_copy(update={"search_language": "en-US" if country_hint == "US" else "en-GB"})
@@ -513,7 +516,10 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
     found, signals, errors, skipped, engine_reports = {}, [], [], [], []
     relaxed_queries = {}
     seen_signals = set()
+    executed_queries = []
+    stop_reason = 'queries_exhausted'
     for search in queries:
+        executed_queries.append(search)
         if on_progress:
             on_progress({"stage": "query_started", "query": search, "candidate_domains": len(found), "signals": len(signals)})
         if search != queries[0]:
@@ -586,8 +592,9 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
                         signal = {"source_url": row["url"], "platform": platform, "state": "resolution_unavailable", "error_type": type(exc).__name__}
                     signals.append(signal)
                     if not signal.get("website"):
-                        if on_signal:
-                            on_signal(signal)
+                        if on_signal and on_signal(signal) is True:
+                            stop_reason = 'requested_limit'
+                            break
                         continue
                     candidate = {"url": signal["website"], "source_url": row["url"], "title": signal.get("company") or row.get("title", ""),
                                  'research_seed_url': signal.get('official_match_url', signal['website'])}
@@ -598,19 +605,28 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
                 domain = domain_of(candidate["url"])
                 first = domain not in found
                 found.setdefault(domain, candidate)
-                if first and len(found) <= limit and on_candidate:
-                    on_candidate(candidate)
+                budget_result = on_candidate(candidate) if first and on_candidate else None
                 if platform and on_signal:
-                    on_signal(signal)
+                    signal_budget = on_signal(signal)
+                    if signal_budget is True or budget_result is True:
+                        budget_result = True
+                    elif signal_budget is False:
+                        budget_result = False
+                if budget_result is True or (first and budget_result is None and len(found) >= limit):
+                    stop_reason = 'requested_limit'
+                    break
             except (ValueError, KeyError):
                 continue
         if on_progress:
             on_progress({"stage": "query_finished", "query": search, "candidate_domains": len(found), "signals": len(signals)})
+        if stop_reason == 'requested_limit':
+            break
         if search == queries[0] and not found and not settings.platform_browser_enabled:
             retry = focused_query(query, country_hint)
             if retry and retry.lower() != market_query.lower():
                 queries.insert(1, retry)
     return list(found.values())[:limit], {"queries": queries, "signals": signals, "errors": errors, "skipped": skipped, "engine_reports": engine_reports,
                                        'relaxed_queries': relaxed_queries,
+                                       'stop_reason': stop_reason, 'requested_limit': limit, 'executed_queries': executed_queries,
                                        "candidate_domains_before_limit": len(found), "country_hint": country_hint,
                                        "note": "Automatic indexed/public research. Every company, geography, contact owner and offer remains unqualified until reviewed; indexed snippets can be stale."}
