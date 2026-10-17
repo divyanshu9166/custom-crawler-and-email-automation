@@ -1,4 +1,5 @@
 import json
+from types import SimpleNamespace
 
 import pytest
 from playwright.async_api import async_playwright
@@ -21,7 +22,7 @@ def probe(settings, monkeypatch):
     class Session:
         last_access_issue = {}
         def __init__(self, configured):
-            pass
+            self.context = SimpleNamespace(on=lambda name, callback: state.update(failed_callback=callback))
         async def __aenter__(self):
             if state.get('error'):
                 raise state['error']
@@ -29,6 +30,8 @@ def probe(settings, monkeypatch):
         async def __aexit__(self, *args):
             state['closed'] = True
         async def navigate(self, target):
+            for url in state.get('failed_urls', []):
+                state['failed_callback'](SimpleNamespace(url=url))
             return Page(), state['denied']
     monkeypatch.setattr(diagnostic.platform_browser, 'BrowserSession', Session)
     return settings, state
@@ -89,10 +92,21 @@ async def test_company_diagnostic_profile_lock_only_reports_known_reason(probe):
     assert 'PRIVATE-LOG-FIXTURE' not in json.dumps(result)
 
 
+async def test_company_diagnostic_failed_requests_only_report_bounded_host_counts(probe):
+    settings, state = probe
+    state['failed_urls'] = ['https://licdn.com/private/path?token=PRIVATE-FIXTURE'] * 2
+    state['failed_urls'] += [f'https://host{i}.example/private?token=PRIVATE-FIXTURE' for i in range(25)]
+    result = await diagnostic.check(settings, 'https://linkedin.com/company/fictional', attempts=1)
+    assert result['failed_request_hosts']['licdn.com'] == 2
+    assert len(result['failed_request_hosts']) == 20
+    assert 'PRIVATE-FIXTURE' not in json.dumps(result) and '/private' not in json.dumps(result)
+
+
 async def test_structure_reader_reports_visible_company_fields_and_ignores_private_shell():
     url = 'https://www.linkedin.com/company/fictional/about/'
     html = '''<h1 hidden>PRIVATE HIDDEN HEADING</h1><nav><dl><dt>PRIVATE NAV LABEL</dt></dl></nav>
-    <main><h1>Fictional Studio</h1><h2>Overview</h2><a href="/company/fictional/about/">About</a>
+    <main><h1>Fictional Studio</h1><h2>Overview</h2><a href="/company/fictional/about/?token=PRIVATE-QUERY">About</a>
+    <article><h2>PRIVATE FEED HEADING</h2></article>
     <dl><dt>Industry</dt><dd>Fictional consulting</dd></dl>
     <div role="dialog"><dl><dt>PRIVATE DIALOG LABEL</dt></dl></div></main>'''
     async with async_playwright() as runtime:
@@ -107,8 +121,32 @@ async def test_structure_reader_reports_visible_company_fields_and_ignores_priva
             assert result['matching_about_link_count'] == 1
             assert result['definition_labels'] == ['Industry']
             assert result['visible_dialog_present']
+            assert result['main_headings'] == [
+                {'tag': 'H1', 'label': 'Fictional Studio', 'classes': ''},
+                {'tag': 'H2', 'label': 'Overview', 'classes': ''},
+            ]
+            assert result['company_navigation'] == [{'label': 'About', 'path': '/company/fictional/about/'}]
             assert 'PRIVATE' not in json.dumps(result)
             await page.goto('https://www.linkedin.com/login')
             assert await page.evaluate(diagnostic.DOM_STRUCTURE, url) == {'expected_route': False}
+        finally:
+            await browser.close()
+
+
+async def test_structure_reader_explains_h2_only_layout_without_assuming_company_identity():
+    url = 'https://www.linkedin.com/company/fictional/about/'
+    html = '<main><h2>Overview</h2><h2>Sign in for more</h2><h2>Website</h2><h2>Industry</h2></main>'
+    async with async_playwright() as runtime:
+        browser = await runtime.chromium.launch()
+        try:
+            page = await browser.new_page()
+            await page.route('**/*', lambda route: route.fulfill(content_type='text/html', body=html))
+            await page.goto(url)
+            result = await page.evaluate(diagnostic.DOM_STRUCTURE, url)
+            assert result['visible_h1_count'] == 0
+            assert result['visible_main_h2_count'] == 4
+            assert result['definition_labels'] == [] and result['company_navigation'] == []
+            assert [h['label'] for h in result['main_headings']] == ['Overview', 'Sign in for more', 'Website', 'Industry']
+            assert [item['label'] for item in result['field_markers']] == ['Website', 'Industry']
         finally:
             await browser.close()

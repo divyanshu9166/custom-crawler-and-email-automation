@@ -3,6 +3,7 @@ import argparse
 import asyncio
 import json
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from outreach import platform_browser
 from outreach.config import Settings
@@ -17,6 +18,12 @@ DOM_STRUCTURE = r"""expected => {
     return {expected_route:false};
   const visible=e=>!!e&&!e.closest('nav,aside,dialog,[role="dialog"],[aria-hidden="true"],[hidden]')&&e.getClientRects().length>0&&getComputedStyle(e).visibility!=='hidden'&&getComputedStyle(e).display!=='none';
   const all=selector=>[...document.querySelectorAll(selector)];
+  const label=e=>(e.innerText||'').replace(/\s+/g,' ').trim().replace(/https?:\/\/\S+/gi,'[url]').replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi,'[email]').slice(0,120);
+  const headings=all('main h1,main h2,main [role="heading"]').filter(e=>visible(e)&&!e.closest('article,[role="feed"],[role="listbox"]')).slice(0,8).map(e=>({tag:e.tagName,label:label(e),classes:String(e.className||'').slice(0,120)}));
+  const companyRoot=expectedURL.pathname.replace(/\/about\/?$/,'').replace(/\/$/,'');
+  const navigation=all('main a[href]').filter(a=>{try{const v=new URL(a.href);return visible(a)&&v.origin===u.origin&&(v.pathname===companyRoot||v.pathname.startsWith(companyRoot+'/'));}catch{return false;}}).slice(0,12).map(a=>({label:label(a),path:new URL(a.href).pathname}));
+  const fieldNames=new Set(['website','industry','phone','email','headquarters','company size','founded','specialties']);
+  const fieldMarkers=all('main h2,main h3,main dt,main span,main p').slice(0,2000).filter(e=>visible(e)&&!e.closest('article,[role="feed"],[role="listbox"]')&&fieldNames.has((e.innerText||'').trim().toLowerCase())).slice(0,16).map(e=>({label:label(e),tag:e.tagName,classes:String(e.className||'').slice(0,120),parent_tag:e.parentElement?.tagName,parent_classes:String(e.parentElement?.className||'').slice(0,120),next_tag:e.nextElementSibling?.tagName||null}));
   const labels=all('main dl dt,main dt').filter(visible).map(e=>e.innerText.replace(/\s+/g,' ').trim().slice(0,80)).slice(0,20);
   const about=all('a[href]').filter(a=>{try{return visible(a)&&a.innerText.trim().toLowerCase()==='about'&&new URL(a.href).pathname.replace(/\/$/,'')===u.pathname.replace(/\/$/,'');}catch{return false;}});
   return {expected_route:true,document_ready:document.readyState,
@@ -26,6 +33,7 @@ DOM_STRUCTURE = r"""expected => {
     visible_h1_count:all('h1').filter(visible).length,
     visible_definition_list_count:all('dl').filter(visible).length,
     definition_labels:labels,matching_about_link_count:about.length,
+    main_headings:headings,company_navigation:navigation,field_markers:fieldMarkers,
     main_present:!!document.querySelector('main'),
     visible_dialog_present:all('dialog,[role="dialog"]').some(e=>e.getClientRects().length>0&&getComputedStyle(e).visibility!=='hidden'&&getComputedStyle(e).display!=='none')};
 }"""
@@ -51,6 +59,14 @@ async def check(settings, url, *, attempts=10):
             if blocked := hold(settings, platform):
                 return held_result(blocked)
             async with platform_browser.BrowserSession(settings) as session:
+                failed_hosts = {}
+                def failed_request(request):
+                    # Only host counts: never URLs, queries, headers or bodies.
+                    hostname = urlsplit(request.url).hostname
+                    if hostname and (hostname in failed_hosts or len(failed_hosts) < 20):
+                        failed_hosts[hostname] = failed_hosts.get(hostname, 0) + 1
+                if context := getattr(session, 'context', None):
+                    context.on('requestfailed', failed_request)
                 await asyncio.sleep(settings.platform_browser_delay_seconds)
                 page, denied = await session.navigate(target)
                 if denied:
@@ -64,7 +80,8 @@ async def check(settings, url, *, attempts=10):
                         break
                     if attempt + 1 < attempts:
                         await asyncio.sleep(1)
-                output = {'state': result.get('state'), 'target': target}
+                output = {'state': result.get('state'), 'target': target,
+                          'failed_request_hosts': failed_hosts}
                 if result.get('state') == 'login_or_challenge':
                     record_hold(settings, platform, 'login_or_challenge')
                     return output

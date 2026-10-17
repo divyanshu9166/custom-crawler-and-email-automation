@@ -77,7 +77,10 @@ sudo docker compose -f compose.yaml -f compose.platform-browser.yaml exec -T app
 The host supplies the script on stdin, so this diagnostic also works before
 rebuilding an older app image. It uses the installed reader and browser module,
 the persistent profile and a temporary private virtual display. Output includes
-visible heading/definition-list counts and field labels. It does not print
+visible heading/definition-list counts, bounded main-content heading labels,
+company navigation paths without queries, field-marker tag/classes and failed
+request counts by host. These explain missing selectors or incomplete loading
+without interpreting an arbitrary heading as a company identity. It does not print
 account navigation, page bodies, cookie values or hidden framework data. A
 non-captured result exits with status 2 and remains unverified. Authentication
 challenges and HTTP denials stop inspection and preserve normal platform holds.
