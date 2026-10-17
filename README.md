@@ -113,7 +113,7 @@ Use the hostname that matches `PUBLIC_URL` exactly: browser writes are protected
 
 ## Configure the system
 
-Use **Settings** in the sidebar for sender identity, SMTP/IMAP, sending limits and username/password changes. Initial setup and infrastructure/provider settings still use `.env` locally. Saved workspace settings override matching `.env` fields on application restart. After changing sign-in details in Settings, use the new credentials. Saving email settings pauses sending; it does not verify the provider or enable sending. Do not paste passwords into chats or commit them. Back up private `data/workspace-settings.json` separately alongside `.env` and the database.
+Use **Settings** in the sidebar for sender identity, SMTP/IMAP, sending limits and username/password changes. Sign-in passwords can be any nonempty length, including one character; the separate `API_TOKEN` still requires at least 32 characters. Initial setup and infrastructure/provider settings still use `.env` locally. Saved workspace settings override matching `.env` fields on application restart. After changing sign-in details in Settings, use the new credentials. Saving email settings pauses sending; it does not verify the provider or enable sending. Do not paste passwords into chats or commit them. Back up private `data/workspace-settings.json` separately alongside `.env` and the database.
 
 | Setting group | What to provide |
 |---|---|

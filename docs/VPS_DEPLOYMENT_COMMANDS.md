@@ -78,14 +78,36 @@ overwrite `.env`. In nano, save with Ctrl+O, Enter, and exit with Ctrl+X.
 View/set the dashboard credentials privately in that editor. Do not paste the
 configuration or credentials into chat or GitHub.
 
-`ADMIN_PASSWORD` must contain at least 16 characters and `API_TOKEN` at least
-32 characters. Initialization already supplies valid random values. If replacing
-the password, retain the minimum length; use a single-quoted `.env` value when
-it contains `$` so Compose does not interpolate it. Keep the generated API token.
-A short/empty credential prevents application startup and can appear as a
-Cloudflare 502. After editing `.env`, recreate app with `docker compose up`;
+`ADMIN_PASSWORD` can be any nonempty password, including one character.
+`API_TOKEN` is a separate application secret and still requires at least
+32 characters. Initialization supplies random values for both. If replacing
+the password, use a single-quoted `.env` value when it contains `$` so Compose
+does not interpolate it. Keep the generated API token. A missing password or
+invalid API token prevents application startup and can appear as a Cloudflare
+502; startup logs identify the affected field. After editing `.env`, recreate
+app with `docker compose up`;
 editing the file or using `docker compose restart` alone does not refresh its
 container environment. Never delete the data volume to reset a login.
+
+For an existing installation reporting the old 16-character requirement, update
+and rebuild the application image. These commands keep the current tunnel and
+do not start the repository's optional n8n service:
+
+```sh
+cd "$HOME/custom-crawler-and-email-automation"
+git pull --ff-only
+nano .env
+sudo docker compose --profile search config --quiet
+sudo docker compose build app
+sudo docker compose --profile search up -d --no-build --force-recreate --wait --wait-timeout 120 app
+sudo docker compose ps app
+curl -fsS --max-time 5 http://127.0.0.1:8000/health
+```
+
+Keep `PUBLIC_URL` equal to the active HTTPS tunnel URL, `SENDING_ENABLED=false`
+and `WORKER_ENABLED=false` during this login repair. Refresh the browser with
+Ctrl+F5 after the app is healthy. If sign-in details were previously changed in
+Settings, the saved username/password override `.env`; use those saved details.
 
 For the initial SSH-tunnel preview, set these existing entries:
 

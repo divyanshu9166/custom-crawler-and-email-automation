@@ -37,7 +37,7 @@ class LoginInput(Input):
 
 class CredentialsInput(Input):
     username: str = Field(min_length=2, max_length=64, pattern=r"^[A-Za-z0-9_.@-]+$")
-    new_password: str = Field(min_length=16, max_length=256)
+    new_password: str = Field(min_length=1, max_length=256)
     current_password: str = Field(max_length=1000)
 
 
@@ -348,8 +348,10 @@ class ArtifactInput(Input):
 def create_app(settings=None):
     settings = settings or Settings()
     preferences = Preferences(settings)
-    if (not settings.admin_password_hash and len(settings.admin_password) < 16) or len(settings.api_token) < 32:
-        raise RuntimeError("Run scripts/init_env.py and configure ADMIN_PASSWORD (16+) / API_TOKEN (32+)")
+    if not settings.admin_password_hash and not settings.admin_password:
+        raise RuntimeError("Configure a nonempty ADMIN_PASSWORD in .env, then recreate the app container")
+    if len(settings.api_token) < 32:
+        raise RuntimeError("Configure API_TOKEN with at least 32 characters in .env, then recreate the app container")
     db = DB(settings.database)
 
     @asynccontextmanager

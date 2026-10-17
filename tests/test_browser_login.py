@@ -5,6 +5,31 @@ from outreach.app import create_app
 from outreach.auth import COOKIE, issue_session, valid_session
 
 
+@pytest.mark.parametrize('password', ['x', 'small', 'मेरी पसंद'])
+def test_short_configured_password_can_sign_in(settings, password):
+    settings.admin_password = password
+    client = TestClient(create_app(settings), base_url=settings.public_url)
+    origin = {'Origin': settings.public_url}
+    assert client.get('/health').json() == {'status': 'ok'}
+    assert client.post('/api/login', json={
+        'username': settings.admin_user, 'password': password + 'wrong',
+    }, headers=origin).status_code == 401
+    assert client.post('/api/login', json={
+        'username': settings.admin_user, 'password': password,
+    }, headers=origin).status_code == 200
+    assert client.get('/api/status').status_code == 200
+
+
+def test_missing_password_and_short_api_token_have_specific_startup_errors(settings):
+    settings.admin_password = ''
+    with pytest.raises(RuntimeError, match='nonempty ADMIN_PASSWORD'):
+        create_app(settings)
+    settings.admin_password = 'x'
+    settings.api_token = 'too-short'
+    with pytest.raises(RuntimeError, match='API_TOKEN with at least 32 characters'):
+        create_app(settings)
+
+
 def test_login_page_and_cookie_auth_with_origin_guards(settings):
     client = TestClient(create_app(settings), base_url=settings.public_url)
     assert 'Sign in to your workspace' in client.get('/').text

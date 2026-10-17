@@ -135,9 +135,13 @@ n8n merely to troubleshoot the dashboard link.
 A login message such as `Unexpected token '<'` in an older frontend means it
 tried to parse an HTML response as JSON; it does not establish that the password
 was rejected. Check origin health and `docker compose logs --tail=40 app`.
-An app startup error mentioning `ADMIN_PASSWORD (16+) / API_TOKEN (32+)` means
-one or both loaded credential requirements are unmet. Correct the private `.env`
-and recreate app; keep the same tunnel running. The current frontend reports
+An app startup error mentioning `ADMIN_PASSWORD (16+) / API_TOKEN (32+)` comes
+from an older application image. Pull the latest source and rebuild app using
+the [existing-installation update commands](VPS_DEPLOYMENT_COMMANDS.md#3-create-private-configuration).
+The current app accepts any nonempty sign-in password, including one character;
+the separate `API_TOKEN` still requires 32 or more characters. Startup logs now
+identify a missing password or invalid token separately. Correct the private
+`.env` and recreate app; keep the same tunnel running. The current frontend reports
 unavailable/non-JSON responses clearly and redirects only after a JSON
 `signed_in: true` confirmation. It never automatically retries credentials.
 

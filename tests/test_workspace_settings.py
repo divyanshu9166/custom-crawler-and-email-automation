@@ -1,5 +1,6 @@
 from threading import Event, Thread
 
+import pytest
 from fastapi.testclient import TestClient
 
 from outreach.app import create_app
@@ -52,7 +53,8 @@ def test_mail_settings_persist_on_restart_and_forbid_enabling_or_login_fields(se
     assert invalid.status_code == 422 and 'SECRET' not in invalid.text
 
 
-def test_cookie_settings_need_same_origin_and_current_password_change_revokes_sessions(settings):
+@pytest.mark.parametrize('new_password', ['tiny', 'च'])
+def test_cookie_settings_need_same_origin_and_current_password_change_revokes_sessions(settings, new_password):
     original = settings.model_dump()
     client = TestClient(create_app(settings), base_url=settings.public_url)
     origin = {'Origin': settings.public_url}
@@ -61,7 +63,7 @@ def test_cookie_settings_need_same_origin_and_current_password_change_revokes_se
     old_cookie = client.cookies.get(COOKIE)
     assert client.put('/api/settings/mail', json={'sender_company': 'Team'}).status_code == 403
     assert client.put('/api/settings/mail', json={'sender_company': 'Team'}, headers=origin).status_code == 200
-    patch = {'username': 'changed-admin', 'new_password': 'new-private-password-4567', 'current_password': 'wrong'}
+    patch = {'username': 'changed-admin', 'new_password': new_password, 'current_password': 'wrong'}
     assert client.put('/api/settings/credentials', json=patch, headers=origin).status_code == 400
     patch['current_password'] = original['admin_password']
     assert client.put('/api/settings/credentials', json=patch, headers=origin).status_code == 200
@@ -81,6 +83,20 @@ def test_cookie_settings_need_same_origin_and_current_password_change_revokes_se
     assert other.post('/api/login', json=login, headers=origin).status_code == 200
     assert other.post('/api/login', json=body, headers=origin).status_code == 401
     assert restarted.api_token == original['api_token']
+
+
+def test_blank_new_password_cannot_replace_existing_credentials(settings):
+    client = client_for(settings)
+    response = client.put('/api/settings/credentials', json={
+        'username': settings.admin_user, 'new_password': '',
+        'current_password': settings.admin_password,
+    })
+    assert response.status_code == 422
+    assert not (settings.data_dir / 'workspace-settings.json').exists()
+    origin = {'Origin': settings.public_url}
+    assert client.post('/api/login', json={
+        'username': settings.admin_user, 'password': settings.admin_password,
+    }, headers=origin).status_code == 200
 
 
 def test_mail_settings_cannot_change_inflight_connection(settings):
