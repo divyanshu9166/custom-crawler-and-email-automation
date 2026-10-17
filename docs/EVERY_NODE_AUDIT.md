@@ -1,8 +1,8 @@
 # Every-node acquisition workflow audit
 
-**Email-writing correction (2026-10-11):** this earlier audit used controlled/template copy. It does not validate live AI writing or model quality. Operational writing now requires research-based AI with no template fallback; legacy drafts cannot be approved. See [the correction and current tests](AI_EMAIL_WRITING.md).
+**Email-writing boundary:** these tests use controlled AI/provider fixtures; they do not establish live model quality or mailbox delivery. Operational writing requires research-based AI with no template fallback. Legacy drafts cannot be approved. See [the writing correction](AI_EMAIL_WRITING.md) and [the current research upgrade](SOCIAL_RESEARCH_UPGRADE.md).
 
-Latest recheck: **35 / 35 nodes mapped to actual source and passing executed tests**. Full suite: **288 passed**.
+Latest recheck: **35 / 35 nodes mapped to actual source and passing executed tests**. Full suite: **1180 passed**.
 
 The implementation is present for every node, with deliberate human gates. This does **not** mean all nodes are fully automatic or verified against real providers/clients. The dashboard supports eleven overview stages and all thirty-five detailed nodes with source/ownership, branch, hold and operator-recorded statuses.
 
@@ -44,13 +44,13 @@ Re-ran the complete suite for the user-supplied diagram. A provider-readiness de
 | E1 | Company-domain contacts | automatic | Published same-domain addresses are imported and verification queued; buyer role and eligibility remain separate. **Boundary:** Two published website contacts captured; neither established fresh safe. |
 | E2 | Other-domain published candidates | automatic candidate capture | Other-domain addresses are held with current source URL/hash; no automatic provider probe. **Boundary:** One live website candidate retained; no automatic import. |
 | E3 | Review current official source and company ownership | review | Ownership notes plus current official extraction required; re-crawl/source changes invalidate proof; cross-company inbox attachment rejected. **Boundary:** Fictional reviewed contacts tested; current real candidate remains held. |
-| F | Reacher verification | automatic / external setup pending | Strict response/address checks; unknown/risky/catch-all/disposable/invalid cannot pass. Freshness and ownership rechecked before probing. **Boundary:** Real self-hosted Reacher backend/SMTP validation pending; current real attempts failed and verdicts are unknown. |
+| F | Reacher verification | automatic / broader provider acceptance pending | Strict response/address checks; unknown/risky/catch-all/disposable/invalid cannot pass. Current source, recipient and suppression checked before dispatch and before committing a result. **Boundary:** Native backend/API/auth passed. The earlier isolated recipient was catch-all/risky; a new officially published florist contact received a real safe/non-catch-all verdict. One verdict does not establish universal existence, broader accuracy or inbox delivery; no outreach sent. |
 | G | Review saved country quote, buyer and one opportunity | review | Save current exact quote, US/UK timezone, buyer-fit notes, one offer and optional sourced announcement/extra idea. **Boundary:** Actual current businesses not qualified by this audit; quote validity alone does not establish semantic truth. |
 | Q | Desktop/mobile screenshots · optional PageSpeed lab audit | automatic optional audit | Desktop/mobile screenshots and optional on-demand PageSpeed; no profile-only site audits and no invented scores. **Boundary:** Real screenshots exist. Keyless PageSpeed live requests returned HTTP 429; no successful live lab score established. |
 | H | Hold · inspect or research further | automatic hold + review | Hold is represented by lead/profile/contact/message states, not a single unified queue. Uncertain sends require reconciliation; blocked sources and unsafe verification cannot send. **Boundary:** Current verification/profile failures visible; human resolution or provider availability required. |
 | AA | Campaign A · website or inquiry/booking chatbot | automatic proposals + reviewed selection | Campaign A proposes build/improvement/chatbot from public inquiry/service/support cues; one final offer is reviewed. Profile-only improvement excluded. **Boundary:** Fixed cue ranking is not a prediction of client value, sales likelihood or conversion uplift. |
 | BB | Campaign B · ecommerce or suitable WhatsApp workflow | automatic proposals + reviewed selection | Campaign B proposes launch/improvement/chatbot/WhatsApp from source cues; channel-fit, permission/integration and one relevant offer still require review. **Boundary:** No live WhatsApp sending or client store integration is performed by this acquisition software. |
-| I | Source-backed personalized draft + 3 follow-ups | automatic drafting after review | Exactly four editable touches, one relevant offer, source references and distinct follow-up value; activated content cannot be overwritten. **Boundary:** Twenty historical company previews/80 messages reviewed as source/copy samples; recipient acceptance and campaign results pending. |
+| I | Source-backed personalized draft + 3 follow-ups | AI writing after source review | Exactly four editable touches, one relevant offer, source references and distinct follow-up value; activated content cannot be overwritten. **Boundary:** Historical templates are offline samples only. The current AI writer requires its own configured endpoint and model-quality acceptance; no live AI/provider or recipient acceptance claimed. |
 | J | Review all messages and outreach eligibility | review gate | All four draft messages, sender identity, qualification, fresh safe proof, relevance/eligibility notes, opt-out and company conversation gate. **Boundary:** No real sequence approved. Current source findings and eligibility require operator judgment. |
 | K | Approve · local send window · mailbox quota | approval + automatic scheduling | Atomic approval; one conversation/company; local weekday/hour window, daily quota and minimum send gap. **Boundary:** Simulated calendars and isolated transport verified; deployed timezone/quota acceptance pending. |
 | L | SMTP send · durable Message-ID | automatic / mailbox setup pending | TLS authenticated SMTP, durable IDs/threading, explicit acceptance versus uncertain outcome and no automatic uncertain retry. **Boundary:** Real socket protocols passed on loopback fixtures; external mailbox delivery/inbox placement unverified. |
@@ -72,57 +72,57 @@ Re-ran the complete suite for the user-supplied diagram. A provider-readiness de
 
 ### A — US/UK search queries or sourced CSV
 
-Source: [outreach/app.py:489 — import_csv](../outreach/app.py), [outreach/discovery.py:219 — prospect_candidates](../outreach/discovery.py)
+Source: [outreach/app.py:602 — import_csv](../outreach/app.py), [outreach/discovery.py:494 — prospect_candidates](../outreach/discovery.py)
 
 - [test_api_import_detail_and_export](../tests/test_api.py) — 1 executed passing case(s), function line 23.
 - [test_market_selection_scopes_search_and_locale](../tests/test_platform_discovery.py) — 2 executed passing case(s), function line 152.
 
 ### B — SearXNG or optional SerpApi
 
-Source: [outreach/providers.py:13 — discover](../outreach/providers.py)
+Source: [outreach/providers.py:131 — discover](../outreach/providers.py)
 
-- [test_search_contract](../tests/test_research.py) — 1 executed passing case(s), function line 142.
+- [test_search_contract](../tests/test_research.py) — 1 executed passing case(s), function line 146.
 - [test_failed_platform_queries_do_not_discard_successful_official_results](../tests/test_platform_discovery.py) — 1 executed passing case(s), function line 70.
 
 ### C — Official company website · domain deduplication
 
-Source: [outreach/research.py:12 — add_lead](../outreach/research.py), [outreach/discovery.py:133 — resolve_signal](../outreach/discovery.py)
+Source: [outreach/research.py:13 — add_lead](../outreach/research.py), [outreach/discovery.py:294 — resolve_signal](../outreach/discovery.py)
 
 - [test_company_and_contact_dedup_preserves_suppression](../tests/test_research.py) — 1 executed passing case(s), function line 53.
 - [test_multi_platform_discovery_persists_signals_deduplicates_and_queues_research](../tests/test_platform_discovery.py) — 1 executed passing case(s), function line 36.
 
 ### CP — Business profile · no known website
 
-Source: [outreach/profiles.py:43 — add_profile_lead](../outreach/profiles.py), [outreach/research.py:215 — discover_leads](../outreach/research.py)
+Source: [outreach/profiles.py:72 — add_profile_lead](../outreach/profiles.py), [outreach/research.py:361 — discover_leads](../outreach/research.py)
 
-- [test_profile_discovery_imports_deduplicates_but_never_probes](../tests/test_profile_prospects.py) — 1 executed passing case(s), function line 66.
-- [test_profile_api_no_fake_website_and_visual_audits_rejected](../tests/test_profile_prospects.py) — 1 executed passing case(s), function line 136.
+- [test_profile_discovery_imports_deduplicates_but_never_probes](../tests/test_profile_prospects.py) — 1 executed passing case(s), function line 69.
+- [test_profile_api_no_fake_website_and_visual_audits_rejected](../tests/test_profile_prospects.py) — 1 executed passing case(s), function line 139.
 
 ### CS — Public snapshot and named-company website search
 
-Source: [outreach/profiles.py:72 — research_profile](../outreach/profiles.py), [outreach/discovery.py:41 — public_snapshot](../outreach/discovery.py), [outreach/discovery.py:133 — resolve_signal](../outreach/discovery.py)
+Source: [outreach/profiles.py:102 — research_profile](../outreach/profiles.py), [outreach/discovery.py:74 — public_snapshot](../outreach/discovery.py), [outreach/discovery.py:294 — resolve_signal](../outreach/discovery.py)
 
-- [test_found_website_routes_to_normal_research_without_merging_contacts](../tests/test_profile_prospects.py) — 1 executed passing case(s), function line 107.
-- [test_failed_website_search_is_not_absence](../tests/test_profile_prospects.py) — 1 executed passing case(s), function line 96.
+- [test_found_website_routes_to_normal_research_without_merging_contacts](../tests/test_profile_prospects.py) — 1 executed passing case(s), function line 110.
+- [test_failed_website_search_is_not_absence](../tests/test_profile_prospects.py) — 1 executed passing case(s), function line 99.
 - [test_robots_denial_never_fetches_profile](../tests/test_platform_discovery.py) — 1 executed passing case(s), function line 58.
 
 ### CR — Review profile identity, activity and search limits
 
-Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/profiles.py:61 — assert_profile_review](../outreach/profiles.py)
+Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/profiles.py:90 — assert_profile_review](../outreach/profiles.py)
 
-- [test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate](../tests/test_profile_prospects.py) — 2 executed passing case(s), function line 43.
-- [test_ambiguous_or_blocked_profile_cannot_be_qualified](../tests/test_profile_prospects.py) — 2 executed passing case(s), function line 82.
+- [test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate](../tests/test_profile_prospects.py) — 2 executed passing case(s), function line 46.
+- [test_ambiguous_or_blocked_profile_cannot_be_qualified](../tests/test_profile_prospects.py) — 2 executed passing case(s), function line 85.
 
 ### CE — Published profile email candidate · no automatic probe
 
-Source: [outreach/profiles.py:72 — research_profile](../outreach/profiles.py), [outreach/research.py:78 — add_contact](../outreach/research.py)
+Source: [outreach/profiles.py:102 — research_profile](../outreach/profiles.py), [outreach/research.py:140 — add_contact](../outreach/research.py)
 
-- [test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate](../tests/test_profile_prospects.py) — 2 executed passing case(s), function line 43.
-- [test_profile_discovery_imports_deduplicates_but_never_probes](../tests/test_profile_prospects.py) — 1 executed passing case(s), function line 66.
+- [test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate](../tests/test_profile_prospects.py) — 2 executed passing case(s), function line 46.
+- [test_profile_discovery_imports_deduplicates_but_never_probes](../tests/test_profile_prospects.py) — 1 executed passing case(s), function line 69.
 
 ### D — Robots + sitemaps + HTTP + Chromium
 
-Source: [outreach/web.py:181 — crawl](../outreach/web.py), [outreach/browser.py:90 — render](../outreach/browser.py)
+Source: [outreach/web.py:277 — crawl](../outreach/web.py), [outreach/browser.py:90 — render](../outreach/browser.py)
 
 - [test_sitemap_index_prioritizes_contacts_and_preserves_partial_pages](../tests/test_crawler_quality.py) — 1 executed passing case(s), function line 378.
 - [test_real_chromium_executes_spa_and_public_cdn_assets](../tests/test_crawler_quality.py) — 1 executed passing case(s), function line 409.
@@ -130,31 +130,31 @@ Source: [outreach/web.py:181 — crawl](../outreach/web.py), [outreach/browser.p
 
 ### E — Saved evidence · recent public signals · sourced contacts
 
-Source: [outreach/research.py:124 — research_lead](../outreach/research.py), [outreach/web.py:354 — extract_page](../outreach/web.py), [outreach/providers.py:90 — research_suggestions](../outreach/providers.py), [outreach/opportunities.py:16 — proposals](../outreach/opportunities.py)
+Source: [outreach/research.py:213 — research_lead](../outreach/research.py), [outreach/web.py:681 — extract_page](../outreach/web.py), [outreach/providers.py:219 — research_suggestions](../outreach/providers.py), [outreach/opportunities.py:28 — proposals](../outreach/opportunities.py)
 
 - [test_crawl_report_and_contact_identity_are_persisted](../tests/test_crawler_quality.py) — 1 executed passing case(s), function line 457.
-- [test_recrawl_suggestions_exclude_unvisited_historical_pages](../tests/test_research.py) — 1 executed passing case(s), function line 122.
-- [test_ai_rejects_invented_quote](../tests/test_research.py) — 1 executed passing case(s), function line 151.
+- [test_recrawl_suggestions_exclude_unvisited_historical_pages](../tests/test_research.py) — 1 executed passing case(s), function line 126.
+- [test_ai_rejects_invented_quote](../tests/test_research.py) — 1 executed passing case(s), function line 155.
 - [test_no_ai_research_saves_current_signal_proposal_without_qualification_or_drafts](../tests/test_opportunities.py) — 1 executed passing case(s), function line 71.
 - [test_insufficient_evidence_stays_empty_instead_of_inventing_friction_or_absent_features](../tests/test_opportunities.py) — 1 executed passing case(s), function line 60.
 
 ### E1 — Company-domain contacts
 
-Source: [outreach/research.py:124 — research_lead](../outreach/research.py), [outreach/research.py:78 — add_contact](../outreach/research.py)
+Source: [outreach/research.py:213 — research_lead](../outreach/research.py), [outreach/research.py:140 — add_contact](../outreach/research.py)
 
-- [test_research_to_contacts_and_verification](../tests/test_research.py) — 1 executed passing case(s), function line 103.
+- [test_research_to_contacts_and_verification](../tests/test_research.py) — 1 executed passing case(s), function line 105.
 - [test_extract_only_sourced_business_emails](../tests/test_research.py) — 1 executed passing case(s), function line 36.
 
 ### E2 — Other-domain published candidates
 
-Source: [outreach/research.py:124 — research_lead](../outreach/research.py), [outreach/research.py:64 — contact_candidates](../outreach/research.py)
+Source: [outreach/research.py:213 — research_lead](../outreach/research.py), [outreach/research.py:121 — contact_candidates](../outreach/research.py)
 
 - [test_external_published_addresses_are_candidates_not_automatic_contacts](../tests/test_contact_candidates.py) — 1 executed passing case(s), function line 21.
 - [test_research_retains_candidates_without_importing_or_verifying_them](../tests/test_contact_candidates.py) — 1 executed passing case(s), function line 28.
 
 ### E3 — Review current official source and company ownership
 
-Source: [outreach/research.py:78 — add_contact](../outreach/research.py), [outreach/research.py:47 — assert_contact_ownership](../outreach/research.py)
+Source: [outreach/research.py:140 — add_contact](../outreach/research.py), [outreach/research.py:97 — assert_contact_ownership](../outreach/research.py)
 
 - [test_alias_contact_requires_source_and_ownership_then_remains_unverified](../tests/test_contact_candidates.py) — 1 executed passing case(s), function line 45.
 - [test_recrawl_without_alias_page_invalidates_old_proof_but_preserves_history](../tests/test_contact_candidates.py) — 2 executed passing case(s), function line 153.
@@ -162,25 +162,25 @@ Source: [outreach/research.py:78 — add_contact](../outreach/research.py), [out
 
 ### F — Reacher verification
 
-Source: [outreach/research.py:257 — verify_contact](../outreach/research.py), [outreach/providers.py:69 — verify_email](../outreach/providers.py), [outreach/providers.py:45 — classify_reacher](../outreach/providers.py)
+Source: [outreach/research.py:417 — verify_contact](../outreach/research.py), [outreach/providers.py:190 — verify_email](../outreach/providers.py), [outreach/providers.py:166 — classify_reacher](../outreach/providers.py)
 
 - [test_reacher_adapter_contract](../tests/test_research.py) — 1 executed passing case(s), function line 91.
 - [test_reacher_contradictions](../tests/test_research.py) — 4 executed passing case(s), function line 19.
-- [test_reviewed_profile_contact_can_verify_and_queue_with_all_existing_gates](../tests/test_profile_prospects.py) — 1 executed passing case(s), function line 151.
+- [test_reviewed_profile_contact_can_verify_and_queue_with_all_existing_gates](../tests/test_profile_prospects.py) — 1 executed passing case(s), function line 154.
 
 ### G — Review saved country quote, buyer and one opportunity
 
-Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/priorities.py:8 — ranked](../outreach/priorities.py)
+Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/priorities.py:9 — ranked](../outreach/priorities.py)
 
 - [test_priority_read_only_explainable_recrawl_and_suppression_reduce_readiness](../tests/test_growth_finance_priority.py) — 1 executed passing case(s), function line 97.
 - [test_active_sequences_are_not_ranked_as_new_outreach_work](../tests/test_growth_finance_priority.py) — 1 executed passing case(s), function line 141.
 - [test_country_evidence_must_match_saved_source](../tests/test_requirements_audit.py) — 2 executed passing case(s), function line 24.
-- [test_review_rejects_sources_not_refreshed_in_latest_crawl](../tests/test_requirements_audit.py) — 4 executed passing case(s), function line 81.
-- [test_sourced_trigger_and_extra_value_survive_into_drafts](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 45.
+- [test_review_rejects_sources_not_refreshed_in_latest_crawl](../tests/test_requirements_audit.py) — 4 executed passing case(s), function line 85.
+- [test_sourced_trigger_and_extra_value_survive_into_drafts](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 49.
 
 ### Q — Desktop/mobile screenshots · optional PageSpeed lab audit
 
-Source: [outreach/browser.py:309 — screenshot](../outreach/browser.py), [outreach/performance.py:9 — performance_audit](../outreach/performance.py)
+Source: [outreach/browser.py:349 — screenshot](../outreach/browser.py), [outreach/performance.py:9 — performance_audit](../outreach/performance.py)
 
 - [test_authenticated_crawl_report_and_audit_images](../tests/test_api.py) — 1 executed passing case(s), function line 37.
 - [test_pagespeed_preserves_lab_evidence_and_partial_results](../tests/test_performance.py) — 3 executed passing case(s), function line 23.
@@ -188,60 +188,60 @@ Source: [outreach/browser.py:309 — screenshot](../outreach/browser.py), [outre
 
 ### H — Hold · inspect or research further
 
-Source: [outreach/mail.py:94 — send_one](../outreach/mail.py), [outreach/mail.py:211 — record_inbound](../outreach/mail.py), [outreach/campaigns.py:270 — resume_contact](../outreach/campaigns.py), [outreach/profiles.py:61 — assert_profile_review](../outreach/profiles.py)
+Source: [outreach/mail.py:95 — send_one](../outreach/mail.py), [outreach/mail.py:249 — record_inbound](../outreach/mail.py), [outreach/campaigns.py:337 — resume_contact](../outreach/campaigns.py), [outreach/profiles.py:90 — assert_profile_review](../outreach/profiles.py)
 
 - [test_uncertain_send_is_never_automatically_retried](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 54.
 - [test_resume_requires_fresh_result_and_cannot_override_optout](../tests/test_mail_providers.py) — 1 executed passing case(s), function line 85.
 - [test_unsafe_reverification_holds_instead_of_looping](../tests/test_mail_providers.py) — 1 executed passing case(s), function line 75.
-- [test_ambiguous_or_blocked_profile_cannot_be_qualified](../tests/test_profile_prospects.py) — 2 executed passing case(s), function line 82.
+- [test_ambiguous_or_blocked_profile_cannot_be_qualified](../tests/test_profile_prospects.py) — 2 executed passing case(s), function line 85.
 
 ### AA — Campaign A · website or inquiry/booking chatbot
 
-Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/campaigns.py:158 — draft_sequence](../outreach/campaigns.py), [outreach/opportunities.py:16 — proposals](../outreach/opportunities.py)
+Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/campaigns.py:167 — draft_sequence](../outreach/campaigns.py), [outreach/opportunities.py:28 — proposals](../outreach/opportunities.py)
 
-- [test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate](../tests/test_profile_prospects.py) — 2 executed passing case(s), function line 43.
+- [test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate](../tests/test_profile_prospects.py) — 2 executed passing case(s), function line 46.
 - [test_drafts_do_not_claim_completed_assets](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 147.
 - [test_inquiry_offer_is_grounded_and_reviewed_without_claiming_an_observed_problem](../tests/test_opportunities.py) — 1 executed passing case(s), function line 14.
 - [test_profile_launch_proposal_requires_completed_not_found_search](../tests/test_opportunities.py) — 2 executed passing case(s), function line 44.
 
 ### BB — Campaign B · ecommerce or suitable WhatsApp workflow
 
-Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/campaigns.py:158 — draft_sequence](../outreach/campaigns.py), [outreach/opportunities.py:16 — proposals](../outreach/opportunities.py)
+Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/campaigns.py:167 — draft_sequence](../outreach/campaigns.py), [outreach/opportunities.py:28 — proposals](../outreach/opportunities.py)
 
 - [test_campaign_b_rejects_non_d2c_website_offer](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 29.
 - [test_whatsapp_requires_recorded_channel_fit](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 35.
-- [test_whatsapp_flow_requires_qualified_channel_and_artifacts_require_auth](../tests/test_deliverables.py) — 1 executed passing case(s), function line 89.
+- [test_whatsapp_flow_requires_qualified_channel_and_artifacts_require_auth](../tests/test_deliverables.py) — 1 executed passing case(s), function line 93.
 - [test_d2c_signals_prioritize_existing_shopping_journey_and_preserve_campaign_gate](../tests/test_opportunities.py) — 1 executed passing case(s), function line 24.
 - [test_channel_signal_does_not_infer_customer_permission](../tests/test_opportunities.py) — 1 executed passing case(s), function line 33.
 
 ### I — Source-backed personalized draft + 3 follow-ups
 
-Source: [outreach/campaigns.py:183 — create_drafts](../outreach/campaigns.py), [outreach/campaigns.py:158 — draft_sequence](../outreach/campaigns.py)
+Source: [outreach/campaigns.py:192 — create_drafts](../outreach/campaigns.py), [outreach/email_writer.py:105 — generate_sequence](../outreach/email_writer.py), [outreach/email_writer.py:58 — validate_output](../outreach/email_writer.py)
 
-- [test_sourced_trigger_and_extra_value_survive_into_drafts](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 45.
-- [test_default_followup_adds_new_value](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 74.
-- [test_draft_generation_cannot_overwrite_a_sequence_approved_mid_request](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 222.
+- [test_sourced_trigger_and_extra_value_survive_into_drafts](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 49.
+- [test_default_followup_adds_new_value](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 78.
+- [test_draft_generation_cannot_overwrite_a_sequence_approved_mid_request](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 226.
 
 ### J — Review all messages and outreach eligibility
 
-Source: [outreach/campaigns.py:212 — approve](../outreach/campaigns.py), [outreach/app.py:707 — edit_message](../outreach/app.py)
+Source: [outreach/campaigns.py:271 — approve](../outreach/campaigns.py), [outreach/app.py:914 — edit_message](../outreach/app.py)
 
 - [test_approval_requires_safe_and_one_contact_per_company](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 20.
 - [test_approve_and_edit_freeze](../tests/test_api.py) — 1 executed passing case(s), function line 64.
-- [test_old_qualification_cannot_skip_new_country_review](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 165.
+- [test_old_qualification_cannot_skip_new_country_review](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 169.
 
 ### K — Approve · local send window · mailbox quota
 
-Source: [outreach/campaigns.py:212 — approve](../outreach/campaigns.py), [outreach/mail.py:94 — send_one](../outreach/mail.py), [outreach/mail.py:23 — eligible_now](../outreach/mail.py)
+Source: [outreach/campaigns.py:271 — approve](../outreach/campaigns.py), [outreach/mail.py:95 — send_one](../outreach/mail.py), [outreach/mail.py:24 — eligible_now](../outreach/mail.py)
 
-- [test_two_concurrent_approvals_cannot_activate_twice](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 185.
+- [test_two_concurrent_approvals_cannot_activate_twice](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 189.
 - [test_send_windows_weekend_and_dst](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 128.
 - [test_daily_limit](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 140.
-- [test_eligible_timezone_not_starved_by_first_hundred_due_contacts](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 206.
+- [test_eligible_timezone_not_starved_by_first_hundred_due_contacts](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 210.
 
 ### L — SMTP send · durable Message-ID
 
-Source: [outreach/mail.py:49 — smtp_send](../outreach/mail.py), [outreach/mail.py:28 — build_message](../outreach/mail.py), [outreach/mail.py:94 — send_one](../outreach/mail.py)
+Source: [outreach/mail.py:50 — smtp_send](../outreach/mail.py), [outreach/mail.py:29 — build_message](../outreach/mail.py), [outreach/mail.py:95 — send_one](../outreach/mail.py)
 
 - [test_real_tls_send_and_imap_optout_stop_sequence](../tests/test_mail_wire.py) — 2 executed passing case(s), function line 29.
 - [test_real_smtp_failure_stages_and_duplicate_protection](../tests/test_mail_wire.py) — 5 executed passing case(s), function line 104.
@@ -249,7 +249,7 @@ Source: [outreach/mail.py:49 — smtp_send](../outreach/mail.py), [outreach/mail
 
 ### M — Independent IMAP monitoring
 
-Source: [outreach/worker.py:62 — mail_loop](../outreach/worker.py), [outreach/mail.py:272 — poll_inbox](../outreach/mail.py)
+Source: [outreach/worker.py:135 — mail_loop](../outreach/worker.py), [outreach/mail.py:312 — poll_inbox](../outreach/mail.py)
 
 - [test_worker_monitors_inbox_during_long_research_and_recovers_shutdown](../tests/test_crawler_quality.py) — 1 executed passing case(s), function line 536.
 - [test_imap_bounded_read_and_reply_stop](../tests/test_mail_providers.py) — 1 executed passing case(s), function line 34.
@@ -257,22 +257,22 @@ Source: [outreach/worker.py:62 — mail_loop](../outreach/worker.py), [outreach/
 
 ### N — Next due follow-up · stop after touch 4
 
-Source: [outreach/mail.py:180 — mark_sent](../outreach/mail.py), [outreach/mail.py:83 — due_candidates](../outreach/mail.py)
+Source: [outreach/mail.py:218 — mark_sent](../outreach/mail.py), [outreach/mail.py:84 — due_candidates](../outreach/mail.py)
 
 - [test_four_touch_tls_sequence_respects_actual_acceptance_and_stops](../tests/test_mail_wire.py) — 2 executed passing case(s), function line 58.
 - [test_send_once_and_schedule_from_acceptance](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 27.
 
 ### O — Stop sequence · human conversation
 
-Source: [outreach/mail.py:211 — record_inbound](../outreach/mail.py), [outreach/sales.py:39 — record_activity](../outreach/sales.py)
+Source: [outreach/mail.py:249 — record_inbound](../outreach/mail.py), [outreach/sales.py:39 — record_activity](../outreach/sales.py)
 
 - [test_reply_cancels_followups_and_is_idempotent](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 83.
 - [test_html_positive_reply_does_not_inherit_quoted_unsubscribe](../tests/test_mail_wire.py) — 1 executed passing case(s), function line 119.
-- [test_manual_reply_stops_active_sequence_and_cannot_release](../tests/test_sales.py) — 1 executed passing case(s), function line 46.
+- [test_manual_reply_stops_active_sequence_and_cannot_release](../tests/test_sales.py) — 1 executed passing case(s), function line 47.
 
 ### P — Global suppression
 
-Source: [outreach/db.py:208 — suppress](../outreach/db.py), [outreach/mail.py:211 — record_inbound](../outreach/mail.py), [outreach/app.py:781 — unsubscribe](../outreach/app.py)
+Source: [outreach/db.py:212 — suppress](../outreach/db.py), [outreach/mail.py:249 — record_inbound](../outreach/mail.py), [outreach/app.py:993 — unsubscribe](../outreach/app.py)
 
 - [test_optout_global_suppression](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 93.
 - [test_permanent_dsn_suppresses](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 104.
@@ -281,76 +281,76 @@ Source: [outreach/db.py:208 — suppress](../outreach/db.py), [outreach/mail.py:
 
 ### R — Classify actual reply and fulfill promised value
 
-Source: [outreach/mail.py:211 — record_inbound](../outreach/mail.py), [outreach/sales.py:39 — record_activity](../outreach/sales.py), [outreach/sales.py:133 — create_task](../outreach/sales.py)
+Source: [outreach/mail.py:249 — record_inbound](../outreach/mail.py), [outreach/sales.py:39 — record_activity](../outreach/sales.py), [outreach/sales.py:137 — create_task](../outreach/sales.py)
 
-- [test_inbound_reply_creates_one_fulfillment_task_and_shared_hold](../tests/test_sales.py) — 1 executed passing case(s), function line 78.
-- [test_tasks_are_due_visible_and_close_with_outcome](../tests/test_sales.py) — 1 executed passing case(s), function line 133.
+- [test_inbound_reply_creates_one_fulfillment_task_and_shared_hold](../tests/test_sales.py) — 1 executed passing case(s), function line 79.
+- [test_tasks_are_due_visible_and_close_with_outcome](../tests/test_sales.py) — 1 executed passing case(s), function line 134.
 
 ### S — Review audit / concept / FAQ / WhatsApp-flow artifact
 
-Source: [outreach/deliverables.py:21 — create](../outreach/deliverables.py), [outreach/deliverables.py:99 — action](../outreach/deliverables.py)
+Source: [outreach/deliverables.py:52 — create](../outreach/deliverables.py), [outreach/deliverables.py:146 — action](../outreach/deliverables.py)
 
 - [test_each_value_artifact_is_sourced_reviewable_and_deliverable](../tests/test_deliverables.py) — 4 executed passing case(s), function line 25.
-- [test_faq_and_concept_labels_do_not_claim_live_ai_or_finished_website](../tests/test_deliverables.py) — 1 executed passing case(s), function line 54.
-- [test_annotated_artifact_embeds_only_its_saved_company_screenshot](../tests/test_deliverables.py) — 1 executed passing case(s), function line 72.
+- [test_faq_and_concept_labels_do_not_claim_live_ai_or_finished_website](../tests/test_deliverables.py) — 1 executed passing case(s), function line 58.
+- [test_annotated_artifact_embeds_only_its_saved_company_screenshot](../tests/test_deliverables.py) — 1 executed passing case(s), function line 76.
 
 ### T — Confirm problem, buyer, budget, timing and success metric
 
 Source: [outreach/sales.py:91 — update_sales](../outreach/sales.py)
 
-- [test_unconfirmed_client_need_cannot_advance_or_create_proposal](../tests/test_sales.py) — 1 executed passing case(s), function line 87.
-- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 93.
+- [test_unconfirmed_client_need_cannot_advance_or_create_proposal](../tests/test_sales.py) — 1 executed passing case(s), function line 88.
+- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 94.
 
 ### U — Record agreed call and dated next action
 
-Source: [outreach/sales.py:91 — update_sales](../outreach/sales.py), [outreach/sales.py:133 — create_task](../outreach/sales.py)
+Source: [outreach/sales.py:91 — update_sales](../outreach/sales.py), [outreach/sales.py:137 — create_task](../outreach/sales.py)
 
-- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 93.
-- [test_invalid_dates_and_future_activity_are_rejected](../tests/test_sales.py) — 1 executed passing case(s), function line 150.
-- [test_tasks_are_due_visible_and_close_with_outcome](../tests/test_sales.py) — 1 executed passing case(s), function line 133.
+- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 94.
+- [test_invalid_dates_and_future_activity_are_rejected](../tests/test_sales.py) — 1 executed passing case(s), function line 151.
+- [test_tasks_are_due_visible_and_close_with_outcome](../tests/test_sales.py) — 1 executed passing case(s), function line 134.
 
 ### V — Prepare and review scoped proposal
 
-Source: [outreach/sales.py:156 — create_proposal](../outreach/sales.py), [outreach/sales.py:181 — proposal_action](../outreach/sales.py)
+Source: [outreach/sales.py:160 — create_proposal](../outreach/sales.py), [outreach/sales.py:198 — proposal_action](../outreach/sales.py)
 
-- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 93.
-- [test_unconfirmed_client_need_cannot_advance_or_create_proposal](../tests/test_sales.py) — 1 executed passing case(s), function line 87.
+- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 94.
+- [test_unconfirmed_client_need_cannot_advance_or_create_proposal](../tests/test_sales.py) — 1 executed passing case(s), function line 88.
 
 ### W — Record actual proposal delivery
 
-Source: [outreach/sales.py:181 — proposal_action](../outreach/sales.py)
+Source: [outreach/sales.py:198 — proposal_action](../outreach/sales.py)
 
-- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 93.
-- [test_won_requires_real_references_and_delivered_proposal](../tests/test_sales.py) — 1 executed passing case(s), function line 117.
+- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 94.
+- [test_won_requires_real_references_and_delivered_proposal](../tests/test_sales.py) — 1 executed passing case(s), function line 118.
 
 ### X — Record agreement and initial payment references
 
 Source: [outreach/sales.py:91 — update_sales](../outreach/sales.py)
 
-- [test_won_requires_real_references_and_delivered_proposal](../tests/test_sales.py) — 1 executed passing case(s), function line 117.
-- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 93.
+- [test_won_requires_real_references_and_delivered_proposal](../tests/test_sales.py) — 1 executed passing case(s), function line 118.
+- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 94.
 
 ### Y — Manage delivery tasks and record client acceptance
 
-Source: [outreach/sales.py:133 — create_task](../outreach/sales.py), [outreach/sales.py:144 — finish_task](../outreach/sales.py), [outreach/sales.py:91 — update_sales](../outreach/sales.py)
+Source: [outreach/sales.py:137 — create_task](../outreach/sales.py), [outreach/sales.py:148 — finish_task](../outreach/sales.py), [outreach/sales.py:91 — update_sales](../outreach/sales.py)
 
-- [test_tasks_are_due_visible_and_close_with_outcome](../tests/test_sales.py) — 1 executed passing case(s), function line 133.
-- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 93.
+- [test_tasks_are_due_visible_and_close_with_outcome](../tests/test_sales.py) — 1 executed passing case(s), function line 134.
+- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 94.
 
 ### Z — Record measured or inconclusive outcome and campaign learning
 
-Source: [outreach/sales.py:91 — update_sales](../outreach/sales.py), [outreach/sales.py:197 — report](../outreach/sales.py), [outreach/learning.py:51 — report](../outreach/learning.py), [outreach/learning.py:24 — summarize](../outreach/learning.py), [outreach/finance.py:19 — record](../outreach/finance.py), [outreach/finance.py:65 — report](../outreach/finance.py), [outreach/aftercare.py:24 — create](../outreach/aftercare.py), [outreach/aftercare.py:44 — update](../outreach/aftercare.py), [outreach/aftercare.py:76 — export](../outreach/aftercare.py), [outreach/aftercare.py:89 — report](../outreach/aftercare.py)
+Source: [outreach/sales.py:91 — update_sales](../outreach/sales.py), [outreach/sales.py:217 — report](../outreach/sales.py), [outreach/learning.py:51 — report](../outreach/learning.py), [outreach/learning.py:24 — summarize](../outreach/learning.py), [outreach/finance.py:19 — record](../outreach/finance.py), [outreach/finance.py:65 — report](../outreach/finance.py), [outreach/aftercare.py:24 — create](../outreach/aftercare.py), [outreach/aftercare.py:44 — update](../outreach/aftercare.py), [outreach/aftercare.py:76 — export](../outreach/aftercare.py), [outreach/aftercare.py:90 — report](../outreach/aftercare.py)
 
 - [test_exact_currency_arithmetic_refunds_and_no_exchange_conversion](../tests/test_growth_finance_priority.py) — 1 executed passing case(s), function line 47.
 - [test_duplicate_receipt_retry_is_idempotent_conflict_and_void_preserve_history](../tests/test_growth_finance_priority.py) — 1 executed passing case(s), function line 71.
 - [test_aftercare_order_permission_idempotency_and_optimistic_version](../tests/test_growth_finance_priority.py) — 3 executed passing case(s), function line 156.
 - [test_case_study_freezes_outcome_escapes_html_and_preserves_inconclusive](../tests/test_growth_finance_priority.py) — 1 executed passing case(s), function line 176.
-- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 93.
-- [test_sales_report_includes_companies_without_sales_records](../tests/test_sales.py) — 1 executed passing case(s), function line 64.
-- [test_funnel_counts_records_not_messages_and_excludes_automatic_replies](../tests/test_learning.py) — 1 executed passing case(s), function line 27.
-- [test_approval_snapshot_is_atomic_and_survives_later_business_label_changes](../tests/test_learning.py) — 1 executed passing case(s), function line 46.
-- [test_legacy_approved_context_stays_unknown_instead_of_invented_historical_attribution](../tests/test_learning.py) — 1 executed passing case(s), function line 59.
-- [test_empty_learning_does_not_invent_rates_or_experiment_winners](../tests/test_learning.py) — 1 executed passing case(s), function line 19.
+- [test_complete_operator_confirmed_sales_lifecycle](../tests/test_sales.py) — 1 executed passing case(s), function line 94.
+- [test_sales_report_includes_companies_without_sales_records](../tests/test_sales.py) — 1 executed passing case(s), function line 65.
+- [test_funnel_counts_records_not_messages_and_excludes_automatic_replies](../tests/test_learning.py) — 1 executed passing case(s), function line 28.
+- [test_approval_snapshot_is_atomic_and_survives_later_business_label_changes](../tests/test_learning.py) — 1 executed passing case(s), function line 47.
+- [test_legacy_approved_context_stays_unknown_instead_of_invented_historical_attribution](../tests/test_learning.py) — 1 executed passing case(s), function line 60.
+- [test_empty_learning_does_not_invent_rates_or_experiment_winners](../tests/test_learning.py) — 1 executed passing case(s), function line 20.
 
 ## Actual current readiness
 

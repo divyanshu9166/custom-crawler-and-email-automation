@@ -1,11 +1,11 @@
 {
-  "checked_at": 1791659185.3173084,
+  "checked_at": 1792244804.1201878,
   "diagram_node_count": 35,
   "diagram_sha256": "e367f970899d3029f4b334abce01f12b22c496290d7e4af6c62077a11976b38a",
   "scope": "Each documented node: source inspection and mapped tests; fixture success is not deployed/provider/client acceptance.",
-  "junit_private_path": "data/audit-growth-tests-release.xml",
-  "junit_sha256": "a732eaeca03cae8672b2b4f474b1b84fdd64ce57a52f45bf053f538da894ab44",
-  "suite_cases_passed": 288,
+  "junit_private_path": "data/social-upgrade-final-tests.xml",
+  "junit_sha256": "f26a35531bbee39b7659cb5f36eb05201a12be2855e64e60ce5b25479f767ad3",
+  "suite_cases_passed": 1180,
   "suite_cases_skipped": 0,
   "all_nodes_live_verified": false,
   "broader_goal_complete": false,
@@ -31,14 +31,14 @@
         {
           "path": "outreach/app.py",
           "symbol": "import_csv",
-          "line": 489,
-          "sha256": "2620c7d9759199f61634ea97c7ff0a7df0f8d6b5ec6c32f03e4ff9e030c51abd"
+          "line": 602,
+          "sha256": "9d839103d6c29388364f2dc7925c3ecd5744c32bad7dcf2a195da3932b5a1b2f"
         },
         {
           "path": "outreach/discovery.py",
           "symbol": "prospect_candidates",
-          "line": 219,
-          "sha256": "91939074033f78f5d2dd2d18c4672814e1c37987e0460cbb884801aa18a3d5a2"
+          "line": 494,
+          "sha256": "74db842bd3e4fbd0ef8028d86106294c41f695dc271e765d3469c471de733087"
         }
       ],
       "tests": [
@@ -67,15 +67,15 @@
         {
           "path": "outreach/providers.py",
           "symbol": "discover",
-          "line": 13,
-          "sha256": "28dc0b312a30b643b8f4daf0898c4d41406222ae78bbec9e532a0e2b4f578966"
+          "line": 131,
+          "sha256": "307b12735fb318d748be6409196c2f79f343488a7282071983f298f8c5e3b29b"
         }
       ],
       "tests": [
         {
           "path": "tests/test_research.py",
           "test": "test_search_contract",
-          "line": 142,
+          "line": 146,
           "executed_passing_cases": 1
         },
         {
@@ -97,14 +97,14 @@
         {
           "path": "outreach/research.py",
           "symbol": "add_lead",
-          "line": 12,
-          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+          "line": 13,
+          "sha256": "ed88806cdc72fe430ad5b79f914637f61f470e50d8451a83df6d7cb619c4813c"
         },
         {
           "path": "outreach/discovery.py",
           "symbol": "resolve_signal",
-          "line": 133,
-          "sha256": "91939074033f78f5d2dd2d18c4672814e1c37987e0460cbb884801aa18a3d5a2"
+          "line": 294,
+          "sha256": "74db842bd3e4fbd0ef8028d86106294c41f695dc271e765d3469c471de733087"
         }
       ],
       "tests": [
@@ -133,27 +133,27 @@
         {
           "path": "outreach/profiles.py",
           "symbol": "add_profile_lead",
-          "line": 43,
-          "sha256": "06f5374b52d969a22ed59e9e1877dcf043fe3a28a6ec3787158a3719b5c5cf4b"
+          "line": 72,
+          "sha256": "849a2a0a8c58816f2fb785e2e764931eab1a1e3b1b36ac272cf626a6b4393e10"
         },
         {
           "path": "outreach/research.py",
           "symbol": "discover_leads",
-          "line": 215,
-          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+          "line": 361,
+          "sha256": "ed88806cdc72fe430ad5b79f914637f61f470e50d8451a83df6d7cb619c4813c"
         }
       ],
       "tests": [
         {
           "path": "tests/test_profile_prospects.py",
           "test": "test_profile_discovery_imports_deduplicates_but_never_probes",
-          "line": 66,
+          "line": 69,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_profile_prospects.py",
           "test": "test_profile_api_no_fake_website_and_visual_audits_rejected",
-          "line": 136,
+          "line": 139,
           "executed_passing_cases": 1
         }
       ]
@@ -169,33 +169,33 @@
         {
           "path": "outreach/profiles.py",
           "symbol": "research_profile",
-          "line": 72,
-          "sha256": "06f5374b52d969a22ed59e9e1877dcf043fe3a28a6ec3787158a3719b5c5cf4b"
+          "line": 102,
+          "sha256": "849a2a0a8c58816f2fb785e2e764931eab1a1e3b1b36ac272cf626a6b4393e10"
         },
         {
           "path": "outreach/discovery.py",
           "symbol": "public_snapshot",
-          "line": 41,
-          "sha256": "91939074033f78f5d2dd2d18c4672814e1c37987e0460cbb884801aa18a3d5a2"
+          "line": 74,
+          "sha256": "74db842bd3e4fbd0ef8028d86106294c41f695dc271e765d3469c471de733087"
         },
         {
           "path": "outreach/discovery.py",
           "symbol": "resolve_signal",
-          "line": 133,
-          "sha256": "91939074033f78f5d2dd2d18c4672814e1c37987e0460cbb884801aa18a3d5a2"
+          "line": 294,
+          "sha256": "74db842bd3e4fbd0ef8028d86106294c41f695dc271e765d3469c471de733087"
         }
       ],
       "tests": [
         {
           "path": "tests/test_profile_prospects.py",
           "test": "test_found_website_routes_to_normal_research_without_merging_contacts",
-          "line": 107,
+          "line": 110,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_profile_prospects.py",
           "test": "test_failed_website_search_is_not_absence",
-          "line": 96,
+          "line": 99,
           "executed_passing_cases": 1
         },
         {
@@ -218,26 +218,26 @@
           "path": "outreach/campaigns.py",
           "symbol": "review_lead",
           "line": 46,
-          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+          "sha256": "697c785c1458d340bba7ff9941441287505413dec507612df975231b97a412c2"
         },
         {
           "path": "outreach/profiles.py",
           "symbol": "assert_profile_review",
-          "line": 61,
-          "sha256": "06f5374b52d969a22ed59e9e1877dcf043fe3a28a6ec3787158a3719b5c5cf4b"
+          "line": 90,
+          "sha256": "849a2a0a8c58816f2fb785e2e764931eab1a1e3b1b36ac272cf626a6b4393e10"
         }
       ],
       "tests": [
         {
           "path": "tests/test_profile_prospects.py",
           "test": "test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate",
-          "line": 43,
+          "line": 46,
           "executed_passing_cases": 2
         },
         {
           "path": "tests/test_profile_prospects.py",
           "test": "test_ambiguous_or_blocked_profile_cannot_be_qualified",
-          "line": 82,
+          "line": 85,
           "executed_passing_cases": 2
         }
       ]
@@ -253,27 +253,27 @@
         {
           "path": "outreach/profiles.py",
           "symbol": "research_profile",
-          "line": 72,
-          "sha256": "06f5374b52d969a22ed59e9e1877dcf043fe3a28a6ec3787158a3719b5c5cf4b"
+          "line": 102,
+          "sha256": "849a2a0a8c58816f2fb785e2e764931eab1a1e3b1b36ac272cf626a6b4393e10"
         },
         {
           "path": "outreach/research.py",
           "symbol": "add_contact",
-          "line": 78,
-          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+          "line": 140,
+          "sha256": "ed88806cdc72fe430ad5b79f914637f61f470e50d8451a83df6d7cb619c4813c"
         }
       ],
       "tests": [
         {
           "path": "tests/test_profile_prospects.py",
           "test": "test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate",
-          "line": 43,
+          "line": 46,
           "executed_passing_cases": 2
         },
         {
           "path": "tests/test_profile_prospects.py",
           "test": "test_profile_discovery_imports_deduplicates_but_never_probes",
-          "line": 66,
+          "line": 69,
           "executed_passing_cases": 1
         }
       ]
@@ -289,14 +289,14 @@
         {
           "path": "outreach/web.py",
           "symbol": "crawl",
-          "line": 181,
-          "sha256": "d5cc0f835c03a033d957b9fdd2c6d05b578d477ebc5417c43f80e99aa7ede5b1"
+          "line": 277,
+          "sha256": "f4e62aaa9de688c9f9a3a391e76f50c3599232b3459025041615d1f64fe25bc3"
         },
         {
           "path": "outreach/browser.py",
           "symbol": "render",
           "line": 90,
-          "sha256": "9224168faf20b461e60836d1165f0ddbfc41e27a1f571eb7f6d52fcff43f95f0"
+          "sha256": "6eb8e92d45dd42ad48ee69497db26abae0d9a8d264bf5d1dc792f86edc70f642"
         }
       ],
       "tests": [
@@ -331,26 +331,26 @@
         {
           "path": "outreach/research.py",
           "symbol": "research_lead",
-          "line": 124,
-          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+          "line": 213,
+          "sha256": "ed88806cdc72fe430ad5b79f914637f61f470e50d8451a83df6d7cb619c4813c"
         },
         {
           "path": "outreach/web.py",
           "symbol": "extract_page",
-          "line": 354,
-          "sha256": "d5cc0f835c03a033d957b9fdd2c6d05b578d477ebc5417c43f80e99aa7ede5b1"
+          "line": 681,
+          "sha256": "f4e62aaa9de688c9f9a3a391e76f50c3599232b3459025041615d1f64fe25bc3"
         },
         {
           "path": "outreach/providers.py",
           "symbol": "research_suggestions",
-          "line": 90,
-          "sha256": "28dc0b312a30b643b8f4daf0898c4d41406222ae78bbec9e532a0e2b4f578966"
+          "line": 219,
+          "sha256": "307b12735fb318d748be6409196c2f79f343488a7282071983f298f8c5e3b29b"
         },
         {
           "path": "outreach/opportunities.py",
           "symbol": "proposals",
-          "line": 16,
-          "sha256": "50e545beea125cf618dc0e77dbfdaaff85b6bd09aeef55a7745a9b9fee76b70b"
+          "line": 28,
+          "sha256": "5034f95df0af0e0cd705705739ac2cd4256dbe4e195da45f7c0591def9112989"
         }
       ],
       "tests": [
@@ -363,13 +363,13 @@
         {
           "path": "tests/test_research.py",
           "test": "test_recrawl_suggestions_exclude_unvisited_historical_pages",
-          "line": 122,
+          "line": 126,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_research.py",
           "test": "test_ai_rejects_invented_quote",
-          "line": 151,
+          "line": 155,
           "executed_passing_cases": 1
         },
         {
@@ -397,21 +397,21 @@
         {
           "path": "outreach/research.py",
           "symbol": "research_lead",
-          "line": 124,
-          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+          "line": 213,
+          "sha256": "ed88806cdc72fe430ad5b79f914637f61f470e50d8451a83df6d7cb619c4813c"
         },
         {
           "path": "outreach/research.py",
           "symbol": "add_contact",
-          "line": 78,
-          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+          "line": 140,
+          "sha256": "ed88806cdc72fe430ad5b79f914637f61f470e50d8451a83df6d7cb619c4813c"
         }
       ],
       "tests": [
         {
           "path": "tests/test_research.py",
           "test": "test_research_to_contacts_and_verification",
-          "line": 103,
+          "line": 105,
           "executed_passing_cases": 1
         },
         {
@@ -433,14 +433,14 @@
         {
           "path": "outreach/research.py",
           "symbol": "research_lead",
-          "line": 124,
-          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+          "line": 213,
+          "sha256": "ed88806cdc72fe430ad5b79f914637f61f470e50d8451a83df6d7cb619c4813c"
         },
         {
           "path": "outreach/research.py",
           "symbol": "contact_candidates",
-          "line": 64,
-          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+          "line": 121,
+          "sha256": "ed88806cdc72fe430ad5b79f914637f61f470e50d8451a83df6d7cb619c4813c"
         }
       ],
       "tests": [
@@ -469,14 +469,14 @@
         {
           "path": "outreach/research.py",
           "symbol": "add_contact",
-          "line": 78,
-          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+          "line": 140,
+          "sha256": "ed88806cdc72fe430ad5b79f914637f61f470e50d8451a83df6d7cb619c4813c"
         },
         {
           "path": "outreach/research.py",
           "symbol": "assert_contact_ownership",
-          "line": 47,
-          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+          "line": 97,
+          "sha256": "ed88806cdc72fe430ad5b79f914637f61f470e50d8451a83df6d7cb619c4813c"
         }
       ],
       "tests": [
@@ -504,27 +504,27 @@
       "id": "F",
       "label": "Reacher verification",
       "implementation": "present; mapped tests passed",
-      "mode": "automatic / external setup pending",
-      "behavior_checked": "Strict response/address checks; unknown/risky/catch-all/disposable/invalid cannot pass. Freshness and ownership rechecked before probing.",
-      "live_or_manual_boundary": "Real self-hosted Reacher backend/SMTP validation pending; current real attempts failed and verdicts are unknown.",
+      "mode": "automatic / broader provider acceptance pending",
+      "behavior_checked": "Strict response/address checks; unknown/risky/catch-all/disposable/invalid cannot pass. Current source, recipient and suppression checked before dispatch and before committing a result.",
+      "live_or_manual_boundary": "Native backend/API/auth passed. The earlier isolated recipient was catch-all/risky; a new officially published florist contact received a real safe/non-catch-all verdict. One verdict does not establish universal existence, broader accuracy or inbox delivery; no outreach sent.",
       "code": [
         {
           "path": "outreach/research.py",
           "symbol": "verify_contact",
-          "line": 257,
-          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+          "line": 417,
+          "sha256": "ed88806cdc72fe430ad5b79f914637f61f470e50d8451a83df6d7cb619c4813c"
         },
         {
           "path": "outreach/providers.py",
           "symbol": "verify_email",
-          "line": 69,
-          "sha256": "28dc0b312a30b643b8f4daf0898c4d41406222ae78bbec9e532a0e2b4f578966"
+          "line": 190,
+          "sha256": "307b12735fb318d748be6409196c2f79f343488a7282071983f298f8c5e3b29b"
         },
         {
           "path": "outreach/providers.py",
           "symbol": "classify_reacher",
-          "line": 45,
-          "sha256": "28dc0b312a30b643b8f4daf0898c4d41406222ae78bbec9e532a0e2b4f578966"
+          "line": 166,
+          "sha256": "307b12735fb318d748be6409196c2f79f343488a7282071983f298f8c5e3b29b"
         }
       ],
       "tests": [
@@ -543,7 +543,7 @@
         {
           "path": "tests/test_profile_prospects.py",
           "test": "test_reviewed_profile_contact_can_verify_and_queue_with_all_existing_gates",
-          "line": 151,
+          "line": 154,
           "executed_passing_cases": 1
         }
       ]
@@ -560,13 +560,13 @@
           "path": "outreach/campaigns.py",
           "symbol": "review_lead",
           "line": 46,
-          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+          "sha256": "697c785c1458d340bba7ff9941441287505413dec507612df975231b97a412c2"
         },
         {
           "path": "outreach/priorities.py",
           "symbol": "ranked",
-          "line": 8,
-          "sha256": "38dd83447f538a542da949ce753e458b4b2ee0443de7688e22be2c5b7afb9419"
+          "line": 9,
+          "sha256": "a4293f6cd7a5d7770ca0474c8985a6884432cf5db1193528edf9ec68f1ebb380"
         }
       ],
       "tests": [
@@ -591,13 +591,13 @@
         {
           "path": "tests/test_requirements_audit.py",
           "test": "test_review_rejects_sources_not_refreshed_in_latest_crawl",
-          "line": 81,
+          "line": 85,
           "executed_passing_cases": 4
         },
         {
           "path": "tests/test_requirements_audit.py",
           "test": "test_sourced_trigger_and_extra_value_survive_into_drafts",
-          "line": 45,
+          "line": 49,
           "executed_passing_cases": 1
         }
       ]
@@ -613,8 +613,8 @@
         {
           "path": "outreach/browser.py",
           "symbol": "screenshot",
-          "line": 309,
-          "sha256": "9224168faf20b461e60836d1165f0ddbfc41e27a1f571eb7f6d52fcff43f95f0"
+          "line": 349,
+          "sha256": "6eb8e92d45dd42ad48ee69497db26abae0d9a8d264bf5d1dc792f86edc70f642"
         },
         {
           "path": "outreach/performance.py",
@@ -655,26 +655,26 @@
         {
           "path": "outreach/mail.py",
           "symbol": "send_one",
-          "line": 94,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 95,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         },
         {
           "path": "outreach/mail.py",
           "symbol": "record_inbound",
-          "line": 211,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 249,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         },
         {
           "path": "outreach/campaigns.py",
           "symbol": "resume_contact",
-          "line": 270,
-          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+          "line": 337,
+          "sha256": "697c785c1458d340bba7ff9941441287505413dec507612df975231b97a412c2"
         },
         {
           "path": "outreach/profiles.py",
           "symbol": "assert_profile_review",
-          "line": 61,
-          "sha256": "06f5374b52d969a22ed59e9e1877dcf043fe3a28a6ec3787158a3719b5c5cf4b"
+          "line": 90,
+          "sha256": "849a2a0a8c58816f2fb785e2e764931eab1a1e3b1b36ac272cf626a6b4393e10"
         }
       ],
       "tests": [
@@ -699,7 +699,7 @@
         {
           "path": "tests/test_profile_prospects.py",
           "test": "test_ambiguous_or_blocked_profile_cannot_be_qualified",
-          "line": 82,
+          "line": 85,
           "executed_passing_cases": 2
         }
       ]
@@ -716,26 +716,26 @@
           "path": "outreach/campaigns.py",
           "symbol": "review_lead",
           "line": 46,
-          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+          "sha256": "697c785c1458d340bba7ff9941441287505413dec507612df975231b97a412c2"
         },
         {
           "path": "outreach/campaigns.py",
           "symbol": "draft_sequence",
-          "line": 158,
-          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+          "line": 167,
+          "sha256": "697c785c1458d340bba7ff9941441287505413dec507612df975231b97a412c2"
         },
         {
           "path": "outreach/opportunities.py",
           "symbol": "proposals",
-          "line": 16,
-          "sha256": "50e545beea125cf618dc0e77dbfdaaff85b6bd09aeef55a7745a9b9fee76b70b"
+          "line": 28,
+          "sha256": "5034f95df0af0e0cd705705739ac2cd4256dbe4e195da45f7c0591def9112989"
         }
       ],
       "tests": [
         {
           "path": "tests/test_profile_prospects.py",
           "test": "test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate",
-          "line": 43,
+          "line": 46,
           "executed_passing_cases": 2
         },
         {
@@ -770,19 +770,19 @@
           "path": "outreach/campaigns.py",
           "symbol": "review_lead",
           "line": 46,
-          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+          "sha256": "697c785c1458d340bba7ff9941441287505413dec507612df975231b97a412c2"
         },
         {
           "path": "outreach/campaigns.py",
           "symbol": "draft_sequence",
-          "line": 158,
-          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+          "line": 167,
+          "sha256": "697c785c1458d340bba7ff9941441287505413dec507612df975231b97a412c2"
         },
         {
           "path": "outreach/opportunities.py",
           "symbol": "proposals",
-          "line": 16,
-          "sha256": "50e545beea125cf618dc0e77dbfdaaff85b6bd09aeef55a7745a9b9fee76b70b"
+          "line": 28,
+          "sha256": "5034f95df0af0e0cd705705739ac2cd4256dbe4e195da45f7c0591def9112989"
         }
       ],
       "tests": [
@@ -801,7 +801,7 @@
         {
           "path": "tests/test_deliverables.py",
           "test": "test_whatsapp_flow_requires_qualified_channel_and_artifacts_require_auth",
-          "line": 89,
+          "line": 93,
           "executed_passing_cases": 1
         },
         {
@@ -822,40 +822,46 @@
       "id": "I",
       "label": "Source-backed personalized draft + 3 follow-ups",
       "implementation": "present; mapped tests passed",
-      "mode": "automatic drafting after review",
+      "mode": "AI writing after source review",
       "behavior_checked": "Exactly four editable touches, one relevant offer, source references and distinct follow-up value; activated content cannot be overwritten.",
-      "live_or_manual_boundary": "Twenty historical company previews/80 messages reviewed as source/copy samples; recipient acceptance and campaign results pending.",
+      "live_or_manual_boundary": "Historical templates are offline samples only. The current AI writer requires its own configured endpoint and model-quality acceptance; no live AI/provider or recipient acceptance claimed.",
       "code": [
         {
           "path": "outreach/campaigns.py",
           "symbol": "create_drafts",
-          "line": 183,
-          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+          "line": 192,
+          "sha256": "697c785c1458d340bba7ff9941441287505413dec507612df975231b97a412c2"
         },
         {
-          "path": "outreach/campaigns.py",
-          "symbol": "draft_sequence",
-          "line": 158,
-          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+          "path": "outreach/email_writer.py",
+          "symbol": "generate_sequence",
+          "line": 105,
+          "sha256": "2aabfc924a565fdca52d7dd9c19b619548555d5e4beb33a1275a524afea8d553"
+        },
+        {
+          "path": "outreach/email_writer.py",
+          "symbol": "validate_output",
+          "line": 58,
+          "sha256": "2aabfc924a565fdca52d7dd9c19b619548555d5e4beb33a1275a524afea8d553"
         }
       ],
       "tests": [
         {
           "path": "tests/test_requirements_audit.py",
           "test": "test_sourced_trigger_and_extra_value_survive_into_drafts",
-          "line": 45,
+          "line": 49,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_requirements_audit.py",
           "test": "test_default_followup_adds_new_value",
-          "line": 74,
+          "line": 78,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_requirements_audit.py",
           "test": "test_draft_generation_cannot_overwrite_a_sequence_approved_mid_request",
-          "line": 222,
+          "line": 226,
           "executed_passing_cases": 1
         }
       ]
@@ -871,14 +877,14 @@
         {
           "path": "outreach/campaigns.py",
           "symbol": "approve",
-          "line": 212,
-          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+          "line": 271,
+          "sha256": "697c785c1458d340bba7ff9941441287505413dec507612df975231b97a412c2"
         },
         {
           "path": "outreach/app.py",
           "symbol": "edit_message",
-          "line": 707,
-          "sha256": "2620c7d9759199f61634ea97c7ff0a7df0f8d6b5ec6c32f03e4ff9e030c51abd"
+          "line": 914,
+          "sha256": "9d839103d6c29388364f2dc7925c3ecd5744c32bad7dcf2a195da3932b5a1b2f"
         }
       ],
       "tests": [
@@ -897,7 +903,7 @@
         {
           "path": "tests/test_requirements_audit.py",
           "test": "test_old_qualification_cannot_skip_new_country_review",
-          "line": 165,
+          "line": 169,
           "executed_passing_cases": 1
         }
       ]
@@ -913,27 +919,27 @@
         {
           "path": "outreach/campaigns.py",
           "symbol": "approve",
-          "line": 212,
-          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+          "line": 271,
+          "sha256": "697c785c1458d340bba7ff9941441287505413dec507612df975231b97a412c2"
         },
         {
           "path": "outreach/mail.py",
           "symbol": "send_one",
-          "line": 94,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 95,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         },
         {
           "path": "outreach/mail.py",
           "symbol": "eligible_now",
-          "line": 23,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 24,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         }
       ],
       "tests": [
         {
           "path": "tests/test_requirements_audit.py",
           "test": "test_two_concurrent_approvals_cannot_activate_twice",
-          "line": 185,
+          "line": 189,
           "executed_passing_cases": 1
         },
         {
@@ -951,7 +957,7 @@
         {
           "path": "tests/test_requirements_audit.py",
           "test": "test_eligible_timezone_not_starved_by_first_hundred_due_contacts",
-          "line": 206,
+          "line": 210,
           "executed_passing_cases": 1
         }
       ]
@@ -967,20 +973,20 @@
         {
           "path": "outreach/mail.py",
           "symbol": "smtp_send",
-          "line": 49,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 50,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         },
         {
           "path": "outreach/mail.py",
           "symbol": "build_message",
-          "line": 28,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 29,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         },
         {
           "path": "outreach/mail.py",
           "symbol": "send_one",
-          "line": 94,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 95,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         }
       ],
       "tests": [
@@ -1015,14 +1021,14 @@
         {
           "path": "outreach/worker.py",
           "symbol": "mail_loop",
-          "line": 62,
-          "sha256": "0b44041146ff8787ff038c0dc1db4e1b21a12c2b94c9dfab9e454ae6576eb8d8"
+          "line": 135,
+          "sha256": "035c3f959eb60e20e06bd93d8f45e738b88e6db7aaad62466dc212f8f918de7b"
         },
         {
           "path": "outreach/mail.py",
           "symbol": "poll_inbox",
-          "line": 272,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 312,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         }
       ],
       "tests": [
@@ -1057,14 +1063,14 @@
         {
           "path": "outreach/mail.py",
           "symbol": "mark_sent",
-          "line": 180,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 218,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         },
         {
           "path": "outreach/mail.py",
           "symbol": "due_candidates",
-          "line": 83,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 84,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         }
       ],
       "tests": [
@@ -1093,14 +1099,14 @@
         {
           "path": "outreach/mail.py",
           "symbol": "record_inbound",
-          "line": 211,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 249,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         },
         {
           "path": "outreach/sales.py",
           "symbol": "record_activity",
           "line": 39,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         }
       ],
       "tests": [
@@ -1119,7 +1125,7 @@
         {
           "path": "tests/test_sales.py",
           "test": "test_manual_reply_stops_active_sequence_and_cannot_release",
-          "line": 46,
+          "line": 47,
           "executed_passing_cases": 1
         }
       ]
@@ -1135,20 +1141,20 @@
         {
           "path": "outreach/db.py",
           "symbol": "suppress",
-          "line": 208,
-          "sha256": "b138f16db3e6c86558665f6658872d2a061ab576ac60d0fd20ddb7b230af6288"
+          "line": 212,
+          "sha256": "c5bf23a3f30ccf8a7cd3368a4901ddc4e4b224bd6702d8f2ac034295abf6e63a"
         },
         {
           "path": "outreach/mail.py",
           "symbol": "record_inbound",
-          "line": 211,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 249,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         },
         {
           "path": "outreach/app.py",
           "symbol": "unsubscribe",
-          "line": 781,
-          "sha256": "2620c7d9759199f61634ea97c7ff0a7df0f8d6b5ec6c32f03e4ff9e030c51abd"
+          "line": 993,
+          "sha256": "9d839103d6c29388364f2dc7925c3ecd5744c32bad7dcf2a195da3932b5a1b2f"
         }
       ],
       "tests": [
@@ -1189,33 +1195,33 @@
         {
           "path": "outreach/mail.py",
           "symbol": "record_inbound",
-          "line": 211,
-          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+          "line": 249,
+          "sha256": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72"
         },
         {
           "path": "outreach/sales.py",
           "symbol": "record_activity",
           "line": 39,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         },
         {
           "path": "outreach/sales.py",
           "symbol": "create_task",
-          "line": 133,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "line": 137,
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         }
       ],
       "tests": [
         {
           "path": "tests/test_sales.py",
           "test": "test_inbound_reply_creates_one_fulfillment_task_and_shared_hold",
-          "line": 78,
+          "line": 79,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_sales.py",
           "test": "test_tasks_are_due_visible_and_close_with_outcome",
-          "line": 133,
+          "line": 134,
           "executed_passing_cases": 1
         }
       ]
@@ -1231,14 +1237,14 @@
         {
           "path": "outreach/deliverables.py",
           "symbol": "create",
-          "line": 21,
-          "sha256": "3f30390bf914e8fc2201910437a80ed55ddbbe11a5763ddc971c9b5050cd22c8"
+          "line": 52,
+          "sha256": "9f3dca60b7475ad830dfac6ff82f7f1721e9f2acd673f21e0f2043fbfc4fb9e5"
         },
         {
           "path": "outreach/deliverables.py",
           "symbol": "action",
-          "line": 99,
-          "sha256": "3f30390bf914e8fc2201910437a80ed55ddbbe11a5763ddc971c9b5050cd22c8"
+          "line": 146,
+          "sha256": "9f3dca60b7475ad830dfac6ff82f7f1721e9f2acd673f21e0f2043fbfc4fb9e5"
         }
       ],
       "tests": [
@@ -1251,13 +1257,13 @@
         {
           "path": "tests/test_deliverables.py",
           "test": "test_faq_and_concept_labels_do_not_claim_live_ai_or_finished_website",
-          "line": 54,
+          "line": 58,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_deliverables.py",
           "test": "test_annotated_artifact_embeds_only_its_saved_company_screenshot",
-          "line": 72,
+          "line": 76,
           "executed_passing_cases": 1
         }
       ]
@@ -1274,20 +1280,20 @@
           "path": "outreach/sales.py",
           "symbol": "update_sales",
           "line": 91,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         }
       ],
       "tests": [
         {
           "path": "tests/test_sales.py",
           "test": "test_unconfirmed_client_need_cannot_advance_or_create_proposal",
-          "line": 87,
+          "line": 88,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_sales.py",
           "test": "test_complete_operator_confirmed_sales_lifecycle",
-          "line": 93,
+          "line": 94,
           "executed_passing_cases": 1
         }
       ]
@@ -1304,32 +1310,32 @@
           "path": "outreach/sales.py",
           "symbol": "update_sales",
           "line": 91,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         },
         {
           "path": "outreach/sales.py",
           "symbol": "create_task",
-          "line": 133,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "line": 137,
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         }
       ],
       "tests": [
         {
           "path": "tests/test_sales.py",
           "test": "test_complete_operator_confirmed_sales_lifecycle",
-          "line": 93,
+          "line": 94,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_sales.py",
           "test": "test_invalid_dates_and_future_activity_are_rejected",
-          "line": 150,
+          "line": 151,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_sales.py",
           "test": "test_tasks_are_due_visible_and_close_with_outcome",
-          "line": 133,
+          "line": 134,
           "executed_passing_cases": 1
         }
       ]
@@ -1345,27 +1351,27 @@
         {
           "path": "outreach/sales.py",
           "symbol": "create_proposal",
-          "line": 156,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "line": 160,
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         },
         {
           "path": "outreach/sales.py",
           "symbol": "proposal_action",
-          "line": 181,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "line": 198,
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         }
       ],
       "tests": [
         {
           "path": "tests/test_sales.py",
           "test": "test_complete_operator_confirmed_sales_lifecycle",
-          "line": 93,
+          "line": 94,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_sales.py",
           "test": "test_unconfirmed_client_need_cannot_advance_or_create_proposal",
-          "line": 87,
+          "line": 88,
           "executed_passing_cases": 1
         }
       ]
@@ -1381,21 +1387,21 @@
         {
           "path": "outreach/sales.py",
           "symbol": "proposal_action",
-          "line": 181,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "line": 198,
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         }
       ],
       "tests": [
         {
           "path": "tests/test_sales.py",
           "test": "test_complete_operator_confirmed_sales_lifecycle",
-          "line": 93,
+          "line": 94,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_sales.py",
           "test": "test_won_requires_real_references_and_delivered_proposal",
-          "line": 117,
+          "line": 118,
           "executed_passing_cases": 1
         }
       ]
@@ -1412,20 +1418,20 @@
           "path": "outreach/sales.py",
           "symbol": "update_sales",
           "line": 91,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         }
       ],
       "tests": [
         {
           "path": "tests/test_sales.py",
           "test": "test_won_requires_real_references_and_delivered_proposal",
-          "line": 117,
+          "line": 118,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_sales.py",
           "test": "test_complete_operator_confirmed_sales_lifecycle",
-          "line": 93,
+          "line": 94,
           "executed_passing_cases": 1
         }
       ]
@@ -1441,33 +1447,33 @@
         {
           "path": "outreach/sales.py",
           "symbol": "create_task",
-          "line": 133,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "line": 137,
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         },
         {
           "path": "outreach/sales.py",
           "symbol": "finish_task",
-          "line": 144,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "line": 148,
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         },
         {
           "path": "outreach/sales.py",
           "symbol": "update_sales",
           "line": 91,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         }
       ],
       "tests": [
         {
           "path": "tests/test_sales.py",
           "test": "test_tasks_are_due_visible_and_close_with_outcome",
-          "line": 133,
+          "line": 134,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_sales.py",
           "test": "test_complete_operator_confirmed_sales_lifecycle",
-          "line": 93,
+          "line": 94,
           "executed_passing_cases": 1
         }
       ]
@@ -1484,25 +1490,25 @@
           "path": "outreach/sales.py",
           "symbol": "update_sales",
           "line": 91,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         },
         {
           "path": "outreach/sales.py",
           "symbol": "report",
-          "line": 197,
-          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+          "line": 217,
+          "sha256": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c"
         },
         {
           "path": "outreach/learning.py",
           "symbol": "report",
           "line": 51,
-          "sha256": "ad7339e35afd033c1a142686074bf624d21fcd2ac77367bc97956867f5f5040c"
+          "sha256": "b31b50455d6d852697a92853c022a66f0e59a196ac83dee6887badb3cf9acc95"
         },
         {
           "path": "outreach/learning.py",
           "symbol": "summarize",
           "line": 24,
-          "sha256": "ad7339e35afd033c1a142686074bf624d21fcd2ac77367bc97956867f5f5040c"
+          "sha256": "b31b50455d6d852697a92853c022a66f0e59a196ac83dee6887badb3cf9acc95"
         },
         {
           "path": "outreach/finance.py",
@@ -1520,25 +1526,25 @@
           "path": "outreach/aftercare.py",
           "symbol": "create",
           "line": 24,
-          "sha256": "51f1a09ef096599a426d0e739b9347d054748c3310124539227d3d9da708d872"
+          "sha256": "6b6e76d55976bd8c5a512bf1bd2814041fa5d4f89a84e68a46fc4b0d276888ff"
         },
         {
           "path": "outreach/aftercare.py",
           "symbol": "update",
           "line": 44,
-          "sha256": "51f1a09ef096599a426d0e739b9347d054748c3310124539227d3d9da708d872"
+          "sha256": "6b6e76d55976bd8c5a512bf1bd2814041fa5d4f89a84e68a46fc4b0d276888ff"
         },
         {
           "path": "outreach/aftercare.py",
           "symbol": "export",
           "line": 76,
-          "sha256": "51f1a09ef096599a426d0e739b9347d054748c3310124539227d3d9da708d872"
+          "sha256": "6b6e76d55976bd8c5a512bf1bd2814041fa5d4f89a84e68a46fc4b0d276888ff"
         },
         {
           "path": "outreach/aftercare.py",
           "symbol": "report",
-          "line": 89,
-          "sha256": "51f1a09ef096599a426d0e739b9347d054748c3310124539227d3d9da708d872"
+          "line": 90,
+          "sha256": "6b6e76d55976bd8c5a512bf1bd2814041fa5d4f89a84e68a46fc4b0d276888ff"
         }
       ],
       "tests": [
@@ -1569,37 +1575,37 @@
         {
           "path": "tests/test_sales.py",
           "test": "test_complete_operator_confirmed_sales_lifecycle",
-          "line": 93,
+          "line": 94,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_sales.py",
           "test": "test_sales_report_includes_companies_without_sales_records",
-          "line": 64,
+          "line": 65,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_learning.py",
           "test": "test_funnel_counts_records_not_messages_and_excludes_automatic_replies",
-          "line": 27,
+          "line": 28,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_learning.py",
           "test": "test_approval_snapshot_is_atomic_and_survives_later_business_label_changes",
-          "line": 46,
+          "line": 47,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_learning.py",
           "test": "test_legacy_approved_context_stays_unknown_instead_of_invented_historical_attribution",
-          "line": 59,
+          "line": 60,
           "executed_passing_cases": 1
         },
         {
           "path": "tests/test_learning.py",
           "test": "test_empty_learning_does_not_invent_rates_or_experiment_winners",
-          "line": 19,
+          "line": 20,
           "executed_passing_cases": 1
         }
       ]
