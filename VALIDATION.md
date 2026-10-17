@@ -1,3 +1,17 @@
+# Selected NVIDIA writer adapter — 17 October 2026
+
+For `nvidia/nemotron-3-ultra-550b-a55b` at the NVIDIA hosted endpoint, requests now explicitly
+disable reasoning using the provider-documented `reasoning_effort: "none"`. Other models and
+providers retain their previous request fields. Writer contracts, social research and runtime
+UI controls passed **79 focused tests in 33.67 seconds**, with one existing Starlette/httpx
+warning; Ruff passed. Four new cases cover the selected model, trailing-slash base URL,
+another model and another provider. Mock-provider results remain unactivated drafts.
+
+No real NVIDIA key was configured or tested here, and no live prospect data was sent to
+the provider. Live account access, quota, output quality and latency remain to be checked
+after the user saves the key in dashboard Settings → AI email writer. The preceding full
+suite result below covers the crawler bug-review revision before this small adapter change.
+
 # LinkedIn/X follow-up bug review — 17 October 2026
 
 The full current suite passed **1194 tests in 352.09 seconds**, with zero failures and

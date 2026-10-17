@@ -20,6 +20,30 @@ Settings → **AI email writer** provides API base URL, model ID, password-style
 
 Environment alternative: `DRAFT_API_URL`, `DRAFT_API_KEY`, `DRAFT_MODEL`, `DRAFT_TIMEOUT_SECONDS`. The default base URL is `https://integrate.api.nvidia.com/v1`; no model or key is enabled automatically. The implementation appends `/chat/completions`. Existing `OPENAI_*` settings remain solely for optional research suggestions; they do not write operational emails.
 
+### NVIDIA Nemotron 3 Ultra configuration
+
+For the model selected on 17 October 2026, use Settings → AI email writer:
+
+| Field | Value |
+| --- | --- |
+| API base URL | `https://integrate.api.nvidia.com/v1` |
+| Model ID | `nvidia/nemotron-3-ultra-550b-a55b` |
+| API key | Generate it on NVIDIA Build, then paste into the dashboard password field |
+| Request timeout | `180` seconds |
+
+Save AI writer settings; no container restart is required. The key stays in the managed
+settings file in the existing VPS volume and is excluded from API responses and events.
+Leaving the key blank on a later save keeps it. Do not commit a key or paste it into chat.
+Keep Sending OFF while generating and reviewing the first real research-based drafts.
+
+The [official hosted inference reference](https://docs.api.nvidia.com/nim/reference/nvidia-nemotron-3-ultra-550b-a55b-infer)
+documents `reasoning_effort: "none"`. For this exact hosted model only, the writer supplies
+that field so its 3,000-token budget is used for the final four-message JSON rather than
+the provider's default high-effort reasoning. Other models/providers retain their existing
+request parameters. Structured content, source quotes and unchanged research are still
+validated before saving. Contract tests use a mock provider; real account availability,
+quota, draft quality and latency require a live generation after configuring the key.
+
 Use terms that permit the intended production use. NVIDIA's [API trial terms](https://assets.ngc.nvidia.com/products/api-catalog/legal/NVIDIA%20API%20Trial%20Terms%20of%20Service.pdf) distinguish evaluation from production; free-endpoint availability alone is not production permission. No real prospect data was sent to any AI endpoint in this correction.
 
 ## Verification and remaining acceptance

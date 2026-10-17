@@ -120,6 +120,10 @@ def generate_sequence(settings, lead, contact, finding, evidence, *, before_requ
         encoded = encoded.replace(contact['name'], '[recipient omitted]')
     payload = {'model': model, 'stream': False, 'temperature': 0.4, 'max_tokens': 3000,
                'messages': [{'role': 'system', 'content': INSTRUCTIONS}, {'role': 'user', 'content': encoded}]}
+    if base == 'https://integrate.api.nvidia.com/v1' and model == 'nvidia/nemotron-3-ultra-550b-a55b':
+        # The hosted Ultra endpoint defaults to high reasoning effort. These
+        # already-reviewed drafting inputs need the budget for final JSON.
+        payload['reasoning_effort'] = 'none'
     try:
         with httpx.Client(timeout=timeout, trust_env=False, follow_redirects=False) as client:
             if before_request:

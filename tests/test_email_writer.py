@@ -84,6 +84,28 @@ def test_real_writer_uses_reviewed_research_and_saves_unactivated_ai_provenance(
     assert settings.draft_api_key not in json.dumps(detail)
 
 
+@pytest.mark.parametrize('base,model,effort', [
+    ('https://integrate.api.nvidia.com/v1', 'nvidia/nemotron-3-ultra-550b-a55b', 'none'),
+    ('https://integrate.api.nvidia.com/v1/', 'nvidia/nemotron-3-ultra-550b-a55b', 'none'),
+    ('https://integrate.api.nvidia.com/v1', 'another-model', None),
+    ('https://another-provider.example/v1', 'nvidia/nemotron-3-ultra-550b-a55b', None),
+])
+def test_nvidia_ultra_uses_final_output_budget_without_changing_other_providers(db, settings, prepared, monkeypatch, base, model, effort):
+    lead, contact, _, sources = inputs(db, prepared)
+    def handle(request):
+        packet = json.loads(request.content)
+        assert request.url == base.rstrip('/')+'/chat/completions'
+        assert packet.get('reasoning_effort') == effort
+        assert packet['stream'] is False and packet['max_tokens'] == 3000
+        assert packet['model'] == model
+        assert contact['email'] not in request.content.decode()
+        return response(output(lead, sources))
+    provider(monkeypatch, settings, handle)
+    settings.draft_api_url, settings.draft_model = base, model
+    create_drafts(db, settings, contact['id'])
+    assert all(m['state'] == 'draft' and m['due_at'] is None for m in db.all('SELECT * FROM messages'))
+
+
 @pytest.mark.parametrize('problem', ['key', 'model'])
 def test_missing_writer_configuration_preserves_drafts_no_fallback(db, settings, prepared, monkeypatch, problem):
     settings.draft_api_key = '' if problem == 'key' else 'fictional-key'
