@@ -11,6 +11,10 @@ This is a browser UI transport, not unrestricted access. The websites make their
 
 ## Configure on the VPS
 
+If Docker Hub cannot be reached during the image build, use the scoped
+[Python registry override](REGISTRY_BUILD_RECOVERY.md). It preserves this browser image
+and data volume without changing the host's global networking configuration.
+
 Domain, VPS and mailbox credentials remain user-configured. These steps prepare a **new VPS-owned** session; do not copy a desktop Chrome profile or paste cookies/tokens into the app.
 
 1. Deploy the normal source release and create/configure `.env` as usual. Keep `SENDING_ENABLED=false`. Set a unique eight-character `PLATFORM_BROWSER_VIEW_PASSWORD` locally. It protects the temporary VNC viewer inside an SSH tunnel; do not place it in a URL or chat. `PLATFORM_BROWSER_SETUP_SITE=linkedin` now opens LinkedIn only by default; choose `x` or `both` explicitly if needed. Use a legitimate own-account session.

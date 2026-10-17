@@ -1,4 +1,5 @@
-FROM python:3.13-slim-bookworm
+ARG PYTHON_BASE_IMAGE=python:3.13-slim-bookworm
+FROM ${PYTHON_BASE_IMAGE}
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 WORKDIR /app
 COPY requirements.lock pyproject.toml ./

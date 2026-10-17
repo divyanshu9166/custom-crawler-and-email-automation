@@ -1,3 +1,16 @@
+# Python registry override for VPS build recovery — 17 October 2026
+
+Both app Dockerfiles now accept an optional `PYTHON_BASE_IMAGE` build argument, retaining
+the previous Python 3.13 slim Bookworm default. An anonymous live check from the development
+machine returned HTTP 200 for the ECR Public token and the exact `3.13-slim-bookworm`
+manifest, with Linux amd64 support. Fourteen existing deployment/browser-setup checks passed
+in 4.04 seconds. This does not establish a Docker build: no local Docker runtime is available.
+
+The override provides a different registry path for the user's failed Docker Hub IPv6
+connection. Actual ECR/pip/apt/Playwright reachability and a completed build on that VPS
+remain to be checked. See [commands and scope](docs/REGISTRY_BUILD_RECOVERY.md). No host
+network, Docker-daemon setting, running VPS service, session or data volume was modified.
+
 # Search submission and background Pipeline refresh — 17 October 2026
 
 The user's VPS initially reported zero leads and no jobs; the subsequent Operations view
