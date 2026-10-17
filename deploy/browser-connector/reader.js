@@ -12,7 +12,9 @@ globalThis.OutreachBusinessReader = () => {
       }
       const url = new URL(value);
       const d = url.hostname.toLowerCase();
-      if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.port ||
+      // Keep the URL credential guard explicit; this reads a property, not a stored secret.
+      if (url.password) return '';
+      if (!['http:', 'https:'].includes(url.protocol) || url.username || url.port ||
           !d.includes('.') || d.includes(':') || /^[\d.]+$/.test(d) || /\.(?:local|localhost|internal)$/.test(d) ||
           ['linkedin.com','x.com','twitter.com','t.co','google.com','facebook.com','instagram.com','youtube.com','bit.ly','linktr.ee']
             .some(p => d === p || d.endsWith('.'+p)) ||

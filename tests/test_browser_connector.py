@@ -63,6 +63,17 @@ def test_missing_ambiguous_private_or_stale_page_is_not_captured(browser, url, h
     assert capture(browser, url, html) is None
 
 
+@pytest.mark.parametrize('authority', [
+    'demo-user@bright-demo.com',
+    ':demo-only@bright-demo.com',
+    'demo-user:demo-only@bright-demo.com',
+    'bright-demo.com:8443',
+])
+def test_website_candidate_rejects_embedded_credentials_and_custom_port(browser, authority):
+    html = BASE.replace('https://bright-demo.com/contact', f'https://{authority}/contact')
+    assert capture(browser, html=html) is None
+
+
 def test_modern_x_header_uses_only_public_website_label(browser):
     html = '''<div><h1>Bright Studio</h1><p>Profile bio</p><div><div>
     <a href="https://t.co/opaque">bright-demo.com</a><a href="/BrightDemo/about">Joined 2020</a>
