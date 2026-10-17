@@ -2,7 +2,7 @@
 
 **Email-writing boundary:** these tests use controlled AI/provider fixtures; they do not establish live model quality or mailbox delivery. Operational writing requires research-based AI with no template fallback. Legacy drafts cannot be approved. See [the writing correction](AI_EMAIL_WRITING.md) and [the current research upgrade](SOCIAL_RESEARCH_UPGRADE.md).
 
-Latest recheck: **35 / 35 nodes mapped to actual source and passing executed tests**. Full suite: **1180 passed**.
+Latest recheck: **35 / 35 nodes mapped to actual source and passing executed tests**. Full suite: **1194 passed**.
 
 The implementation is present for every node, with deliberate human gates. This does **not** mean all nodes are fully automatic or verified against real providers/clients. The dashboard supports eleven overview stages and all thirty-five detailed nodes with source/ownership, branch, hold and operator-recorded statuses.
 

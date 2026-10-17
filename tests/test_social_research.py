@@ -370,3 +370,141 @@ def test_business_profile_links_are_bounded_deduplicated_and_reject_private_rout
     links = [X, X+'?tracking=discarded', 'https://www.linkedin.com/company/bright',
              PERSON, 'https://x.com/messages', 'https://bright-demo.com/contact']
     assert business_profile_links(links) == [X, 'https://www.linkedin.com/company/bright']
+
+
+async def test_experience_does_not_import_contact_links_from_unrequested_dialog(browser_fixture):
+    settings, source = browser_fixture
+    source['routes'].update({'/in/alex-demo': PROFILE, '/in/alex-demo/details/experience/':
+        EXPERIENCE.replace('</section>', '<div role="dialog"><h2>Contact Info</h2>'
+                           '<a href="mailto:private@other-demo.com">PRIVATE DIALOG</a></div></section>')})
+    result = await platform_browser.browser_professional_snapshot(settings, PERSON)
+    assert result['state'] == 'captured' and 'experience' in result['sections']
+    assert 'PRIVATE' not in json.dumps(result) and not result['published_emails']
+    assert not result['published_email_links'] and 'contact_info' not in result['sections']
+
+
+async def test_empty_inline_experience_does_not_skip_detail_fallback(browser_fixture):
+    settings, source = browser_fixture
+    source['routes'].update({'/in/alex-demo': PROFILE.replace('</main>', '<section><h2>Experience</h2></section></main>'),
+                             '/in/alex-demo/details/experience/': EXPERIENCE})
+    result = await platform_browser.browser_professional_snapshot(settings, PERSON)
+    assert result['sections']['experience']['source_url'].endswith('/details/experience/')
+    assert 'since 2022' in result['sections']['experience']['text']
+
+
+async def test_optional_section_deadline_preserves_root_capture_and_marks_partial(settings):
+    settings.platform_browser_delay_seconds = 0
+    settings.platform_browser_search_timeout_seconds = .02
+    async def stalled(*args):
+        import asyncio
+        await asyncio.sleep(60)
+    root = {'state': 'captured', 'text': 'Alex Demo\nFounder at Bright Demo', 'links': [], 'mailto': []}
+    result = await social_browser.enrich_professional(settings, SimpleNamespace(navigate=stalled), PERSON, root)
+    assert result['state'] == 'captured' and result['text'] == root['text']
+    assert result['section_errors'] == [{'section': 'optional_sections', 'state': 'deadline'}]
+
+
+async def test_linkedin_post_uses_own_activity_and_ignores_hidden_date(browser_fixture):
+    settings, source = browser_fixture
+    source['routes']['/company/bright/posts/'] = '''<main><div data-urn="urn:li:activity:123456">
+      <div class="update-components-actor"><a href="/company/bright/">Bright</a></div>
+      <div class="update-components-text">Our store has launched.</div>
+      <a href="/feed/update/urn:li:activity:999999/">Unrelated activity</a>
+      <time hidden datetime="2026-10-16T12:00:00Z">PRIVATE DATE</time></div></main>'''
+    result = await social_browser.browser_recent_posts(settings, 'https://www.linkedin.com/company/bright')
+    assert result['posts'][0]['url'] == 'https://www.linkedin.com/feed/update/urn:li:activity:123456/'
+    assert result['posts'][0]['published_at'] is None
+    assert not result['posts'][0]['publication_date_verified']
+
+
+async def test_hidden_linkedin_permalink_does_not_support_post_attribution(browser_fixture):
+    settings, source = browser_fixture
+    source['routes']['/company/bright/posts/'] = '''<main><article>
+      <div class="update-components-actor"><a href="/company/bright/">Bright</a></div>
+      <div class="update-components-text">Our store has launched.</div>
+      <a hidden href="/feed/update/urn:li:activity:999999/">PRIVATE LINK</a></article></main>'''
+    result = await social_browser.browser_recent_posts(settings, 'https://www.linkedin.com/company/bright')
+    assert not result['posts']
+
+
+@pytest.mark.parametrize('suffix', ['not-an-id', '123456/private', '123456/extra'])
+async def test_x_author_search_rejects_non_post_permalink_routes(browser_fixture, suffix):
+    settings, source = browser_fixture
+    source['routes']['/search'] = '<main>' + tweet().replace('/status/123456', '/status/' + suffix) + '</main>'
+    async with platform_browser.BrowserSession(settings) as session:
+        page, _ = await session.navigate('https://x.com/search?q=Bright&f=live')
+        result = await page.evaluate((ROOT/'outreach/static/post-search-reader.js').read_text(encoding='utf-8'))
+    assert not result['rows']
+
+
+async def test_post_challenge_after_capture_preserves_data_but_is_incomplete(settings, monkeypatch):
+    settings.platform_browser_enabled = True
+    settings.platform_browser_delay_seconds = 0
+    settings.platform_browser_search_steps = 2
+    settings.social_posts_max_posts = 2
+    responses = iter([{'state': 'captured', 'posts': [{'url': X+'/status/123456', 'text': 'Our store launched.'}]},
+                      {'state': 'login_or_challenge', 'posts': []}])
+    async def evaluate(*args):
+        return next(responses)
+    async def wheel(*args):
+        pass
+    page = SimpleNamespace(evaluate=evaluate, mouse=SimpleNamespace(wheel=wheel))
+    class Session:
+        def __init__(self, *args): pass
+        async def __aenter__(self): return self
+        async def __aexit__(self, *args): pass
+        async def navigate(self, url): return page, None
+    monkeypatch.setattr(platform_browser, 'BrowserSession', Session)
+    result = await social_browser.browser_recent_posts(settings, X)
+    assert result['state'] == 'captured' and len(result['posts']) == 1
+    assert result['partial'] and result['stop_reason'] == 'login_or_challenge'
+    assert platform_browser.hold(settings, 'x.com')
+
+
+async def test_deployment_diagnostic_does_not_pass_partial_post_capture(settings, monkeypatch):
+    spec = importlib.util.spec_from_file_location('check_social_research', ROOT/'scripts/check_social_research.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    settings.platform_browser_enabled = True
+    settings.sending_enabled = False
+    async def partial(*args):
+        return {'state': 'captured', 'posts': [{}], 'partial': True, 'stop_reason': 'deadline'}
+    monkeypatch.setattr(module, 'browser_recent_posts', partial)
+    report = await module.check(settings, x_profile=X)
+    assert report['state'] == 'incomplete' and report['checks'][0]['partial']
+
+
+def test_source_status_filters_lead_before_history_limit_and_preserves_partial(settings, db):
+    source_status.record(db, 'website', 'crawl', 'https://bright-demo.com', {'state': 'captured', 'partial': True}, lead_id=1)
+    with db.connect() as con:
+        con.executemany('INSERT INTO events(kind,detail,created_at) VALUES(?,?,?)', [
+            ('source_observation', json.dumps({'lead_id': 2}), time.time()) for _ in range(1001)])
+    result = source_status.snapshot(db, settings, 1)
+    assert result['providers'][2]['last_state'] == 'captured'
+    assert len(result['observations']) == 1 and result['observations'][0]['partial']
+
+
+async def test_social_evidence_and_attribution_roll_back_together(settings, db, prepared, monkeypatch):
+    import sqlite3
+    settings.platform_browser_enabled = True
+    async def captured(*args):
+        return {'state': 'captured', 'profile_url': X, 'observed_at': time.time(),
+                'posts': [{'url': X+'/status/123456', 'text': 'Our new store launched.'}]}
+    monkeypatch.setattr(social_browser, 'browser_recent_posts', captured)
+    db.execute("CREATE TRIGGER fail_social_capture BEFORE INSERT ON events WHEN NEW.kind='social_capture' BEGIN SELECT RAISE(ABORT,'test disk write failure'); END")
+    with pytest.raises(sqlite3.IntegrityError, match='test disk write failure'):
+        await social_research.research_posts(db, settings, prepared['lead_id'], [{'url': X}])
+    assert not db.one('SELECT id FROM evidence WHERE url=?', (X+'/status/123456',))
+    assert not db.one("SELECT id FROM events WHERE kind='social_post_capture'")
+
+
+async def test_social_research_rechecks_outreach_status_after_browser_access(settings, db, prepared, monkeypatch):
+    settings.platform_browser_enabled = True
+    async def changed(*args):
+        db.execute("UPDATE contacts SET status='active' WHERE id=?", (prepared['contact_id'],))
+        return {'state': 'captured', 'profile_url': X, 'observed_at': time.time(),
+                'posts': [{'url': X+'/status/123456', 'text': 'Our new store launched.'}]}
+    monkeypatch.setattr(social_browser, 'browser_recent_posts', changed)
+    with pytest.raises(ValueError, match='Existing outreach history'):
+        await social_research.research_posts(db, settings, prepared['lead_id'], [{'url': X}])
+    assert not db.one('SELECT id FROM evidence WHERE url=?', (X+'/status/123456',))

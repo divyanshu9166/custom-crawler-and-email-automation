@@ -24,10 +24,12 @@
       if(owner.pathname.replace(/\/$/,'').toLowerCase()!==target.pathname.replace(/\/$/,'').toLowerCase())continue;
     }catch{continue;}
     const text=clean(card.querySelector(linkedin?'.update-components-text,.feed-shared-update-v2__description,[data-testid="post-text"]':'[data-testid="tweetText"]'));if(!text)continue;
-    const time=[...card.querySelectorAll('time[datetime]')].find(e=>!e.closest('[data-testid="quoteTweet"],.feed-shared-mini-update-v2')),anchor=linkedin?[...card.querySelectorAll('a[href]')].find(a=>!a.closest('.feed-shared-mini-update-v2')&&/\/feed\/update\/urn:li:activity:\d+|\/posts\/[^/]+-activity-\d+/.test(a.href)):time?.closest('a[href]');
+    const activity=card.getAttribute('data-urn')?.match(/^urn:li:activity:(\d+)$/)?.[1];
+    const time=[...card.querySelectorAll('time[datetime]')].find(e=>visible(e)&&!e.closest('[data-testid="quoteTweet"],.feed-shared-mini-update-v2'));
+    const anchor=linkedin?[...card.querySelectorAll('a[href]')].find(a=>visible(a)&&!a.closest('[data-testid="quoteTweet"],.feed-shared-mini-update-v2')&&/\/feed\/update\/urn:li:activity:\d+|\/posts\/[^/]+-activity-\d+/.test(a.href)&&(!activity||a.href.match(/(?:urn:li:activity:|-activity-)(\d+)/)?.[1]===activity)):time?.closest('a[href]');
     let url;
     try{
-      if(anchor){const v=new URL(anchor.href);v.search='';v.hash='';url=v.href;}
+      if(visible(anchor)){const v=new URL(anchor.href);v.search='';v.hash='';url=v.href;}
       else if(linkedin&&/^urn:li:activity:\d+$/.test(card.getAttribute('data-urn')||''))url='https://www.linkedin.com/feed/update/'+card.getAttribute('data-urn')+'/';
       else continue;
       const v=new URL(url);

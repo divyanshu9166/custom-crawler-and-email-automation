@@ -1,3 +1,24 @@
+# LinkedIn/X follow-up bug review — 17 October 2026
+
+The full current suite passed **1194 tests in 352.09 seconds**, with zero failures and
+one existing Starlette/httpx warning. The focused social-research, desktop/mobile dashboard
+and runtime-control run passed **41 tests**. Thirteen additional regression cases cover
+unrequested dialog links, empty section headings, optional-section deadlines, mismatched
+LinkedIn activity links, hidden dates/permalinks, invalid X status routes, interrupted
+captures, diagnostic completeness, lead-filtered history, transactional capture rollback
+and outreach-status changes during browser access.
+
+Ruff, syntax checks for every JavaScript reader/dashboard file and all **35 workflow-node
+mappings** passed. Evidence, attribution and capture events now commit atomically with an
+eligibility check inside the same transaction. The source dashboard distinguishes partial
+capture from a bounded sample, and the deployment diagnostic refuses a partial pass.
+See [the fixes](docs/SOCIAL_RESEARCH_UPGRADE.md#follow-up-bug-review).
+
+These checks use isolated APIs, SQLite databases and controlled Chromium pages; they do
+not access live LinkedIn/X accounts, verify real recipients or send outreach. Docker/VPS
+acceptance and live yield of the new paths remain pending. Earlier results below retain
+their original scope.
+
 # LinkedIn/X research upgrade verification — 17 October 2026
 
 The corrected full regression suite passed **1180 tests in 325.96 seconds**, with zero

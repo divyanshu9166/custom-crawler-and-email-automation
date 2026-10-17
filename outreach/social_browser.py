@@ -33,6 +33,17 @@ async def browser_people_discover(settings, query, limit=5):
 async def enrich_professional(settings, session, target, result):
     """A root capture stays attributable; missing optional sections are explicit."""
     result = {**result, 'sections': dict(result.get('sections', {})), 'section_errors': []}
+    try:
+        async with asyncio.timeout(settings.platform_browser_search_timeout_seconds):
+            await _enrich_sections(settings, session, target, result)
+    except TimeoutError:
+        result['section_errors'].append({'section': 'optional_sections', 'state': 'deadline'})
+    if 'contact_info' in result['sections']:
+        result['scope'] = 'account_visible_professional_fields'
+    return result
+
+
+async def _enrich_sections(settings, session, target, result):
     sections = result['sections']
     requested = []
     if settings.linkedin_profile_experience_enabled and 'experience' not in sections:
@@ -82,9 +93,6 @@ async def enrich_professional(settings, session, target, result):
             break
         except Exception as exc:
             result['section_errors'].append({'section': name, 'state': 'unavailable', 'error_type': type(exc).__name__})
-    if 'contact_info' in sections:
-        result['scope'] = 'account_visible_professional_fields'
-    return result
 
 
 def post_profile(url):
@@ -143,10 +151,11 @@ async def browser_recent_posts(settings, url):
                             await page.mouse.wheel(0, 650)
                             await asyncio.sleep(max(.25, settings.platform_browser_delay_seconds))
                     return {**base, 'state': 'captured' if found else state, 'stop_reason': stop,
-                            'coverage': 'bounded_visible_posts', 'posts': list(found.values())[:settings.social_posts_max_posts]}
+                            'coverage': 'bounded_visible_posts', 'partial': stop != 'requested_limit',
+                            'posts': list(found.values())[:settings.social_posts_max_posts]}
     except browser.LoginTransitionError:
         record_hold(settings, platform, 'login_or_challenge')
-        return {**base, 'state': 'login_or_challenge'}
+        return interrupted('login_or_challenge')
     except TimeoutError:
         return interrupted('deadline')
     except Exception as exc:

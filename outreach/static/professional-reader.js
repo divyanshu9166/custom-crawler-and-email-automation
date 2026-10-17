@@ -18,7 +18,7 @@ options => {
     const heading=[...section.querySelectorAll('h2,[role="heading"]')].find(e=>visible(e)&&(includeExperience?['about','experience']:['about']).includes(text(e).toLowerCase()));
     if(!heading||section===card)continue;
     const key=text(heading).toLowerCase(),content=key==='about'?section.querySelector('[data-testid="profile-about"],.inline-show-more-text,.pv-shared-text-with-see-more')||section:section;
-    if(visible(content)){const value=text(content).slice(0,6000);sections[key]={state:'captured',text:value,source_url:u.origin+u.pathname};pieces.push(value);scopes.push(content);}
+    if(visible(content)){const value=text(content).slice(0,6000);if(!value||value.toLowerCase()===key)continue;sections[key]={state:'captured',text:value,source_url:u.origin+u.pathname};pieces.push(value);scopes.push(content);}
   }
   const links=[],mailto=[];
   for(const scope of scopes)for(const a of scope.querySelectorAll('a[href]'))if(visible(a)){

@@ -39,6 +39,28 @@ Person section captures retain their own source URLs, hashes and visibility labe
 the combined profile capture. An optional section failure does not erase the root capture;
 it is reported separately and authentication/HTTP denials preserve platform holds.
 
+## Follow-up bug review
+
+The follow-up review hardened these cases:
+
+- Experience extraction excludes unrelated dialog links as well as dialog text. Empty
+  section headings cannot masquerade as captured fields or suppress the detail fallback.
+- Optional profile sections share a deadline. A stalled section returns the root capture
+  with an explicit section error instead of delaying the entire profile indefinitely.
+- Post readers require visible permalinks and dates. LinkedIn activity links must match
+  the containing card's activity ID when present; X author-search links require the exact
+  numeric status route. Hidden dates never establish a publication date.
+- A post sample interrupted by a challenge, timeout or exhausted step budget remains
+  partial even when it contains usable posts. The deployment diagnostic reports incomplete
+  and exits nonzero for partial captures. Reaching the requested count proves only that
+  bounded sample, not complete platform coverage.
+- Social evidence, per-post attribution and the capture record commit together. Eligibility
+  is checked inside the write transaction; a contact activated during browser access prevents
+  the write. A failed write rolls the entire capture back.
+- Lead-specific diagnostics filter the lead before applying the history limit, so busy
+  unrelated prospects cannot hide that lead's results. Bounded coverage and interrupted
+  capture status are displayed separately.
+
 ## VPS deployment
 
 Keep Worker and Sending OFF while building and checking. Preserve the same Docker volume

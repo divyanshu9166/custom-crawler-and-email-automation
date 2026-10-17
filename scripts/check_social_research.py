@@ -36,9 +36,10 @@ async def check(settings, *, people_query='', person_profile='', linkedin_compan
             value = await browser_recent_posts(settings, profile)
             reports.append({'operation': 'author_post_research', 'state': value.get('state'),
                             'http_status': value.get('http_status'), 'post_count': len(value.get('posts', [])),
+                            'partial': bool(value.get('partial')),
                             'stop_reason': value.get('stop_reason'),
                             'elapsed_seconds': round(time.monotonic()-started, 2)})
-    complete = bool(reports) and all(r['state'] == 'captured' and not r.get('section_errors') for r in reports)
+    complete = bool(reports) and all(r['state'] == 'captured' and not r.get('section_errors') and not r.get('partial') for r in reports)
     return {'state': 'captured' if complete else 'incomplete', 'checks': reports,
             'note': 'Bounded capture checks only. Business identity, buyer fit, email ownership and mailbox existence remain unverified. No message was sent.'}
 

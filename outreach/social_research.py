@@ -63,7 +63,6 @@ async def research_posts(db, settings, lead_id, hints):
         eligible_lead(db, lead_id)
         started = time.monotonic()
         value = await browser_recent_posts(settings, profile)
-        eligible_lead(db, lead_id)
         value.update(lead_id=lead_id, source_hint=hint)
         if value.get('state') != 'captured':
             value['posts'] = []
@@ -72,12 +71,6 @@ async def research_posts(db, settings, lead_id, hints):
             text = post['text']
             digest = hashlib.sha256(text.encode()).hexdigest()
             post.update(sha256=digest, observed_at=time.time())
-            # This is background/trigger evidence, never a business-identity,
-            # country, contact ownership or mailbox-verification shortcut.
-            db.execute('INSERT INTO evidence(lead_id,url,title,text,sha256,fetched_at) VALUES(?,?,?,?,?,?) '
-                       'ON CONFLICT(lead_id,url) DO UPDATE SET title=excluded.title,text=excluded.text,sha256=excluded.sha256,fetched_at=excluded.fetched_at',
-                       (lead_id, post['url'], 'Social post: ' + profile, text, digest, time.time()))
-            db.event('social_post_capture', {'lead_id': lead_id, **post, 'source_hint': hint})
             for email in re.findall(EMAIL_RE, text):
                 try:
                     address = normalize_email(email)
@@ -85,7 +78,21 @@ async def research_posts(db, settings, lead_id, hints):
                         candidates.add(address)
                 except ValueError:
                     pass
-        db.event('social_capture', value)
+        # Bind eligibility, evidence and attribution in one write transaction.
+        # An approval/status change during browser access must not overwrite
+        # the evidence of an already-active conversation.
+        from .sequence import Reader
+        with db.connect() as con:
+            con.execute('BEGIN IMMEDIATE')
+            eligible_lead(Reader(con), lead_id)
+            for post in value.get('posts', []):
+                con.execute('INSERT INTO evidence(lead_id,url,title,text,sha256,fetched_at) VALUES(?,?,?,?,?,?) '
+                            'ON CONFLICT(lead_id,url) DO UPDATE SET title=excluded.title,text=excluded.text,sha256=excluded.sha256,fetched_at=excluded.fetched_at',
+                            (lead_id, post['url'], 'Social post: ' + profile, post['text'], post['sha256'], post['observed_at']))
+                con.execute('INSERT INTO events(kind,detail,created_at) VALUES(?,?,?)',
+                            ('social_post_capture', json.dumps({'lead_id': lead_id, **post, 'source_hint': hint}), time.time()))
+            con.execute('INSERT INTO events(kind,detail,created_at) VALUES(?,?,?)',
+                        ('social_capture', json.dumps(value), time.time()))
         source_status.record(db, 'managed_browser:' + platform, 'recent_posts', profile, value,
                              lead_id=lead_id, elapsed=time.monotonic()-started, contacts=len(candidates))
         captures.append(value)

@@ -13,7 +13,8 @@ def record(db, provider, operation, target, result, *, lead_id=None, elapsed=Non
         'elapsed_seconds': round(elapsed, 3) if elapsed is not None else None,
         'observed_at': time.time(), 'http_status': result.get('http_status'),
         'reason': result.get('reason') or result.get('stop_reason') or result.get('error_type', ''),
-        'partial': bool(result.get('section_errors')) or result.get('coverage') == 'bounded_visible_posts',
+        'partial': bool(result.get('partial') or result.get('section_errors')),
+        'coverage': result.get('coverage'),
         'review_required': True,
     })
 
@@ -23,10 +24,13 @@ def snapshot(db, settings, lead_id=None):
                   'managed_browser:x.com': settings.platform_browser_enabled,
                   'website': True, 'fxembed_profiles': settings.fxembed_profiles_enabled}
     seen, latest = set(), []
-    for row in db.all("SELECT detail FROM events WHERE kind='source_observation' ORDER BY id DESC LIMIT 1000"):
+    sql = "SELECT detail FROM events WHERE kind='source_observation'"
+    args = ()
+    if lead_id is not None:
+        sql += " AND json_extract(detail,'$.lead_id')=?"
+        args = (lead_id,)
+    for row in db.all(sql + ' ORDER BY id DESC LIMIT 1000', args):
         value = json.loads(row['detail'])
-        if lead_id and value.get('lead_id') != lead_id:
-            continue
         key = (value['provider'], value['operation'], value['target'], value.get('lead_id'))
         if key in seen:
             continue

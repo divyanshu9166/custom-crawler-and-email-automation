@@ -14,7 +14,8 @@
   const copy=root.cloneNode(true),original=[...root.querySelectorAll('*')],copies=[...copy.querySelectorAll('*')];
   original.forEach((e,i)=>{if(!visible(e)||e.matches('nav,aside,button,script,style,input')||e.closest('nav,aside,article')||(section==='experience'&&e.closest('dialog,[role="dialog"]')))copies[i]?.remove();});
   const text=copy.textContent.replace(/\s+/g,' ').trim().slice(0,6000),links=[],mailto=[];
-  for(const a of root.querySelectorAll('a[href]'))if(visible(a)&&!a.closest('nav,aside,article'))try{
+  if(!text||/^(?:experience|contact info|contact information)$/i.test(text))return {state:'fields_not_ready'};
+  for(const a of root.querySelectorAll('a[href]'))if(visible(a)&&!a.closest('nav,aside,article')&&(section!=='experience'||!a.closest('dialog,[role="dialog"]')))try{
     if(a.href.startsWith('mailto:'))mailto.push(decodeURIComponent(a.href.slice(7).split('?')[0]));
     else {const v=new URL(a.href);if(['http:','https:'].includes(v.protocol)&&!v.username&&!v.password){v.search='';v.hash='';links.push(v.href);}}
   }catch{}

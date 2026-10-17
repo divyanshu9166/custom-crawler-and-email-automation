@@ -6,12 +6,12 @@
   const rows=[];
   for(const card of document.querySelectorAll('main article[data-testid="tweet"]')){
     if(!visible(card)||card.querySelector('[data-testid="socialContext"],[aria-label="Protected account"],[data-testid="icon-lock"]'))continue;
-    const author=card.querySelector('[data-testid="User-Name"] a[href]'),body=card.querySelector('[data-testid="tweetText"]'),time=[...card.querySelectorAll('time[datetime]')].find(e=>!e.closest('[data-testid="quoteTweet"]')),permalink=time?.closest('a[href]');
+    const author=card.querySelector('[data-testid="User-Name"] a[href]'),body=card.querySelector('[data-testid="tweetText"]'),time=[...card.querySelectorAll('time[datetime]')].find(e=>visible(e)&&visible(e.closest('a[href]'))&&!e.closest('[data-testid="quoteTweet"]')),permalink=time?.closest('a[href]');
     if(!visible(author)||!visible(body)||!visible(permalink)||author.closest('[data-testid="quoteTweet"]')||body.closest('[data-testid="quoteTweet"]'))continue;
     try{
       const a=new URL(author.href),post=new URL(permalink.href);
       if(a.protocol!=='https:'||post.protocol!=='https:'||a.username||a.password||a.port||post.username||post.password||post.port)continue;
-      if(a.hostname!==u.hostname||post.hostname!==u.hostname||!/^\/[A-Za-z0-9_]{1,15}\/?$/.test(a.pathname)||!post.pathname.toLowerCase().startsWith(a.pathname.replace(/\/$/,'').toLowerCase()+'/status/'))continue;
+      if(a.hostname!==u.hostname||post.hostname!==u.hostname||!/^\/[A-Za-z0-9_]{1,15}\/?$/.test(a.pathname)||!/^\/[A-Za-z0-9_]{1,15}\/status\/[0-9]+\/?$/.test(post.pathname)||post.pathname.split('/')[1].toLowerCase()!==a.pathname.split('/')[1].toLowerCase())continue;
       const copy=body.cloneNode(true),original=[...body.querySelectorAll('*')],copies=[...copy.querySelectorAll('*')];
       original.forEach((e,i)=>{if(!visible(e)||e.closest('[data-testid="quoteTweet"]'))copies[i]?.remove();});
       rows.push({url:a.origin+a.pathname.replace(/\/$/,''),title:author.innerText.trim().slice(0,150),snippet:copy.textContent.replace(/\s+/g,' ').trim().slice(0,1200),
