@@ -1,0 +1,2295 @@
+{
+  "checked_at": 1791804956.019967,
+  "company_checks": [
+    {
+      "company": "Bouquets For Days",
+      "website": "https://www.bouquetsfordays.co.uk/",
+      "reused_prior_company_pages": 21,
+      "contact_recovery": {
+        "state": "captured",
+        "pages_saved": 2,
+        "queries": [
+          {
+            "query": "site:bouquetsfordays.co.uk (contact OR email)",
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 17,
+                "rejected_constraints": 10,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791804975.0391116,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 7,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791804976.8187716,
+                "cached": false
+              }
+            ],
+            "result_count": 7
+          },
+          {
+            "query": "site:bouquetsfordays.co.uk (founder OR owner OR leadership OR team)",
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 13,
+                "rejected_constraints": 7,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791804979.8815682,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 6,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791804980.9341822,
+                "cached": false
+              }
+            ],
+            "result_count": 6
+          },
+          {
+            "query": "\"Bouquets For Days\" \"bouquetsfordays.co.uk\" contact email",
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 17,
+                "rejected_constraints": 17,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791804984.2791963,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 7,
+                "rejected_constraints": 7,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791804985.424445,
+                "cached": false
+              }
+            ],
+            "result_count": 0
+          }
+        ],
+        "url_index": {
+          "state": "available",
+          "rows": [
+            {
+              "url": "https://www.bouquetsfordays.co.uk/about",
+              "indexed_at": "20260907112742",
+              "collection": "CC-MAIN-2026-39",
+              "origin": "commoncrawl_url_hint",
+              "current_publication": false
+            },
+            {
+              "url": "https://www.bouquetsfordays.co.uk/contact",
+              "indexed_at": "20260907122447",
+              "collection": "CC-MAIN-2026-39",
+              "origin": "commoncrawl_url_hint",
+              "current_publication": false
+            }
+          ],
+          "collection": "CC-MAIN-2026-39",
+          "records_examined": 22,
+          "bounded_first_page": true,
+          "provider": "commoncrawl",
+          "observed_at": 1791804995.8201425,
+          "cached": false
+        },
+        "seed_sources": [
+          {
+            "url": "https://www.bouquetsfordays.co.uk/about",
+            "origins": [
+              "commoncrawl_url_hint",
+              "saved_official_page"
+            ]
+          },
+          {
+            "url": "https://www.bouquetsfordays.co.uk/contact",
+            "origins": [
+              "commoncrawl_url_hint",
+              "saved_official_page",
+              "search_index"
+            ]
+          }
+        ]
+      },
+      "currently_sourced_company_contacts": 1,
+      "professional_research": {
+        "lead_id": 1,
+        "queries": [
+          {
+            "query": "site:linkedin.com/in/ \"Bouquets For Days\" (founder OR owner OR marketing OR ecommerce OR director)",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805016.661733,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805017.622275,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:x.com \"Bouquets For Days\" (founder OR owner OR marketing OR ecommerce)",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805020.6530817,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805021.6382916,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:linkedin.com/in/ \"Bouquets For Days\"",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 14,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805026.7403226,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 14,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805029.8792245,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:x.com \"Bouquets For Days\"",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 14,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805035.0935006,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 14,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805037.0886068,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "\"bouquetsfordays.co.uk\" LinkedIn founder",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805040.0702438,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805040.9638062,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "\"Bouquets For Days\"",
+            "results": 7,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 7,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805046.2246132,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 7,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805047.606069,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          }
+        ],
+        "captures": [],
+        "other_public_profile_hints": [
+          {
+            "url": "https://www.instagram.com/bouquets.for.days",
+            "origin": "current_official_navigation",
+            "source_url": "https://www.bouquetsfordays.co.uk/contact",
+            "observed_at": 1791805008.989541,
+            "email_publication_verified": false
+          },
+          {
+            "url": "https://www.instagram.com/bouquetsfordays",
+            "origin": "search_index",
+            "query": "\"Bouquets For Days\"",
+            "company_identity_verified": false,
+            "email_publication_verified": false
+          },
+          {
+            "url": "https://www.facebook.com/100063802969441",
+            "origin": "search_index",
+            "query": "\"Bouquets For Days\"",
+            "company_identity_verified": false,
+            "email_publication_verified": false
+          }
+        ],
+        "state": "held",
+        "note": "Public profile email candidates only; current employer, role, ownership and mailbox existence require review. No guessed addresses or SMTP probes.",
+        "url_index": {
+          "state": "available",
+          "rows": [
+            {
+              "url": "https://www.bouquetsfordays.co.uk/about",
+              "indexed_at": "20260907112742",
+              "collection": "CC-MAIN-2026-39",
+              "origin": "commoncrawl_url_hint",
+              "current_publication": false
+            },
+            {
+              "url": "https://www.bouquetsfordays.co.uk/contact",
+              "indexed_at": "20260907122447",
+              "collection": "CC-MAIN-2026-39",
+              "origin": "commoncrawl_url_hint",
+              "current_publication": false
+            }
+          ],
+          "collection": "CC-MAIN-2026-39",
+          "records_examined": 22,
+          "bounded_first_page": true,
+          "provider": "commoncrawl",
+          "observed_at": 1791804995.8201425,
+          "cached": true
+        },
+        "official_link_refresh": [
+          {
+            "url": "https://www.bouquetsfordays.co.uk/about",
+            "state": "captured",
+            "observed_at": 1791805004.1038666,
+            "sha256": "94817181b6922e7e4855a76e649dd5c8a3b4af22767b4c7f6a970be3aad43e7a",
+            "professional_links": [],
+            "published_company_email_candidates": 0
+          },
+          {
+            "url": "https://www.bouquetsfordays.co.uk/contact",
+            "state": "captured",
+            "observed_at": 1791805008.989541,
+            "sha256": "f33c139d394c8dccbebec5580ff5340cae841488053425eec263de7ac34aca8f",
+            "professional_links": [],
+            "published_company_email_candidates": 1
+          },
+          {
+            "url": "https://www.bouquetsfordays.co.uk/",
+            "state": "captured",
+            "observed_at": 1791805013.6559563,
+            "sha256": "b053d5daa4bdcf428db50a9e45bb959963b00452deff429cde92b6830b589d08",
+            "professional_links": [],
+            "published_company_email_candidates": 0
+          }
+        ],
+        "finished_at": 1791805049.6092887
+      }
+    },
+    {
+      "company": "Order Coffee Online | Portland Coffee Roasters",
+      "website": "https://www.portlandcoffeeroasters.com/",
+      "reused_prior_company_pages": 29,
+      "contact_recovery": {
+        "state": "captured",
+        "pages_saved": 2,
+        "queries": [
+          {
+            "query": "site:portlandcoffeeroasters.com (contact OR email)",
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 7,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805050.985088,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 7,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805052.0341039,
+                "cached": false
+              }
+            ],
+            "result_count": 7
+          },
+          {
+            "query": "site:portlandcoffeeroasters.com (founder OR owner OR leadership OR team)",
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 13,
+                "rejected_constraints": 6,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805055.1785839,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 13,
+                "rejected_constraints": 6,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805056.3310483,
+                "cached": false
+              }
+            ],
+            "result_count": 7
+          },
+          {
+            "query": "\"Order Coffee Online\" \"portlandcoffeeroasters.com\" contact email",
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 17,
+                "rejected_constraints": 17,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805059.4581923,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 8,
+                "rejected_constraints": 8,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805060.7183726,
+                "cached": false
+              }
+            ],
+            "result_count": 0
+          }
+        ],
+        "url_index": {
+          "state": "available",
+          "rows": [],
+          "collection": "CC-MAIN-2026-39",
+          "records_examined": 2,
+          "bounded_first_page": true,
+          "provider": "commoncrawl",
+          "observed_at": 1791805065.1674566,
+          "cached": false
+        },
+        "seed_sources": [
+          {
+            "url": "https://www.portlandcoffeeroasters.com/pages/about-us",
+            "origins": [
+              "saved_official_page",
+              "search_index"
+            ]
+          },
+          {
+            "url": "https://www.portlandcoffeeroasters.com/pages/contact",
+            "origins": [
+              "saved_official_page",
+              "search_index"
+            ]
+          }
+        ]
+      },
+      "currently_sourced_company_contacts": 0
+    }
+  ],
+  "scope": "Four market queries and two previously known companies. Index candidates are unqualified. Not a vendor-parity or exhaustive platform benchmark.",
+  "email_probes": 0,
+  "external_messages_sent": 0,
+  "paid_keys_used": false,
+  "main_operational_database_unchanged": true,
+  "finished_at": 1791805069.96008,
+  "discovery_before_final_directory_filter": [
+    {
+      "query": "UK Bristol independent florists",
+      "candidate_count": 5,
+      "candidate_urls": [
+        "https://theflowershopbristol.com/",
+        "https://bristolfloraldesign.co.uk/",
+        "https://bluefernflorist.co.uk/",
+        "https://rootsfloraldesigns.co.uk/",
+        "https://www.lloydsflowers.co.uk/"
+      ],
+      "providers": [
+        {
+          "state": "available",
+          "raw_results": 20,
+          "rejected_constraints": 10,
+          "engine_issues": [
+            [
+              "brave",
+              "too many requests"
+            ],
+            [
+              "google",
+              "access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ],
+          "provider": "searxng:default",
+          "observed_at": 1791804957.8444686,
+          "cached": false
+        },
+        {
+          "state": "available",
+          "raw_results": 11,
+          "rejected_constraints": 0,
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ],
+          "provider": "searxng:yahoo,mojeek",
+          "observed_at": 1791804960.7545738,
+          "cached": false
+        }
+      ],
+      "engine_issues": [
+        [
+          "brave",
+          "too many requests"
+        ],
+        [
+          "google",
+          "access denied"
+        ],
+        [
+          "qwant",
+          "CAPTCHA"
+        ],
+        [
+          "brave",
+          "Suspended: too many requests"
+        ],
+        [
+          "google",
+          "Suspended: access denied"
+        ],
+        [
+          "qwant",
+          "CAPTCHA"
+        ]
+      ]
+    },
+    {
+      "query": "US Portland coffee roasters",
+      "candidate_count": 5,
+      "candidate_urls": [
+        "https://www.portlandcoffeeroasters.com/pages/about-us",
+        "https://www.portlandcoffeeroasters.com/",
+        "https://en.wikipedia.org/wiki/Portland_Coffee_Roasters",
+        "https://roasters.the-coffee-box.com/roasters/city/portland/",
+        "https://www.roastlocal.com/oregon/portland"
+      ],
+      "providers": [
+        {
+          "state": "available",
+          "raw_results": 20,
+          "rejected_constraints": 10,
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ],
+          "provider": "searxng:default",
+          "observed_at": 1791804963.7750165,
+          "cached": false
+        },
+        {
+          "state": "available",
+          "raw_results": 10,
+          "rejected_constraints": 0,
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ],
+          "provider": "searxng:yahoo,mojeek",
+          "observed_at": 1791804966.9732924,
+          "cached": false
+        }
+      ],
+      "engine_issues": [
+        [
+          "brave",
+          "Suspended: too many requests"
+        ],
+        [
+          "google",
+          "Suspended: access denied"
+        ],
+        [
+          "qwant",
+          "CAPTCHA"
+        ],
+        [
+          "brave",
+          "Suspended: too many requests"
+        ],
+        [
+          "google",
+          "Suspended: access denied"
+        ],
+        [
+          "qwant",
+          "CAPTCHA"
+        ]
+      ]
+    },
+    {
+      "query": "UK London dental clinics",
+      "candidate_count": 5,
+      "candidate_urls": [
+        "https://www.treatwell.co.uk/places/at-dental-clinic/in-london-uk/",
+        "https://www.dentaly.org/en/dentists-near-me/london/dental-clinics-london/",
+        "https://docdental.uk/dental-clinics/london/",
+        "https://thelondondentalcentre.co.uk/",
+        "https://www.treatwell.co.uk/places/at-dental-clinic/in-greater-london-uk/"
+      ],
+      "providers": [
+        {
+          "state": "available",
+          "raw_results": 20,
+          "rejected_constraints": 10,
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "access denied"
+            ]
+          ],
+          "provider": "searxng:default",
+          "observed_at": 1791804968.3515453,
+          "cached": false
+        },
+        {
+          "state": "available",
+          "raw_results": 10,
+          "rejected_constraints": 0,
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "Suspended: access denied"
+            ]
+          ],
+          "provider": "searxng:yahoo,mojeek",
+          "observed_at": 1791804970.3270993,
+          "cached": false
+        }
+      ],
+      "engine_issues": [
+        [
+          "brave",
+          "Suspended: too many requests"
+        ],
+        [
+          "google",
+          "Suspended: access denied"
+        ],
+        [
+          "qwant",
+          "access denied"
+        ],
+        [
+          "brave",
+          "Suspended: too many requests"
+        ],
+        [
+          "google",
+          "Suspended: access denied"
+        ],
+        [
+          "qwant",
+          "Suspended: access denied"
+        ]
+      ]
+    },
+    {
+      "query": "US Austin roofing companies",
+      "candidate_count": 5,
+      "candidate_urls": [
+        "https://www.usroofingcompany.com/austin-tx",
+        "https://www.yelp.com/search?find_desc=Roofers&find_loc=Austin%2C+TX",
+        "https://www.angi.com/companylist/us/tx/austin/roofing.htm",
+        "https://austinroofingcompany.us/",
+        "https://austinlocalroofing.com/"
+      ],
+      "providers": [
+        {
+          "state": "available",
+          "raw_results": 20,
+          "rejected_constraints": 10,
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "Suspended: access denied"
+            ]
+          ],
+          "provider": "searxng:default",
+          "observed_at": 1791804971.7451723,
+          "cached": false
+        },
+        {
+          "state": "available",
+          "raw_results": 12,
+          "rejected_constraints": 0,
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "Suspended: access denied"
+            ]
+          ],
+          "provider": "searxng:yahoo,mojeek",
+          "observed_at": 1791804973.7538369,
+          "cached": false
+        }
+      ],
+      "engine_issues": [
+        [
+          "brave",
+          "Suspended: too many requests"
+        ],
+        [
+          "google",
+          "Suspended: access denied"
+        ],
+        [
+          "qwant",
+          "Suspended: access denied"
+        ],
+        [
+          "brave",
+          "Suspended: too many requests"
+        ],
+        [
+          "google",
+          "Suspended: access denied"
+        ],
+        [
+          "qwant",
+          "Suspended: access denied"
+        ]
+      ]
+    }
+  ],
+  "discovery": [
+    {
+      "query": "UK Bristol independent florists",
+      "country_hint": "UK",
+      "company_candidates": [
+        {
+          "url": "https://theflowershopbristol.com/",
+          "title": "The Flower Shop Bristol , Gloucester Rd. Same Day Flower Delivery",
+          "snippet": "We\u2019ve been working hard to provide Bristol with fresh flowers, beautiful bouquets and plants since 2002, offering a unique approach to floral arrangements with a team of friendly talented florists.",
+          "engines": [
+            "yahoo",
+            "bing"
+          ],
+          "source_url": "https://theflowershopbristol.com/",
+          "research_seed_url": "https://theflowershopbristol.com/",
+          "identity_status": "indexed_candidate_needs_review"
+        },
+        {
+          "url": "https://bristolfloraldesign.co.uk/",
+          "title": "Flower Delivery Bristol | Clifton Florist, Same-Day by 11am",
+          "snippet": "Independent Bristol florist in Clifton Village \u2014 bespoke bouquets, wedding & funeral flowers, and same-day flower delivery across Bristol. Order by 11am.",
+          "engines": [
+            "yahoo",
+            "bing"
+          ],
+          "source_url": "https://bristolfloraldesign.co.uk/",
+          "research_seed_url": "https://bristolfloraldesign.co.uk/",
+          "identity_status": "indexed_candidate_needs_review"
+        },
+        {
+          "url": "https://bluefernflorist.co.uk/",
+          "title": "Sustainable Florist Bristol | Seasonal Flower Delivery | blue fern florist",
+          "snippet": "Eco-conscious, hand-crafted arrangements from an independent Bristol florist. Bridal, sympathy, subscriptions & seasonal flowers, delivered sustainably.",
+          "engines": [
+            "yahoo",
+            "bing"
+          ],
+          "source_url": "https://bluefernflorist.co.uk/",
+          "research_seed_url": "https://bluefernflorist.co.uk/",
+          "identity_status": "indexed_candidate_needs_review"
+        },
+        {
+          "url": "https://rootsfloraldesigns.co.uk/",
+          "title": "Local Florist Bristol | Same Day Flower Delivery | Roots Floral Designs",
+          "snippet": "Our beautiful little shop sits in the heart of the city, Roots Floral Designs is a local Bristol florist providing beautiful flowers and plants. You can order online or by phone before 10am for same day flower delivery. Alternatively you can pop in or use our website to arrange a collection.",
+          "engines": [
+            "yahoo",
+            "bing"
+          ],
+          "source_url": "https://rootsfloraldesigns.co.uk/",
+          "research_seed_url": "https://rootsfloraldesigns.co.uk/",
+          "identity_status": "indexed_candidate_needs_review"
+        },
+        {
+          "url": "https://www.lloydsflowers.co.uk/",
+          "title": "Lloyds Flowers - Bristol Florist & Same Day Flower Delivery",
+          "snippet": "Lloyds Flowers is an independent Bristol florist offering fresh bouquets, wedding flowers, funeral tributes and same day flower delivery across Bristol from our Clifton shop.",
+          "engines": [
+            "yahoo",
+            "bing"
+          ],
+          "source_url": "https://www.lloydsflowers.co.uk/",
+          "research_seed_url": "https://www.lloydsflowers.co.uk/",
+          "identity_status": "indexed_candidate_needs_review"
+        }
+      ],
+      "discovery": {
+        "queries": [
+          "UK Bristol independent florists"
+        ],
+        "signals": [],
+        "errors": [],
+        "skipped": [],
+        "engine_reports": [
+          {
+            "query": "UK Bristol independent florists",
+            "engine_issues": [
+              [
+                "brave",
+                "too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 10,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805252.4827647,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 10,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805253.9966826,
+                "cached": false
+              }
+            ],
+            "source": "public_search",
+            "results": 10
+          }
+        ],
+        "candidate_domains_before_limit": 10,
+        "country_hint": "UK",
+        "note": "Automatic indexed/public research. Every company, geography, contact owner and offer remains unqualified until reviewed; indexed snippets can be stale."
+      }
+    },
+    {
+      "query": "US Portland coffee roasters",
+      "country_hint": "US",
+      "company_candidates": [
+        {
+          "url": "https://www.portlandcoffeeroasters.com/",
+          "title": "About Us - Portland Coffee Roasters",
+          "snippet": "Learn about Portland Coffee Roasters\u2014dedicated to sustainably sourcing and roasting premium coffee since 1996. Discover our mission, values, and commitment to community.",
+          "engines": [
+            "yahoo"
+          ],
+          "source_url": "https://www.portlandcoffeeroasters.com/pages/about-us",
+          "research_seed_url": "https://www.portlandcoffeeroasters.com/pages/about-us",
+          "identity_status": "indexed_candidate_needs_review"
+        },
+        {
+          "url": "https://www.heartroasters.com/",
+          "title": "Heart Coffee Roasters",
+          "snippet": "Heart is a caf\u00e9, roaster & bustling destination point located in Portland, Oregon.",
+          "engines": [
+            "yahoo"
+          ],
+          "source_url": "https://www.heartroasters.com/",
+          "research_seed_url": "https://www.heartroasters.com/",
+          "identity_status": "indexed_candidate_needs_review"
+        },
+        {
+          "url": "https://www.stumptowncoffee.com/",
+          "title": "Craft Coffee Beans Online & In Shops | Stumptown Coffee Roasters",
+          "snippet": "Stumptown Coffee Roasters brings you fresh beans, cold brew, and good vibes. Order online, visit a shop, or subscribe for the long haul.",
+          "engines": [
+            "yahoo"
+          ],
+          "source_url": "https://www.stumptowncoffee.com/",
+          "research_seed_url": "https://www.stumptowncoffee.com/",
+          "identity_status": "indexed_candidate_needs_review"
+        }
+      ],
+      "discovery": {
+        "queries": [
+          "US Portland coffee roasters"
+        ],
+        "signals": [],
+        "errors": [],
+        "skipped": [
+          {
+            "url": "https://en.wikipedia.org/wiki/Portland_Coffee_Roasters",
+            "reason": "editorial_or_marketplace_source"
+          },
+          {
+            "url": "https://www.emeraldpalate.com/best-portland-coffee-roasters/",
+            "reason": "directory_or_listicle_result"
+          },
+          {
+            "url": "https://www.roastlocal.com/oregon/portland",
+            "reason": "directory_or_listicle_result"
+          }
+        ],
+        "engine_reports": [
+          {
+            "query": "US Portland coffee roasters",
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 17,
+                "rejected_constraints": 10,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805255.95154,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 17,
+                "rejected_constraints": 10,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805257.446773,
+                "cached": false
+              }
+            ],
+            "source": "public_search",
+            "results": 7
+          }
+        ],
+        "candidate_domains_before_limit": 3,
+        "country_hint": "US",
+        "note": "Automatic indexed/public research. Every company, geography, contact owner and offer remains unqualified until reviewed; indexed snippets can be stale."
+      }
+    },
+    {
+      "query": "UK London dental clinics",
+      "country_hint": "UK",
+      "company_candidates": [
+        {
+          "url": "https://thelondondentalcentre.co.uk/",
+          "title": "London Dental Centre | Private Dentist London | Islington",
+          "snippet": "Dentistry you can trust. Welcome to London Dental Centre. We offer all general and cosmetic dental services. If you\u2019re looking for routine dental care, Invisalign, composite bonding, veneers, implants or anything else, you\u2019re in the right place.",
+          "engines": [
+            "yahoo",
+            "bing"
+          ],
+          "source_url": "https://thelondondentalcentre.co.uk/",
+          "research_seed_url": "https://thelondondentalcentre.co.uk/",
+          "identity_status": "indexed_candidate_needs_review"
+        },
+        {
+          "url": "https://www.dentalclinic.london/",
+          "title": "Dental Clinic London | Private Dentist in London \u00a330",
+          "snippet": "Welcome to Dental Clinic London \u2014 your trusted private dental practice in South Kensington. From cosmetic dentistry and teeth whitening to dental implants and invisible braces, we make exceptional dental care affordable.",
+          "engines": [
+            "yahoo",
+            "bing"
+          ],
+          "source_url": "https://www.dentalclinic.london/",
+          "research_seed_url": "https://www.dentalclinic.london/",
+          "identity_status": "indexed_candidate_needs_review"
+        },
+        {
+          "url": "https://www.zental.uk/",
+          "title": "Award Winning Private Dentist in London - Zental",
+          "snippet": "Premium dental care from award winning private dentists in London. Visit Zental for tailored treatment in a calm, modern setting, Find \u2026",
+          "engines": [
+            "bing"
+          ],
+          "source_url": "https://www.zental.uk/locations/london",
+          "research_seed_url": "https://www.zental.uk/locations/london",
+          "identity_status": "indexed_candidate_needs_review"
+        }
+      ],
+      "discovery": {
+        "queries": [
+          "UK London dental clinics"
+        ],
+        "signals": [],
+        "errors": [],
+        "skipped": [
+          {
+            "url": "https://www.treatwell.co.uk/places/at-dental-clinic/in-london-uk/",
+            "reason": "directory_or_listicle_result"
+          },
+          {
+            "url": "https://www.dentaly.org/en/dentists-near-me/london/dental-clinics-london/",
+            "reason": "directory_or_listicle_result"
+          },
+          {
+            "url": "https://docdental.uk/dental-clinics/london/",
+            "reason": "not_a_supported_specific_business_profile"
+          },
+          {
+            "url": "https://www.treatwell.co.uk/places/at-dental-clinic/in-greater-london-uk/",
+            "reason": "directory_or_listicle_result"
+          },
+          {
+            "url": "https://bestinlondon.uk/top-10-dental-clinics-in-london/",
+            "reason": "directory_or_listicle_result"
+          },
+          {
+            "url": "https://dentistregister.co.uk/city/london",
+            "reason": "directory_or_listicle_result"
+          },
+          {
+            "url": "https://www.dentaly.org/en/dentists-near-me/london/",
+            "reason": "not_a_supported_specific_business_profile"
+          }
+        ],
+        "engine_reports": [
+          {
+            "query": "UK London dental clinics",
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 10,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805259.2643404,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 10,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805260.875504,
+                "cached": false
+              }
+            ],
+            "source": "public_search",
+            "results": 10
+          }
+        ],
+        "candidate_domains_before_limit": 3,
+        "country_hint": "UK",
+        "note": "Automatic indexed/public research. Every company, geography, contact owner and offer remains unqualified until reviewed; indexed snippets can be stale."
+      }
+    },
+    {
+      "query": "US Austin roofing companies",
+      "country_hint": "US",
+      "company_candidates": [
+        {
+          "url": "https://www.usroofingcompany.com/",
+          "title": "Top Roofers in Austin, TX | US Roofing Company",
+          "snippet": "Whether you're looking to replace your damaged roof or install a new one in Austin for a brand new home construction, look no further than Ace Roofing Company, - the top roofing company in Austin.",
+          "engines": [
+            "yahoo"
+          ],
+          "source_url": "https://www.usroofingcompany.com/austin-tx",
+          "research_seed_url": "https://www.usroofingcompany.com/austin-tx",
+          "identity_status": "indexed_candidate_needs_review"
+        },
+        {
+          "url": "https://austinlocalroofing.com/",
+          "title": "Austin Roofing Company",
+          "snippet": "Discover seasonal roofing discounts Austin and sustainable roofing materials with top Austin TX roofing contractors. Tailored to your needs, we're your go-to for roofing services near me Austin, including roof replacement Austin.",
+          "engines": [
+            "yahoo"
+          ],
+          "source_url": "https://austinlocalroofing.com/",
+          "research_seed_url": "https://austinlocalroofing.com/",
+          "identity_status": "indexed_candidate_needs_review"
+        }
+      ],
+      "discovery": {
+        "queries": [
+          "US Austin roofing companies"
+        ],
+        "signals": [],
+        "errors": [],
+        "skipped": [
+          {
+            "url": "https://www.yelp.com/search?find_desc=Roofers&find_loc=Austin%2C+TX",
+            "reason": "directory_or_listicle_result"
+          },
+          {
+            "url": "https://www.angi.com/companylist/us/tx/austin/roofing.htm",
+            "reason": "directory_or_listicle_result"
+          },
+          {
+            "url": "https://www.expertise.com/home-improvement/roofing/texas/austin",
+            "reason": "directory_or_listicle_result"
+          },
+          {
+            "url": "https://www.yelp.com/search?cflt=roofing&find_loc=Austin%2C+TX",
+            "reason": "directory_or_listicle_result"
+          },
+          {
+            "url": "https://incredibletexas.com/top-20-best-austin-roofing-companies/",
+            "reason": "directory_or_listicle_result"
+          }
+        ],
+        "engine_reports": [
+          {
+            "query": "US Austin roofing companies",
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 17,
+                "rejected_constraints": 10,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791805262.7449288,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 17,
+                "rejected_constraints": 10,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791805264.4529753,
+                "cached": false
+              }
+            ],
+            "source": "public_search",
+            "results": 7
+          }
+        ],
+        "candidate_domains_before_limit": 2,
+        "country_hint": "US",
+        "note": "Automatic indexed/public research. Every company, geography, contact owner and offer remains unqualified until reviewed; indexed snippets can be stale."
+      }
+    }
+  ],
+  "distinct_candidate_domains": 13,
+  "candidate_note": "13 indexed, deduplicated company candidates; identity, current market, decision-maker and opportunity are not qualified by this check."
+}

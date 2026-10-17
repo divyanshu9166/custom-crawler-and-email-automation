@@ -1,0 +1,50 @@
+{
+  "checked_at": 1791660967.416006,
+  "scope": "First supplied diagram and research UI",
+  "suite_cases_passed": 305,
+  "final_focused_cases_passed": 17,
+  "new_tests": 17,
+  "ui": {
+    "checked_at": 1791660849.1500158,
+    "research_nodes": 17,
+    "overview_nodes": 11,
+    "full_nodes": 35,
+    "guided_steps": 7,
+    "desktop_mobile": true,
+    "overflow": false,
+    "js_errors": 0,
+    "read_only_browser_check": true,
+    "existing_records_and_credentials_unchanged": true,
+    "new_candidates": 4,
+    "new_unverified_contact": 1,
+    "external_actions_queued": 0,
+    "sent_messages": 0,
+    "db_integrity": "ok"
+  },
+  "live_counts": {
+    "candidates": 4,
+    "websites": 4,
+    "profiles": 0,
+    "researched": 2,
+    "current_pages": 35,
+    "stored_contacts": 1,
+    "country_supported": 0,
+    "supported_opportunities": 3,
+    "qualified": 0
+  },
+  "raw_report_sha256": "4ec552b107a5ad88088afd5e670ea69ee5448203aceddb8b7303a4531c569375",
+  "code_hashes": {
+    "outreach\\discovery.py": "4f9d92ee8acfa5a93ddae3025d2b851978f1ab79a51202f8460f5a6364da34bb",
+    "outreach\\research.py": "031225f15d2509b8786d0cbbb175e76473ddf18ecf6b2e7c80ea0d5b88674a71",
+    "outreach\\research_status.py": "788e44710fa94fc48ed7713cc4f103c9c58af80a46be28c4d5f80c8645a80e31",
+    "outreach\\app.py": "5767b96ebce0f2581386f0574e2274721a31de56080499cbd168b3da5a991a80",
+    "outreach\\static\\workflow.js": "89d0ec7efdc5f4f87f39fd1e2daec70264f69cd92b89bcd7b6994bd82c9d585b",
+    "outreach\\static\\index.html": "5ee9fcb4adba54adcfdd62401e0e14d3e35c445af792b0a964b4be7cf1ceb88b",
+    "outreach\\static\\style.css": "7978f020855302b2837f421a334520173ce1a1d338a2b732e14d1f03e4380f9e",
+    "tests\\test_first_workflow.py": "d69272880a96277625c743b24aa1873c1241ba2eb71fe5fe219742a8d670ddbc"
+  },
+  "external_email_sent": 0,
+  "email_probes": 0,
+  "all_businesses_qualified": false,
+  "provider_or_full_acquisition_acceptance": false
+}

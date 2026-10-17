@@ -1,0 +1,575 @@
+{
+  "checked_at": 1791735145.6380718,
+  "goal_complete": false,
+  "tests_passed": 575,
+  "junit_sha256": "83a95af31a7feedf693b6604909689aff069c37d105c1b5d130db2e63f6f41b5",
+  "source_hashes": {
+    "README.md": "97a766994aad25bce802829d0bc435aaf4282330cabffd6584c9e6c5d768ee76",
+    "VALIDATION.md": "b5549fbd25ffd73c597e96d68fcc424cbc7f45834bc87f089cb127dccddb2d87",
+    "docs/COMPLETE_WORKFLOW_AUDIT.md": "073414669b733fb83b8219d5d94af99ba6ccb4e3e1542fbf5209f0b3f5c99aea",
+    "docs/CONTACT_PUBLICATION.md": "337a07ab636dd6ee8037cf1ac6d60690146b49be9b03f79aacd6f7ffcba22dd4",
+    "docs/CONTACT_SOURCE_FALLBACK.md": "fbb4fd649b0c80d350bb47a229f2969c5a5c4d48fea67849c1d6a61390d95c3a",
+    "docs/CRAWLER.md": "b73ccfd55f4dc80455350a5369f66f12405750f99a9133b409f16bef70541234",
+    "docs/LEARNING.md": "0d532255298cc7e1cc180b28d70ec5da5e6bef652a3117aaabc6d447ed9ac5b4",
+    "docs/OFFER_DRAFT_PREVIEWS.md": "e7b6ad71ee6c509655acfab63b7c372430f72f149afeeddcd617dedd85416359",
+    "docs/OFFER_SOURCE_QUALITY.md": "86a1f3e0825da7b31905615f8ae63f8690a3d3e3b5785def9a4c38feb9bd3cbc",
+    "docs/PRIORITY_FINANCE_AFTERCARE.md": "06ae2579feae20e58b5d7e6c9e4d16a9f9aa15e2af37a0bb88fb39f3f4ee7cc8",
+    "docs/PRIORITY_READINESS.md": "d020b9add44b1e38f34c2d9fb172cf1d8ea3d17eebbadd0a21eb1a87ce516402",
+    "docs/README_WORKFLOW_CHECK.md": "2a140e0ed7d6cbeed1ccc2db4b41b0336a560ad54270eef67d02f926fd33f66a",
+    "docs/WORKFLOW.md": "6d563525402d225306e9ac1e3d6c5e10107cd7b3790526faa5626a57a164ba39",
+    "outreach/__init__.py": "ab294c3bf5d7f6d1721dc713a055a57d710ace1e738efcf93235f106cc46043f",
+    "outreach/aftercare.py": "6b6e76d55976bd8c5a512bf1bd2814041fa5d4f89a84e68a46fc4b0d276888ff",
+    "outreach/app.py": "48e4c15e9c0f073acb9ffbffd5f87f7a581f1e8fe5ce9af6466e329951b171ea",
+    "outreach/auth.py": "5ffc7139302a48e781bc9405a12654bcf66a4d4ab475d5da3c58b07088073262",
+    "outreach/browser.py": "3d7e98374e877eff00f360458ceb9168b86b4714226e67054b3837fce828d014",
+    "outreach/campaigns.py": "561190e7cf16ffc8caa0293b3427e49f5d22885cd72591bc59c5cb44e37e9ca0",
+    "outreach/config.py": "e498fcf6baa3a90fb8a2e21ee7f9f9e6d7aae184d993dfd5096709990facab5e",
+    "outreach/contact_recovery.py": "cb5d50130c9997e7c8374369dc5ebc183cc9d2dc791ca59a1fed3a4138f651f9",
+    "outreach/db.py": "f1efaf682ba23927aa4d6705383d0fa35a074dd833c0cb834c441f4ebe707363",
+    "outreach/deliverables.py": "9f3dca60b7475ad830dfac6ff82f7f1721e9f2acd673f21e0f2043fbfc4fb9e5",
+    "outreach/discovery.py": "a1274325c55c67875ec81674e0b61e1d9f1a5823fa978113ade2a630e6f226b1",
+    "outreach/finance.py": "78c1c554d62dbc3287d2f07e5b68d93c8f36f220eb89f4a53ec9c725fbefd770",
+    "outreach/learning.py": "b31b50455d6d852697a92853c022a66f0e59a196ac83dee6887badb3cf9acc95",
+    "outreach/mail.py": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72",
+    "outreach/offers.py": "5505eb0cb6621f8f4d1ce2155c531cf1f296f877bf9c532df03b838cc21240a0",
+    "outreach/opportunities.py": "5034f95df0af0e0cd705705739ac2cd4256dbe4e195da45f7c0591def9112989",
+    "outreach/performance.py": "ab5d54c584b3db9b562e717ef0ecca8f7815c93a090eeca65c58351094c538ff",
+    "outreach/preferences.py": "3e074cf6b225b2c1a4b31ef46bebf9d3de41d0b5bac2192bb660a91af7a90452",
+    "outreach/priorities.py": "a4293f6cd7a5d7770ca0474c8985a6884432cf5db1193528edf9ec68f1ebb380",
+    "outreach/profiles.py": "440b13c58fd84f9808e81107a43140d6a4432a202317b953969099835a1030eb",
+    "outreach/providers.py": "071ca72de9313fc934eba6061e6a4597dc107ea4ac8bd5c3db4e11aec5ed05e4",
+    "outreach/research.py": "62199cc5dc6cdf100f8699250031b2ff46ead371e5aab608339092514f8b738d",
+    "outreach/research_status.py": "94c8c1ff85f62e6c3ccf44b722c8bb2754ddf5ae7177aafbf83c533acc88166b",
+    "outreach/sales.py": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c",
+    "outreach/sequence.py": "48f385e00652d6a03edcaa662a23bb482bad851204c1a844455ba595a0d11582",
+    "outreach/static/app.js": "747286a8a99204905f403c2960bcf9b2c45c00171f48627b92ddb34496cbf2cb",
+    "outreach/web.py": "1f549299d92b5d185fd642d3d097c3f6be636a07297ae2971756f523346dc398",
+    "outreach/worker.py": "153a2f7ce6836024f14caf88fa3f0252930f0ca99fc72ab659db4708e700cc0a",
+    "outreach/workflow.py": "9de289ef572cd1f7f165d999ad28e52aed4f998b2437ce0267fb9be07db55cc7",
+    "outreach/workflow_detail.py": "23ac4ffe0b99cda83f3453e229668af6cd79206d5fc3b72d33c85769c71f23aa",
+    "scripts/benchmark_priority_readiness.py": "a973aeb4c43f45ca31855e3f748d98d255cd113250423a0b0133c4c8c0effe1f",
+    "scripts/demo.py": "23ff705aba46fb58675ab88e8b256a2960c02c0376295857c17d12fce5f9402e",
+    "scripts/ui_smoke.py": "824c547abc33eb2d1a95458eca2e2aa7e086bf2193bff14e4735f2441fb51cde",
+    "scripts/verify_complete_workflow.py": "68759858c9f36167a542457dd0203a923de0ea860d17a1aba779185f7fe997ac",
+    "scripts/verify_complete_workflow_ui.py": "40bd1bac3b23cd42b9fdd52eb816dba4b84b9b46ca9a63e7b2564c7d1e7dbdca",
+    "scripts/verify_contact_fallback_live.py": "77889a7c0d8387b4119432bd3eef6ddcb3b06c6be62cee4614d42cc59239095a",
+    "scripts/verify_offer_sources_saved.py": "1dbe8b12ef1744f637ba88bb62ea1c04a17538e1faec4f18454f74cdb67c63b3",
+    "scripts/verify_second_workflow_ui.py": "b83ab470307d930ff363b583bdee3cea65084e447f65e771a81ab05bee56e343",
+    "tests/test_api.py": "3806991afbd7e06373ffabd0cbcf94046f8366ce4e5254c51889b614c95ed887",
+    "tests/test_benchmark.py": "503b0335f8cbcabbc9e28415b57f7f031c67521ab1a5f5afe3dc7f617d1a549b",
+    "tests/test_browser_login.py": "16c5fca8df20ba9792950bada32725d8888154ca7d5c15e0ad6dd2839584fc44",
+    "tests/test_campaigns_mail.py": "319293a2ce897e28d6486f3e6d0a21ada3b1ff1a9c1f3c370e088c2ebe8b9706",
+    "tests/test_complete_workflow.py": "b09cc62f93d45beb5fca1b1cb49620e58695ee6dfcbc511d8390f6f919555e8e",
+    "tests/test_contact_candidates.py": "c41686a5038693d19fdc7ab47192dc9a347f19b51f83c255510056b821c7bab6",
+    "tests/test_contact_publication.py": "2dfa75b4984e3183543811b175edc7d76996da243f8da3afca320bd834fb608d",
+    "tests/test_contact_purpose.py": "5f98ec528b259ac941c94c0dbd276e3c9eb6edd6e4f84d6140bda4b4742b6342",
+    "tests/test_crawler_optimization.py": "a64d6f6b109b27d2bf952ee0a59107f6940033f050b075f6cb348d15e2611184",
+    "tests/test_crawler_quality.py": "25af6b352eb43dced0f34f59d00597838e56c6daff1cdafa4bd31ab529070d2d",
+    "tests/test_deliverables.py": "e893ea384f971428377ae323785cf9ca4e5593f4325f0d594a9c289180375602",
+    "tests/test_demo.py": "c75111cf32b083b99c2d3a8df84905025e6a93829fa93f9abfcd459aed0b35f9",
+    "tests/test_deployment.py": "c0c850b43faaf30148b4e3c77f07c8fb0187b0d3ba6b1a39d8980cac6da05dd8",
+    "tests/test_draft_review.py": "ea5a8078c462bcadd057c086a18db19d33cd833736b77b2725041c187f5ff6f0",
+    "tests/test_first_workflow.py": "f425a520db543e49d530ccb6138dd4fd6c842d05c85d83b181b0b408bce96046",
+    "tests/test_growth_finance_priority.py": "052d944336c9c14e9d07933fc9e7f741917e8079995ed8b76843babb0f24be48",
+    "tests/test_learning.py": "be7a51482ac5fa75e4f15b851bab5ef025bc54d08219ad0c40fbd1fa6da77802",
+    "tests/test_mail_providers.py": "faac9cbff0573ea3b95ee56ddae89cc3bf2ca84c2a869e0522f03c1a8dc5ec67",
+    "tests/test_mail_wire.py": "66f093d1e5a209f456efcd6f20125a28a6724367ad4a323ccaf505254c984511",
+    "tests/test_offer_source_quality.py": "42de5b32147e716adf663906ed8d85d4183d54d9079ac31f64878b5b82ed5482",
+    "tests/test_opportunities.py": "3988a6a3d8ecb0bd4c6d421f2693f124b1cc7abac052f0b6dd12bb058b5ae6cc",
+    "tests/test_performance.py": "a3a7072bf7cd3ed4601a8953de7f57b4d8c4f67b7ac53d149f1db08482a845d9",
+    "tests/test_platform_discovery.py": "bb6cd37254c97f7fed79eb74eea32c9800dde901183787416797b651e3f61f51",
+    "tests/test_priority_readiness.py": "03cc372dc68739f3af6729b928a2105a8573950131ce668a490405ddd605d788",
+    "tests/test_profile_prospects.py": "789642a1b5982c9821f9472bd0aa29d96bf6ab3e75c7ef16fea4ac0cff83af0f",
+    "tests/test_reacher_smoke.py": "8750a77618a81a26678d536ba0153ca4074eb94ae151fda6b90daf53ef04ef16",
+    "tests/test_requirements_audit.py": "dc858bc9d68778e1f37eebdd08715a606fd396c52b9394d0d641c6453d957ee6",
+    "tests/test_research.py": "8c27066d23a96a56e47fcfaba774176751a303ef1e965d9e8213798763b218d7",
+    "tests/test_research_recovery.py": "18fce8860ea009b428925578772e0f05f84cc7de56b4343642f0c74a8555721f",
+    "tests/test_sales.py": "fa9e255bbb6e0b726c10d4841bf3ff1be5903ae2cc65663a47eac87433eb6e57",
+    "tests/test_second_workflow.py": "9a6c2c0c076f7940d3d41633ff7f526c2e6ee7eebdda7d097b4b88618ebad236",
+    "tests/test_third_workflow.py": "937a34a9e3ca14320e6ad3b9dceee111ba141369ef321ec9532f709b507ee151",
+    "tests/test_workflow_canvas.py": "017120fa796d3e8c635a7beecf8c30409bf8c89445f4320c8130d44e3019fa36",
+    "tests/test_workflow_detail.py": "591dfbf964d93a4db769007dd0a22cbce850633329df3538fab590b502997df4",
+    "tests/test_workspace_settings.py": "104d45b12e03443df042c6ad0c10ae8dd355c6471e70b15f7bb21b4b46800463",
+    "scripts/start_native_reacher.py": "db06dcca059fe34a58756a2b76b28760e67ce20188753da283ecfb28ebb935d8",
+    "scripts/start_native_reacher.ps1": "1f6b5d1dd9d37c1725b0b4e82a7f3610faf1afc4886b88b752f6277178df1e7a",
+    "scripts/start.ps1": "8ffe59213d3fc934a57fd86098221ba009ce099d9497d505c382edd10371b4dc",
+    "scripts/verify_workflow_nodes.py": "2094c6ea67e57c136e65d5e79bec7beb4bc54de5cdf290b171165799ba07cea4",
+    "tests/test_native_reacher.py": "3c499c664e141fe65667b62ecae17f29ba6d814814104dc695d45296081b8d7d",
+    "deploy/reacher-windows.patch": "97f33b796ffb958471790bf015ea4fc3a2aadb2978ca08cb4d60f31354678481",
+    "docs/NATIVE_REACHER.md": "8845cc50a3ce44084cf5104bbe41f010794c6b29d95f77ceb5d18700617617f8",
+    "docs/native-reacher-check.json": "8b86b430d150ddfecacf363d12ac66456203888cd457fea0bedd844514423b84",
+    "docs/native-reacher-recipient-check.json": "8a3f37365cea26d361553665c3752dfabc63c0e37beb2a9cd661193f83bb4d24",
+    "docs/RECOVERY_PATHS.md": "ac6e3914fd9b64ce4d95eb456965d9a36023645cda3f99483d14934ba924383d",
+    "tests/test_verification_dispatch.py": "e35fbe29f24cf6bb6d3613c4113c2b5d7de67551bc224b98c588f05e94c85a98",
+    "docs/VERIFICATION_DISPATCH.md": "4ce91b76a69c3c2331702d4f889b068376cf5fdb82e25fac10dc7bb2d6cc1b44",
+    "docs/verification-dispatch-check.json": "f01b63bbca93934a7bbe3dcc86a2d9381fb125b82da02d1b33276e3d5df2b61c",
+    "tests/test_draft_source_freshness.py": "01d80bd5dee913dfd9dee9ac1f4dddf550ae06f929c00795f67ab96193103a3f",
+    "docs/DRAFT_SOURCE_FRESHNESS.md": "de1d7aa3b1588eeefaf2374c1e87fb864f291d32935785450f4afc9ec806a048",
+    "docs/draft-source-freshness-check.json": "9a4ed02bdf9d6b53fcdb46bfa33c5a7aa4f3706dc51c875f7ce4d8b2b71ec5dd",
+    "docs/LIVE_ACQUISITION_CURRENT.md": "29cada29e34bec77540f707696b17f569ac255feab54ba768b479a939be7f4d5",
+    "docs/live-acquisition-current-check.json": "55917c88fb7318ced5680038f4d1ca81b1d0fdd26ac6c4e21df15575f4d11fed",
+    "outreach\\aftercare.py": "6b6e76d55976bd8c5a512bf1bd2814041fa5d4f89a84e68a46fc4b0d276888ff",
+    "outreach\\app.py": "48e4c15e9c0f073acb9ffbffd5f87f7a581f1e8fe5ce9af6466e329951b171ea",
+    "outreach\\auth.py": "5ffc7139302a48e781bc9405a12654bcf66a4d4ab475d5da3c58b07088073262",
+    "outreach\\browser.py": "3d7e98374e877eff00f360458ceb9168b86b4714226e67054b3837fce828d014",
+    "outreach\\campaigns.py": "561190e7cf16ffc8caa0293b3427e49f5d22885cd72591bc59c5cb44e37e9ca0",
+    "outreach\\config.py": "e498fcf6baa3a90fb8a2e21ee7f9f9e6d7aae184d993dfd5096709990facab5e",
+    "outreach\\contact_recovery.py": "cb5d50130c9997e7c8374369dc5ebc183cc9d2dc791ca59a1fed3a4138f651f9",
+    "outreach\\db.py": "f1efaf682ba23927aa4d6705383d0fa35a074dd833c0cb834c441f4ebe707363",
+    "outreach\\deliverables.py": "9f3dca60b7475ad830dfac6ff82f7f1721e9f2acd673f21e0f2043fbfc4fb9e5",
+    "outreach\\discovery.py": "a1274325c55c67875ec81674e0b61e1d9f1a5823fa978113ade2a630e6f226b1",
+    "outreach\\finance.py": "78c1c554d62dbc3287d2f07e5b68d93c8f36f220eb89f4a53ec9c725fbefd770",
+    "outreach\\learning.py": "b31b50455d6d852697a92853c022a66f0e59a196ac83dee6887badb3cf9acc95",
+    "outreach\\mail.py": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72",
+    "outreach\\offers.py": "5505eb0cb6621f8f4d1ce2155c531cf1f296f877bf9c532df03b838cc21240a0",
+    "outreach\\opportunities.py": "5034f95df0af0e0cd705705739ac2cd4256dbe4e195da45f7c0591def9112989",
+    "outreach\\performance.py": "ab5d54c584b3db9b562e717ef0ecca8f7815c93a090eeca65c58351094c538ff",
+    "outreach\\preferences.py": "3e074cf6b225b2c1a4b31ef46bebf9d3de41d0b5bac2192bb660a91af7a90452",
+    "outreach\\priorities.py": "a4293f6cd7a5d7770ca0474c8985a6884432cf5db1193528edf9ec68f1ebb380",
+    "outreach\\profiles.py": "440b13c58fd84f9808e81107a43140d6a4432a202317b953969099835a1030eb",
+    "outreach\\providers.py": "071ca72de9313fc934eba6061e6a4597dc107ea4ac8bd5c3db4e11aec5ed05e4",
+    "outreach\\research.py": "62199cc5dc6cdf100f8699250031b2ff46ead371e5aab608339092514f8b738d",
+    "outreach\\research_status.py": "94c8c1ff85f62e6c3ccf44b722c8bb2754ddf5ae7177aafbf83c533acc88166b",
+    "outreach\\sales.py": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c",
+    "outreach\\sequence.py": "48f385e00652d6a03edcaa662a23bb482bad851204c1a844455ba595a0d11582",
+    "outreach\\web.py": "1f549299d92b5d185fd642d3d097c3f6be636a07297ae2971756f523346dc398",
+    "outreach\\worker.py": "153a2f7ce6836024f14caf88fa3f0252930f0ca99fc72ab659db4708e700cc0a",
+    "outreach\\workflow.py": "9de289ef572cd1f7f165d999ad28e52aed4f998b2437ce0267fb9be07db55cc7",
+    "outreach\\workflow_detail.py": "23ac4ffe0b99cda83f3453e229668af6cd79206d5fc3b72d33c85769c71f23aa",
+    "outreach\\__init__.py": "ab294c3bf5d7f6d1721dc713a055a57d710ace1e738efcf93235f106cc46043f",
+    "tests\\conftest.py": "dd21edb94bb372638471b4c82af2d8e18b1ab9aeff646780f77c241589a38d40",
+    "tests\\mail_servers.py": "0190e2baf6518b8500d0e49edde29962c5416ce01b1cb81760508a3f4f8a313c",
+    "tests\\test_api.py": "3806991afbd7e06373ffabd0cbcf94046f8366ce4e5254c51889b614c95ed887",
+    "tests\\test_benchmark.py": "503b0335f8cbcabbc9e28415b57f7f031c67521ab1a5f5afe3dc7f617d1a549b",
+    "tests\\test_browser_login.py": "16c5fca8df20ba9792950bada32725d8888154ca7d5c15e0ad6dd2839584fc44",
+    "tests\\test_business_profile_routes.py": "9bc0380707383137e6398fc36030df778e68f253d49f2333e43afb46b764df59",
+    "tests\\test_campaigns_mail.py": "319293a2ce897e28d6486f3e6d0a21ada3b1ff1a9c1f3c370e088c2ebe8b9706",
+    "tests\\test_complete_workflow.py": "b09cc62f93d45beb5fca1b1cb49620e58695ee6dfcbc511d8390f6f919555e8e",
+    "tests\\test_contact_candidates.py": "c41686a5038693d19fdc7ab47192dc9a347f19b51f83c255510056b821c7bab6",
+    "tests\\test_contact_publication.py": "2dfa75b4984e3183543811b175edc7d76996da243f8da3afca320bd834fb608d",
+    "tests\\test_contact_purpose.py": "5f98ec528b259ac941c94c0dbd276e3c9eb6edd6e4f84d6140bda4b4742b6342",
+    "tests\\test_crawler_optimization.py": "a64d6f6b109b27d2bf952ee0a59107f6940033f050b075f6cb348d15e2611184",
+    "tests\\test_crawler_quality.py": "25af6b352eb43dced0f34f59d00597838e56c6daff1cdafa4bd31ab529070d2d",
+    "tests\\test_deliverables.py": "e893ea384f971428377ae323785cf9ca4e5593f4325f0d594a9c289180375602",
+    "tests\\test_demo.py": "c75111cf32b083b99c2d3a8df84905025e6a93829fa93f9abfcd459aed0b35f9",
+    "tests\\test_deployment.py": "c0c850b43faaf30148b4e3c77f07c8fb0187b0d3ba6b1a39d8980cac6da05dd8",
+    "tests\\test_discovery_intent.py": "e4c9f8a6991de9ed4dbb2327989a28535b9f5a46cd26153fbf36f6f05ce12e4b",
+    "tests\\test_draft_review.py": "ea5a8078c462bcadd057c086a18db19d33cd833736b77b2725041c187f5ff6f0",
+    "tests\\test_draft_source_freshness.py": "01d80bd5dee913dfd9dee9ac1f4dddf550ae06f929c00795f67ab96193103a3f",
+    "tests\\test_first_workflow.py": "f425a520db543e49d530ccb6138dd4fd6c842d05c85d83b181b0b408bce96046",
+    "tests\\test_growth_finance_priority.py": "052d944336c9c14e9d07933fc9e7f741917e8079995ed8b76843babb0f24be48",
+    "tests\\test_learning.py": "be7a51482ac5fa75e4f15b851bab5ef025bc54d08219ad0c40fbd1fa6da77802",
+    "tests\\test_mail_providers.py": "faac9cbff0573ea3b95ee56ddae89cc3bf2ca84c2a869e0522f03c1a8dc5ec67",
+    "tests\\test_mail_wire.py": "66f093d1e5a209f456efcd6f20125a28a6724367ad4a323ccaf505254c984511",
+    "tests\\test_native_reacher.py": "3c499c664e141fe65667b62ecae17f29ba6d814814104dc695d45296081b8d7d",
+    "tests\\test_offer_source_quality.py": "42de5b32147e716adf663906ed8d85d4183d54d9079ac31f64878b5b82ed5482",
+    "tests\\test_opportunities.py": "3988a6a3d8ecb0bd4c6d421f2693f124b1cc7abac052f0b6dd12bb058b5ae6cc",
+    "tests\\test_performance.py": "a3a7072bf7cd3ed4601a8953de7f57b4d8c4f67b7ac53d149f1db08482a845d9",
+    "tests\\test_platform_discovery.py": "bb6cd37254c97f7fed79eb74eea32c9800dde901183787416797b651e3f61f51",
+    "tests\\test_priority_readiness.py": "03cc372dc68739f3af6729b928a2105a8573950131ce668a490405ddd605d788",
+    "tests\\test_profile_prospects.py": "789642a1b5982c9821f9472bd0aa29d96bf6ab3e75c7ef16fea4ac0cff83af0f",
+    "tests\\test_reacher_smoke.py": "8750a77618a81a26678d536ba0153ca4074eb94ae151fda6b90daf53ef04ef16",
+    "tests\\test_requirements_audit.py": "dc858bc9d68778e1f37eebdd08715a606fd396c52b9394d0d641c6453d957ee6",
+    "tests\\test_research.py": "8c27066d23a96a56e47fcfaba774176751a303ef1e965d9e8213798763b218d7",
+    "tests\\test_research_recovery.py": "18fce8860ea009b428925578772e0f05f84cc7de56b4343642f0c74a8555721f",
+    "tests\\test_sales.py": "fa9e255bbb6e0b726c10d4841bf3ff1be5903ae2cc65663a47eac87433eb6e57",
+    "tests\\test_second_workflow.py": "9a6c2c0c076f7940d3d41633ff7f526c2e6ee7eebdda7d097b4b88618ebad236",
+    "tests\\test_third_workflow.py": "937a34a9e3ca14320e6ad3b9dceee111ba141369ef321ec9532f709b507ee151",
+    "tests\\test_verification_dispatch.py": "e35fbe29f24cf6bb6d3613c4113c2b5d7de67551bc224b98c588f05e94c85a98",
+    "tests\\test_workflow_canvas.py": "017120fa796d3e8c635a7beecf8c30409bf8c89445f4320c8130d44e3019fa36",
+    "tests\\test_workflow_detail.py": "591dfbf964d93a4db769007dd0a22cbce850633329df3538fab590b502997df4",
+    "tests\\test_workspace_settings.py": "104d45b12e03443df042c6ad0c10ae8dd355c6471e70b15f7bb21b4b46800463",
+    "docs\\WORKFLOW.md": "6d563525402d225306e9ac1e3d6c5e10107cd7b3790526faa5626a57a164ba39",
+    "docs\\LEARNING.md": "0d532255298cc7e1cc180b28d70ec5da5e6bef652a3117aaabc6d447ed9ac5b4",
+    "docs\\README_WORKFLOW_CHECK.md": "2a140e0ed7d6cbeed1ccc2db4b41b0336a560ad54270eef67d02f926fd33f66a",
+    "docs\\LIVE_LEAD_ACCEPTANCE.md": "8401a93e7c5e741488f88b157326faf7e370cbb3dce04f549d1fc91d662fa45b",
+    "docs\\live-lead-acceptance-check.json": "a940385e279808dc272e1f6a9f65b5364f28c3b7036b87d065763da71b101ece"
+  },
+  "original_reference_hashes": {
+    "image-1.png": "fd344a42995b01ea82fbf001261650c8a1eedc82ad401ae140a82f9193d952fc",
+    "image-2.png": "22fb27d06e7135f5405a7d0c5fe33074088c9c451d8f5bfcab1159550a6f947a",
+    "image-3.png": "22fb27d06e7135f5405a7d0c5fe33074088c9c451d8f5bfcab1159550a6f947a"
+  },
+  "second_and_third_images_identical": true,
+  "third_written_workflow_preserved": true,
+  "main_diagram_matches_runtime": true,
+  "workflow_nodes": 35,
+  "workflow_connections": 46,
+  "requirements": [
+    {
+      "requirement": "Discovery/search/CSV/dedup",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_platform_discovery": 12,
+        "test_api": 7,
+        "test_first_workflow": 19
+      },
+      "source_files": [
+        "outreach/discovery.py",
+        "outreach/providers.py",
+        "outreach/research.py"
+      ]
+    },
+    {
+      "requirement": "Profile-first website-less review",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_profile_prospects": 16
+      },
+      "source_files": [
+        "outreach/profiles.py"
+      ]
+    },
+    {
+      "requirement": "Rendered crawling/evidence/contact extraction",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_crawler_quality": 28,
+        "test_crawler_optimization": 15,
+        "test_research": 25,
+        "test_contact_candidates": 13,
+        "test_contact_purpose": 22
+      },
+      "source_files": [
+        "outreach/web.py",
+        "outreach/browser.py",
+        "outreach/research.py"
+      ]
+    },
+    {
+      "requirement": "Current country/business evidence and source-grounded ideas",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_requirements_audit": 24,
+        "test_opportunities": 11
+      },
+      "source_files": [
+        "outreach/campaigns.py",
+        "outreach/opportunities.py"
+      ]
+    },
+    {
+      "requirement": "Partial-crawl continuation and contact fallback",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_research_recovery": 27
+      },
+      "source_files": [
+        "outreach/contact_recovery.py",
+        "outreach/web.py"
+      ]
+    },
+    {
+      "requirement": "Screenshots and optional PageSpeed contracts",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_performance": 5,
+        "test_api": 7
+      },
+      "source_files": [
+        "outreach/performance.py",
+        "outreach/browser.py"
+      ]
+    },
+    {
+      "requirement": "One Campaign A/B service and WhatsApp qualification",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_second_workflow": 34,
+        "test_offer_source_quality": 15
+      },
+      "source_files": [
+        "outreach/offers.py",
+        "outreach/campaigns.py",
+        "outreach/opportunities.py"
+      ]
+    },
+    {
+      "requirement": "Drafts/approval/recipient/ownership gates",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_campaigns_mail": 14,
+        "test_requirements_audit": 24,
+        "test_contact_candidates": 13,
+        "test_third_workflow": 37
+      },
+      "source_files": [
+        "outreach/campaigns.py",
+        "outreach/sequence.py"
+      ]
+    },
+    {
+      "requirement": "TLS SMTP/IMAP, four-touch calendar and stop/uncertain rules",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_mail_wire": 13,
+        "test_mail_providers": 5,
+        "test_campaigns_mail": 14
+      },
+      "source_files": [
+        "outreach/mail.py"
+      ]
+    },
+    {
+      "requirement": "Authenticated Settings/login and private persistence",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_workspace_settings": 5,
+        "test_browser_login": 6,
+        "test_api": 7
+      },
+      "source_files": [
+        "outreach/preferences.py",
+        "outreach/auth.py"
+      ]
+    },
+    {
+      "requirement": "Durable jobs, scheduling and demo isolation",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_api": 7,
+        "test_demo": 2
+      },
+      "source_files": [
+        "outreach/db.py",
+        "outreach/worker.py"
+      ]
+    },
+    {
+      "requirement": "Value artifact preparation/review/export",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_deliverables": 9,
+        "test_second_workflow": 34
+      },
+      "source_files": [
+        "outreach/deliverables.py"
+      ]
+    },
+    {
+      "requirement": "Conversation, scoped proposal and operator-confirmed client lifecycle",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_sales": 14,
+        "test_third_workflow": 37,
+        "test_complete_workflow": 18
+      },
+      "source_files": [
+        "outreach/sales.py"
+      ]
+    },
+    {
+      "requirement": "Learning current qualification and preserved cohort/history",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_learning": 11
+      },
+      "source_files": [
+        "outreach/learning.py"
+      ]
+    },
+    {
+      "requirement": "Priorities, separate-currency finance and reviewed aftercare",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_growth_finance_priority": 24,
+        "test_priority_readiness": 10
+      },
+      "source_files": [
+        "outreach/priorities.py",
+        "outreach/finance.py",
+        "outreach/aftercare.py"
+      ]
+    },
+    {
+      "requirement": "WAL backup, deployment config and provider preflight safeguards",
+      "scope": "Local application behavior/configuration; not external production acceptance",
+      "passing_cases_by_test_module": {
+        "test_deployment": 8,
+        "test_reacher_smoke": 6,
+        "test_native_reacher": 13
+      },
+      "source_files": [
+        "scripts/backup.py",
+        "scripts/preflight.py",
+        "deploy/reacher.Dockerfile",
+        "compose.yaml"
+      ],
+      "native_live_proof": "docs/native-reacher-check.json"
+    },
+    {
+      "requirement": "Current company-domain publication and frozen recipient sources",
+      "scope": "Current source proof; separate from buyer relevance and real mailbox existence",
+      "passing_cases_by_test_module": {
+        "test_contact_publication": 17
+      },
+      "source_files": [
+        "outreach/research.py",
+        "outreach/contact_recovery.py",
+        "outreach/sequence.py",
+        "outreach/mail.py",
+        "outreach/static/app.js"
+      ]
+    },
+    {
+      "requirement": "Verification current permission at dispatch and result commit",
+      "scope": "Controlled adapter awaits and isolated databases; external accuracy separate",
+      "passing_cases_by_test_module": {
+        "test_verification_dispatch": 13
+      },
+      "source_files": [
+        "outreach/research.py",
+        "outreach/providers.py"
+      ],
+      "proof": "docs/verification-dispatch-check.json"
+    },
+    {
+      "requirement": "Current reviewed sources at Campaign A/B draft boundary",
+      "scope": "Controlled stale-source regressions and one actual no-send Campaign A API run; no outreach eligibility or paid-client acceptance",
+      "passing_cases_by_test_module": {
+        "test_draft_source_freshness": 5,
+        "test_draft_review": 8
+      },
+      "source_files": [
+        "outreach/campaigns.py",
+        "outreach/offers.py"
+      ],
+      "proof": "docs/draft-source-freshness-check.json"
+    },
+    {
+      "requirement": "Requested search subject, market conflict and bounded focused retry",
+      "scope": "24 controlled regressions plus actual two-wave eight-segment discovery; candidate-level repeatability only",
+      "passing_cases_by_test_module": {
+        "test_discovery_intent": 24
+      },
+      "source_files": [
+        "outreach/discovery.py"
+      ],
+      "proof": "docs/live-lead-acceptance-check.json"
+    },
+    {
+      "requirement": "Specific business profile routes; reject job/category identities",
+      "scope": "14 controlled route regressions and real indexed PeoplePerHour job/category inputs rejected after the fix",
+      "passing_cases_by_test_module": {
+        "test_business_profile_routes": 14
+      },
+      "source_files": [
+        "outreach/profiles.py"
+      ],
+      "proof": "docs/live-lead-acceptance-check.json"
+    }
+  ],
+  "local_document_links_checked": 124,
+  "schema_version": 5,
+  "new_learning_regressions": 4,
+  "fresh_isolated_chromium_smoke_passed": true,
+  "normal_dashboard_check": "data/complete-workflow-normal-check.json",
+  "normal_learning_api_checked": true,
+  "normal_qualified": 1,
+  "normal_smtp_accepted": 0,
+  "messages_sent": 0,
+  "sending_paused": true,
+  "command_checks": {
+    "pip_check": "passed",
+    "javascript_syntax": "passed",
+    "powershell_startup_syntax": "passed",
+    "native_powershell_startup_syntax": "passed"
+  },
+  "acceptance_unproven": [
+    "Repeatable new qualified US/UK buyer/contact acquisition across all segments",
+    "Actual website-less recipient acceptance",
+    "Unrestricted LinkedIn/X/PeoplePerHour access",
+    "Broader provider accuracy, individual mailbox certainty and repeatability beyond one safe verdict",
+    "User-owned domain/VPS/mailbox/HTTPS runtime and resource acceptance",
+    "External delivery/inbox placement",
+    "Actual paid client and measured client outcome"
+  ],
+  "boundary": "Two real website-search waves return repeatable candidate-level results across eight cells, with 205 current pages for eight representatives and ten source-reviewed published inboxes. Direct social access remains restricted, all crawls partial/interrupted, and actual website-less contact acceptance failed. No new recipient probe/outreach. Earlier isolated/form/loopback and native safe-verdict evidence retain their own scopes.",
+  "reacher_runtime_check": {
+    "ready": true,
+    "path": "/v0/check_email",
+    "scope": "API/syntax check only; no real recipient submitted",
+    "http_status": 200,
+    "reason": "Reacher syntax API responded; SMTP deliverability remains unverified"
+  },
+  "junit_path": "data/live-lead-final-tests.xml",
+  "new_publication_regressions": 17,
+  "live_publication_check": "docs/contact-fallback-live-check.json",
+  "third_workflow_form_check": {
+    "isolated_fictional_data": true,
+    "sending_enabled": false,
+    "actual_chromium_forms": true,
+    "approval_revision_and_copy_edit": true,
+    "new_approval_snapshot": true,
+    "baseline_field_visible": true,
+    "desktop_mobile": true,
+    "overflow": false,
+    "js_errors": 0,
+    "messages_submitted": 0,
+    "provider_jobs": 0
+  },
+  "new_priority_regressions": 10,
+  "priority_readiness_check": "docs/priority-readiness-check.json",
+  "normal_priority_api_check": {
+    "records": 11,
+    "outreach_review": 0,
+    "rubric_v2": true,
+    "read_only": true,
+    "scope": "Earlier eleven-record check; current normal all-node browser check covers twelve records"
+  },
+  "new_offer_source_quality_cases": 15,
+  "offer_source_replay": "docs/offer-source-quality-check.json",
+  "offer_draft_previews": "docs/OFFER_DRAFT_PREVIEWS.md",
+  "second_workflow_current_form_check": {
+    "fictional_isolated_fixture": true,
+    "nodes_checked": 15,
+    "campaign_a_secondary_offer": "chatbot",
+    "campaign_b_five_sourced_choices": true,
+    "campaign_b_selected_offer": "whatsapp_automation",
+    "unknown_and_confirmed_channel_routes": true,
+    "actual_form_submission_and_artifact_review": true,
+    "changed_context_invalidates_artifact": true,
+    "legacy_automatic_suggestion_prefill_rechecked": true,
+    "invalid_source_prefill_cleared_without_record_mutation": true,
+    "desktop_mobile": true,
+    "overflow": false,
+    "js_errors": 0,
+    "email_probes": 0,
+    "external_messages": 0,
+    "checked_at": 1791713008.0581381
+  },
+  "normal_offer_api_check": {
+    "records": 11,
+    "matches_current_saved_source_proposals": true,
+    "read_only": true,
+    "network_research": false,
+    "scope": "Earlier eleven-record replay; new live prospect uses current reviewed source/offer guard and API drafting"
+  },
+  "new_native_setup_cases": 13,
+  "native_reacher_live_proof": "docs/native-reacher-check.json",
+  "native_actual_recipient_check": "docs/native-reacher-recipient-check.json",
+  "new_verification_dispatch_cases": 13,
+  "verification_dispatch_proof": "docs/verification-dispatch-check.json",
+  "normal_runtime_recheck": "data/current-acquisition-runtime-check.json",
+  "isolated_chromium_scope": "Earlier isolated form/smoke checks preserved for unchanged UI; current normal-server all-node desktop/mobile check rerun after verification code update",
+  "local_document_link_scope": [
+    "README.md",
+    "VALIDATION.md",
+    "docs/README_WORKFLOW_CHECK.md",
+    "docs/WORKFLOW.md",
+    "docs/LEARNING.md",
+    "docs/COMPLETE_WORKFLOW_AUDIT.md",
+    "docs/LIVE_LEAD_ACCEPTANCE.md",
+    "docs/DRAFT_SOURCE_FRESHNESS.md",
+    "docs/NATIVE_REACHER.md"
+  ],
+  "new_draft_source_cases": 5,
+  "draft_source_proof": "docs/draft-source-freshness-check.json",
+  "new_live_acquisition": "docs/live-acquisition-current-check.json",
+  "normal_unsent_drafts": 4,
+  "live_lead_acceptance": "docs/live-lead-acceptance-check.json",
+  "new_discovery_intent_regressions": 24,
+  "new_profile_route_regressions": 14,
+  "normal_runtime_check": "data/live-lead-runtime-check.json",
+  "browser_check_scope": "Previously executed isolated Chromium and normal dashboard checks retained as historical evidence; this turn reloads current app and checks authenticated runtime without altering records."
+}

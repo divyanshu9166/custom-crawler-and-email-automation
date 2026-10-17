@@ -1,0 +1,402 @@
+{
+  "checked_at": 1791654630.4101238,
+  "status": "incomplete_acceptance",
+  "automated_suite": {
+    "passed": 249,
+    "failed": 0,
+    "warning_count": 1,
+    "seconds": 83.26,
+    "private_log": "data/audit-context-learning-tests.log",
+    "private_junit": "data/audit-context-learning-tests.xml"
+  },
+  "actual_chromium_dashboard": {
+    "passed": true,
+    "javascript_errors": 0,
+    "private_log": "data/audit-context-learning-browser.log",
+    "profile_branch_checked": true,
+    "normal_sign_in_form_checked": true,
+    "historical_sources_excluded_from_qualification": true,
+    "committed_write_refresh_failure_checked": true,
+    "node_drag_zoom_and_scope_checked": true,
+    "mobile_layout_checked": true,
+    "fictional_mail_settings_saved": true,
+    "fictional_credentials_changed_and_new_login_checked": true,
+    "learning_checked": true
+  },
+  "source_hashes": {
+    "outreach/browser.py": "9224168faf20b461e60836d1165f0ddbfc41e27a1f571eb7f6d52fcff43f95f0",
+    "outreach/research.py": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476",
+    "outreach/campaigns.py": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f",
+    "outreach/app.py": "e08df64efae983963a7e6bebff652c9ecf9376f8f1489cc0dab29ede251d0666",
+    "outreach/static/app.js": "679d3f0c6b0d2623f3b37d82fa4bb73a4eaa0e69a99c85936c7fe48325ab6725",
+    "outreach/db.py": "613d755756af92deccb3678409699652420bc79ce35910daaeb637f699663d73",
+    "outreach/profiles.py": "06f5374b52d969a22ed59e9e1877dcf043fe3a28a6ec3787158a3719b5c5cf4b",
+    "outreach/discovery.py": "91939074033f78f5d2dd2d18c4672814e1c37987e0460cbb884801aa18a3d5a2",
+    "outreach/static/index.html": "8f197c94558a72353bf710739fab493854e658e17fe5004e765c63627ea231e3",
+    "outreach/config.py": "8ca4cb4e6a18444fbac25509b852e5461e43e66e2e7c513a895bb5e69c91d712",
+    "outreach/performance.py": "ab5d54c584b3db9b562e717ef0ecca8f7815c93a090eeca65c58351094c538ff",
+    "tests/test_profile_prospects.py": "30abaed06716d818a3623697d97750281532b701dde7cf22907c7568d59ea200",
+    "scripts/ui_smoke.py": "2a841b10748b9f94c6ce38d7b2ce3ce3c8307aad4c54751fd1de88db82537944",
+    "outreach/preferences.py": "3e074cf6b225b2c1a4b31ef46bebf9d3de41d0b5bac2192bb660a91af7a90452",
+    "outreach/workflow.py": "3a4f1b9686ba4f655f5a19ea37c518763cacd3a825e01a097cd9193c960afca6",
+    "outreach/worker.py": "0b44041146ff8787ff038c0dc1db4e1b21a12c2b94c9dfab9e454ae6576eb8d8",
+    "outreach/static/style.css": "72fda9f7306f5941151322c5ccaa1ae388073451184c0eb1216c794c35aa54ff",
+    "outreach/static/workflow.js": "3f6cc9ea63df906082b57dca3df834c630eb16e3717dad75e75d190123e60061",
+    "outreach/static/settings.js": "0216975d54a9f7e60652e6d1ebf604a975eff46a22d7e37d7be10fd4ec852fb8",
+    "tests/test_workspace_settings.py": "104d45b12e03443df042c6ad0c10ae8dd355c6471e70b15f7bb21b4b46800463",
+    "tests/test_workflow_canvas.py": "017120fa796d3e8c635a7beecf8c30409bf8c89445f4320c8130d44e3019fa36",
+    "scripts/verify_workflow_nodes.py": "c8162a988bcfe2cea232db5437890f813662c288c7db73bb6454e049f22ec465",
+    "outreach/opportunities.py": "50e545beea125cf618dc0e77dbfdaaff85b6bd09aeef55a7745a9b9fee76b70b",
+    "outreach/learning.py": "ad7339e35afd033c1a142686074bf624d21fcd2ac77367bc97956867f5f5040c",
+    "outreach/sales.py": "a8ea84c268af135c9db10a0c0213241df601445ea8bc2929e118245b28561369",
+    "outreach/static/sales.js": "d400dea2c43745b8985d373342b2a7310fafdccbb8e4448212e8e6f1a0a0b1bf",
+    "scripts/preflight.py": "23cf7ec90b288365f2164ddf7a30cd778c1d9bfab9cc40d9f8a56f41f63c9f9d",
+    "scripts/start.ps1": "ce27403f00888a911e2f22674077d20b74fd250ef838d3efb121d49c36642922",
+    "tests/test_learning.py": "d07b467b7cf038ab892dfa08a3064e7651836bd07128bf35cfc8df95f2efbb76",
+    "tests/test_opportunities.py": "4491f693d85f9e36c5758d949835d990584d553712f5b038021ddbb1fa6c86c2",
+    "tests/test_deployment.py": "c2aeb0dd9abb2bf8bf6fae3aa09846c11ccd490297c01d6005f0fb32db7bfe46",
+    ".github/workflows/test.yml": "803aadc4a842f3ef60a3e3a737224cc0545abcbb897d7fda57455e7f2a041bd0"
+  },
+  "research_scope": {
+    "original_attempts": 50,
+    "original_partial": 29,
+    "original_failed": 21,
+    "source_profiles": 46,
+    "company_copy_reviews": 20,
+    "preview_messages": 80,
+    "send_ready": 0,
+    "original_coverage_note": "Architecture/design and skincare/beauty only; not acceptance across every target industry.",
+    "retry_interrupted_completed": 13,
+    "retry_partial": 9,
+    "retry_failed": 4,
+    "fresh_resumed_attempts": 9,
+    "fresh_full_depth_recovery": {
+      "checked_at": 1791638456.8961737,
+      "run_status": "finished",
+      "source_run": "data/benchmark-extended-recovery/run-20261010-124552-UTC-13cea0",
+      "scope": {
+        "company_count": 1,
+        "max_pages": 30,
+        "max_depth": 3,
+        "render_mode": "always",
+        "company_concurrency": 1,
+        "job_timeout_seconds": 3600
+      },
+      "runtime_versions": {
+        "python": "3.14.7",
+        "playwright": "1.63.0"
+      },
+      "source_files_at_start": {
+        "outreach/web.py": "3d26984f977296940cc16478579a599bb05bdbe714649e905f96990926f7b49c",
+        "outreach/browser.py": "43241eedd13b4f906ed1f71602b7a5a8fae51f32a7274819f598805d338f6b64",
+        "outreach/config.py": "c75b906e7246c7dca4928f98057db2713f4809fb5b794e2f36b25b52ffc87342",
+        "scripts/benchmark.py": "0ca1163ed3c1e7d1069699ab5956611307099e63e5a5da9c1eb66c51da2f5064",
+        "requirements.lock": "886062d34b84734ecb0619ba721e1969e23f649e0818c6374ae95421af86c94f"
+      },
+      "companies": [
+        {
+          "company": "Goldstein Heather Architecture",
+          "website": "https://www.goldsteinheather.co.uk/",
+          "campaign": "A",
+          "country_hint": "UK",
+          "status": "partial",
+          "pages": 30,
+          "unique_page_urls": 30,
+          "rendered_pages": 30,
+          "published_emails": 8,
+          "other_domain_candidates": 0,
+          "published_named_contacts": 0,
+          "elapsed_seconds": 2098.21,
+          "detail_file": "company-001-goldsteinheather.co.uk.json",
+          "error": "",
+          "verified_emails": null,
+          "company_match": null,
+          "buyer_match": null,
+          "observation_accuracy": null,
+          "issues": {
+            "network_did_not_settle_within_10s": 30,
+            "resource_requests_pending_at_snapshot": 30,
+            "unowned_route_target_unavailable": 4,
+            "browser_context_recreated_after_failure": 4
+          }
+        }
+      ],
+      "full_page_budget_captured_and_rendered": true,
+      "observed_orphan_callback_warning_count": 0,
+      "coverage_note": "Rendered captures do not establish complete asset/website coverage or a successful deployed campaign. Preserve partial status and every reported issue.",
+      "imports": 0,
+      "recipient_probes": 0,
+      "sends": 0
+    },
+    "supplemental_recovered_source_profiles": 17,
+    "supplemental_review_note": "Seventeen recovered source/fit profiles retained privately; not additional approved copy, contacts or email.",
+    "fresh_resumed_finished_at_checkpoint": 9,
+    "original_source_profiles": 29,
+    "recovered_source_profiles": 17,
+    "geographic_source_support": 43,
+    "geography_held": 3,
+    "fresh_resumed_saved_pages": 212,
+    "fresh_resumed_rendered_pages": 212,
+    "yafa_recovery_saved_pages": 30,
+    "yafa_recovery_rendered_pages": 30,
+    "latest_original_candidate_reports": {
+      "partial": 46,
+      "failed": 4
+    },
+    "source_review_note": "Source/fit notes for 46 companies across preserved source snapshots. 43 geographic source supports and 3 holds are not independent country/buyer/operator approval. Twenty company-copy sequences/80 messages reviewed; all contacts unapproved/unverified."
+  },
+  "requirements": [
+    {
+      "requirement": "US/UK Campaign A/B with one relevant offered service",
+      "state": "implemented_and_locally_tested",
+      "evidence": [
+        "outreach/campaigns.py",
+        "tests/test_requirements_audit.py"
+      ]
+    },
+    {
+      "requirement": "Official-source discovery, deep browser crawl, source-attributed contacts and evidence",
+      "state": "implemented; representative acceptance incomplete",
+      "evidence": [
+        "outreach/web.py",
+        "outreach/browser.py",
+        "docs/BENCHMARK.md"
+      ]
+    },
+    {
+      "requirement": "Public LinkedIn/X/PeoplePerHour signals",
+      "state": "Automatic indexed/public signal research, robots-permitted snapshots, conservative website resolution; no logged-in crawling/messaging. Representative live check only.",
+      "evidence": [
+        "outreach/discovery.py",
+        "tests/test_platform_discovery.py",
+        "docs/PLATFORM_DISCOVERY.md",
+        "docs/platform-discovery-check.json"
+      ]
+    },
+    {
+      "requirement": "Current sourced observations, optional announcements, personalized four-touch pitch",
+      "state": "implemented_and_locally_tested; all live recipients unapproved",
+      "evidence": [
+        "outreach/research.py",
+        "outreach/campaigns.py",
+        "tests/test_requirements_audit.py",
+        "docs/draft-review-check.json"
+      ]
+    },
+    {
+      "requirement": "Self-hosted Reacher",
+      "state": "adapter/build recipe tested locally; actual runtime/probing unvalidated",
+      "evidence": [
+        "deploy/reacher.Dockerfile",
+        "outreach/providers.py",
+        "tests/test_reacher_smoke.py"
+      ]
+    },
+    {
+      "requirement": "Sending, follow-ups, replies, bounces, uncertainty and opt-out handling",
+      "state": "local TLS fixture acceptance; live mailbox/domain acceptance deferred",
+      "evidence": [
+        "outreach/mail.py",
+        "tests/test_mail_wire.py",
+        "tests/test_campaigns_mail.py"
+      ]
+    },
+    {
+      "requirement": "Shared history, value fulfillment and post-reply sales process",
+      "state": "implemented_and_locally_tested; external conversations/calls/payments/delivery operator-recorded",
+      "evidence": [
+        "outreach/sales.py",
+        "outreach/deliverables.py",
+        "tests/test_sales.py",
+        "tests/test_deliverables.py",
+        "docs/SALES.md"
+      ]
+    },
+    {
+      "requirement": "Smooth actual 4 GB/2-core VPS operation",
+      "state": "not measured; host configuration deferred by user; quality preserved",
+      "evidence": [
+        "compose.yaml",
+        "PLAN.md",
+        "VALIDATION.md"
+      ]
+    }
+  ],
+  "remaining": [
+    "Independent company/buyer/recipient approval and controlled live pilot.",
+    "Actual Docker builds/startup and Linux Chromium sandbox.",
+    "Actual SMTP/IMAP, sender identity/domain authentication/public HTTPS/unsubscribe.",
+    "Representative full-stack VPS resource measurements.",
+    "Actual validated Reacher and optional AI if used; search validated locally on Windows only, not production Linux/container."
+  ],
+  "external_messages_sent": 0,
+  "real_recipient_probes": null,
+  "sending_enabled": false,
+  "latest_feature_check": "docs/context-learning-check.json",
+  "recipient_probe_note": "Live verification requests returned HTTPStatusError; no successful backend/SMTP verification established.",
+  "current_discovery_recheck": {
+    "job_id": 6,
+    "state": "done",
+    "seconds": 46.23,
+    "queries_completed": 6,
+    "progress_events": 12,
+    "lead_ids": [
+      1
+    ],
+    "platform_signals": 3,
+    "query_errors": [],
+    "engine_reports": [
+      {
+        "query": "\"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:linkedin.com/company/ \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:x.com \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:peopleperhour.com \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:clutch.co \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:crunchbase.com \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      }
+    ],
+    "new_contacts_imported": 0,
+    "note": "Existing unqualified lead retained; no duplicate website research or verification was queued."
+  },
+  "profile_prospect_branch": {
+    "job_id": 7,
+    "state": "done",
+    "company": "IMAGE Skincare UK",
+    "source_url": "https://uk.linkedin.com/company/image-skincare-uk-362200241",
+    "website_status": "website_found",
+    "snapshot_state": "robots_denied",
+    "matched_website": "https://imageskincare.co.uk/",
+    "resolution_state": "exact_brand_domain_candidate",
+    "reused_website_lead_id": 1,
+    "captured_profile_pages": 0,
+    "profile_contacts_imported": 0,
+    "profile_verification_jobs_created": 0,
+    "note": "Website-found routing and blocked-source handling only. This real company has a matched website; it is not evidence of live website-less email acquisition."
+  },
+  "each_node_audit": {
+    "node_count": 35,
+    "all_mapped_tests_passed": true,
+    "all_nodes_live_verified": false,
+    "report": "docs/EVERY_NODE_AUDIT.md",
+    "map_defects_reproduced_and_fixed": 6
+  },
+  "readme_and_original_workflow_comparison": "docs/README_WORKFLOW_CHECK.md"
+}

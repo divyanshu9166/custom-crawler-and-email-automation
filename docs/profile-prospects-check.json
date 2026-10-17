@@ -1,0 +1,70 @@
+{
+  "checked_at": 1791643757.1108127,
+  "scope": "Profile-first branch implemented and verified locally; production and independent live recipient acceptance incomplete.",
+  "automated_suite": {
+    "passed": 215,
+    "failed": 0,
+    "warning_count": 1,
+    "seconds": 75.94,
+    "private_log": "data/audit-pytest-profile-release.log"
+  },
+  "full_chromium_smoke": {
+    "passed": true,
+    "private_log": "data/audit-ui-profile-release.log",
+    "profile_flow": "Fictional public source: profile form, identity/activity/search review, sourced Gmail ownership import, four drafts, mobile and zero JS errors. No actual provider or email send."
+  },
+  "normal_server_dashboard": {
+    "checked_at": 1791643687.2033365,
+    "url": "http://localhost:8000/",
+    "sending_enabled": false,
+    "login_passed": true,
+    "profile_detail_loaded": true,
+    "profile_form_visible": true,
+    "website_visual_audits_disabled": true,
+    "javascript_errors": [],
+    "csv_profile_fields_present": true
+  },
+  "real_profile_check": {
+    "job_id": 7,
+    "state": "done",
+    "company": "IMAGE Skincare UK",
+    "source_url": "https://uk.linkedin.com/company/image-skincare-uk-362200241",
+    "website_status": "website_found",
+    "snapshot_state": "robots_denied",
+    "matched_website": "https://imageskincare.co.uk/",
+    "resolution_state": "exact_brand_domain_candidate",
+    "reused_website_lead_id": 1,
+    "captured_profile_pages": 0,
+    "profile_contacts_imported": 0,
+    "profile_verification_jobs_created": 0,
+    "note": "Website-found routing and blocked-source handling only. This real company has a matched website; it is not evidence of live website-less email acquisition."
+  },
+  "database_migration": {
+    "from_version": 2,
+    "to_version": 3,
+    "backup": "Private data/backups directory",
+    "existing_records_preserved": true
+  },
+  "sending_enabled": false,
+  "actual_messages_created": 0,
+  "paid_discovery_dependencies": [],
+  "source_hashes": {
+    "outreach/db.py": "613d755756af92deccb3678409699652420bc79ce35910daaeb637f699663d73",
+    "outreach/profiles.py": "6b1911cb6efc6a7cb2e03688366f68f00f10e6969e5868e94d507b0e84b0eda6",
+    "outreach/research.py": "8d138fd0578c6716f3990fbbccadc856e38d8c7066215f554fb6e2cbd65900e3",
+    "outreach/discovery.py": "91939074033f78f5d2dd2d18c4672814e1c37987e0460cbb884801aa18a3d5a2",
+    "outreach/campaigns.py": "2a5e4ebb813c4f487e042b8cf88d465a13e15c60d9546c37b388cd2e5141147e",
+    "outreach/app.py": "489f52a835b221f7204cc0dc027d10b05777bd69ca373cc724c0fe8c702af77a",
+    "outreach/static/app.js": "21e2da2263384f8b786daa9b35ff668370b646d4878eddbcd50963af6730d290",
+    "outreach/static/index.html": "c295628bf0ac08546e5fc787cc6dd2829adfbd1ea73e12f706aecf33d3da10da",
+    "outreach/config.py": "b2b741074d6092ea81f5a300eccee82cc756b6ddf5fefda9eca30bfd4956ad5d",
+    "outreach/browser.py": "9224168faf20b461e60836d1165f0ddbfc41e27a1f571eb7f6d52fcff43f95f0",
+    "outreach/performance.py": "ab5d54c584b3db9b562e717ef0ecca8f7815c93a090eeca65c58351094c538ff",
+    "tests/test_profile_prospects.py": "30abaed06716d818a3623697d97750281532b701dde7cf22907c7568d59ea200",
+    "scripts/ui_smoke.py": "6b4c8e25cfbb65b7fef6e3e2b7094641b9b17dafe3f590e8aaaac257a47b188d"
+  },
+  "remaining": [
+    "Accessible live website-less business-profile email coverage and independent business/recipient approval.",
+    "Validated actual Reacher backend, real mailbox/domain/public HTTPS, controlled send lifecycle and representative VPS/container acceptance."
+  ]
+}

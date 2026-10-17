@@ -1,0 +1,1128 @@
+{
+  "checked_at": 1791699011.3331316,
+  "tests_passed": 452,
+  "new_recovery_cases": 19,
+  "real_company_contact_research_runs": 3,
+  "official_contact_page_captures": 18,
+  "new_published_contacts": 0,
+  "companies": [
+    {
+      "id": 9,
+      "company": "Roofing Contractors in Raleigh, North Carolina | SmartRoof",
+      "current_pages": 41,
+      "status": "review",
+      "crawl_status": "partial",
+      "checkpoint_frontier": 0,
+      "resume_history": [
+        {
+          "at": 1791698754.1731827,
+          "previous_status": "partial",
+          "previous_pages": 31
+        }
+      ],
+      "capture_urls": [
+        "https://smartroof.com/service/roofing/",
+        "https://smartroof.com/contact-us/contact-confirmation/",
+        "https://smartroof.com/referrals-team/",
+        "https://smartroof.com/service/solar/",
+        "https://smartroof.com/book-inspection/",
+        "https://smartroof.com/service/roofing/storm-damage/",
+        "https://smartroof.com/service/roofing/roof-replacement/",
+        "https://smartroof.com/company/customer-stories/",
+        "https://smartroof.com/company/careers/",
+        "https://smartroof.com/referrals/",
+        "https://smartroof.com/make-a-payment/",
+        "https://smartroof.com/company/our-story/",
+        "https://smartroof.com/company/areas-we-serve/",
+        "https://smartroof.com/location/reston-virginia/",
+        "https://smartroof.com/location/richmond-virginia/",
+        "https://smartroof.com/location/philadelphia-pennsylvania/",
+        "https://smartroof.com/location/newark-new-jersey/",
+        "https://smartroof.com/location/pittsburgh-pennsylvania/",
+        "https://smartroof.com/location/washington-dc/",
+        "https://smartroof.com/location/wilmington-delaware/",
+        "https://smartroof.com/location/baltimore-md/",
+        "https://smartroof.com/location/raleigh-north-carolina/",
+        "https://smartroof.com/frequently-asked-questions/",
+        "https://smartroof.com/privacy-policy/",
+        "https://smartroof.com/terms-conditions/",
+        "https://smartroof.com/",
+        "https://smartroof.com/contact-us/",
+        "https://smartroof.com/service/roofing/warranty/claim/",
+        "https://smartroof.com/accessibility/",
+        "https://smartroof.com/company/",
+        "https://smartroof.com/company/awards/",
+        "https://smartroof.com/service/roofing/warranty/",
+        "https://smartroof.com/service/solar/solar-financing/",
+        "https://smartroof.com/service/solar/frequently-asked-questions/",
+        "https://smartroof.com/service/solar/integrated-roofing/",
+        "https://smartroof.com/services/",
+        "https://smartroof.com/service/windows/",
+        "http://smartroof.com/company/careers/",
+        "https://smartroof.com/service/doors/",
+        "https://smartroof.com/service/siding-trim/",
+        "https://smartroof.com/service/gutters/"
+      ]
+    },
+    {
+      "id": 11,
+      "company": "Order Coffee Online | Portland Coffee Roasters",
+      "current_pages": 29,
+      "status": "review",
+      "crawl_status": "partial",
+      "checkpoint_frontier": 0,
+      "resume_history": [],
+      "capture_urls": [
+        "https://www.portlandcoffeeroasters.com/",
+        "https://www.portlandcoffeeroasters.com/pages/about-us",
+        "https://www.portlandcoffeeroasters.com/collections/shop",
+        "https://www.portlandcoffeeroasters.com/pages/contact",
+        "https://www.portlandcoffeeroasters.com/pages/faq",
+        "https://www.portlandcoffeeroasters.com/products/endless-summer",
+        "https://www.portlandcoffeeroasters.com/products/opbeans",
+        "https://www.portlandcoffeeroasters.com/products/pcr-coffee-bean-necklace-antique-bronze",
+        "https://www.portlandcoffeeroasters.com/products/anniversary-roast",
+        "https://www.portlandcoffeeroasters.com/pages/news",
+        "https://www.portlandcoffeeroasters.com/pages/cafes",
+        "https://www.portlandcoffeeroasters.com/pages/wholesale",
+        "https://www.portlandcoffeeroasters.com/search",
+        "https://www.portlandcoffeeroasters.com/pages/find-our-coffee",
+        "https://www.portlandcoffeeroasters.com/pages/privacy-policy",
+        "https://www.portlandcoffeeroasters.com/pages/data-sharing-opt-out",
+        "https://www.portlandcoffeeroasters.com/pages/brew-guides",
+        "https://www.portlandcoffeeroasters.com/blogs/brew-guides/kalita-wave",
+        "https://www.portlandcoffeeroasters.com/blogs/brew-guides/french-press",
+        "https://www.portlandcoffeeroasters.com/blogs/brew-guides/drip-machine",
+        "https://www.portlandcoffeeroasters.com/blogs/brew-guides/chemex",
+        "https://www.portlandcoffeeroasters.com/pages/coldbrew",
+        "https://www.portlandcoffeeroasters.com/agents.md",
+        "https://www.portlandcoffeeroasters.com/pages/jobs",
+        "https://www.portlandcoffeeroasters.com/collections/all",
+        "https://www.portlandcoffeeroasters.com/products/30th-anniversary-postcard",
+        "https://www.portlandcoffeeroasters.com/products/best-sellers-subscription",
+        "https://www.portlandcoffeeroasters.com/products/coffeebeanpin"
+      ]
+    }
+  ],
+  "actual_browser_controls": {
+    "desktop_mobile": true,
+    "verifier_message_visible": true,
+    "continuation_queued": true,
+    "js_errors": 0
+  },
+  "jobs": [
+    {
+      "id": 27,
+      "kind": "contact_research",
+      "state": "done",
+      "error": ""
+    },
+    {
+      "id": 28,
+      "kind": "contact_research",
+      "state": "done",
+      "error": ""
+    },
+    {
+      "id": 29,
+      "kind": "contact_research",
+      "state": "done",
+      "error": ""
+    },
+    {
+      "id": 30,
+      "kind": "verify",
+      "state": "failed",
+      "error": "Verifier unavailable: Configured path is missing or this port serves a different application"
+    },
+    {
+      "id": 31,
+      "kind": "research",
+      "state": "done",
+      "error": ""
+    },
+    {
+      "id": 32,
+      "kind": "screenshot",
+      "state": "done",
+      "error": ""
+    }
+  ],
+  "social_bridge": {
+    "query": "site:linkedin.com/company/ \"Portland Coffee Roasters\"",
+    "checked_at": 1791698626.2567987,
+    "live": true,
+    "engine_issues": [
+      [
+        "brave",
+        "Suspended: too many requests"
+      ],
+      [
+        "duckduckgo",
+        "timeout"
+      ],
+      [
+        "google",
+        "Suspended: access denied"
+      ],
+      [
+        "qwant",
+        "CAPTCHA"
+      ]
+    ],
+    "signal": {
+      "state": "indexed_profile_not_found"
+    },
+    "emails_imported": 0,
+    "messages_sent": 0,
+    "saved_hint_recheck": {
+      "original_indexed_signal_observed_at": 1791696683.6117465,
+      "source_url": "https://www.linkedin.com/company/portlandcoffeeroasters",
+      "official_url": "https://www.portlandcoffeeroasters.com/",
+      "official_snapshot_state": "captured",
+      "official_sha256": "ff5f672a0849cd11ed9d3109bd1ea7b7535d86cb3df01fa66b0e3accd8ef2ed7",
+      "current_official_reciprocal_link": true,
+      "note": "Fresh website corroboration of an earlier stored indexed hint. The new platform-index query did not find that exact profile; no current LinkedIn profile/email access is established."
+    }
+  },
+  "dns_only_provider_hold": {
+    "error": "VerificationUnavailable",
+    "provider_status": {
+      "ready": false,
+      "path": "/v0/check_email",
+      "scope": "API/syntax check only; no real recipient submitted",
+      "http_status": 404,
+      "reason": "Configured path is missing or this port serves a different application",
+      "dns_precheck": {
+        "mailbox_exists": null,
+        "safe": false,
+        "scope": "Syntax/DNS only; no SMTP conversation or email sent",
+        "syntax_valid": true,
+        "mx_records": [
+          "alt1.aspmx.l.google.com",
+          "alt2.aspmx.l.google.com",
+          "alt3.aspmx.l.google.com",
+          "alt4.aspmx.l.google.com",
+          "aspmx.l.google.com"
+        ],
+        "null_mx": false
+      }
+    }
+  },
+  "practice_continuation": {
+    "live": true,
+    "practice_site": true,
+    "business_prospect": false,
+    "checked_at": 1791698908.038738,
+    "first_pass_pages": 2,
+    "second_pass_new_pages": 2,
+    "total_current_pages": 4,
+    "rendered_pages": 4,
+    "original_evidence_preserved": true,
+    "duplicate_captures": 0,
+    "scope": "Two diagnostic passes; production default stays 30 pages per pass. This is checkpoint/rendering proof, not full coverage or campaign performance.",
+    "first_report": {
+      "status": "partial",
+      "pages": [
+        {
+          "url": "https://quotes.toscrape.com/js/",
+          "rendered": true,
+          "emails": 0,
+          "text_chars": 1512,
+          "contacts": [],
+          "review_candidates": [],
+          "visual": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "horizontalOverflow": false,
+            "title": "Quotes to Scrape",
+            "forms": 0,
+            "fieldsWithoutExplicitLabels": 0,
+            "ctas": [
+              {
+                "text": "books",
+                "href": "",
+                "top": 610
+              }
+            ]
+          },
+          "http_seconds": 1.687,
+          "render_seconds": 9.328,
+          "document_reused": true
+        },
+        {
+          "url": "https://quotes.toscrape.com/",
+          "rendered": true,
+          "emails": 0,
+          "text_chars": 1681,
+          "contacts": [],
+          "review_candidates": [],
+          "visual": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "horizontalOverflow": false,
+            "title": "Quotes to Scrape",
+            "forms": 0,
+            "fieldsWithoutExplicitLabels": 0,
+            "ctas": [
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 687
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/",
+                "top": 332
+              }
+            ]
+          },
+          "http_seconds": 0.507,
+          "render_seconds": 5.659,
+          "document_reused": true
+        }
+      ],
+      "errors": [],
+      "skipped": [],
+      "sitemaps": [],
+      "activity": {
+        "stage": "save",
+        "url": "https://quotes.toscrape.com/",
+        "started_at": 1791698891.0451283
+      },
+      "checkpoint": {
+        "website": "https://quotes.toscrape.com/js/",
+        "frontier": [
+          {
+            "url": "https://quotes.toscrape.com/tag/books/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/books/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/js/page/2/",
+            "depth": 1
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Albert-Einstein",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/change/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/deep-thoughts/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/thinking/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/world/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/J-K-Rowling",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/abilities/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/choices/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/inspirational/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/life/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/live/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/miracle/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/miracles/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Jane-Austen",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/aliteracy/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/classic/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/humor/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Marilyn-Monroe",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/be-yourself/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/adulthood/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/success/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/value/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Andre-Gide",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/love/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Thomas-A-Edison",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/edison/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/failure/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/paraphrased/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Eleanor-Roosevelt",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/misattributed-eleanor-roosevelt/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Steve-Martin",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/obvious/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/simile/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/page/2/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/love/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/inspirational/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/life/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/humor/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/reading/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/friendship/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/friends/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/truth/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/simile/",
+            "depth": 2
+          }
+        ],
+        "seen": [
+          "https://quotes.toscrape.com/",
+          "https://quotes.toscrape.com/js/"
+        ],
+        "sitemap_queue": [
+          "https://quotes.toscrape.com/sitemap.xml"
+        ],
+        "sitemap_seen": [],
+        "depth_limited": []
+      },
+      "first_page_seconds": 12.545,
+      "attempted": 2,
+      "pass_attempted": 2,
+      "remaining": 46,
+      "sitemaps_remaining": 1,
+      "seconds": 18.845,
+      "depth_limited_urls": 0,
+      "scope": {
+        "domain": "quotes.toscrape.com",
+        "max_pages": 2,
+        "max_depth": 3,
+        "render_mode": "always",
+        "seeded_only": false
+      },
+      "budget_reached": true,
+      "finished_at": 1791698891.1516097
+    },
+    "continued_report": {
+      "status": "partial",
+      "pages": [
+        {
+          "url": "https://quotes.toscrape.com/js/",
+          "rendered": true,
+          "emails": 0,
+          "text_chars": 1512,
+          "contacts": [],
+          "review_candidates": [],
+          "visual": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "horizontalOverflow": false,
+            "title": "Quotes to Scrape",
+            "forms": 0,
+            "fieldsWithoutExplicitLabels": 0,
+            "ctas": [
+              {
+                "text": "books",
+                "href": "",
+                "top": 610
+              }
+            ]
+          },
+          "http_seconds": 1.687,
+          "render_seconds": 9.328,
+          "document_reused": true
+        },
+        {
+          "url": "https://quotes.toscrape.com/",
+          "rendered": true,
+          "emails": 0,
+          "text_chars": 1681,
+          "contacts": [],
+          "review_candidates": [],
+          "visual": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "horizontalOverflow": false,
+            "title": "Quotes to Scrape",
+            "forms": 0,
+            "fieldsWithoutExplicitLabels": 0,
+            "ctas": [
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 687
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/",
+                "top": 332
+              }
+            ]
+          },
+          "http_seconds": 0.507,
+          "render_seconds": 5.659,
+          "document_reused": true
+        },
+        {
+          "url": "https://quotes.toscrape.com/tag/books/page/1/",
+          "rendered": true,
+          "emails": 0,
+          "text_chars": 1936,
+          "contacts": [],
+          "review_candidates": [],
+          "visual": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "horizontalOverflow": false,
+            "title": "Quotes to Scrape",
+            "forms": 0,
+            "fieldsWithoutExplicitLabels": 0,
+            "ctas": [
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 138
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 284
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 423
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 561
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 699
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 863
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 1002
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 1192
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 1330
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 1520
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 1684
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/",
+                "top": 396
+              }
+            ]
+          },
+          "http_seconds": 2.018,
+          "render_seconds": 7.127,
+          "document_reused": true
+        },
+        {
+          "url": "https://quotes.toscrape.com/tag/books/",
+          "rendered": true,
+          "emails": 0,
+          "text_chars": 1936,
+          "contacts": [],
+          "review_candidates": [],
+          "visual": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "horizontalOverflow": false,
+            "title": "Quotes to Scrape",
+            "forms": 0,
+            "fieldsWithoutExplicitLabels": 0,
+            "ctas": [
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 138
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 284
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 423
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 561
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 699
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 863
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 1002
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 1192
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 1330
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 1520
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/page/1/",
+                "top": 1684
+              },
+              {
+                "text": "books",
+                "href": "/tag/books/",
+                "top": 396
+              }
+            ]
+          },
+          "http_seconds": 0.519,
+          "render_seconds": 5.666,
+          "document_reused": true
+        }
+      ],
+      "errors": [],
+      "skipped": [],
+      "sitemaps": [],
+      "activity": {
+        "stage": "save",
+        "url": "https://quotes.toscrape.com/tag/books/",
+        "started_at": 1791698907.8855412
+      },
+      "checkpoint": {
+        "website": "https://quotes.toscrape.com/js/",
+        "frontier": [
+          {
+            "url": "https://quotes.toscrape.com/tag/books/page/2/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/js/page/2/",
+            "depth": 1
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Albert-Einstein",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/change/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/deep-thoughts/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/thinking/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/world/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/J-K-Rowling",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/abilities/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/choices/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/inspirational/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/life/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/live/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/miracle/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/miracles/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Jane-Austen",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/aliteracy/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/classic/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/humor/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Marilyn-Monroe",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/be-yourself/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/adulthood/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/success/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/value/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Andre-Gide",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/love/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Thomas-A-Edison",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/edison/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/failure/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/paraphrased/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Eleanor-Roosevelt",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/misattributed-eleanor-roosevelt/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Steve-Martin",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/obvious/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/simile/page/1/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/page/2/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/love/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/inspirational/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/life/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/humor/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/reading/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/friendship/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/friends/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/truth/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/simile/",
+            "depth": 2
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Mark-Twain",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/contentment/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/friends/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/friendship/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Jorge-Luis-Borges",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/library/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/C-S-Lewis",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/reading/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/tea/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Haruki-Murakami",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/thought/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Ernest-Hemingway",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/novelist-quotes/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/J-D-Salinger",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/authors/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/literature/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/writing/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/author/Madeleine-LEngle",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/children/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/difficult/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/grown-ups/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/write/page/1/",
+            "depth": 3
+          },
+          {
+            "url": "https://quotes.toscrape.com/tag/writers/page/1/",
+            "depth": 3
+          }
+        ],
+        "seen": [
+          "https://quotes.toscrape.com/",
+          "https://quotes.toscrape.com/js/",
+          "https://quotes.toscrape.com/tag/books/",
+          "https://quotes.toscrape.com/tag/books/page/1/"
+        ],
+        "sitemap_queue": [
+          "https://quotes.toscrape.com/sitemap.xml"
+        ],
+        "sitemap_seen": [],
+        "depth_limited": []
+      },
+      "first_page_seconds": 12.545,
+      "attempted": 4,
+      "pass_attempted": 2,
+      "remaining": 68,
+      "sitemaps_remaining": 1,
+      "seconds": 16.795,
+      "depth_limited_urls": 0,
+      "scope": {
+        "domain": "quotes.toscrape.com",
+        "max_pages": 2,
+        "max_depth": 3,
+        "render_mode": "always",
+        "seeded_only": false
+      },
+      "budget_reached": true,
+      "finished_at": 1791698908.0002956,
+      "resume_history": [
+        {
+          "at": 1791698892.0005758,
+          "previous_status": "partial",
+          "previous_pages": 2
+        }
+      ]
+    },
+    "messages_sent": 0,
+    "pages": [
+      {
+        "url": "https://quotes.toscrape.com/js/",
+        "sha256": "b6d656f508cbbb0df37ec664f4363c41aa4fb497395e206ed24c497cd75ad110"
+      },
+      {
+        "url": "https://quotes.toscrape.com/",
+        "sha256": "99ae91f9c5772615153e93710f57ef2222c093a74a8908816e8f05c19285a7c5"
+      },
+      {
+        "url": "https://quotes.toscrape.com/tag/books/page/1/",
+        "sha256": "6b8d9689ea570b30204b45013b98db6d5de230d2a26e7a7509b7fe75937e158a"
+      },
+      {
+        "url": "https://quotes.toscrape.com/tag/books/",
+        "sha256": "6b8d9689ea570b30204b45013b98db6d5de230d2a26e7a7509b7fe75937e158a"
+      }
+    ],
+    "source_hash": "1f549299d92b5d185fd642d3d097c3f6be636a07297ae2971756f523346dc398"
+  },
+  "external_messages_sent": 0,
+  "sending_disabled": true,
+  "paused": true,
+  "private_settings_unchanged": true,
+  "reacher_started": false,
+  "reacher_blocker": "Configured local port 8080 serves Apache/httpd. Docker/Rust and a usable Linux distribution are unavailable; the real backend has not started.",
+  "limits": [
+    "Social/index hints do not expose private profile emails and can be missing/stale.",
+    "No new published contacts found in these real contact-research runs.",
+    "Processed checkpoint frontier is a bounded scope; render/access/depth restrictions keep overall coverage partial.",
+    "DNS MX records do not prove a mailbox exists. Reacher delivery verdicts remain unknown.",
+    "No login/CAPTCHA/robots restrictions bypassed; no paid prospect API used."
+  ],
+  "source_hashes": {
+    "outreach/aftercare.py": "6b6e76d55976bd8c5a512bf1bd2814041fa5d4f89a84e68a46fc4b0d276888ff",
+    "outreach/app.py": "6b5bdcb91aa9358fbc28608b4230c9f4ff79ef3ab0f81d7ee5a1e0f0f3befbd0",
+    "outreach/auth.py": "5ffc7139302a48e781bc9405a12654bcf66a4d4ab475d5da3c58b07088073262",
+    "outreach/browser.py": "3d7e98374e877eff00f360458ceb9168b86b4714226e67054b3837fce828d014",
+    "outreach/campaigns.py": "daaaf488e10831f7eb34aa5b0d6222acad57b8c7275f54bcfe8f82b4398e37b2",
+    "outreach/config.py": "e498fcf6baa3a90fb8a2e21ee7f9f9e6d7aae184d993dfd5096709990facab5e",
+    "outreach/contact_recovery.py": "bbcedcb64e32f9d05c40b10dd289900ca6aaa5540ddf8134ecfe26af6d7e4b6e",
+    "outreach/db.py": "f1efaf682ba23927aa4d6705383d0fa35a074dd833c0cb834c441f4ebe707363",
+    "outreach/deliverables.py": "9f3dca60b7475ad830dfac6ff82f7f1721e9f2acd673f21e0f2043fbfc4fb9e5",
+    "outreach/discovery.py": "d44d48a2255115f0d96719c143391d436619011ab90db75a81885883cabdb0e6",
+    "outreach/finance.py": "78c1c554d62dbc3287d2f07e5b68d93c8f36f220eb89f4a53ec9c725fbefd770",
+    "outreach/learning.py": "ad7339e35afd033c1a142686074bf624d21fcd2ac77367bc97956867f5f5040c",
+    "outreach/mail.py": "796f65d9457b57f3c7a765f4f0bb832dd176ade921c6c449f929e935b9473993",
+    "outreach/offers.py": "515774b913ec0cb838f396ffb95d3882b67140087498670eea41f5cd5da2cffb",
+    "outreach/opportunities.py": "79f66f359da183a46df053dd18c5eb2b30bf0ea42d9cc0cb49e5f36325848af5",
+    "outreach/performance.py": "ab5d54c584b3db9b562e717ef0ecca8f7815c93a090eeca65c58351094c538ff",
+    "outreach/preferences.py": "3e074cf6b225b2c1a4b31ef46bebf9d3de41d0b5bac2192bb660a91af7a90452",
+    "outreach/priorities.py": "38dd83447f538a542da949ce753e458b4b2ee0443de7688e22be2c5b7afb9419",
+    "outreach/profiles.py": "f8e52785faade5b323560aa6ccfb5974b45544d76b2953a5afa5d0ffabc4d46f",
+    "outreach/providers.py": "5610418cdea8857b3a4f7fe400661d7cc3023f3edcd224c2decc643e4cac1946",
+    "outreach/research.py": "705f67841e876de3c23d474ff0780f13fc15d8887bc6259f264f46ee3d28a5e2",
+    "outreach/research_status.py": "94c8c1ff85f62e6c3ccf44b722c8bb2754ddf5ae7177aafbf83c533acc88166b",
+    "outreach/sales.py": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c",
+    "outreach/sequence.py": "0cf282c76e684b39d5558404b68a58c37802362b64ea5103fc0b8687a5a162e6",
+    "outreach/web.py": "1f549299d92b5d185fd642d3d097c3f6be636a07297ae2971756f523346dc398",
+    "outreach/worker.py": "153a2f7ce6836024f14caf88fa3f0252930f0ca99fc72ab659db4708e700cc0a",
+    "outreach/workflow.py": "344602ecc6747cc3fbce1b0421c2c152160b835ee35d2d9596707f72439491ca",
+    "outreach/workflow_detail.py": "82207e0d7ece5fd7f061a58734db8801a1838e98ab84f90bbb235f9b89ddf296",
+    "outreach/__init__.py": "ab294c3bf5d7f6d1721dc713a055a57d710ace1e738efcf93235f106cc46043f"
+  }
+}

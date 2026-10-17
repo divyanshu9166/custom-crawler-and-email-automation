@@ -1,0 +1,29 @@
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install -r requirements.lock && pip install -e '.[test]'
+      - run: ruff check outreach tests scripts
+      - run: python -m playwright install --with-deps chromium
+      - run: pytest -q --junitxml=data/ci-workflow-tests.xml
+      - run: python scripts/verify_workflow_nodes.py --junit data/ci-workflow-tests.xml
+      - run: node --check outreach/static/app.js && node --check outreach/static/sales.js && node --check outreach/static/workflow.js && node --check outreach/static/settings.js && node --check outreach/static/login.js
+      - run: python scripts/ui_smoke.py
+      - run: python scripts/init_env.py
+      - run: docker compose --profile verify --profile search --profile n8n config --quiet
+      - run: docker build -t outreach-test .
+  reacher-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f deploy/reacher.Dockerfile -t reacher-test .
+      - run: docker run -d --name reacher-smoke -p 127.0.0.1:18080:8080 -e RCH__HEADER_SECRET=ci-only-fixture-secret reacher-test
+      - run: python3 scripts/reacher_smoke.py --url http://127.0.0.1:18080 --secret ci-only-fixture-secret
+      - if: always()
+        run: docker logs reacher-smoke

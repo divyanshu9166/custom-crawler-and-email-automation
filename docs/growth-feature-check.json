@@ -1,0 +1,83 @@
+{
+  "checked_at": 1791659302.292837,
+  "features": [
+    "explainable prospect review ranking",
+    "separate currency costs, receipts and correction ledger",
+    "recorded return on cost and acquisition costs per recorded win",
+    "permission-reviewed maintenance, expansion and case-study plans",
+    "dated client plan reporting and navigation"
+  ],
+  "node_count": 35,
+  "overview_stage_count": 11,
+  "connections": 46,
+  "database_version": 4,
+  "suite": {
+    "passed": 288,
+    "failed": 0,
+    "seconds": 93.47,
+    "warnings": 1,
+    "new_cases": 24,
+    "private_junit": "data/audit-growth-tests-release.xml",
+    "junit_sha256": "a732eaeca03cae8672b2b4f474b1b84fdd64ce57a52f45bf053f538da894ab44"
+  },
+  "browser": {
+    "passed": true,
+    "javascript_errors": 0,
+    "desktop_mobile_checked": true,
+    "scope": "Isolated fictional records; no real sends or client transactions",
+    "private_log": "data/audit-growth-browser-release.log",
+    "log_sha256": "55fa8f103d0b5b23a24942f88a500c7a963081f3f72320b369f63e1b62b40596"
+  },
+  "normal_server": {
+    "checked_at": 1791659148.0258865,
+    "normal_server_read_only": true,
+    "priority_finance_aftercare_ui": true,
+    "desktop_mobile_checked": true,
+    "javascript_errors": 0,
+    "mobile_overflow": false,
+    "existing_operational_records_unchanged": true,
+    "credentials_unchanged": true,
+    "database_version": 4,
+    "integrity": "ok",
+    "new_external_mail": 0,
+    "new_financial_entries": 0,
+    "new_client_plans": 0,
+    "sending_enabled": false
+  },
+  "priority_fixture_measurement": {
+    "fixture_businesses": 500,
+    "elapsed_seconds": 0.0083,
+    "scope": "Local synthetic current-source review queue only; no contacts, crawler or whole-VPS benchmark",
+    "jobs_created": 0
+  },
+  "source_hashes": {
+    "outreach/db.py": "b138f16db3e6c86558665f6658872d2a061ab576ac60d0fd20ddb7b230af6288",
+    "outreach/finance.py": "78c1c554d62dbc3287d2f07e5b68d93c8f36f220eb89f4a53ec9c725fbefd770",
+    "outreach/aftercare.py": "51f1a09ef096599a426d0e739b9347d054748c3310124539227d3d9da708d872",
+    "outreach/priorities.py": "38dd83447f538a542da949ce753e458b4b2ee0443de7688e22be2c5b7afb9419",
+    "outreach/app.py": "2620c7d9759199f61634ea97c7ff0a7df0f8d6b5ec6c32f03e4ff9e030c51abd",
+    "outreach/sales.py": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa",
+    "outreach/workflow_detail.py": "1756b637aacef8252c28c3889e59ec6057174fe2ba6e83d08d172260371d61fe",
+    "outreach/static/growth.js": "9a178c587f3611cee6c6504004e85dce89c28276a8ceaf35daa8d027572bd189",
+    "outreach/static/app.js": "de01846037a478496997ae30cbff7595cef608cacb873560b44b931dd2e391a7",
+    "outreach/static/sales.js": "c3ec348e6388b4b560d606b13d36bf1d41beb7ed89dbc47fa56494a18e59e1d3",
+    "outreach/static/index.html": "2d7a0304d808575013089e195db3994af75dc8b75d97c82b4ec8a0be98bdcfa0",
+    "outreach/static/style.css": "821c43eb0b5e585517cefc48051b90d1997e1cf0f31bdf5223234cd48b776978",
+    "tests/test_growth_finance_priority.py": "9a25cd50770e7622c861d39bcccf5056f48a4fc2d0607d0b3dc0a9d0ee4a690f",
+    "scripts/ui_smoke.py": "7627a131ddf776414f0af9f116a21346437ec7a8cdf49b8717ec3ef69c384c8e",
+    "scripts/verify_workflow_nodes.py": "e767add78b7601b77b2f7b312e76f040b5b965045d71c9ec8dcaf5e7d6e0b4e3",
+    "docs/WORKFLOW.md": "b098a94b885f71668fbeabc0119b2fd597607b6ff29ddb60ff25313180077a5f",
+    "docs/PRIORITY_FINANCE_AFTERCARE.md": "7144ccb54be3b8dbc44f67f75710a90d6461f20c8718496d68387b5f03d5051a"
+  },
+  "current_requested_features_implemented": true,
+  "broader_live_acquisition_goal_complete": false,
+  "actual_client_outcome_claimed": false,
+  "live_domain_vps_mailbox_setup": "User-owned; not a local-development blocker",
+  "manual_boundaries": [
+    "buyer/eligibility review",
+    "conversations and actual calendar bookings",
+    "actual agreement, payment and client delivery",
+    "case-study permission and publication",
+    "independent measurement and causal interpretation"
+  ]
+}

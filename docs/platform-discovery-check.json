@@ -1,0 +1,361 @@
+{
+  "checked_at": 1791642318.981569,
+  "scope": "One real UK skincare prospect in normal development database; not all-market or sending acceptance.",
+  "implementation": "Automatic indexed platform research, robots-permitted snapshots, held ambiguity, official-site resolution, website crawl and sourced contact extraction.",
+  "paid_discovery_dependencies": [],
+  "local_search": {
+    "running": true,
+    "source_repository": "https://github.com/searxng/searxng",
+    "commit": "f4822b3fc46726bb259d14c6332b702c76b98f82",
+    "deployment_scope": "Windows development, Valkey disabled; production Linux/container unvalidated"
+  },
+  "automated_suite": {
+    "passed": 199,
+    "failed": 0,
+    "seconds": 67.68,
+    "warning_count": 1,
+    "private_log": "data/audit-pytest-platform-final.log"
+  },
+  "browser_login": {
+    "checked_at": 1791642261.177921,
+    "url": "http://localhost:8000/",
+    "unauthenticated_root_status": 200,
+    "unauthenticated_api_status": 401,
+    "search_root_status": 200,
+    "platform_cards_visible": 2,
+    "login_form_loaded": true,
+    "signed_in": true,
+    "real_pipeline_loaded": true,
+    "discovery_view_loaded": true,
+    "javascript_errors": []
+  },
+  "full_dashboard_smoke": {
+    "passed": true,
+    "scope": "Fictional loopback workflow with browser cookie login, source cards, mobile, qualification, drafts, shared history, sales and artifacts",
+    "private_log": "data/audit-ui-platform-login-final.log"
+  },
+  "live_pipeline": {
+    "discovery_job": "done",
+    "website_research_job": "done",
+    "screenshot_job": "done",
+    "website": "https://imageskincare.co.uk/",
+    "unqualified_companies": 1,
+    "captured_pages": 30,
+    "rendered_pages": 30,
+    "coverage": "partial",
+    "published_contacts": 2,
+    "verified_safe": 0,
+    "approved_contacts": 0,
+    "source_signal_counts": {
+      "exact_brand_domain_candidate": 1,
+      "no_company_match": 1,
+      "ambiguous_search_matches": 1
+    },
+    "queries": [
+      "\"Image Skincare\" \"UK\" contact",
+      "site:linkedin.com/company/ \"Image Skincare\" \"UK\" contact",
+      "site:x.com \"Image Skincare\" \"UK\" contact",
+      "site:peopleperhour.com \"Image Skincare\" \"UK\" contact",
+      "site:clutch.co \"Image Skincare\" \"UK\" contact",
+      "site:crunchbase.com \"Image Skincare\" \"UK\" contact"
+    ],
+    "engine_issues": [
+      {
+        "query": "\"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:linkedin.com/company/ \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:x.com \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:peopleperhour.com \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:clutch.co \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:crunchbase.com \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      }
+    ],
+    "verification": "Both verification jobs failed with HTTPStatusError at configured localhost endpoint; mailbox existence/SMTP probing not established.",
+    "messages_created": 0,
+    "sending_enabled": false,
+    "code_lineage": "First full crawl predates final streaming/market-scoping refinements. Fresh current-server discovery job 6 finished successfully, persisted progress and retained the existing reviewed-required prospect without a duplicate crawl."
+  },
+  "separate_live_resolution": {
+    "source": "https://uk.linkedin.com/company/image-skincare-uk-362200241",
+    "matched_website": "https://imageskincare.co.uk/",
+    "state": "exact_brand_domain_candidate",
+    "independent_identity_approval": false,
+    "private_result": "data/platform-resolution-reviewed.json"
+  },
+  "source_hashes": {
+    "outreach/auth.py": "5ffc7139302a48e781bc9405a12654bcf66a4d4ab475d5da3c58b07088073262",
+    "outreach/app.py": "995cf5411dcb5f95d3c5324122d2fb74548d111686342cdbd31e5c44a1718858",
+    "outreach/discovery.py": "e1a655c78ccf60c3bea528ce2f960ed157335a097c3b74b44ee5194b80cd7587",
+    "outreach/research.py": "309651fea9df5e7a6196fbc9c5341b4bfeaa1ef5f78212fcf37812831c046a65",
+    "outreach/providers.py": "28dc0b312a30b643b8f4daf0898c4d41406222ae78bbec9e532a0e2b4f578966",
+    "outreach/web.py": "d5cc0f835c03a033d957b9fdd2c6d05b578d477ebc5417c43f80e99aa7ede5b1",
+    "outreach/config.py": "a9a8512013711d5a4271b2e8af695e24eac48ca614530d25f60f4d3aceaf4806",
+    "outreach/static/app.js": "b80e9d8c48fce39bf7fee8f8ca92c015057cd9a0a1a2c93f3d84e62dbcd0c638",
+    "outreach/static/login.js": "d18a0cfd1b686ab6d7e74a23fa13cca8b8d48446df4cd8cae558060bfcce6bd4",
+    "scripts/local_search.py": "2c162ca5f60debf87c534e93cf7e225e72fed7112088e5688d2e2da9b6505beb"
+  },
+  "remaining": [
+    "Actual validated Reacher backend and controlled email verification.",
+    "Independent business, geography, buyer/owner and outreach approval.",
+    "Actual mailbox/domain/HTTPS, controlled sending pilot and VPS/container measurements."
+  ],
+  "current_discovery_recheck": {
+    "job_id": 6,
+    "state": "done",
+    "seconds": 46.23,
+    "queries_completed": 6,
+    "progress_events": 12,
+    "lead_ids": [
+      1
+    ],
+    "platform_signals": 3,
+    "query_errors": [],
+    "engine_reports": [
+      {
+        "query": "\"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:linkedin.com/company/ \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:x.com \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:peopleperhour.com \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:clutch.co \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:crunchbase.com \"Image Skincare\" \"UK\" contact",
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "CAPTCHA"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      }
+    ],
+    "new_contacts_imported": 0,
+    "note": "Existing unqualified lead retained; no duplicate website research or verification was queued."
+  }
+}

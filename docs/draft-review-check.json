@@ -1,0 +1,24 @@
+{
+  "checked_at": 1791623386.7307265,
+  "companies": 20,
+  "messages": 80,
+  "split": {
+    "A-US": 5,
+    "A-UK": 5,
+    "B-US": 5,
+    "B-UK": 5
+  },
+  "first_touch_word_range": [
+    79,
+    95
+  ],
+  "review": "Source/copy review plus structural/browser checks; semantic fit remains an operator decision. No recipient eligibility, buyer identity or live pilot acceptance implied.",
+  "browser": {
+    "mobile_overflow": false,
+    "remote_requests": 0,
+    "javascript_errors": 0,
+    "all_followups_opened": true
+  },
+  "send_ready_contacts": 0,
+  "emails_sent": 0
+}

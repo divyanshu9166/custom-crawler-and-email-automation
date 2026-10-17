@@ -1,0 +1,93 @@
+{
+  "website": "https://quotes.toscrape.com/js/",
+  "elapsed_seconds": 30.59,
+  "report": {
+    "status": "partial",
+    "pages": [
+      {
+        "url": "https://quotes.toscrape.com/js/",
+        "rendered": true,
+        "emails": 0,
+        "text_chars": 1512,
+        "contacts": [],
+        "visual": {
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "horizontalOverflow": false,
+          "title": "Quotes to Scrape",
+          "forms": 0,
+          "fieldsWithoutExplicitLabels": 0,
+          "ctas": [
+            {
+              "text": "books",
+              "href": "",
+              "top": 610
+            }
+          ]
+        }
+      },
+      {
+        "url": "https://quotes.toscrape.com/",
+        "rendered": true,
+        "emails": 0,
+        "text_chars": 1681,
+        "contacts": [],
+        "visual": {
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "horizontalOverflow": false,
+          "title": "Quotes to Scrape",
+          "forms": 0,
+          "fieldsWithoutExplicitLabels": 0,
+          "ctas": [
+            {
+              "text": "books",
+              "href": "/tag/books/page/1/",
+              "top": 687
+            },
+            {
+              "text": "books",
+              "href": "/tag/books/",
+              "top": 332
+            }
+          ]
+        }
+      }
+    ],
+    "errors": [],
+    "skipped": [],
+    "sitemaps": [],
+    "attempted": 2,
+    "remaining": 46,
+    "depth_limited_urls": 0,
+    "scope": {
+      "domain": "quotes.toscrape.com",
+      "max_pages": 2,
+      "max_depth": 3,
+      "render_mode": "always"
+    },
+    "budget_reached": true,
+    "finished_at": 1791609467.7332816
+  },
+  "pages": [
+    {
+      "url": "https://quotes.toscrape.com/js/",
+      "rendered": true,
+      "sha256": "b6d656f508cbbb0df37ec664f4363c41aa4fb497395e206ed24c497cd75ad110",
+      "text_chars": 1512,
+      "sourced_emails": 0
+    },
+    {
+      "url": "https://quotes.toscrape.com/",
+      "rendered": true,
+      "sha256": "99ae91f9c5772615153e93710f57ef2222c093a74a8908816e8f05c19285a7c5",
+      "text_chars": 1681,
+      "sourced_emails": 0
+    }
+  ],
+  "note": "Research smoke check on a public JavaScript practice site. No contacts imported or verified; no emails sent. Workstation timing is not a VPS performance benchmark."
+}

@@ -1,0 +1,26 @@
+{
+  "checked_at": 1791732752.4710305,
+  "suite_cases_passed": 537,
+  "suite_seconds": 139.16,
+  "reproduced_failures": 4,
+  "new_cases_passed": 5,
+  "rejected_contexts": [
+    "expired",
+    "future",
+    "changed quote",
+    "new crawl superseded source"
+  ],
+  "current_partial_capture_allowed": true,
+  "both_campaigns_use_shared_guard": true,
+  "source_guard_rechecked_in_write_transaction": true,
+  "stale_context_preserves_existing_drafts": true,
+  "scope": "Isolated database regressions; no external messages",
+  "external_messages_sent": 0,
+  "junit_sha256": "22b1962196425b11353b65405996e403a3e30c5c9132903405470a883c1e6f92",
+  "source_hashes": {
+    "outreach/campaigns.py": "561190e7cf16ffc8caa0293b3427e49f5d22885cd72591bc59c5cb44e37e9ca0",
+    "outreach/offers.py": "5505eb0cb6621f8f4d1ce2155c531cf1f296f877bf9c532df03b838cc21240a0",
+    "tests/test_draft_source_freshness.py": "01d80bd5dee913dfd9dee9ac1f4dddf550ae06f929c00795f67ab96193103a3f",
+    "tests/test_draft_review.py": "ea5a8078c462bcadd057c086a18db19d33cd833736b77b2725041c187f5ff6f0"
+  }
+}

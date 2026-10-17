@@ -1,0 +1,1608 @@
+{
+  "checked_at": 1791659185.3173084,
+  "diagram_node_count": 35,
+  "diagram_sha256": "e367f970899d3029f4b334abce01f12b22c496290d7e4af6c62077a11976b38a",
+  "scope": "Each documented node: source inspection and mapped tests; fixture success is not deployed/provider/client acceptance.",
+  "junit_private_path": "data/audit-growth-tests-release.xml",
+  "junit_sha256": "a732eaeca03cae8672b2b4f474b1b84fdd64ce57a52f45bf053f538da894ab44",
+  "suite_cases_passed": 288,
+  "suite_cases_skipped": 0,
+  "all_nodes_live_verified": false,
+  "broader_goal_complete": false,
+  "ui": "Overview has eleven summary stages; Full workflow renders all 35 nodes and 46 connections with saved statuses and execution modes. Layout editing does not change execution rules.",
+  "findings_fixed": [
+    "Approval status cannot combine drafts, qualification and safe verification from unrelated prospects.",
+    "Manual reply/closed status is not evidence of prior sequence approval; use recorded approval timestamp.",
+    "Terminal research/audit job failures remain visible even with preserved reviewable partial evidence.",
+    "Fresh-safe count excludes suppression and stale profile/other-domain ownership.",
+    "Stale inbox catch-up does not show running monitoring; worker must also be enabled.",
+    "Terminal recorded sales journey with no open tasks is complete instead of permanent needs-review.",
+    "Unqueued new research is ready; partially qualified aggregate is not complete; latest jobs ordered deterministically."
+  ],
+  "nodes": [
+    {
+      "id": "A",
+      "label": "US/UK search queries or sourced CSV",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic",
+      "behavior_checked": "Queries include US/UK context; CSV imports sourced website records. Profile-only records use discovery/profile form, not website-only CSV import.",
+      "live_or_manual_boundary": "Search/import live locally; discovery country is an unconfirmed hint.",
+      "code": [
+        {
+          "path": "outreach/app.py",
+          "symbol": "import_csv",
+          "line": 489,
+          "sha256": "2620c7d9759199f61634ea97c7ff0a7df0f8d6b5ec6c32f03e4ff9e030c51abd"
+        },
+        {
+          "path": "outreach/discovery.py",
+          "symbol": "prospect_candidates",
+          "line": 219,
+          "sha256": "91939074033f78f5d2dd2d18c4672814e1c37987e0460cbb884801aa18a3d5a2"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_api.py",
+          "test": "test_api_import_detail_and_export",
+          "line": 23,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_platform_discovery.py",
+          "test": "test_market_selection_scopes_search_and_locale",
+          "line": 152,
+          "executed_passing_cases": 2
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "label": "SearXNG or optional SerpApi",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic",
+      "behavior_checked": "SearXNG JSON and optional SerpApi adapter; failed engines are retained as limitations.",
+      "live_or_manual_boundary": "Native SearXNG used live; engine blocks/CAPTCHAs observed. Optional paid SerpApi not live validated.",
+      "code": [
+        {
+          "path": "outreach/providers.py",
+          "symbol": "discover",
+          "line": 13,
+          "sha256": "28dc0b312a30b643b8f4daf0898c4d41406222ae78bbec9e532a0e2b4f578966"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_research.py",
+          "test": "test_search_contract",
+          "line": 142,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_platform_discovery.py",
+          "test": "test_failed_platform_queries_do_not_discard_successful_official_results",
+          "line": 70,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "label": "Official company website \u00b7 domain deduplication",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic + review",
+      "behavior_checked": "Domains deduplicate; profile links/name/reciprocal links produce candidate matches, not verified owners.",
+      "live_or_manual_boundary": "A matched official website was researched; identity and buyer fit still need review.",
+      "code": [
+        {
+          "path": "outreach/research.py",
+          "symbol": "add_lead",
+          "line": 12,
+          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+        },
+        {
+          "path": "outreach/discovery.py",
+          "symbol": "resolve_signal",
+          "line": 133,
+          "sha256": "91939074033f78f5d2dd2d18c4672814e1c37987e0460cbb884801aa18a3d5a2"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_research.py",
+          "test": "test_company_and_contact_dedup_preserves_suppression",
+          "line": 53,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_platform_discovery.py",
+          "test": "test_multi_platform_discovery_persists_signals_deduplicates_and_queues_research",
+          "line": 36,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "CP",
+      "label": "Business profile \u00b7 no known website",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic",
+      "behavior_checked": "Specific business profile retained with empty website and internal identity key; no fake company domain.",
+      "live_or_manual_boundary": "Live LinkedIn record routed to an existing website; actual website-less acquisition not yet accepted.",
+      "code": [
+        {
+          "path": "outreach/profiles.py",
+          "symbol": "add_profile_lead",
+          "line": 43,
+          "sha256": "06f5374b52d969a22ed59e9e1877dcf043fe3a28a6ec3787158a3719b5c5cf4b"
+        },
+        {
+          "path": "outreach/research.py",
+          "symbol": "discover_leads",
+          "line": 215,
+          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_profile_prospects.py",
+          "test": "test_profile_discovery_imports_deduplicates_but_never_probes",
+          "line": 66,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_profile_prospects.py",
+          "test": "test_profile_api_no_fake_website_and_visual_audits_rejected",
+          "line": 136,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "CS",
+      "label": "Public snapshot and named-company website search",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic",
+      "behavior_checked": "Robots-permitted profile capture and named-company lookup; matched website creates/reuses a deep-research record.",
+      "live_or_manual_boundary": "Live lookup matched IMAGE Skincare UK; LinkedIn capture robots-denied. No private-platform scraping.",
+      "code": [
+        {
+          "path": "outreach/profiles.py",
+          "symbol": "research_profile",
+          "line": 72,
+          "sha256": "06f5374b52d969a22ed59e9e1877dcf043fe3a28a6ec3787158a3719b5c5cf4b"
+        },
+        {
+          "path": "outreach/discovery.py",
+          "symbol": "public_snapshot",
+          "line": 41,
+          "sha256": "91939074033f78f5d2dd2d18c4672814e1c37987e0460cbb884801aa18a3d5a2"
+        },
+        {
+          "path": "outreach/discovery.py",
+          "symbol": "resolve_signal",
+          "line": 133,
+          "sha256": "91939074033f78f5d2dd2d18c4672814e1c37987e0460cbb884801aa18a3d5a2"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_profile_prospects.py",
+          "test": "test_found_website_routes_to_normal_research_without_merging_contacts",
+          "line": 107,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_profile_prospects.py",
+          "test": "test_failed_website_search_is_not_absence",
+          "line": 96,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_platform_discovery.py",
+          "test": "test_robots_denial_never_fetches_profile",
+          "line": 58,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "CR",
+      "label": "Review profile identity, activity and search limits",
+      "implementation": "present; mapped tests passed",
+      "mode": "review",
+      "behavior_checked": "Exact current activity/country quotes, ownership notes and search-limit acknowledgment required. Not-found does not mean confirmed absent.",
+      "live_or_manual_boundary": "Verified with fictional captured profiles; real profile identity acceptance pending.",
+      "code": [
+        {
+          "path": "outreach/campaigns.py",
+          "symbol": "review_lead",
+          "line": 46,
+          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+        },
+        {
+          "path": "outreach/profiles.py",
+          "symbol": "assert_profile_review",
+          "line": 61,
+          "sha256": "06f5374b52d969a22ed59e9e1877dcf043fe3a28a6ec3787158a3719b5c5cf4b"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_profile_prospects.py",
+          "test": "test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate",
+          "line": 43,
+          "executed_passing_cases": 2
+        },
+        {
+          "path": "tests/test_profile_prospects.py",
+          "test": "test_ambiguous_or_blocked_profile_cannot_be_qualified",
+          "line": 82,
+          "executed_passing_cases": 2
+        }
+      ]
+    },
+    {
+      "id": "CE",
+      "label": "Published profile email candidate \u00b7 no automatic probe",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic extraction + review",
+      "behavior_checked": "Captured published emails stay candidates; import/probe blocked until profile qualification and inbox ownership review. Candidates can be captured before CR; the later gates still apply.",
+      "live_or_manual_boundary": "No real profile email acquired/probed in current live record.",
+      "code": [
+        {
+          "path": "outreach/profiles.py",
+          "symbol": "research_profile",
+          "line": 72,
+          "sha256": "06f5374b52d969a22ed59e9e1877dcf043fe3a28a6ec3787158a3719b5c5cf4b"
+        },
+        {
+          "path": "outreach/research.py",
+          "symbol": "add_contact",
+          "line": 78,
+          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_profile_prospects.py",
+          "test": "test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate",
+          "line": 43,
+          "executed_passing_cases": 2
+        },
+        {
+          "path": "tests/test_profile_prospects.py",
+          "test": "test_profile_discovery_imports_deduplicates_but_never_probes",
+          "line": 66,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "label": "Robots + sitemaps + HTTP + Chromium",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic",
+      "behavior_checked": "Robots, sitemap/depth/page budgets, mediated HTTP and sandboxed JS rendering; report partial or failed coverage.",
+      "live_or_manual_boundary": "Real 30-page Chromium research completed with partial coverage; broader 50-domain audit contains partial/failing sites.",
+      "code": [
+        {
+          "path": "outreach/web.py",
+          "symbol": "crawl",
+          "line": 181,
+          "sha256": "d5cc0f835c03a033d957b9fdd2c6d05b578d477ebc5417c43f80e99aa7ede5b1"
+        },
+        {
+          "path": "outreach/browser.py",
+          "symbol": "render",
+          "line": 90,
+          "sha256": "9224168faf20b461e60836d1165f0ddbfc41e27a1f571eb7f6d52fcff43f95f0"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_crawler_quality.py",
+          "test": "test_sitemap_index_prioritizes_contacts_and_preserves_partial_pages",
+          "line": 378,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_crawler_quality.py",
+          "test": "test_real_chromium_executes_spa_and_public_cdn_assets",
+          "line": 409,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_research.py",
+          "test": "test_robots_denial_prevents_crawl",
+          "line": 80,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "label": "Saved evidence \u00b7 recent public signals \u00b7 sourced contacts",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic + review",
+      "behavior_checked": "Persist URL, text, hashes and contact identity; only current captures support new ideas. Explicit public signals propose relevant services without an AI key; optional AI can suggest more. Weak/negative cues stay needs-review; every exact quote and interpretation requires review.",
+      "live_or_manual_boundary": "Current real website pages yielded matching store/support proposals in a read-only preview; actual pain points, buyer relevance and recent announcements require interpretation/review.",
+      "code": [
+        {
+          "path": "outreach/research.py",
+          "symbol": "research_lead",
+          "line": 124,
+          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+        },
+        {
+          "path": "outreach/web.py",
+          "symbol": "extract_page",
+          "line": 354,
+          "sha256": "d5cc0f835c03a033d957b9fdd2c6d05b578d477ebc5417c43f80e99aa7ede5b1"
+        },
+        {
+          "path": "outreach/providers.py",
+          "symbol": "research_suggestions",
+          "line": 90,
+          "sha256": "28dc0b312a30b643b8f4daf0898c4d41406222ae78bbec9e532a0e2b4f578966"
+        },
+        {
+          "path": "outreach/opportunities.py",
+          "symbol": "proposals",
+          "line": 16,
+          "sha256": "50e545beea125cf618dc0e77dbfdaaff85b6bd09aeef55a7745a9b9fee76b70b"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_crawler_quality.py",
+          "test": "test_crawl_report_and_contact_identity_are_persisted",
+          "line": 457,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_research.py",
+          "test": "test_recrawl_suggestions_exclude_unvisited_historical_pages",
+          "line": 122,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_research.py",
+          "test": "test_ai_rejects_invented_quote",
+          "line": 151,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_opportunities.py",
+          "test": "test_no_ai_research_saves_current_signal_proposal_without_qualification_or_drafts",
+          "line": 71,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_opportunities.py",
+          "test": "test_insufficient_evidence_stays_empty_instead_of_inventing_friction_or_absent_features",
+          "line": 60,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "E1",
+      "label": "Company-domain contacts",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic",
+      "behavior_checked": "Published same-domain addresses are imported and verification queued; buyer role and eligibility remain separate.",
+      "live_or_manual_boundary": "Two published website contacts captured; neither established fresh safe.",
+      "code": [
+        {
+          "path": "outreach/research.py",
+          "symbol": "research_lead",
+          "line": 124,
+          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+        },
+        {
+          "path": "outreach/research.py",
+          "symbol": "add_contact",
+          "line": 78,
+          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_research.py",
+          "test": "test_research_to_contacts_and_verification",
+          "line": 103,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_research.py",
+          "test": "test_extract_only_sourced_business_emails",
+          "line": 36,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "E2",
+      "label": "Other-domain published candidates",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic candidate capture",
+      "behavior_checked": "Other-domain addresses are held with current source URL/hash; no automatic provider probe.",
+      "live_or_manual_boundary": "One live website candidate retained; no automatic import.",
+      "code": [
+        {
+          "path": "outreach/research.py",
+          "symbol": "research_lead",
+          "line": 124,
+          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+        },
+        {
+          "path": "outreach/research.py",
+          "symbol": "contact_candidates",
+          "line": 64,
+          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_contact_candidates.py",
+          "test": "test_external_published_addresses_are_candidates_not_automatic_contacts",
+          "line": 21,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_contact_candidates.py",
+          "test": "test_research_retains_candidates_without_importing_or_verifying_them",
+          "line": 28,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "E3",
+      "label": "Review current official source and company ownership",
+      "implementation": "present; mapped tests passed",
+      "mode": "review",
+      "behavior_checked": "Ownership notes plus current official extraction required; re-crawl/source changes invalidate proof; cross-company inbox attachment rejected.",
+      "live_or_manual_boundary": "Fictional reviewed contacts tested; current real candidate remains held.",
+      "code": [
+        {
+          "path": "outreach/research.py",
+          "symbol": "add_contact",
+          "line": 78,
+          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+        },
+        {
+          "path": "outreach/research.py",
+          "symbol": "assert_contact_ownership",
+          "line": 47,
+          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_contact_candidates.py",
+          "test": "test_alias_contact_requires_source_and_ownership_then_remains_unverified",
+          "line": 45,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_contact_candidates.py",
+          "test": "test_recrawl_without_alias_page_invalidates_old_proof_but_preserves_history",
+          "line": 153,
+          "executed_passing_cases": 2
+        },
+        {
+          "path": "tests/test_contact_candidates.py",
+          "test": "test_stale_ownership_holds_approved_sequence_before_smtp",
+          "line": 211,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "F",
+      "label": "Reacher verification",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic / external setup pending",
+      "behavior_checked": "Strict response/address checks; unknown/risky/catch-all/disposable/invalid cannot pass. Freshness and ownership rechecked before probing.",
+      "live_or_manual_boundary": "Real self-hosted Reacher backend/SMTP validation pending; current real attempts failed and verdicts are unknown.",
+      "code": [
+        {
+          "path": "outreach/research.py",
+          "symbol": "verify_contact",
+          "line": 257,
+          "sha256": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476"
+        },
+        {
+          "path": "outreach/providers.py",
+          "symbol": "verify_email",
+          "line": 69,
+          "sha256": "28dc0b312a30b643b8f4daf0898c4d41406222ae78bbec9e532a0e2b4f578966"
+        },
+        {
+          "path": "outreach/providers.py",
+          "symbol": "classify_reacher",
+          "line": 45,
+          "sha256": "28dc0b312a30b643b8f4daf0898c4d41406222ae78bbec9e532a0e2b4f578966"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_research.py",
+          "test": "test_reacher_adapter_contract",
+          "line": 91,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_research.py",
+          "test": "test_reacher_contradictions",
+          "line": 19,
+          "executed_passing_cases": 4
+        },
+        {
+          "path": "tests/test_profile_prospects.py",
+          "test": "test_reviewed_profile_contact_can_verify_and_queue_with_all_existing_gates",
+          "line": 151,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "G",
+      "label": "Review saved country quote, buyer and one opportunity",
+      "implementation": "present; mapped tests passed",
+      "mode": "review",
+      "behavior_checked": "Save current exact quote, US/UK timezone, buyer-fit notes, one offer and optional sourced announcement/extra idea.",
+      "live_or_manual_boundary": "Actual current businesses not qualified by this audit; quote validity alone does not establish semantic truth.",
+      "code": [
+        {
+          "path": "outreach/campaigns.py",
+          "symbol": "review_lead",
+          "line": 46,
+          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+        },
+        {
+          "path": "outreach/priorities.py",
+          "symbol": "ranked",
+          "line": 8,
+          "sha256": "38dd83447f538a542da949ce753e458b4b2ee0443de7688e22be2c5b7afb9419"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_growth_finance_priority.py",
+          "test": "test_priority_read_only_explainable_recrawl_and_suppression_reduce_readiness",
+          "line": 97,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_growth_finance_priority.py",
+          "test": "test_active_sequences_are_not_ranked_as_new_outreach_work",
+          "line": 141,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_requirements_audit.py",
+          "test": "test_country_evidence_must_match_saved_source",
+          "line": 24,
+          "executed_passing_cases": 2
+        },
+        {
+          "path": "tests/test_requirements_audit.py",
+          "test": "test_review_rejects_sources_not_refreshed_in_latest_crawl",
+          "line": 81,
+          "executed_passing_cases": 4
+        },
+        {
+          "path": "tests/test_requirements_audit.py",
+          "test": "test_sourced_trigger_and_extra_value_survive_into_drafts",
+          "line": 45,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "Q",
+      "label": "Desktop/mobile screenshots \u00b7 optional PageSpeed lab audit",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic optional audit",
+      "behavior_checked": "Desktop/mobile screenshots and optional on-demand PageSpeed; no profile-only site audits and no invented scores.",
+      "live_or_manual_boundary": "Real screenshots exist. Keyless PageSpeed live requests returned HTTP 429; no successful live lab score established.",
+      "code": [
+        {
+          "path": "outreach/browser.py",
+          "symbol": "screenshot",
+          "line": 309,
+          "sha256": "9224168faf20b461e60836d1165f0ddbfc41e27a1f571eb7f6d52fcff43f95f0"
+        },
+        {
+          "path": "outreach/performance.py",
+          "symbol": "performance_audit",
+          "line": 9,
+          "sha256": "ab5d54c584b3db9b562e717ef0ecca8f7815c93a090eeca65c58351094c538ff"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_api.py",
+          "test": "test_authenticated_crawl_report_and_audit_images",
+          "line": 37,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_performance.py",
+          "test": "test_pagespeed_preserves_lab_evidence_and_partial_results",
+          "line": 23,
+          "executed_passing_cases": 3
+        },
+        {
+          "path": "tests/test_performance.py",
+          "test": "test_pagespeed_failure_never_creates_fake_score",
+          "line": 47,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "H",
+      "label": "Hold \u00b7 inspect or research further",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic hold + review",
+      "behavior_checked": "Hold is represented by lead/profile/contact/message states, not a single unified queue. Uncertain sends require reconciliation; blocked sources and unsafe verification cannot send.",
+      "live_or_manual_boundary": "Current verification/profile failures visible; human resolution or provider availability required.",
+      "code": [
+        {
+          "path": "outreach/mail.py",
+          "symbol": "send_one",
+          "line": 94,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        },
+        {
+          "path": "outreach/mail.py",
+          "symbol": "record_inbound",
+          "line": 211,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        },
+        {
+          "path": "outreach/campaigns.py",
+          "symbol": "resume_contact",
+          "line": 270,
+          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+        },
+        {
+          "path": "outreach/profiles.py",
+          "symbol": "assert_profile_review",
+          "line": 61,
+          "sha256": "06f5374b52d969a22ed59e9e1877dcf043fe3a28a6ec3787158a3719b5c5cf4b"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_campaigns_mail.py",
+          "test": "test_uncertain_send_is_never_automatically_retried",
+          "line": 54,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_mail_providers.py",
+          "test": "test_resume_requires_fresh_result_and_cannot_override_optout",
+          "line": 85,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_mail_providers.py",
+          "test": "test_unsafe_reverification_holds_instead_of_looping",
+          "line": 75,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_profile_prospects.py",
+          "test": "test_ambiguous_or_blocked_profile_cannot_be_qualified",
+          "line": 82,
+          "executed_passing_cases": 2
+        }
+      ]
+    },
+    {
+      "id": "AA",
+      "label": "Campaign A \u00b7 website or inquiry/booking chatbot",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic proposals + reviewed selection",
+      "behavior_checked": "Campaign A proposes build/improvement/chatbot from public inquiry/service/support cues; one final offer is reviewed. Profile-only improvement excluded.",
+      "live_or_manual_boundary": "Fixed cue ranking is not a prediction of client value, sales likelihood or conversion uplift.",
+      "code": [
+        {
+          "path": "outreach/campaigns.py",
+          "symbol": "review_lead",
+          "line": 46,
+          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+        },
+        {
+          "path": "outreach/campaigns.py",
+          "symbol": "draft_sequence",
+          "line": 158,
+          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+        },
+        {
+          "path": "outreach/opportunities.py",
+          "symbol": "proposals",
+          "line": 16,
+          "sha256": "50e545beea125cf618dc0e77dbfdaaff85b6bd09aeef55a7745a9b9fee76b70b"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_profile_prospects.py",
+          "test": "test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate",
+          "line": 43,
+          "executed_passing_cases": 2
+        },
+        {
+          "path": "tests/test_campaigns_mail.py",
+          "test": "test_drafts_do_not_claim_completed_assets",
+          "line": 147,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_opportunities.py",
+          "test": "test_inquiry_offer_is_grounded_and_reviewed_without_claiming_an_observed_problem",
+          "line": 14,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_opportunities.py",
+          "test": "test_profile_launch_proposal_requires_completed_not_found_search",
+          "line": 44,
+          "executed_passing_cases": 2
+        }
+      ]
+    },
+    {
+      "id": "BB",
+      "label": "Campaign B \u00b7 ecommerce or suitable WhatsApp workflow",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic proposals + reviewed selection",
+      "behavior_checked": "Campaign B proposes launch/improvement/chatbot/WhatsApp from source cues; channel-fit, permission/integration and one relevant offer still require review.",
+      "live_or_manual_boundary": "No live WhatsApp sending or client store integration is performed by this acquisition software.",
+      "code": [
+        {
+          "path": "outreach/campaigns.py",
+          "symbol": "review_lead",
+          "line": 46,
+          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+        },
+        {
+          "path": "outreach/campaigns.py",
+          "symbol": "draft_sequence",
+          "line": 158,
+          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+        },
+        {
+          "path": "outreach/opportunities.py",
+          "symbol": "proposals",
+          "line": 16,
+          "sha256": "50e545beea125cf618dc0e77dbfdaaff85b6bd09aeef55a7745a9b9fee76b70b"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_requirements_audit.py",
+          "test": "test_campaign_b_rejects_non_d2c_website_offer",
+          "line": 29,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_requirements_audit.py",
+          "test": "test_whatsapp_requires_recorded_channel_fit",
+          "line": 35,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_deliverables.py",
+          "test": "test_whatsapp_flow_requires_qualified_channel_and_artifacts_require_auth",
+          "line": 89,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_opportunities.py",
+          "test": "test_d2c_signals_prioritize_existing_shopping_journey_and_preserve_campaign_gate",
+          "line": 24,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_opportunities.py",
+          "test": "test_channel_signal_does_not_infer_customer_permission",
+          "line": 33,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "I",
+      "label": "Source-backed personalized draft + 3 follow-ups",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic drafting after review",
+      "behavior_checked": "Exactly four editable touches, one relevant offer, source references and distinct follow-up value; activated content cannot be overwritten.",
+      "live_or_manual_boundary": "Twenty historical company previews/80 messages reviewed as source/copy samples; recipient acceptance and campaign results pending.",
+      "code": [
+        {
+          "path": "outreach/campaigns.py",
+          "symbol": "create_drafts",
+          "line": 183,
+          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+        },
+        {
+          "path": "outreach/campaigns.py",
+          "symbol": "draft_sequence",
+          "line": 158,
+          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_requirements_audit.py",
+          "test": "test_sourced_trigger_and_extra_value_survive_into_drafts",
+          "line": 45,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_requirements_audit.py",
+          "test": "test_default_followup_adds_new_value",
+          "line": 74,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_requirements_audit.py",
+          "test": "test_draft_generation_cannot_overwrite_a_sequence_approved_mid_request",
+          "line": 222,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "J",
+      "label": "Review all messages and outreach eligibility",
+      "implementation": "present; mapped tests passed",
+      "mode": "review gate",
+      "behavior_checked": "All four draft messages, sender identity, qualification, fresh safe proof, relevance/eligibility notes, opt-out and company conversation gate.",
+      "live_or_manual_boundary": "No real sequence approved. Current source findings and eligibility require operator judgment.",
+      "code": [
+        {
+          "path": "outreach/campaigns.py",
+          "symbol": "approve",
+          "line": 212,
+          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+        },
+        {
+          "path": "outreach/app.py",
+          "symbol": "edit_message",
+          "line": 707,
+          "sha256": "2620c7d9759199f61634ea97c7ff0a7df0f8d6b5ec6c32f03e4ff9e030c51abd"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_campaigns_mail.py",
+          "test": "test_approval_requires_safe_and_one_contact_per_company",
+          "line": 20,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_api.py",
+          "test": "test_approve_and_edit_freeze",
+          "line": 64,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_requirements_audit.py",
+          "test": "test_old_qualification_cannot_skip_new_country_review",
+          "line": 165,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "K",
+      "label": "Approve \u00b7 local send window \u00b7 mailbox quota",
+      "implementation": "present; mapped tests passed",
+      "mode": "approval + automatic scheduling",
+      "behavior_checked": "Atomic approval; one conversation/company; local weekday/hour window, daily quota and minimum send gap.",
+      "live_or_manual_boundary": "Simulated calendars and isolated transport verified; deployed timezone/quota acceptance pending.",
+      "code": [
+        {
+          "path": "outreach/campaigns.py",
+          "symbol": "approve",
+          "line": 212,
+          "sha256": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f"
+        },
+        {
+          "path": "outreach/mail.py",
+          "symbol": "send_one",
+          "line": 94,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        },
+        {
+          "path": "outreach/mail.py",
+          "symbol": "eligible_now",
+          "line": 23,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_requirements_audit.py",
+          "test": "test_two_concurrent_approvals_cannot_activate_twice",
+          "line": 185,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_campaigns_mail.py",
+          "test": "test_send_windows_weekend_and_dst",
+          "line": 128,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_campaigns_mail.py",
+          "test": "test_daily_limit",
+          "line": 140,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_requirements_audit.py",
+          "test": "test_eligible_timezone_not_starved_by_first_hundred_due_contacts",
+          "line": 206,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "L",
+      "label": "SMTP send \u00b7 durable Message-ID",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic / mailbox setup pending",
+      "behavior_checked": "TLS authenticated SMTP, durable IDs/threading, explicit acceptance versus uncertain outcome and no automatic uncertain retry.",
+      "live_or_manual_boundary": "Real socket protocols passed on loopback fixtures; external mailbox delivery/inbox placement unverified.",
+      "code": [
+        {
+          "path": "outreach/mail.py",
+          "symbol": "smtp_send",
+          "line": 49,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        },
+        {
+          "path": "outreach/mail.py",
+          "symbol": "build_message",
+          "line": 28,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        },
+        {
+          "path": "outreach/mail.py",
+          "symbol": "send_one",
+          "line": 94,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_mail_wire.py",
+          "test": "test_real_tls_send_and_imap_optout_stop_sequence",
+          "line": 29,
+          "executed_passing_cases": 2
+        },
+        {
+          "path": "tests/test_mail_wire.py",
+          "test": "test_real_smtp_failure_stages_and_duplicate_protection",
+          "line": 104,
+          "executed_passing_cases": 5
+        },
+        {
+          "path": "tests/test_mail_wire.py",
+          "test": "test_untrusted_tls_fails_before_authentication",
+          "line": 129,
+          "executed_passing_cases": 2
+        }
+      ]
+    },
+    {
+      "id": "M",
+      "label": "Independent IMAP monitoring",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic / mailbox setup pending",
+      "behavior_checked": "Independent mailbox lane, bounded read-only IMAP, UID/identity idempotency and freshness; long crawling does not block it.",
+      "live_or_manual_boundary": "Local protocol fixtures verified; no real mailbox credentials configured.",
+      "code": [
+        {
+          "path": "outreach/worker.py",
+          "symbol": "mail_loop",
+          "line": 62,
+          "sha256": "0b44041146ff8787ff038c0dc1db4e1b21a12c2b94c9dfab9e454ae6576eb8d8"
+        },
+        {
+          "path": "outreach/mail.py",
+          "symbol": "poll_inbox",
+          "line": 272,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_crawler_quality.py",
+          "test": "test_worker_monitors_inbox_during_long_research_and_recovers_shutdown",
+          "line": 536,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_mail_providers.py",
+          "test": "test_imap_bounded_read_and_reply_stop",
+          "line": 34,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_mail_providers.py",
+          "test": "test_imap_login_failure_invalidates_readiness",
+          "line": 65,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "N",
+      "label": "Next due follow-up \u00b7 stop after touch 4",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic",
+      "behavior_checked": "Calendar day 1/4/9/15: gaps 3/5/6 days from actual acceptance, then local-window adjustment. Stop after touch 4; no overdue burst.",
+      "live_or_manual_boundary": "Loopback TLS test used both ordinary and delayed calendars; no real campaign sent.",
+      "code": [
+        {
+          "path": "outreach/mail.py",
+          "symbol": "mark_sent",
+          "line": 180,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        },
+        {
+          "path": "outreach/mail.py",
+          "symbol": "due_candidates",
+          "line": 83,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_mail_wire.py",
+          "test": "test_four_touch_tls_sequence_respects_actual_acceptance_and_stops",
+          "line": 58,
+          "executed_passing_cases": 2
+        },
+        {
+          "path": "tests/test_campaigns_mail.py",
+          "test": "test_send_once_and_schedule_from_acceptance",
+          "line": 27,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "O",
+      "label": "Stop sequence \u00b7 human conversation",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic stop + human conversation",
+      "behavior_checked": "Human reply cancels future touches, creates fulfillment task and shared company hold; manual social replies can be recorded.",
+      "live_or_manual_boundary": "Fixture replies verified; the software does not autonomously negotiate with the prospect.",
+      "code": [
+        {
+          "path": "outreach/mail.py",
+          "symbol": "record_inbound",
+          "line": 211,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        },
+        {
+          "path": "outreach/sales.py",
+          "symbol": "record_activity",
+          "line": 39,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_campaigns_mail.py",
+          "test": "test_reply_cancels_followups_and_is_idempotent",
+          "line": 83,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_mail_wire.py",
+          "test": "test_html_positive_reply_does_not_inherit_quoted_unsubscribe",
+          "line": 119,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_manual_reply_stops_active_sequence_and_cannot_release",
+          "line": 46,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "P",
+      "label": "Global suppression",
+      "implementation": "present; mapped tests passed",
+      "mode": "automatic",
+      "behavior_checked": "Opt-outs/permanent recipient failures suppress globally; unsubscribe GET is read-only and POST performs the stop.",
+      "live_or_manual_boundary": "Fixture events/protocol verified; production HTTPS unsubscribe endpoint still requires deployment.",
+      "code": [
+        {
+          "path": "outreach/db.py",
+          "symbol": "suppress",
+          "line": 208,
+          "sha256": "b138f16db3e6c86558665f6658872d2a061ab576ac60d0fd20ddb7b230af6288"
+        },
+        {
+          "path": "outreach/mail.py",
+          "symbol": "record_inbound",
+          "line": 211,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        },
+        {
+          "path": "outreach/app.py",
+          "symbol": "unsubscribe",
+          "line": 781,
+          "sha256": "2620c7d9759199f61634ea97c7ff0a7df0f8d6b5ec6c32f03e4ff9e030c51abd"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_campaigns_mail.py",
+          "test": "test_optout_global_suppression",
+          "line": 93,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_campaigns_mail.py",
+          "test": "test_permanent_dsn_suppresses",
+          "line": 104,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_campaigns_mail.py",
+          "test": "test_suppression_overrides_approved_queue",
+          "line": 134,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_api.py",
+          "test": "test_unsubscribe_get_does_not_mutate",
+          "line": 55,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "R",
+      "label": "Classify actual reply and fulfill promised value",
+      "implementation": "present; mapped tests passed",
+      "mode": "operator review + automatic task",
+      "behavior_checked": "Transport classifies reply/auto-reply/opt-out/DSN. Commercial intent and promised-value fulfillment are operator notes/tasks/stages, not a trained automatic sales classifier.",
+      "live_or_manual_boundary": "No actual external reply fulfillment claimed.",
+      "code": [
+        {
+          "path": "outreach/mail.py",
+          "symbol": "record_inbound",
+          "line": 211,
+          "sha256": "5dfcccbbf2dad99a7a17fdac22b3442466c0bd7520d18cadce9f593a5fae61c0"
+        },
+        {
+          "path": "outreach/sales.py",
+          "symbol": "record_activity",
+          "line": 39,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        },
+        {
+          "path": "outreach/sales.py",
+          "symbol": "create_task",
+          "line": 133,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_inbound_reply_creates_one_fulfillment_task_and_shared_hold",
+          "line": 78,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_tasks_are_due_visible_and_close_with_outcome",
+          "line": 133,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "S",
+      "label": "Review audit / concept / FAQ / WhatsApp-flow artifact",
+      "implementation": "present; mapped tests passed",
+      "mode": "assisted creation + review",
+      "behavior_checked": "Source-backed audit, annotated screenshot, homepage concept, interactive FAQ and WhatsApp planning outline; review/export and actual-delivery reference.",
+      "live_or_manual_boundary": "Actual Chromium inspected fictional exports. Concepts/FAQ/WhatsApp outlines are prototypes, not deployed client services.",
+      "code": [
+        {
+          "path": "outreach/deliverables.py",
+          "symbol": "create",
+          "line": 21,
+          "sha256": "3f30390bf914e8fc2201910437a80ed55ddbbe11a5763ddc971c9b5050cd22c8"
+        },
+        {
+          "path": "outreach/deliverables.py",
+          "symbol": "action",
+          "line": 99,
+          "sha256": "3f30390bf914e8fc2201910437a80ed55ddbbe11a5763ddc971c9b5050cd22c8"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_deliverables.py",
+          "test": "test_each_value_artifact_is_sourced_reviewable_and_deliverable",
+          "line": 25,
+          "executed_passing_cases": 4
+        },
+        {
+          "path": "tests/test_deliverables.py",
+          "test": "test_faq_and_concept_labels_do_not_claim_live_ai_or_finished_website",
+          "line": 54,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_deliverables.py",
+          "test": "test_annotated_artifact_embeds_only_its_saved_company_screenshot",
+          "line": 72,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "T",
+      "label": "Confirm problem, buyer, budget, timing and success metric",
+      "implementation": "present; mapped tests passed",
+      "mode": "operator-recorded",
+      "behavior_checked": "Confirmed problem, goal, buyer, timeline, budget and success metric required; a real conversation record gates advancement.",
+      "live_or_manual_boundary": "External buyer confirmation cannot be independently verified by these fixture tests.",
+      "code": [
+        {
+          "path": "outreach/sales.py",
+          "symbol": "update_sales",
+          "line": 91,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_unconfirmed_client_need_cannot_advance_or_create_proposal",
+          "line": 87,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_complete_operator_confirmed_sales_lifecycle",
+          "line": 93,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "U",
+      "label": "Record agreed call and dated next action",
+      "implementation": "present; mapped tests passed",
+      "mode": "operator-recorded",
+      "behavior_checked": "Record agreed call timestamp and dated next action/tasks. This does not book a calendar or send an invitation.",
+      "live_or_manual_boundary": "No actual booking/calendar integration performed.",
+      "code": [
+        {
+          "path": "outreach/sales.py",
+          "symbol": "update_sales",
+          "line": 91,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        },
+        {
+          "path": "outreach/sales.py",
+          "symbol": "create_task",
+          "line": 133,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_complete_operator_confirmed_sales_lifecycle",
+          "line": 93,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_invalid_dates_and_future_activity_are_rejected",
+          "line": 150,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_tasks_are_due_visible_and_close_with_outcome",
+          "line": 133,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "V",
+      "label": "Prepare and review scoped proposal",
+      "implementation": "present; mapped tests passed",
+      "mode": "assisted creation + review",
+      "behavior_checked": "Qualified client need, scope, deliverables, exclusions, acceptance, timeline, terms and USD/GBP fee create reviewed downloadable proposal.",
+      "live_or_manual_boundary": "Proposal fixtures reviewed; human scope/commercial acceptance required.",
+      "code": [
+        {
+          "path": "outreach/sales.py",
+          "symbol": "create_proposal",
+          "line": 156,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        },
+        {
+          "path": "outreach/sales.py",
+          "symbol": "proposal_action",
+          "line": 181,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_complete_operator_confirmed_sales_lifecycle",
+          "line": 93,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_unconfirmed_client_need_cannot_advance_or_create_proposal",
+          "line": 87,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "W",
+      "label": "Record actual proposal delivery",
+      "implementation": "present; mapped tests passed",
+      "mode": "operator-recorded",
+      "behavior_checked": "Delivery requires reviewed proposal and explicit actual-delivery reference; not automatic SMTP proposal delivery.",
+      "live_or_manual_boundary": "No real client proposal sent by this audit.",
+      "code": [
+        {
+          "path": "outreach/sales.py",
+          "symbol": "proposal_action",
+          "line": 181,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_complete_operator_confirmed_sales_lifecycle",
+          "line": 93,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_won_requires_real_references_and_delivered_proposal",
+          "line": 117,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "X",
+      "label": "Record agreement and initial payment references",
+      "implementation": "present; mapped tests passed",
+      "mode": "operator-recorded",
+      "behavior_checked": "Won/delivery/completed require agreement and initial-payment references; no payment processor or signature collection.",
+      "live_or_manual_boundary": "References are operator assertions, not verified receipts or signed documents.",
+      "code": [
+        {
+          "path": "outreach/sales.py",
+          "symbol": "update_sales",
+          "line": 91,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_won_requires_real_references_and_delivered_proposal",
+          "line": 117,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_complete_operator_confirmed_sales_lifecycle",
+          "line": 93,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "Y",
+      "label": "Manage delivery tasks and record client acceptance",
+      "implementation": "present; mapped tests passed",
+      "mode": "operator-recorded task management",
+      "behavior_checked": "Delivery tasks and closure outcomes; completed stage requires client acceptance reference. No automatic client website/WhatsApp deployment.",
+      "live_or_manual_boundary": "Actual client delivery and acceptance remain external.",
+      "code": [
+        {
+          "path": "outreach/sales.py",
+          "symbol": "create_task",
+          "line": 133,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        },
+        {
+          "path": "outreach/sales.py",
+          "symbol": "finish_task",
+          "line": 144,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        },
+        {
+          "path": "outreach/sales.py",
+          "symbol": "update_sales",
+          "line": 91,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_tasks_are_due_visible_and_close_with_outcome",
+          "line": 133,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_complete_operator_confirmed_sales_lifecycle",
+          "line": 93,
+          "executed_passing_cases": 1
+        }
+      ]
+    },
+    {
+      "id": "Z",
+      "label": "Record measured or inconclusive outcome and campaign learning",
+      "implementation": "present; mapped tests passed",
+      "mode": "operator-recorded + automatic descriptive learning",
+      "behavior_checked": "Outcome notes can be inconclusive. Learning reports frozen campaign/service/country/industry groups, accepted-record-to-human-reply/qualified/recorded-won rates and next-review guidance. No denominator means unknown; repeats and auto-replies cannot inflate conversions. Recorded USD/GBP cost and receipt reports remain separate, with immutable correction history. Completed clients can have dated maintenance/expansion plans and permission-reviewed frozen case studies; external work/publication remains operator-recorded.",
+      "live_or_manual_boundary": "No automatic analytics attribution, A/B optimization, verified revenue or evidence of conversion uplift. Historical contexts missing an approval snapshot remain unknown.",
+      "code": [
+        {
+          "path": "outreach/sales.py",
+          "symbol": "update_sales",
+          "line": 91,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        },
+        {
+          "path": "outreach/sales.py",
+          "symbol": "report",
+          "line": 197,
+          "sha256": "ca0b67c2a96545c5980aa73e6b2c2158ed637c337a363687d02f4c567dbfb6fa"
+        },
+        {
+          "path": "outreach/learning.py",
+          "symbol": "report",
+          "line": 51,
+          "sha256": "ad7339e35afd033c1a142686074bf624d21fcd2ac77367bc97956867f5f5040c"
+        },
+        {
+          "path": "outreach/learning.py",
+          "symbol": "summarize",
+          "line": 24,
+          "sha256": "ad7339e35afd033c1a142686074bf624d21fcd2ac77367bc97956867f5f5040c"
+        },
+        {
+          "path": "outreach/finance.py",
+          "symbol": "record",
+          "line": 19,
+          "sha256": "78c1c554d62dbc3287d2f07e5b68d93c8f36f220eb89f4a53ec9c725fbefd770"
+        },
+        {
+          "path": "outreach/finance.py",
+          "symbol": "report",
+          "line": 65,
+          "sha256": "78c1c554d62dbc3287d2f07e5b68d93c8f36f220eb89f4a53ec9c725fbefd770"
+        },
+        {
+          "path": "outreach/aftercare.py",
+          "symbol": "create",
+          "line": 24,
+          "sha256": "51f1a09ef096599a426d0e739b9347d054748c3310124539227d3d9da708d872"
+        },
+        {
+          "path": "outreach/aftercare.py",
+          "symbol": "update",
+          "line": 44,
+          "sha256": "51f1a09ef096599a426d0e739b9347d054748c3310124539227d3d9da708d872"
+        },
+        {
+          "path": "outreach/aftercare.py",
+          "symbol": "export",
+          "line": 76,
+          "sha256": "51f1a09ef096599a426d0e739b9347d054748c3310124539227d3d9da708d872"
+        },
+        {
+          "path": "outreach/aftercare.py",
+          "symbol": "report",
+          "line": 89,
+          "sha256": "51f1a09ef096599a426d0e739b9347d054748c3310124539227d3d9da708d872"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/test_growth_finance_priority.py",
+          "test": "test_exact_currency_arithmetic_refunds_and_no_exchange_conversion",
+          "line": 47,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_growth_finance_priority.py",
+          "test": "test_duplicate_receipt_retry_is_idempotent_conflict_and_void_preserve_history",
+          "line": 71,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_growth_finance_priority.py",
+          "test": "test_aftercare_order_permission_idempotency_and_optimistic_version",
+          "line": 156,
+          "executed_passing_cases": 3
+        },
+        {
+          "path": "tests/test_growth_finance_priority.py",
+          "test": "test_case_study_freezes_outcome_escapes_html_and_preserves_inconclusive",
+          "line": 176,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_complete_operator_confirmed_sales_lifecycle",
+          "line": 93,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_sales.py",
+          "test": "test_sales_report_includes_companies_without_sales_records",
+          "line": 64,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_learning.py",
+          "test": "test_funnel_counts_records_not_messages_and_excludes_automatic_replies",
+          "line": 27,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_learning.py",
+          "test": "test_approval_snapshot_is_atomic_and_survives_later_business_label_changes",
+          "line": 46,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_learning.py",
+          "test": "test_legacy_approved_context_stays_unknown_instead_of_invented_historical_attribution",
+          "line": 59,
+          "executed_passing_cases": 1
+        },
+        {
+          "path": "tests/test_learning.py",
+          "test": "test_empty_learning_does_not_invent_rates_or_experiment_winners",
+          "line": 19,
+          "executed_passing_cases": 1
+        }
+      ]
+    }
+  ]
+}

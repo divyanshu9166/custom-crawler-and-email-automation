@@ -1,0 +1,89 @@
+{
+  "checked_at": 1791808396.07819,
+  "guest_profiles": [
+    {
+      "url": "https://www.linkedin.com/in/kara-webs-403722422",
+      "state": "operator_attention",
+      "capture_method": "managed_browser_professional_profile",
+      "scope": "visible_professional_fields",
+      "http_status": 999,
+      "observed_at": 1791808396.556946,
+      "text_chars": 0,
+      "published_email_candidates": 0
+    },
+    {
+      "url": "https://x.com/ssbmGooms",
+      "state": "operator_attention",
+      "capture_method": "managed_browser_professional_profile",
+      "scope": "visible_professional_fields",
+      "http_status": 403,
+      "observed_at": 1791808400.648545,
+      "text_chars": 0,
+      "published_email_candidates": 0
+    }
+  ],
+  "profile_publishing": [
+    {
+      "url": "https://x.com/ssbmGooms",
+      "http_status": 200,
+      "observed_at": 1791808406.4200253,
+      "fields": [
+        "url",
+        "title",
+        "html",
+        "width",
+        "height",
+        "type",
+        "cache_age",
+        "provider_name",
+        "provider_url",
+        "version"
+      ],
+      "has_bio_field": false,
+      "markup_scope": "timeline_anchor",
+      "returned_author": null,
+      "email_strings_in_returned_markup": 0,
+      "biography_extraction_proven": false,
+      "markup_rechecked_at": 1791808533.6809971
+    },
+    {
+      "url": "https://x.com/musicplaza_la",
+      "http_status": 200,
+      "observed_at": 1791808408.7755067,
+      "fields": [
+        "url",
+        "title",
+        "html",
+        "width",
+        "height",
+        "type",
+        "cache_age",
+        "provider_name",
+        "provider_url",
+        "version"
+      ],
+      "has_bio_field": false,
+      "markup_scope": "timeline_anchor",
+      "returned_author": null,
+      "email_strings_in_returned_markup": 0,
+      "biography_extraction_proven": false,
+      "markup_rechecked_at": 1791808535.9719553
+    }
+  ],
+  "scope": "Public-transport diagnostics on explicit observed URLs; government post and mixed-relevance guest controls are not qualified client leads. No login, credential/session transfer or challenge handling.",
+  "publication_post_control": {
+    "url": "https://x.com/Interior/status/507185938620219395",
+    "state": "captured",
+    "capture_method": "official_public_oembed",
+    "scope": "single_public_post",
+    "profile_snapshot": false,
+    "response_sha256": "59eca63df72aca492bc4604d70c7c6c10a7a9f66613ba8c4b4c282fa4043e79a",
+    "published_email_candidates": 0
+  },
+  "main_operational_database_unchanged": true,
+  "contacts_imported": 0,
+  "email_probes": 0,
+  "external_messages_sent": 0,
+  "paid_keys_used": false,
+  "completion_proven": false
+}

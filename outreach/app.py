@@ -1,0 +1,951 @@
+import asyncio
+import csv
+import io
+import json
+import secrets
+import time
+from contextlib import asynccontextmanager
+from pathlib import Path
+from typing import Literal
+from decimal import Decimal
+
+from fastapi import FastAPI, Depends, HTTPException, Request, Query
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
+from fastapi.security import HTTPBasic, HTTPBasicCredentials, HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.exceptions import RequestValidationError
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+from .config import Settings
+from .db import DB
+from .research import add_lead, add_contact, contact_candidates, assert_contact_ownership
+from .campaigns import review_lead, create_drafts, approve, resume_contact, revise_unsent_sequence
+from .mail import mark_sent
+from .worker import run, WorkerLock
+from . import sales, deliverables, finance, aftercare, priorities
+from .auth import COOKIE, MAX_AGE, issue_session, valid_session
+from .preferences import Preferences, password_matches, session_key
+
+
+class Input(BaseModel):
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+
+class LoginInput(Input):
+    username: str = Field(max_length=200)
+    password: str = Field(max_length=1000)
+
+
+class CredentialsInput(Input):
+    username: str = Field(min_length=2, max_length=64, pattern=r"^[A-Za-z0-9_.@-]+$")
+    new_password: str = Field(min_length=16, max_length=256)
+    current_password: str = Field(max_length=1000)
+
+
+class MailSettingsInput(Input):
+    sender_name: str | None = Field(default=None, max_length=150)
+    sender_company: str | None = Field(default=None, max_length=200)
+    sender_email: str | None = Field(default=None, max_length=254)
+    sender_website: str | None = Field(default=None, max_length=2000)
+    postal_address: str | None = Field(default=None, max_length=1000)
+    smtp_host: str | None = Field(default=None, max_length=254)
+    smtp_port: int | None = Field(default=None, ge=1, le=65535)
+    smtp_user: str | None = Field(default=None, max_length=254)
+    smtp_password: str | None = Field(default=None, max_length=1000)
+    smtp_security: Literal["starttls", "ssl"] | None = None
+    imap_host: str | None = Field(default=None, max_length=254)
+    imap_port: int | None = Field(default=None, ge=1, le=65535)
+    imap_user: str | None = Field(default=None, max_length=254)
+    imap_password: str | None = Field(default=None, max_length=1000)
+    imap_folder: str | None = Field(default=None, max_length=150)
+    daily_send_limit: int | None = Field(default=None, ge=1, le=500)
+    min_send_interval_seconds: int | None = Field(default=None, ge=60, le=86400)
+    send_hour_start: int | None = Field(default=None, ge=0, le=23)
+    send_hour_end: int | None = Field(default=None, ge=1, le=24)
+    domain_auth_confirmed: bool | None = None
+    clear_smtp_password: bool = False
+    clear_imap_password: bool = False
+
+
+class WriterSettingsInput(Input):
+    draft_api_url: str | None = Field(default=None, max_length=2000)
+    draft_api_key: str | None = Field(default=None, max_length=1000)
+    draft_model: str | None = Field(default=None, max_length=200)
+    draft_timeout_seconds: float | None = Field(default=None, ge=5, le=180)
+    clear_draft_api_key: bool = False
+
+
+class LeadInput(Input):
+    company: str = Field(min_length=2, max_length=200)
+    website: str = Field(max_length=2000)
+    campaign: Literal["A", "B"]
+    source_url: str = Field(max_length=2000)
+    country_hint: str = Field(default="", max_length=50)
+
+
+class ContactInput(Input):
+    email: str = Field(max_length=254)
+    source_url: str = Field(max_length=2000)
+    name: str = Field(default="", max_length=150)
+    role: str = Field(default="", max_length=150)
+    ownership_notes: str = Field(default="", max_length=2000)
+
+
+class ProfileLeadInput(Input):
+    company: str = Field(min_length=2, max_length=200)
+    profile_url: str = Field(max_length=2000)
+    campaign: Literal["A", "B"]
+    country_hint: Literal["US", "UK"]
+
+
+class ProfessionalResearchInput(Input):
+    profile_url:str=Field(default='',max_length=2000)
+
+
+class ProfessionalReviewInput(Input):
+    capture_id:int=Field(ge=1)
+    email:str=Field(max_length=254)
+    employer_quote:str=Field(min_length=8,max_length=700)
+    role_quote:str=Field(min_length=3,max_length=700)
+    company_evidence_id:int=Field(ge=1)
+    company_quote:str=Field(min_length=8,max_length=700)
+    ownership_notes:str=Field(min_length=30,max_length=2000)
+    reviewed_current_employer_and_publication:Literal[True]
+
+
+class SearchInput(Input):
+    query: str = Field(min_length=5, max_length=400)
+    campaign: Literal["A", "B"]
+    country_hint: Literal["US", "UK"]
+    limit: int = Field(default=10, ge=1, le=30)
+
+
+class BrowserReferenceInput(Input):
+    company: str = Field(min_length=2, max_length=200)
+    source_url: str = Field(max_length=2000)
+    website: str = Field(max_length=2000)
+    campaign: Literal['A', 'B']
+    country_hint: Literal['US', 'UK']
+    observed_at: float
+    observation: str = Field(min_length=8, max_length=300)
+    public_business_confirmed: Literal[True]
+    capture_method: Literal['operator_browser_reference', 'browser_connector_reference'] = 'operator_browser_reference'
+
+
+class ReviewInput(Input):
+    company: str = Field(min_length=2, max_length=200)
+    country: Literal["US", "UK"]
+    country_source: str = Field(max_length=2000)
+    country_quote: str = Field(min_length=3, max_length=700)
+    timezone: str = Field(max_length=100)
+    business_type: Literal["corporate", "sole_trader", "other"]
+    service: str
+    fit_notes: str = Field(min_length=12, max_length=1500)
+    evidence_id: int
+    quote: str = Field(min_length=8, max_length=700)
+    observation: str = Field(min_length=12, max_length=1200)
+    suggestion: str = Field(min_length=12, max_length=1200)
+    industry: str = Field(default="", max_length=150)
+    channel_fit_notes: str = Field(default="", max_length=1500)
+    primary_goal: Literal['inquiries_bookings', 'd2c_growth'] | None = None
+    selling_stage: Literal['unknown', 'starting_ecommerce', 'selling_online', 'not_d2c'] = 'unknown'
+    commerce_evidence_id: int | None = None
+    commerce_quote: str = Field(default='', max_length=700)
+    d2c_fit_notes: str = Field(default='', max_length=1500)
+    channel_fit_status: Literal['unknown', 'confirmed', 'not_suitable'] = 'unknown'
+    customer_permission_status: Literal['unknown', 'confirmed', 'not_suitable'] = 'unknown'
+    recent_trigger: str = Field(default="", max_length=700)
+    trigger_evidence_id: int | None = None
+    trigger_quote: str = Field(default="", max_length=700)
+    followup_suggestion: str = Field(default="", max_length=1200)
+    followup_evidence_id: int | None = None
+    followup_quote: str = Field(default="", max_length=700)
+    profile_ownership_notes: str = Field(default="", max_length=2000)
+    profile_activity_quote: str = Field(default="", max_length=700)
+    website_search_notes: str = Field(default="", max_length=2000)
+    website_search_reviewed: Literal[True] | None = None
+
+
+class ApprovalInput(Input):
+    eligibility_basis: str = Field(min_length=20, max_length=2000)
+    contact_relevance: str = Field(min_length=12, max_length=1000)
+    reviewed_all_messages: Literal[True]
+
+
+class DraftInput(Input):
+    subject: str = Field(min_length=3, max_length=180)
+    body: str = Field(min_length=20, max_length=5000)
+
+    @field_validator("subject")
+    @classmethod
+    def single_line(cls, value):
+        if "\r" in value or "\n" in value:
+            raise ValueError("Subject must be one line")
+        return value
+
+
+class SuppressionInput(Input):
+    reason: str = Field(min_length=3, max_length=500)
+
+
+class SequenceRevisionInput(Input):
+    note: str = Field(min_length=20, max_length=2000)
+    reviewed_pending_messages: Literal[True]
+
+
+class ReconcileInput(Input):
+    outcome: Literal["sent", "not_sent"]
+    evidence: str = Field(min_length=20, max_length=2000)
+
+
+class CSVInput(Input):
+    content: str = Field(max_length=1_000_000)
+
+
+class ScheduleInput(SearchInput):
+    interval_hours: int = Field(default=24, ge=1, le=720)
+
+
+class ProfileInput(Input):
+    name: str = Field(max_length=150)
+    role: str = Field(max_length=150)
+
+
+class ResumeContactInput(Input):
+    note: str = Field(min_length=20, max_length=2000)
+    next_at: float
+    reviewed_remaining_messages: Literal[True]
+
+
+class ActivityInput(Input):
+    channel: Literal["email", "linkedin", "x", "phone", "meeting", "other"]
+    kind: Literal["note", "outreach", "reply", "opt_out"]
+    note: str = Field(min_length=12, max_length=3000)
+    source_url: str = Field(default="", max_length=2000)
+    contact_id: int | None = None
+    happened_at: float | None = None
+
+
+class HoldReleaseInput(Input):
+    note: str = Field(min_length=20, max_length=2000)
+    reviewed_shared_history: Literal[True]
+
+
+class SalesInput(Input):
+    version: int = Field(ge=0)
+    stage: Literal["new", "contacted", "interested", "qualified", "call_booked", "proposal", "won", "delivery", "completed", "nurture", "lost"]
+    confirmed_problem: str = Field(default="", max_length=2000)
+    primary_goal: str = Field(default="", max_length=1000)
+    success_metric: str = Field(default="", max_length=1000)
+    baseline_notes: str = Field(default="", max_length=2000)
+    decision_maker: str = Field(default="", max_length=300)
+    timeline: str = Field(default="", max_length=1000)
+    budget_notes: str = Field(default="", max_length=1000)
+    call_at: float | None = None
+    next_action_at: float | None = None
+    proposal_id: int | None = None
+    agreement_reference: str = Field(default="", max_length=1000)
+    payment_reference: str = Field(default="", max_length=1000)
+    acceptance_reference: str = Field(default="", max_length=1000)
+    outcome_notes: str = Field(default="", max_length=2000)
+
+
+class TaskInput(Input):
+    kind: Literal["audit", "concept", "demo", "call", "proposal", "followup", "delivery", "review"]
+    title: str = Field(min_length=8, max_length=300)
+    due_at: float = Field(gt=0)
+
+
+class TaskCloseInput(Input):
+    state: Literal["done", "cancelled"]
+    outcome: str = Field(min_length=12, max_length=2000)
+
+
+class FinancialInput(Input):
+    kind: Literal['acquisition_cost', 'delivery_cost', 'maintenance_cost', 'payment', 'refund']
+    currency: Literal['USD', 'GBP']
+    amount: Decimal = Field(gt=0, max_digits=12, decimal_places=2)
+    reference: str = Field(min_length=12, max_length=1000)
+    note: str = Field(min_length=12, max_length=2000)
+    happened_at: float | None = Field(default=None, gt=0)
+    actual_transaction_confirmed: Literal[True]
+
+
+class FinancialVoidInput(Input):
+    reason: str = Field(min_length=12, max_length=2000)
+
+
+class ClientPlanInput(Input):
+    kind: Literal['maintenance', 'expansion', 'case_study']
+    title: str = Field(min_length=8, max_length=200)
+    scope: str = Field(min_length=20, max_length=4000)
+    due_at: float = Field(gt=0)
+
+
+class ClientPlanUpdate(Input):
+    version: int = Field(ge=0)
+    state: Literal['reviewed', 'agreed', 'completed', 'declined']
+    agreement_reference: str = Field(default='', max_length=1000)
+    permission_reference: str = Field(default='', max_length=1000)
+    client_permission_confirmed: bool = False
+    outcome_reference: str = Field(default='', max_length=1000)
+    outcome_notes: str = Field(default='', max_length=2000)
+
+
+class ProposalInput(Input):
+    title: str = Field(min_length=12, max_length=200)
+    scope: str = Field(min_length=12, max_length=4000)
+    deliverables: str = Field(min_length=12, max_length=4000)
+    timeline: str = Field(min_length=12, max_length=2000)
+    exclusions: str = Field(min_length=12, max_length=3000)
+    acceptance_criteria: str = Field(min_length=12, max_length=3000)
+    payment_terms: str = Field(min_length=12, max_length=2000)
+    ownership_revision_terms: str = Field(min_length=12, max_length=3000)
+    fee: Decimal = Field(gt=0, max_digits=12, decimal_places=2)
+    currency: Literal["USD", "GBP"]
+
+
+class ProposalReviewInput(Input):
+    reviewed_scope_and_terms: Literal[True]
+
+
+class ProposalDeliveryInput(Input):
+    reference: str = Field(min_length=12, max_length=1000)
+    actually_delivered: Literal[True]
+
+
+class ArtifactPoint(Input):
+    evidence_id: int
+    quote: str = Field(min_length=8, max_length=700)
+    observation: str = Field(min_length=12, max_length=1200)
+    suggestion: str = Field(min_length=12, max_length=1200)
+
+
+class FAQPoint(Input):
+    evidence_id: int
+    quote: str = Field(min_length=8, max_length=700)
+    question: str = Field(min_length=5, max_length=300)
+
+
+class ArtifactMarker(Input):
+    point_index: int = Field(ge=0, le=2)
+    left: float = Field(ge=0, le=100)
+    top: float = Field(ge=0, le=100)
+
+
+class ArtifactInput(Input):
+    kind: Literal["audit", "concept", "faq_demo", "whatsapp_flow"]
+    title: str = Field(min_length=5, max_length=200)
+    points: list[ArtifactPoint] = Field(default_factory=list, max_length=3)
+    faqs: list[FAQPoint] = Field(default_factory=list, max_length=10)
+    headline: str = Field(default="", max_length=300)
+    intro: str = Field(default="", max_length=1200)
+    primary_action: str = Field(default="", max_length=150)
+    screenshot_name: str = Field(default="", max_length=100)
+    markers: list[ArtifactMarker] = Field(default_factory=list, max_length=3)
+    reviewed_source_points: Literal[True]
+
+
+def create_app(settings=None):
+    settings = settings or Settings()
+    preferences = Preferences(settings)
+    if (not settings.admin_password_hash and len(settings.admin_password) < 16) or len(settings.api_token) < 32:
+        raise RuntimeError("Run scripts/init_env.py and configure ADMIN_PASSWORD (16+) / API_TOKEN (32+)")
+    db = DB(settings.database)
+
+    @asynccontextmanager
+    async def lifespan(app):
+        stop, task, lock = asyncio.Event(), None, None
+        if settings.worker_enabled:
+            lock = WorkerLock(settings.data_dir / "worker.lock")
+            task = asyncio.create_task(run(db, settings, stop))
+        yield
+        stop.set()
+        if task:
+            await task
+        if lock:
+            lock.close()
+
+    app = FastAPI(title="Outreach Workbench", version="0.1.0", lifespan=lifespan,
+                  docs_url=None, redoc_url=None, openapi_url=None)
+    app.state.db, app.state.settings = db, settings
+    basic, bearer = HTTPBasic(auto_error=False), HTTPBearer(auto_error=False)
+    login_attempts = {}
+
+    def auth(request: Request, creds: HTTPBasicCredentials | None = Depends(basic),
+             token: HTTPAuthorizationCredentials | None = Depends(bearer)):
+        if token and secrets.compare_digest(token.credentials, settings.api_token):
+            return "api"
+        with preferences.lock:
+            admin_ok = (valid_session(request.cookies.get(COOKIE), session_key(settings))
+                        or (creds and secrets.compare_digest(creds.username.encode(), settings.admin_user.encode())
+                            and password_matches(settings, creds.password)))
+        if admin_ok:
+            if request.method not in {"GET", "HEAD", "OPTIONS"}:
+                origin = request.headers.get("origin")
+                expected = settings.public_url.rstrip("/")
+                if origin != expected:
+                    raise HTTPException(403, "A same-origin request or bearer API token is required")
+            return "admin"
+        raise HTTPException(401, "Authentication required", headers={"WWW-Authenticate": "Basic"})
+
+    @app.middleware("http")
+    async def security(request, call_next):
+        length = request.headers.get("content-length", "0")
+        if length.isdigit() and int(length) > 1_100_000:
+            return JSONResponse({"detail": "Request too large"}, status_code=413)
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Referrer-Policy"] = "no-referrer"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Cache-Control"] = "no-store"
+        response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+        return response
+
+    @app.exception_handler(ValueError)
+    async def value_error(request, exc):
+        return JSONResponse({"detail": str(exc)}, status_code=400)
+
+    @app.exception_handler(RequestValidationError)
+    async def invalid_input(request, exc):
+        return JSONResponse({"detail": [{"loc": e["loc"], "msg": e["msg"], "type": e["type"]} for e in exc.errors()]}, status_code=422)
+
+    @app.get("/health")
+    def health():
+        return {"status": "ok"}
+
+    @app.post("/api/login")
+    async def login(value: LoginInput, request: Request):
+        if request.headers.get("origin") != settings.public_url.rstrip("/"):
+            raise HTTPException(403, "Use the configured workspace URL to sign in")
+        now = time.time()
+        for key in list(login_attempts):
+            login_attempts[key] = [t for t in login_attempts[key] if now-t < 60]
+            if not login_attempts[key]:
+                del login_attempts[key]
+        ip = request.client.host if request.client else "unknown"
+        attempts = login_attempts.setdefault(ip, [])
+        if len(attempts) >= 10 or len(login_attempts) > 1000:
+            raise HTTPException(429, "Too many sign-in attempts; wait one minute")
+        attempts.append(now)
+        with preferences.lock:
+            user_ok = secrets.compare_digest(value.username.encode(), settings.admin_user.encode())
+            password_ok = password_matches(settings, value.password)
+            login_key = session_key(settings)
+        if not (user_ok and password_ok):
+            raise HTTPException(401, "Username or password is incorrect")
+        response = JSONResponse({"signed_in": True})
+        response.set_cookie(COOKIE, issue_session(login_key), max_age=MAX_AGE,
+                            httponly=True, secure=settings.public_url.startswith("https://"), samesite="strict", path="/")
+        return response
+
+    @app.post("/api/logout", dependencies=[Depends(auth)])
+    def logout():
+        response = JSONResponse({"signed_in": False})
+        response.delete_cookie(COOKIE, path="/")
+        return response
+
+    @app.get("/")
+    def dashboard(request: Request, creds: HTTPBasicCredentials | None = Depends(basic),
+                  token: HTTPAuthorizationCredentials | None = Depends(bearer)):
+        try:
+            auth(request, creds, token)
+        except HTTPException as exc:
+            if exc.status_code != 401:
+                raise
+            return FileResponse(Path(__file__).parent / "static" / "login.html")
+        return FileResponse(Path(__file__).parent / "static" / "index.html")
+
+    @app.get("/static/{name}")
+    def static(name: str, request: Request, creds: HTTPBasicCredentials | None = Depends(basic),
+               token: HTTPAuthorizationCredentials | None = Depends(bearer)):
+        if name not in {"app.js", "sales.js", "growth.js", "workflow.js", "settings.js", "style.css", "login.js"}:
+            raise HTTPException(404)
+        if name in {"app.js", "sales.js", "growth.js", "workflow.js", "settings.js"}:
+            auth(request, creds, token)
+        return FileResponse(Path(__file__).parent / "static" / name)
+
+    @app.get("/api/openapi", dependencies=[Depends(auth)])
+    def spec():
+        return app.openapi()
+
+    @app.get("/api/settings", dependencies=[Depends(auth)])
+    def workspace_settings():
+        return preferences.public()
+
+    @app.put("/api/settings/mail", dependencies=[Depends(auth)])
+    def mail_settings(value: MailSettingsInput):
+        return preferences.update_mail(db, value.model_dump(exclude_none=True))
+
+    @app.put('/api/settings/writer', dependencies=[Depends(auth)])
+    def writer_settings(value: WriterSettingsInput):
+        return preferences.update_writer(db, value.model_dump(exclude_none=True))
+
+    @app.put("/api/settings/credentials", dependencies=[Depends(auth)])
+    def credentials(value: CredentialsInput, request: Request):
+        key = "credentials:" + (request.client.host if request.client else "unknown")
+        attempts = [t for t in login_attempts.get(key, []) if time.time()-t < 60]
+        if len(attempts) >= 5:
+            raise HTTPException(429, "Too many account-change attempts; wait one minute")
+        login_attempts[key] = attempts + [time.time()]
+        preferences.update_credentials(db, value.username, value.new_password, value.current_password)
+        response = JSONResponse({"saved": True, "signed_out": True})
+        response.delete_cookie(COOKIE, path="/")
+        return response
+
+    @app.get("/api/workflow", dependencies=[Depends(auth)])
+    def workflow_state(lead_id: int | None = Query(default=None, ge=1), detail: bool = False):
+        if detail:
+            from .workflow_detail import detailed_snapshot
+            return detailed_snapshot(db, settings, lead_id)
+        from .workflow import snapshot
+        return snapshot(db, settings, lead_id)
+
+    @app.get("/api/research-status", dependencies=[Depends(auth)])
+    def research_status(lead_id: int | None = Query(default=None, ge=1)):
+        from .research_status import snapshot
+        return snapshot(db, lead_id)
+
+    @app.get('/api/source-coverage',dependencies=[Depends(auth)])
+    def coverage(lead_id:int|None=Query(default=None,ge=1)):
+        from .research_status import source_coverage
+        with db.connect() as con:
+            con.execute('BEGIN')
+            if lead_id and not con.execute('SELECT 1 FROM leads WHERE id=?',(lead_id,)).fetchone():
+                raise ValueError('Prospect not found')
+            return source_coverage(con,lead_id,time.time())
+
+    @app.get("/api/status", dependencies=[Depends(auth)])
+    def status():
+        from .platform_access import access_status
+        access=access_status(settings)
+        return {"demo": db.get("demo") == "true", "sending_enabled": settings.sending_enabled, "paused": db.get("paused", "true") != "false",
+                "sending_gaps": settings.sending_gaps(), "worker_heartbeat": db.get("worker_heartbeat"),
+                "imap_error": db.get("imap_error"), "imap_caught_up": db.get("imap_caught_up") == "true",
+                "imap_last_success": db.get("imap_last_success"), "search_provider": settings.search_provider,
+                "discovery_platforms": settings.discovery_platforms.split(","),
+                "ai_enabled": bool(settings.openai_api_key and settings.openai_model),
+                "browser_enabled": settings.browser_enabled,
+                'platform_browser_enabled':settings.platform_browser_enabled,
+                'platform_browser_public_fallback':settings.platform_browser_public_fallback,
+                'fxembed_profiles_enabled':settings.fxembed_profiles_enabled,
+                'platform_browser_holds':{platform:value['reason'] for platform,value in access.items()},
+                'platform_browser_access_issues':access,
+                'crawler_runtime': json.loads(db.get('crawler_runtime', '{}')),
+                "counts": {table: db.one(f"SELECT COUNT(*) n FROM {table}")["n"] for table in ["leads", "contacts", "suppression"]},
+                "messages": db.all("SELECT state,COUNT(*) n FROM messages GROUP BY state"),
+                "funnel": db.all("SELECT l.campaign,c.status,COUNT(*) n FROM contacts c JOIN leads l ON l.id=c.lead_id GROUP BY l.campaign,c.status")}
+
+    @app.post("/api/pause", dependencies=[Depends(auth)])
+    def pause():
+        db.set("paused", "true")
+        db.event("paused", {})
+        return {"paused": True}
+
+    @app.post("/api/resume", dependencies=[Depends(auth)])
+    def resume():
+        if db.get("demo") == "true":
+            raise ValueError("Offline demo cannot send; use a separate live database")
+        if not settings.sending_enabled or settings.sending_gaps():
+            raise ValueError("Configure sending and set SENDING_ENABLED=true before resuming")
+        db.set("paused", "false")
+        db.event("resumed", {})
+        return {"paused": False}
+
+    @app.get("/api/leads", dependencies=[Depends(auth)])
+    def leads():
+        return priorities.ranked(db, settings)
+
+    @app.post("/api/leads", dependencies=[Depends(auth)])
+    def new_lead(value: LeadInput):
+        lead_id = add_lead(db, **value.model_dump())
+        return {"id": lead_id, "job_id": db.enqueue("research", {"lead_id": lead_id})}
+
+    @app.post("/api/import", dependencies=[Depends(auth)])
+    def import_csv(value: CSVInput):
+        rows, errors, ids = list(csv.DictReader(io.StringIO(value.content.lstrip('\ufeff')))), [], []
+        if len(rows) > 500:
+            raise ValueError("Import up to 500 rows at a time")
+        for number, row in enumerate(rows, 2):
+            try:
+                parsed = LeadInput(**{key: row.get(key, "") for key in LeadInput.model_fields})
+                lid = add_lead(db, **parsed.model_dump())
+                if row.get("email"):
+                    cid = add_contact(db, lid, row["email"], row.get("email_source") or row["source_url"], row.get("name", ""), row.get("role", ""))
+                    db.enqueue("verify", {"contact_id": cid})
+                db.enqueue("research", {"lead_id": lid})
+                ids.append(lid)
+            except ValueError as exc:
+                errors.append({"row": number, "error": str(exc)[:250]})
+        return {"ids": ids, "errors": errors}
+
+    @app.post("/api/discover", dependencies=[Depends(auth)])
+    def discover(value: SearchInput):
+        return {"job_id": db.enqueue("discover", value.model_dump())}
+
+    @app.get("/api/schedules", dependencies=[Depends(auth)])
+    def schedules():
+        return db.all("SELECT * FROM schedules ORDER BY id")
+
+    @app.post("/api/schedules", dependencies=[Depends(auth)])
+    def add_schedule(value: ScheduleInput):
+        sid = db.execute("INSERT INTO schedules(query,campaign,country_hint,result_limit,interval_hours,next_run) VALUES(?,?,?,?,?,?)",
+                         (value.query, value.campaign, value.country_hint, value.limit, value.interval_hours, time.time()))
+        return {"id": sid}
+
+    @app.delete("/api/schedules/{schedule_id}", dependencies=[Depends(auth)])
+    def disable_schedule(schedule_id: int):
+        db.execute("UPDATE schedules SET enabled=0 WHERE id=?", (schedule_id,))
+        return {"status": "disabled"}
+
+    @app.post("/api/profile-leads", dependencies=[Depends(auth)])
+    def profile_lead(value: ProfileLeadInput):
+        from .profiles import add_profile_lead
+        lid = add_profile_lead(db, **value.model_dump())
+        return {"id": lid, "job_id": db.enqueue("research", {"lead_id": lid})}
+
+    @app.post('/api/browser-references', dependencies=[Depends(auth)])
+    def browser_reference(value: BrowserReferenceInput):
+        from .browser_references import save_reference
+        return save_reference(db, **value.model_dump())
+
+    @app.get("/api/leads/{lead_id}", dependencies=[Depends(auth)])
+    def lead_detail(lead_id: int):
+        from .professionals import captures,reviewed_publication
+        row = db.one("SELECT * FROM leads WHERE id=?", (lead_id,))
+        if not row:
+            raise HTTPException(404)
+        professional_captures=captures(db,lead_id)
+        for source in professional_captures:
+            source['reviewed_emails']=[email for email in source['published_emails'] if reviewed_publication(db,row,source['url'],email)]
+        professional_report=db.one("SELECT detail FROM events WHERE kind='professional_research' AND json_extract(detail,'$.lead_id')=? ORDER BY id DESC LIMIT 1",(lead_id,))
+        crawl = db.one("SELECT * FROM crawls WHERE lead_id=? ORDER BY id DESC LIMIT 1", (lead_id,))
+        evidence = db.all("SELECT * FROM evidence WHERE lead_id=?", (lead_id,))
+        for page in evidence:
+            page["current_for_review"] = (not crawl or page["fetched_at"] >= crawl["created_at"]) and time.time()-30*86400 <= page['fetched_at'] <= time.time()+60
+            from .profiles import source_allowed
+            page['business_for_review']=source_allowed(row,page['url'])
+        from . import offers
+        from .opportunities import proposals as offer_proposals
+        from .email_writer import assert_ai_origin, configuration as writer_configuration
+        contacts = db.all("SELECT * FROM contacts WHERE lead_id=?", (lead_id,))
+        for contact in contacts:
+            origin = db.one("SELECT detail FROM events WHERE kind='drafts_created' AND contact_id=? ORDER BY id DESC LIMIT 1", (contact['id'],))
+            contact['draft_origin'] = json.loads(origin['detail']) if origin else {}
+            try:
+                assert_ai_origin(db, contact['id'])
+                contact['ai_drafts'] = True
+            except ValueError:
+                contact['ai_drafts'] = False
+            try:
+                assert_contact_ownership(db, contact, row)
+                contact.update(source_eligible=True, source_issue='')
+            except ValueError as exc:
+                contact.update(source_eligible=False, source_issue=str(exc))
+        artifacts = db.all('SELECT * FROM deliverables WHERE lead_id=? ORDER BY id DESC', (lead_id,))
+        for artifact in artifacts:
+            try:
+                deliverables.assert_current_artifact(db, artifact)
+                artifact['current_for_review'] = True
+            except ValueError:
+                artifact['current_for_review'] = False
+        return {"lead": row, "evidence": evidence, "crawl": crawl,
+                'professional_captures':professional_captures,
+                'professional_report':json.loads(professional_report['detail']) if professional_report else None,
+                "contacts": contacts,
+                "email_writer": writer_configuration(settings),
+                "review_candidates": contact_candidates(db, lead_id),
+                "messages": db.all("SELECT m.* FROM messages m JOIN contacts c ON c.id=m.contact_id WHERE c.lead_id=? ORDER BY m.contact_id,m.step", (lead_id,)),
+                "events": db.all("SELECT e.* FROM events e LEFT JOIN contacts c ON c.id=e.contact_id WHERE c.lead_id=? OR json_extract(e.detail,'$.lead_id')=? ORDER BY e.id DESC LIMIT 50", (lead_id, lead_id)),
+                "sales": db.one("SELECT * FROM sales WHERE lead_id=?", (lead_id,)) or {"stage": "new", "version": 0, "details": "{}", "cold_email_hold": 0},
+                "activities": db.all("SELECT * FROM activities WHERE lead_id=? ORDER BY happened_at DESC,id DESC LIMIT 100", (lead_id,)),
+                "tasks": db.all("SELECT * FROM tasks WHERE lead_id=? ORDER BY state,due_at", (lead_id,)),
+                "proposals": db.all("SELECT * FROM proposals WHERE lead_id=? ORDER BY id DESC", (lead_id,)),
+                "deliverables": artifacts,
+                "priority": priorities.ranked(db, settings, lead_id)[0]['priority'],
+                'offer_workflow': offers.snapshot(db, lead_id),
+                'offer_proposals': offer_proposals(row, [e for e in evidence if e['current_for_review'] and e['business_for_review']]),
+                "financial_entries": finance.entries(db, lead_id), "financial_report": finance.report(db, lead_id),
+                "client_plans": db.all('SELECT * FROM client_plans WHERE lead_id=? ORDER BY due_at,id', (lead_id,))}
+
+    @app.post('/api/leads/{lead_id}/finance', dependencies=[Depends(auth)])
+    def financial_record(lead_id: int, value: FinancialInput):
+        return {'id': finance.record(db, lead_id, value.model_dump())}
+
+    @app.post('/api/finance/{entry_id}/void', dependencies=[Depends(auth)])
+    def financial_void(entry_id: int, value: FinancialVoidInput):
+        finance.void(db, entry_id, value.reason)
+        return {'status': 'voided'}
+
+    @app.post('/api/leads/{lead_id}/client-plans', dependencies=[Depends(auth)])
+    def client_plan_create(lead_id: int, value: ClientPlanInput):
+        return {'id': aftercare.create(db, lead_id, value.model_dump())}
+
+    @app.put('/api/client-plans/{plan_id}', dependencies=[Depends(auth)])
+    def client_plan_update(plan_id: int, value: ClientPlanUpdate):
+        aftercare.update(db, plan_id, value.model_dump())
+        return {'status': 'saved'}
+
+    @app.get('/api/client-plans/{plan_id}/download', dependencies=[Depends(auth)])
+    def client_plan_download(plan_id: int):
+        return Response(aftercare.export(db, plan_id), media_type='text/html',
+                        headers={'Content-Disposition': f'attachment; filename="case-study-{plan_id}.html"'})
+
+    @app.post("/api/leads/{lead_id}/artifacts", dependencies=[Depends(auth)])
+    def artifact_create(lead_id: int, value: ArtifactInput):
+        return {"id": deliverables.create(db, lead_id, value.model_dump())}
+
+    @app.post("/api/artifacts/{artifact_id}/approve", dependencies=[Depends(auth)])
+    def artifact_review(artifact_id: int, value: ProposalReviewInput):
+        deliverables.action(db, artifact_id, "approve")
+        return {"status": "approved"}
+
+    @app.post("/api/artifacts/{artifact_id}/sent", dependencies=[Depends(auth)])
+    def artifact_delivery(artifact_id: int, value: ProposalDeliveryInput):
+        deliverables.action(db, artifact_id, "sent", value.reference)
+        return {"status": "recorded"}
+
+    @app.get("/api/artifacts/{artifact_id}/download", dependencies=[Depends(auth)])
+    def artifact_download(artifact_id: int):
+        artifact = db.one("SELECT * FROM deliverables WHERE id=?", (artifact_id,))
+        if not artifact:
+            raise HTTPException(404)
+        return Response(artifact["body"], media_type="text/html", headers={"Content-Disposition": f'attachment; filename="artifact-{artifact_id}.html"'})
+
+    @app.get("/api/sales/report", dependencies=[Depends(auth)])
+    def sales_report():
+        return sales.report(db)
+
+    @app.put("/api/leads/{lead_id}/sales", dependencies=[Depends(auth)])
+    def sales_update(lead_id: int, value: SalesInput):
+        sales.update_sales(db, lead_id, value.model_dump())
+        return {"status": "saved"}
+
+    @app.post("/api/leads/{lead_id}/activity", dependencies=[Depends(auth)])
+    def activity(lead_id: int, value: ActivityInput):
+        return {"id": sales.record_activity(db, lead_id, value.model_dump())}
+
+    @app.post("/api/leads/{lead_id}/outreach-release", dependencies=[Depends(auth)])
+    def release_company_hold(lead_id: int, value: HoldReleaseInput):
+        sales.release_outreach_hold(db, lead_id, value.note)
+        return {"status": "released", "note": "Held contacts still need their separate reviewed resume"}
+
+    @app.post("/api/leads/{lead_id}/tasks", dependencies=[Depends(auth)])
+    def task_create(lead_id: int, value: TaskInput):
+        return {"id": sales.create_task(db, lead_id, value.model_dump())}
+
+    @app.put("/api/tasks/{task_id}", dependencies=[Depends(auth)])
+    def task_close(task_id: int, value: TaskCloseInput):
+        sales.finish_task(db, task_id, value.state, value.outcome)
+        return {"status": value.state}
+
+    @app.post("/api/leads/{lead_id}/proposals", dependencies=[Depends(auth)])
+    def proposal_create(lead_id: int, value: ProposalInput):
+        return {"id": sales.create_proposal(db, lead_id, value.model_dump(mode="json"))}
+
+    @app.post("/api/proposals/{proposal_id}/approve", dependencies=[Depends(auth)])
+    def proposal_review(proposal_id: int, value: ProposalReviewInput):
+        sales.proposal_action(db, proposal_id, "approve")
+        return {"status": "approved"}
+
+    @app.post("/api/proposals/{proposal_id}/sent", dependencies=[Depends(auth)])
+    def proposal_delivered(proposal_id: int, value: ProposalDeliveryInput):
+        sales.proposal_action(db, proposal_id, "sent", value.reference)
+        return {"status": "recorded"}
+
+    @app.get("/api/proposals/{proposal_id}/download", dependencies=[Depends(auth)])
+    def proposal_download(proposal_id: int):
+        proposal = db.one("SELECT * FROM proposals WHERE id=?", (proposal_id,))
+        if not proposal:
+            raise HTTPException(404)
+        return Response(proposal["body"], media_type="text/markdown", headers={"Content-Disposition": f'attachment; filename="proposal-{proposal_id}.md"'})
+
+    @app.post("/api/leads/{lead_id}/research", dependencies=[Depends(auth)])
+    def research(lead_id: int):
+        return {"job_id": db.enqueue("research", {"lead_id": lead_id})}
+
+    @app.post('/api/leads/{lead_id}/continue-research', dependencies=[Depends(auth)])
+    def continue_research(lead_id: int):
+        from .research import research_checkpoint
+        research_checkpoint(db, lead_id)
+        return {'job_id': db.enqueue('research', {'lead_id': lead_id, 'continuation': True})}
+
+    @app.post('/api/leads/{lead_id}/contact-research', dependencies=[Depends(auth)])
+    def contact_research(lead_id: int):
+        from .contact_recovery import eligible_lead
+        eligible_lead(db, lead_id)
+        return {'job_id': db.enqueue('contact_research', {'lead_id': lead_id})}
+
+    @app.post('/api/leads/{lead_id}/professional-research',dependencies=[Depends(auth)])
+    def professional_research(lead_id:int,value:ProfessionalResearchInput):
+        from .contact_recovery import eligible_lead
+        from .professionals import professional_target
+        eligible_lead(db,lead_id)
+        payload={'lead_id':lead_id}
+        if value.profile_url:
+            payload['profile_url']=professional_target(value.profile_url)[1]
+        return {'job_id':db.enqueue('professional_research',payload)}
+
+    @app.post('/api/leads/{lead_id}/professional-review',dependencies=[Depends(auth)])
+    def professional_review(lead_id:int,value:ProfessionalReviewInput):
+        from .professionals import review_contact
+        return {'contact_id':review_contact(db,lead_id,value.model_dump()),'state':'reviewed_contact_unverified'}
+
+    @app.get('/api/providers/reacher', dependencies=[Depends(auth)])
+    async def verifier_status():
+        from .providers import reacher_readiness
+        return await reacher_readiness(settings)
+
+    @app.post("/api/leads/{lead_id}/screenshot", dependencies=[Depends(auth)])
+    def audit(lead_id: int):
+        row = db.one("SELECT * FROM leads WHERE id=?", (lead_id,))
+        if not row or row["lead_kind"] == "profile":
+            raise ValueError("Website visual audit needs an official company website")
+        return {"job_id": db.enqueue("screenshot", {"lead_id": lead_id})}
+
+    @app.post("/api/leads/{lead_id}/performance", dependencies=[Depends(auth)])
+    def performance(lead_id: int):
+        row = db.one("SELECT * FROM leads WHERE id=?", (lead_id,))
+        if not row:
+            raise HTTPException(404)
+        if row["lead_kind"] == "profile":
+            raise ValueError("PageSpeed needs an official company website")
+        return {"job_id": db.enqueue("performance", {"lead_id": lead_id})}
+
+    @app.get("/api/screenshots/{name}", dependencies=[Depends(auth)])
+    def get_screenshot(name: str):
+        import re
+        if not re.fullmatch(r"lead-\d+-\d+(?:-[a-f0-9]{6}-(?:mobile|desktop))?\.png", name):
+            raise HTTPException(404)
+        path = settings.data_dir / "screenshots" / name
+        if not path.is_file():
+            raise HTTPException(404)
+        return FileResponse(path)
+
+    @app.post("/api/leads/{lead_id}/review", dependencies=[Depends(auth)])
+    def review(lead_id: int, value: ReviewInput):
+        review_lead(db, lead_id, value.model_dump())
+        return {"status": "qualified"}
+
+    @app.post("/api/leads/{lead_id}/contacts", dependencies=[Depends(auth)])
+    def contact(lead_id: int, value: ContactInput):
+        cid = add_contact(db, lead_id, **value.model_dump())
+        row = db.one('SELECT * FROM contacts WHERE id=?', (cid,))
+        try:
+            assert_contact_ownership(db, row, db.one('SELECT * FROM leads WHERE id=?', (lead_id,)))
+        except ValueError as exc:
+            return {'id': cid, 'job_id': None, 'source_eligible': False, 'source_issue': str(exc)}
+        return {"id": cid, "job_id": db.enqueue("verify", {"contact_id": cid})}
+
+    @app.post("/api/contacts/{contact_id}/verify", dependencies=[Depends(auth)])
+    def verify(contact_id: int):
+        row = db.one('SELECT * FROM contacts WHERE id=?', (contact_id,))
+        if not row:
+            raise HTTPException(404)
+        assert_contact_ownership(db, row, db.one('SELECT * FROM leads WHERE id=?', (row['lead_id'],)))
+        return {"job_id": db.enqueue("verify", {"contact_id": contact_id})}
+
+    @app.put("/api/contacts/{contact_id}/profile", dependencies=[Depends(auth)])
+    def profile(contact_id: int, value: ProfileInput):
+        row = db.one("SELECT status FROM contacts WHERE id=?", (contact_id,))
+        if not row or row["status"] != "new":
+            raise ValueError("Only contacts without outreach history can be edited")
+        with db.connect() as con:
+            changed = con.execute("UPDATE contacts SET name=?,role=? WHERE id=? AND status='new'", (value.name, value.role, contact_id)).rowcount
+            if not changed:
+                raise ValueError("Contact changed; reload before editing")
+        return {"status": "saved", "note": "Regenerate any existing drafts to use the updated name"}
+
+    @app.post("/api/contacts/{contact_id}/draft", dependencies=[Depends(auth)])
+    def draft(contact_id: int):
+        create_drafts(db, settings, contact_id)
+        return {"status": "drafted"}
+
+    @app.put("/api/messages/{message_id}", dependencies=[Depends(auth)])
+    def edit_message(message_id: int, value: DraftInput):
+        row = db.one("SELECT * FROM messages WHERE id=?", (message_id,))
+        if not row or row["state"] != "draft":
+            raise ValueError("Only unapproved drafts can be edited")
+        with db.connect() as con:
+            changed = con.execute("UPDATE messages SET subject=?,body=? WHERE id=? AND state='draft'", (value.subject, value.body, message_id)).rowcount
+            if not changed:
+                raise ValueError("Draft was approved during editing; reload before continuing")
+        db.event("draft_edited", {"message": message_id}, row["contact_id"])
+        return {"status": "saved"}
+
+    @app.post("/api/contacts/{contact_id}/approve", dependencies=[Depends(auth)])
+    def approval(contact_id: int, value: ApprovalInput):
+        approve(db, settings, contact_id, value.eligibility_basis, value.contact_relevance)
+        return {"status": "queued"}
+
+    @app.post("/api/contacts/{contact_id}/suppress", dependencies=[Depends(auth)])
+    def suppress(contact_id: int, value: SuppressionInput):
+        row = db.one("SELECT email FROM contacts WHERE id=?", (contact_id,))
+        if not row:
+            raise HTTPException(404)
+        db.suppress(row["email"], value.reason)
+        db.event("suppressed", {"reason": value.reason}, contact_id)
+        return {"status": "suppressed"}
+
+    @app.post("/api/contacts/{contact_id}/resume", dependencies=[Depends(auth)])
+    def resume_held_contact(contact_id: int, value: ResumeContactInput):
+        resume_contact(db, settings, contact_id, value.note, value.next_at)
+        return {"status": "active"}
+
+    @app.post('/api/contacts/{contact_id}/revise', dependencies=[Depends(auth)])
+    def revise_pilot(contact_id: int, value: SequenceRevisionInput):
+        revise_unsent_sequence(db, contact_id, value.note)
+        return {'status': 'draft', 'note': 'Approval revoked; review current evidence and all messages before approving again'}
+
+    @app.post("/api/messages/{message_id}/reconcile", dependencies=[Depends(auth)])
+    def reconcile(message_id: int, value: ReconcileInput):
+        row = db.one("SELECT * FROM messages WHERE id=?", (message_id,))
+        if not row or row["state"] != "uncertain":
+            raise ValueError("Only uncertain sends can be reconciled")
+        if value.outcome == "sent":
+            mark_sent(db, row, time.time())
+        else:
+            db.execute("UPDATE messages SET state='draft',due_at=NULL WHERE contact_id=? AND state IN ('uncertain','queued')", (row["contact_id"],))
+        # Never automatically resume after reconciliation: preserve replies/opt-outs received meanwhile.
+        db.event("send_reconciled", value.model_dump(), row["contact_id"])
+        return {"status": "reconciled", "note": "Contact remains held; inspect its conversation before any further outreach"}
+
+    @app.get("/api/jobs", dependencies=[Depends(auth)])
+    def jobs():
+        return db.all("SELECT * FROM jobs ORDER BY id DESC LIMIT 100")
+
+    @app.post("/api/jobs/{job_id}/retry", dependencies=[Depends(auth)])
+    def retry(job_id: int):
+        db.execute("UPDATE jobs SET state='pending',attempts=0,due_at=?,error='' WHERE id=? AND state='failed'", (time.time(), job_id))
+        return {"status": "queued"}
+
+    @app.get("/api/events", dependencies=[Depends(auth)])
+    def events():
+        return db.all("SELECT * FROM events ORDER BY id DESC LIMIT 100")
+
+    @app.get("/api/export", dependencies=[Depends(auth)])
+    def export():
+        rows = db.all("SELECT l.company,CASE WHEN l.lead_kind='profile' THEN '' ELSE l.domain END domain,l.website,l.profile_url,l.lead_kind,l.website_status,l.campaign,l.country,c.email,c.name,c.role,c.verification,c.status FROM leads l LEFT JOIN contacts c ON c.lead_id=l.id ORDER BY l.id")
+        out = io.StringIO()
+        writer = csv.writer(out)
+        keys = ["company", "domain", "website", "profile_url", "lead_kind", "website_status", "campaign", "country", "email", "name", "role", "verification", "status"]
+        writer.writerow(keys)
+        for row in rows:
+            writer.writerow([("'" + str(row[k]) if str(row[k] or "").startswith(("=", "+", "-", "@", "\t", "\r")) else row[k]) for k in keys])
+        return Response(out.getvalue(), media_type="text/csv", headers={"Content-Disposition": "attachment; filename=leads.csv"})
+
+    @app.get("/unsubscribe/{token}", response_class=HTMLResponse)
+    def unsubscribe_page(token: str):
+        if not db.one("SELECT id FROM contacts WHERE unsubscribe_token=?", (token,)):
+            raise HTTPException(404)
+        return '<!doctype html><html lang="en"><meta name="viewport" content="width=device-width"><title>Stop emails</title><h1>Stop these emails</h1><form method="post"><button type="submit">Unsubscribe</button></form></html>'
+
+    @app.post("/unsubscribe/{token}", response_class=HTMLResponse)
+    def unsubscribe(token: str):
+        row = db.one("SELECT id,email FROM contacts WHERE unsubscribe_token=?", (token,))
+        if not row:
+            raise HTTPException(404)
+        db.suppress(row["email"], "unsubscribe link")
+        db.event("opt_out", {"channel": "link"}, row["id"])
+        return "<h1>You have been unsubscribed.</h1>"
+
+    return app

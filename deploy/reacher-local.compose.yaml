@@ -1,0 +1,6 @@
+# Local native app only: leave existing services on port 8080 untouched.
+# docker compose -f compose.yaml -f deploy/reacher-local.compose.yaml --profile verify up -d --no-deps reacher
+services:
+  reacher:
+    ports:
+      - "127.0.0.1:8081:8080"

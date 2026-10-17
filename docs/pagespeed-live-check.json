@@ -1,0 +1,20 @@
+{
+  "lead_id": 1,
+  "url": "https://quotes.toscrape.com/js/",
+  "requested_at": 1791612234.526719,
+  "strategies": {},
+  "errors": [
+    {
+      "strategy": "mobile",
+      "reason": "HTTP 429"
+    },
+    {
+      "strategy": "desktop",
+      "reason": "HTTP 429"
+    }
+  ],
+  "kind": "Lighthouse lab measurements",
+  "limitations": "Emulated lab results vary by run; these are not visitor analytics or proof of lost sales.",
+  "status": "failed",
+  "test_context": "Public practice site; no contacts imported or email sent; keyless Google API."
+}

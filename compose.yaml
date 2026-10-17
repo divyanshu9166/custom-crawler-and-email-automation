@@ -1,0 +1,109 @@
+name: outreach
+services:
+  app:
+    build:
+      context: .
+      args:
+        INSTALL_BROWSER: ${INSTALL_BROWSER:-true}
+    env_file: .env
+    environment:
+      DATA_DIR: /data
+      REACHER_URL: http://reacher:8080
+      SEARXNG_URL: http://searxng:8080
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - app_data:/data
+    restart: unless-stopped
+    # Resource budgets are adjustable; lowering concurrency preserves crawler capability.
+    mem_limit: ${APP_MEMORY_LIMIT:-2560m}
+    cpus: ${APP_CPU_LIMIT:-1.5}
+    init: true
+    shm_size: 512m
+    security_opt:
+      - seccomp=./deploy/playwright-seccomp.json
+      - no-new-privileges:true
+    stop_grace_period: 90s
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+  browser-setup:
+    profiles: ["browser-setup"]
+    build:
+      context: .
+      dockerfile: deploy/platform-browser.Dockerfile
+    env_file: .env
+    environment:
+      DATA_DIR: /data
+      PLATFORM_BROWSER_VIEW_PASSWORD: ${PLATFORM_BROWSER_VIEW_PASSWORD:-}
+      PLATFORM_BROWSER_SETUP_SITE: ${PLATFORM_BROWSER_SETUP_SITE:-linkedin}
+    ports: ["127.0.0.1:6080:6080"]
+    volumes: ["app_data:/data"]
+    init: true
+    shm_size: 512m
+    mem_limit: ${PLATFORM_SETUP_MEMORY_LIMIT:-1536m}
+    security_opt:
+      - seccomp=./deploy/playwright-seccomp.json
+      - no-new-privileges:true
+    restart: "no"
+    stop_grace_period: 120s
+  reacher:
+    profiles: ["verify"]
+    build:
+      context: .
+      dockerfile: deploy/reacher.Dockerfile
+    environment:
+      RCH__HTTP_HOST: 0.0.0.0
+      RCH__HEADER_SECRET: ${REACHER_SECRET:?Run scripts/init_env.py first}
+      RCH__FROM_EMAIL: ${REACHER_FROM_EMAIL:-hello@localhost}
+      RCH__HELLO_NAME: ${REACHER_HELLO_NAME:-localhost}
+      RCH__SMTP_TIMEOUT: 45
+    # Internal network only. Outgoing TCP/25 still requires VPS provider permission.
+    expose: ["8080"]
+    restart: unless-stopped
+    mem_limit: 512m
+    cpus: 0.5
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "2"}
+  searxng:
+    profiles: ["search"]
+    image: searxng/searxng@sha256:85492ba800a861e3e8ff6014c430e81369fe6ca766a9990595f616d1ce95b272
+    environment:
+      SEARXNG_SECRET: ${SEARXNG_SECRET:?Run scripts/init_env.py first}
+    volumes:
+      - ./deploy/searxng.yml:/etc/searxng/settings.yml:ro
+    expose: ["8080"]
+    restart: unless-stopped
+    mem_limit: 384m
+    cpus: 0.35
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "2"}
+  n8n:
+    profiles: ["n8n"]
+    image: n8nio/n8n@sha256:526daa38b68e923cc00c5280d18b4da5d489f115a73bdbf3b8e452b184197a9a
+    environment:
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:?Run scripts/init_env.py first}
+      N8N_DIAGNOSTICS_ENABLED: "false"
+      N8N_CONCURRENCY_PRODUCTION_LIMIT: "1"
+      EXECUTIONS_DATA_MAX_AGE: "168"
+      EXECUTIONS_DATA_PRUNE: "true"
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "true"
+    ports:
+      - "127.0.0.1:5678:5678"
+    volumes: ["n8n_data:/home/node/.n8n"]
+    restart: unless-stopped
+    mem_limit: 512m
+    cpus: 0.35
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "2"}
+volumes:
+  app_data:
+  n8n_data:

@@ -1,0 +1,123 @@
+{
+  "tests": {
+    "passed": 322,
+    "failures": 0,
+    "seconds": 92.6,
+    "existing_dependency_warnings": 1,
+    "junit": "data/crawler-optimization-tests.xml",
+    "ruff": "passed",
+    "javascript_syntax": "passed"
+  },
+  "comparison": {
+    "same_four_websites": true,
+    "seconds_per_site": 180,
+    "max_pages": 30,
+    "render_mode": "always",
+    "before_saved_pages": 35,
+    "after_saved_pages": 36,
+    "before_sites_with_pages": 2,
+    "after_sites_with_pages": 3,
+    "published_unverified_contacts": 1,
+    "qualified": 0,
+    "complete_crawls": 0,
+    "results": [
+      {
+        "website": "https://austinroofingandwaterdamage.com/",
+        "lead_id": 2,
+        "seconds": 181.78,
+        "error": "TimeoutError",
+        "before_pages_at_180s": 0,
+        "after_pages_at_180s": 1,
+        "first_page_seconds": 114.765,
+        "http_document_reuses": 1,
+        "status": "interrupted",
+        "last_phase": "render",
+        "http_status": null,
+        "rendered_saved_pages": 0
+      },
+      {
+        "website": "https://www.dentalclinic.london/",
+        "lead_id": 1,
+        "seconds": 182.348,
+        "error": "TimeoutError",
+        "before_pages_at_180s": 16,
+        "after_pages_at_180s": 16,
+        "first_page_seconds": 14.499,
+        "http_document_reuses": 16,
+        "status": "interrupted",
+        "last_phase": "render",
+        "http_status": null,
+        "rendered_saved_pages": 16
+      },
+      {
+        "website": "https://www.myskinshop.co.uk/",
+        "lead_id": 4,
+        "seconds": 0.786,
+        "error": "HTTPStatusError",
+        "before_pages_at_180s": 0,
+        "after_pages_at_180s": 0,
+        "first_page_seconds": null,
+        "http_document_reuses": 0,
+        "status": "failed",
+        "last_phase": "robots",
+        "http_status": 403,
+        "rendered_saved_pages": 0
+      },
+      {
+        "website": "https://tanukicoffeeroasters.com/",
+        "lead_id": 3,
+        "seconds": 182.377,
+        "error": "TimeoutError",
+        "before_pages_at_180s": 19,
+        "after_pages_at_180s": 19,
+        "first_page_seconds": 10.745,
+        "http_document_reuses": 18,
+        "status": "interrupted",
+        "last_phase": "render",
+        "http_status": null,
+        "rendered_saved_pages": 19
+      }
+    ]
+  },
+  "raw_report": "data\\crawler-optimization-live\\20261011-011403\\report.json",
+  "raw_report_sha256": "b7d571b966cc898a05e0b358004e1375c70ed725c63d50d0ee3837c58d1788ce",
+  "normal_browser": {
+    "checked_at": 1791662139.0352201,
+    "research_nodes": 17,
+    "overview_nodes": 11,
+    "full_nodes": 35,
+    "desktop_mobile": true,
+    "visible_403_and_phase": true,
+    "visible_measured_first_page_time": true,
+    "unknown_remaining_coverage_explicit": true,
+    "overflow": false,
+    "js_errors": 0,
+    "read_only_browser_check": true,
+    "other_records_and_credentials_unchanged": true,
+    "external_actions_queued": 0,
+    "db_integrity": "ok"
+  },
+  "source_sha256": {
+    "outreach/web.py": "4c787a57ef16cdf042aa5000f00eb69c5c4031ee37bb02163d19749d65032b37",
+    "outreach/browser.py": "3d7e98374e877eff00f360458ceb9168b86b4714226e67054b3837fce828d014",
+    "outreach/config.py": "f92b45487dd58bfabc3c54d24f9d6ba708438519f55c499cb81ab57182542144",
+    "outreach/research.py": "a49dc90bc910c0b9a7d0a2af6ed11671070b944dac8ab59f5930af77ab0b9af1",
+    "outreach/worker.py": "4528a08da7c72c456b7695a6927937e970572a33d0ab3ebf123bdde1d4dff581",
+    "outreach/research_status.py": "94c8c1ff85f62e6c3ccf44b722c8bb2754ddf5ae7177aafbf83c533acc88166b",
+    "outreach/static/workflow.js": "ba983f60dbb37281f7d94c49f0ff6cbe732a7617d39931ad4e5c99e82bd001fa",
+    ".env.example": "63466df493c59c3ff7b5c53f62e15b8ca0b6abe1ad67935a28e452e41ffceba0",
+    "tests/test_crawler_optimization.py": "a64d6f6b109b27d2bf952ee0a59107f6940033f050b075f6cb348d15e2611184",
+    "tests/test_first_workflow.py": "f425a520db543e49d530ccb6138dd4fd6c842d05c85d83b181b0b408bce96046",
+    "scripts/verify_crawler_optimization_live.py": "8fcab85e52921c679b72b7663f438e0ff268155ed55cfc09b7ef61e12e30c8be"
+  },
+  "email_probes": 0,
+  "external_mail_sent": 0,
+  "limits": [
+    "No general speedup established",
+    "Three interrupted crawls; one robots-fetch HTTP 403",
+    "HTTP fallback roofing page is not a successful Chromium capture",
+    "No new published inbox versus baseline",
+    "All company/buyer/offer reviews remain pending",
+    "Final no-page retry propagation, sitemap partial handling and readout adjustments were unit/UI tested after the live process loaded"
+  ]
+}

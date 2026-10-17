@@ -1,0 +1,1799 @@
+{
+  "checked_at": 1791697417.4308968,
+  "live": true,
+  "fixtures": false,
+  "normal_dashboard": true,
+  "duration_seconds": 1561,
+  "source_eligible_prospects": 4,
+  "rejected_source_records": 1,
+  "current_official_pages": 112,
+  "rendered_official_pages": 112,
+  "usable_published_contacts": 5,
+  "excluded_contacts": 1,
+  "qualified_companies": 0,
+  "external_mail_sent": 0,
+  "approved_contacts": 0,
+  "message_states": [],
+  "private_configuration_unchanged": true,
+  "sending_disabled": true,
+  "paused": true,
+  "final_pilot_search_signal_budget": 10,
+  "initial_search_signal_budget": 40,
+  "crawl_page_budget": 30,
+  "rows": [
+    {
+      "id": 7,
+      "company": "Dentists in Leeds | mydentist",
+      "website": "https://www.mydentist.co.uk/",
+      "campaign": "A",
+      "state": "review",
+      "source_eligible": true,
+      "crawl_state": "partial",
+      "current_pages": 30,
+      "rendered_pages": 30,
+      "errors": {
+        "render": 30
+      },
+      "render_issues": {
+        "robots": 333,
+        "javascript_error": 115,
+        "resource_requests_pending_at_snapshot": 2,
+        "external_document_navigation": 2
+      },
+      "screenshots_desktop_mobile": true,
+      "contacts": [
+        {
+          "id": 4,
+          "email": "dataprotection@mydentist.co.uk",
+          "status": "suppressed",
+          "verification": "unverified",
+          "name": "",
+          "role": "",
+          "source_url": "https://www.mydentist.co.uk/contact-us"
+        },
+        {
+          "id": 5,
+          "email": "patientsupport@mydentist.co.uk",
+          "status": "new",
+          "verification": "unknown",
+          "name": "",
+          "role": "",
+          "source_url": "https://www.mydentist.co.uk/patient-information/customer-feedback"
+        }
+      ],
+      "usable_published_contacts": 1,
+      "excluded_contacts": 1,
+      "review_candidates": 3,
+      "source_url": "https://www.mydentist.co.uk/dentists/practices/leeds",
+      "research_notes": "Website research: partial; 30 saved pages, 30 issues, 501 URLs remaining. Confirm company, country, buyer role and selected opportunity; inspect the crawl report before making claims. Free service proposals use explicit public signals; review relevance, buyer fit and the proposed change.\nScreenshots: {\"desktop\": \"lead-7-1791696090-89f97f-desktop.png\", \"mobile\": \"lead-7-1791696090-89f97f-mobile.png\"}; render issues: 14",
+      "finding_previews": 1,
+      "pages": [
+        {
+          "url": "https://www.mydentist.co.uk/",
+          "sha256": "aedaf4d5ffca623446d304804711f15b53cec7f91f86d58868710c027646cc37"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/about-us",
+          "sha256": "7d5de9c17a8a912dd334ff1c0edd4436a93c3dcda0f2084554e7aa7ba1ada36a"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/contact-us",
+          "sha256": "ef98363534583e833c93074e15fc5c723c657b71d291f1b7fcf0eeaf4907077f"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/about-us/charitable-partners",
+          "sha256": "a9db6b8d04f6528b9e98e2df4a5bbbfba193381f72d1ea84c6410229855588a6"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/about-us/mydentist-foundation/",
+          "sha256": "a19530c1ea9b86e37d1cc6ea726b9b1b0e58ae124672da0269a7b174555d8ffe"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/about-us/company-information",
+          "sha256": "57b2457542b18e9ffd125eb10acaaf8fd733c3ab4bc379cc7c819277f19b1be0"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/about-us/news",
+          "sha256": "e6e356650166ee17618168c1f6acef381a20e3e53c730fab8d29da534506f4d3"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/customer-services/legal",
+          "sha256": "08c1cdbce7a1e41bdd10134ec64b1981b74a0a0b6ae206593819dd0bdca1b9b0"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/customer-services/your-privacy",
+          "sha256": "3af18e9d48ca0d3590b3eb10fd11a2357eae0293660e27b029baba6c04bc1fe2"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/customer-services/patient-privacy",
+          "sha256": "3bcf9441a2d789c41a5098e972f6dcf7a33320447637c859ae5326dd28607288"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/customer-services/cookie-policy",
+          "sha256": "a49c69d8d2ebfe1827072be8ef7cc0bc6eb39862ab9a7975cc01bdf8dcf594e2"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/customer-services/legal/document-store",
+          "sha256": "f100ab048a12c2ee4ea7503b31d7a8217bf06d26366b24d7d8511d617bbab57e"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/patient-information/customer-feedback",
+          "sha256": "d8694d42b8ea9a850a5ebb8859b2f315fdf73a44eedc95a5f9ee3c120b9b2c2b"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/dental-products",
+          "sha256": "a2be748b8261cf1cc5023a25f23e50dcb5b2d9d26708d37f70b9c5cf945afc8d"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/dental-products/brands/tepe",
+          "sha256": "e08920fa8836e3ee22889a087b510fddfc45c8c50fed1e0c394fa056f86a1a69"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/dental-products/brands",
+          "sha256": "05a43165cc64d760389466e152956078ced6a5c0f5d79fca76bb1e0367f55fa6"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/big-smiles-blog",
+          "sha256": "e90ca74c52f632bba86f62b65f4bc6ece9a5a62922b74d21bc8ece7c82560f05"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/big-smiles-blog/article/the-dental-blog/2026/10/09/world-mental-health-day---why-we-fear-the-dentist-and-what-can-help",
+          "sha256": "db80cfad22a671e3b95d95850fdd84851a0d5e6b1ea2590d175130ce5e716aee"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/big-smiles-blog/article/the-dental-blog/2024/07/31/practice-opening-stonebow-york",
+          "sha256": "ff9ffe39cc94c34edaaa27138a3c9252fd76982ea20b5e4950a8650f82f3e290"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/big-smiles-blog/article/the-dental-blog/2026/10/09/eat--drink-and-be-merry---dentist-offers-guidance-on-festive-foods-this-winter-season",
+          "sha256": "83504a01a97711388fd17420c0c552788ef238afb9c78a5545899c78a32206de"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/big-smiles-blog/article/the-dental-blog/2026/10/09/world-diabetes-day-2026---the-connection-between-diabetes-and-your-gum-health",
+          "sha256": "d2af36c45ea52c4706f50e9ad1e9b399483ba615b02f7a10b29983dcfdcd819b"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/big-smiles-blog/article/the-dental-blog/2026/10/09/6-signs-you-need-to-see-your-dentist",
+          "sha256": "2901cc9290b35171f20feda898a6528f2d89cb91e0a07d9ddd69b6ddfc261d07"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/big-smiles-blog/article/the-dental-blog/2026/10/09/mydentist-risbygate--bury-st-edmunds--proposes-relocation-to-new-practice",
+          "sha256": "85a7141973bb894877f12f5700f06708eed542f00cd8a786dbfd0d2b9a767778"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/dentists",
+          "sha256": "6ca25a0d401c05ae5a4123a77a223ff13d9e383b2f4237a28f04ef97b95e002f"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/careers",
+          "sha256": "29e8f98ca74372a9a65f1a42a3a1168e7dc546b73d83a272243d605483702246"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/dental-health",
+          "sha256": "a4b79e52c56090f351b64e54d9dd8017c11060785568905c9e1a5e477d21817f"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/patient-information",
+          "sha256": "860cef5b644a1c188dc7c85ebed0670a8c6b7419c9df1d40ceb3345f9b194c07"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/dental-professionals",
+          "sha256": "5683c609a60d7e8fc03bbba0fd3de7ae952a46bff23faa6900610341792822f9"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/dentists/request-appointment",
+          "sha256": "10bd2f5b477cabb24413475123401f8ee616499d4405322b3704d464fae7e82e"
+        },
+        {
+          "url": "https://www.mydentist.co.uk/patient-information/ways-to-pay/dental-finance",
+          "sha256": "660544ca95b9ebfe2fef359b828f7b93c06da0b412b56aea61f548c472a5e761"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "company": "Roofing Contractors Services, Roofing Contractors in India",
+      "website": "https://m.indiamart.com/",
+      "campaign": "A",
+      "state": "research_failed",
+      "source_eligible": false,
+      "crawl_state": "interrupted",
+      "current_pages": 11,
+      "rendered_pages": 11,
+      "errors": {
+        "render": 11
+      },
+      "render_issues": {
+        "mutating_or_post_request_requires_review": 136,
+        "javascript_error": 28,
+        "http_405": 3,
+        "robots": 14,
+        "resource_requests_pending_at_snapshot": 7,
+        "unowned_route_target_unavailable": 1,
+        "browser_context_recreated_after_failure": 1,
+        "external_document_navigation": 10
+      },
+      "screenshots_desktop_mobile": false,
+      "contacts": [],
+      "usable_published_contacts": 0,
+      "excluded_contacts": 0,
+      "review_candidates": 0,
+      "source_url": "https://m.indiamart.com/impcat/roofing-contractors-services.html",
+      "research_notes": "Official company identity rejected: this source is a platform/directory/marketplace, not an official business website.",
+      "finding_previews": 0,
+      "pages": [
+        {
+          "url": "https://m.indiamart.com/",
+          "sha256": "ad4bc1ef5387c29e641e017304b316c71cb4e33798560f4503c7e78abbfd48cf"
+        },
+        {
+          "url": "https://m.indiamart.com/impcat/share-market-tip-services.html",
+          "sha256": "8ba3c7a2a27c3801dcac0b8dc2936d96822604386202c401bb7bcc3d47cbc61e"
+        },
+        {
+          "url": "https://m.indiamart.com/impcat/labour-law-services.html",
+          "sha256": "80c6b70b973d1e9134a1b7f8bcdf926ba2fe8961483511b88a31d3103cbce438"
+        },
+        {
+          "url": "https://m.indiamart.com/impcat/legal-documentation-services.html",
+          "sha256": "a8a07beb7407e7147ff63f0b98c1081cc1bcb8af6c27fac07589568baf593e8c"
+        },
+        {
+          "url": "https://m.indiamart.com/impcat/compliance-service.html",
+          "sha256": "772b1b775dc3a3c502101bac891814b6a0fe3d336c86babbbfdd09b7513f1ead"
+        },
+        {
+          "url": "https://m.indiamart.com/impcat/cctv-installation-services.html",
+          "sha256": "5cb752f0240e0004ee9c570c5e08d34d688d228a3244ef0d2e9c332795a94f92"
+        },
+        {
+          "url": "https://m.indiamart.com/impcat/intraday-call-service.html",
+          "sha256": "858b3e44a5b79095f2ef9c257bc158e4e5cfcdaa3610dacb67df565a03928aed"
+        },
+        {
+          "url": "https://m.indiamart.com/designcollection-madhyapradesh/",
+          "sha256": "9cdc4d47a3db4f4369eeb9447a6b44859d9c9c3c4c561f394db272a1b74597e6"
+        },
+        {
+          "url": "https://m.indiamart.com/designcollection-madhyapradesh/profile.html",
+          "sha256": "afba9c21c8e7d2f6d4efe71d1a1ad123bbdd14028cfd3d1ed0cf9b3e8514d2b7"
+        },
+        {
+          "url": "https://m.indiamart.com/designcollection-madhyapradesh/testimonial.html",
+          "sha256": "363a1993a5d1a2e376022dcb737c337ee019b3a70b2b4fc172f78f703baac5e0"
+        },
+        {
+          "url": "https://m.indiamart.com/designcollection-madhyapradesh/photos.html",
+          "sha256": "b91f80d332da4fc323472f08b9cf36ed585606ddb12ccb4a95000b17fee18203"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "company": "Roofing Contractors in Raleigh, North Carolina | SmartRoof",
+      "website": "https://smartroof.com/",
+      "campaign": "A",
+      "state": "review",
+      "source_eligible": true,
+      "crawl_state": "partial",
+      "current_pages": 30,
+      "rendered_pages": 30,
+      "errors": {
+        "render": 30
+      },
+      "render_issues": {
+        "mutating_or_post_request_requires_review": 221,
+        "external_document_navigation": 39,
+        "http_403": 30,
+        "resource_requests_pending_at_snapshot": 30,
+        "javascript_error": 1,
+        "http_404": 1
+      },
+      "screenshots_desktop_mobile": true,
+      "contacts": [],
+      "usable_published_contacts": 0,
+      "excluded_contacts": 0,
+      "review_candidates": 1,
+      "source_url": "https://smartroof.com/location/raleigh-north-carolina/",
+      "research_notes": "Website research: partial; 30 saved pages, 30 issues, 24 URLs remaining. Confirm company, country, buyer role and selected opportunity; inspect the crawl report before making claims. Free service proposals use explicit public signals; review relevance, buyer fit and the proposed change.\nScreenshots: {\"desktop\": \"lead-9-1791696760-c354c4-desktop.png\", \"mobile\": \"lead-9-1791696760-c354c4-mobile.png\"}; render issues: 9",
+      "finding_previews": 2,
+      "pages": [
+        {
+          "url": "https://smartroof.com/",
+          "sha256": "a8fd33ca10f72f8fc27bcd5eb131fabdfc44ed199d3b0761457cefef9be36dd6"
+        },
+        {
+          "url": "https://smartroof.com/contact-us/",
+          "sha256": "fe7eb298dd320ae21a2d86fc3d8e52631bf80651c5079ae19915ed64f3ac5715"
+        },
+        {
+          "url": "https://smartroof.com/service/roofing/",
+          "sha256": "d46227e59f3681d3ddbd7234fbae2e05cc1cc60936c220c393f2c5810ae2eb2b"
+        },
+        {
+          "url": "https://smartroof.com/contact-us/contact-confirmation/",
+          "sha256": "965d572c8b3c02b2add8e098715636be2b64f84bb57e4239d00c957a28533ddc"
+        },
+        {
+          "url": "https://smartroof.com/referrals-team/",
+          "sha256": "2bab7bc85b851784f23c26a9f7eece05baaaf4fa04a8a3d42b55e85f23d9fde3"
+        },
+        {
+          "url": "https://smartroof.com/service/solar/",
+          "sha256": "9f328064b23d04a22d8b7e31d072891d9e4f019dd009d910b3a0d1e53020f7ad"
+        },
+        {
+          "url": "https://smartroof.com/service/roofing/warranty/claim/",
+          "sha256": "a3301c341a62af343556547cc04bfb2e77feada90e6d9e5ea6819193a14601ce"
+        },
+        {
+          "url": "https://smartroof.com/book-inspection/",
+          "sha256": "8fade0a33fc68c522435b5cf43265f94fd78a58476a70b6ac65656386ae99ed8"
+        },
+        {
+          "url": "https://smartroof.com/service/roofing/storm-damage/",
+          "sha256": "7d0e5d43908e03b52141906fb925505ad005a9e4cdaba0c460b0dc800fd09bf1"
+        },
+        {
+          "url": "https://smartroof.com/service/roofing/roof-replacement/",
+          "sha256": "967e831910c69324003e197a90a29ad5203b97b8099415cb4ba50b71ff056701"
+        },
+        {
+          "url": "https://smartroof.com/company/customer-stories/",
+          "sha256": "b613e13b7661d2ae5beb6d156ea8bcf45ee7b0e59355fb31d22410e47c6057a1"
+        },
+        {
+          "url": "https://smartroof.com/company/",
+          "sha256": "8713bd8d43c8a5720891845b78db6222947caa40b1a28e108d26d5b49656e498"
+        },
+        {
+          "url": "https://smartroof.com/company/careers/",
+          "sha256": "3eade5344d077daac5108e785c31ad62b15ece594556e14b290151df647ccf0a"
+        },
+        {
+          "url": "https://smartroof.com/referrals/",
+          "sha256": "45c392ecbac67eef877677d8291a40a7c41295662aa13e5446b01065139db73d"
+        },
+        {
+          "url": "https://smartroof.com/make-a-payment/",
+          "sha256": "010d74e2fe5160d2a16c07b9eda82bc39dde11b8eb5fa7b022707be077d751d2"
+        },
+        {
+          "url": "https://smartroof.com/company/our-story/",
+          "sha256": "f848f4d30a75dfe447806adef275f0d7b9332eb9a47c9a831af417d21d5d493c"
+        },
+        {
+          "url": "https://smartroof.com/company/awards/",
+          "sha256": "e33bdf86c0fd5b0d5ac9b1d6da06116a1bb3104460dd20940677137785a9ab6f"
+        },
+        {
+          "url": "https://smartroof.com/company/areas-we-serve/",
+          "sha256": "2f075114a97877569bc93d96a9c68c5d71344ad33a6ee54928478398eb316b5b"
+        },
+        {
+          "url": "https://smartroof.com/location/reston-virginia/",
+          "sha256": "a49946a3d9dd9fb5a6fe83e29e8e38205afed2cfd0dbbc4f3314fa0edda19fa4"
+        },
+        {
+          "url": "https://smartroof.com/location/richmond-virginia/",
+          "sha256": "92f06f4f1b685f52dbc98bf937a4514b2e0a1a83fe18a658c2622cfc531ec4ac"
+        },
+        {
+          "url": "https://smartroof.com/location/philadelphia-pennsylvania/",
+          "sha256": "92717c7030aee2b36f8f7627b6b28c9a9b866f99ce98fddec29b8515d95bc1ae"
+        },
+        {
+          "url": "https://smartroof.com/location/newark-new-jersey/",
+          "sha256": "a5034676a7dd84fee2a3147e3066aa05e763a16fda00d5aa56607d0cf579b272"
+        },
+        {
+          "url": "https://smartroof.com/location/pittsburgh-pennsylvania/",
+          "sha256": "5cf2118d7a07f0c2ef36256df57c51cc32dc56260e54b51616c7165e0b371352"
+        },
+        {
+          "url": "https://smartroof.com/location/washington-dc/",
+          "sha256": "cf99b8140f5286014bcc92244fa7d3f8078b427c02d428a6ede53c894434723f"
+        },
+        {
+          "url": "https://smartroof.com/location/wilmington-delaware/",
+          "sha256": "b54d661f48001dcd8932fa5192da1dd56ab9e8d1b11a7ae4aef83884f53cfdaf"
+        },
+        {
+          "url": "https://smartroof.com/location/baltimore-md/",
+          "sha256": "7250be299b92ee2133895b0f46d3bf86bdf635db0efe38e9d01345e38c683186"
+        },
+        {
+          "url": "https://smartroof.com/location/raleigh-north-carolina/",
+          "sha256": "f47e8f2c35f5d4eb0199984c6233535774a55432a13096f5650de708c2f0c5d0"
+        },
+        {
+          "url": "https://smartroof.com/frequently-asked-questions/",
+          "sha256": "94759f0ee69f660fbfa1274a49c7db3eb5e2a433496f3da41d898fc1b2b9ba48"
+        },
+        {
+          "url": "https://smartroof.com/privacy-policy/",
+          "sha256": "97b9bf0c33a503e0178b4c7778ca408e89c3daef87f7defeeead85057118dfa6"
+        },
+        {
+          "url": "https://smartroof.com/terms-conditions/",
+          "sha256": "8e45c8e103d80a274e6918bd99c37f1737586344ec993b54b37669ef4af21862"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "company": "Skindays | Curated Indie Skincare, Haircare & Wellness UK",
+      "website": "https://www.skindays.com/",
+      "campaign": "B",
+      "state": "review",
+      "source_eligible": true,
+      "crawl_state": "partial",
+      "current_pages": 24,
+      "rendered_pages": 24,
+      "errors": {
+        "render": 24,
+        "HTTPStatusError": 3,
+        "not_found": 3
+      },
+      "render_issues": {
+        "mutating_or_post_request_requires_review": 1400,
+        "robots": 664,
+        "javascript_error": 227,
+        "external_document_navigation": 27,
+        "Resource exceeds configured size limit": 2,
+        "http_403": 23,
+        "resource_requests_pending_at_snapshot": 7,
+        "http_429": 94,
+        "http_404": 1
+      },
+      "screenshots_desktop_mobile": true,
+      "contacts": [
+        {
+          "id": 6,
+          "email": "hello@skindays.com",
+          "status": "new",
+          "verification": "unknown",
+          "name": "",
+          "role": "",
+          "source_url": "https://www.skindays.com/pages/contact"
+        },
+        {
+          "id": 7,
+          "email": "info@skindays.com",
+          "status": "new",
+          "verification": "unknown",
+          "name": "",
+          "role": "",
+          "source_url": "https://www.skindays.com/pages/contact"
+        },
+        {
+          "id": 8,
+          "email": "partnerships@skindays.com",
+          "status": "new",
+          "verification": "unknown",
+          "name": "",
+          "role": "",
+          "source_url": "https://www.skindays.com/pages/contact"
+        },
+        {
+          "id": 9,
+          "email": "press@skindays.com",
+          "status": "new",
+          "verification": "unknown",
+          "name": "",
+          "role": "",
+          "source_url": "https://www.skindays.com/pages/contact"
+        }
+      ],
+      "usable_published_contacts": 4,
+      "excluded_contacts": 0,
+      "review_candidates": 1,
+      "source_url": "https://www.skindays.com/",
+      "research_notes": "Website research: partial; 24 saved pages, 30 issues, 818 URLs remaining. Confirm company, country, buyer role and selected opportunity; inspect the crawl report before making claims. Free service proposals use explicit public signals; review relevance, buyer fit and the proposed change.\nScreenshots: {\"desktop\": \"lead-10-1791697030-876cae-desktop.png\", \"mobile\": \"lead-10-1791697030-876cae-mobile.png\"}; render issues: 121",
+      "finding_previews": 1,
+      "pages": [
+        {
+          "url": "https://www.skindays.com/",
+          "sha256": "f7ceb0df6fff7c18d3fc6913493b2f6cbe5d4cbf6a93a7d980ab0a0b4c06d3cf"
+        },
+        {
+          "url": "https://www.skindays.com/pages/about-us",
+          "sha256": "e430be5baa80c3ce87998378e23edc3006857abcee35a10ac17311ea6e78215d"
+        },
+        {
+          "url": "https://www.skindays.com/pages/contact",
+          "sha256": "1e56bcff65038f012d2c643da6195528808f4f579171ef6c9aea352a51f263cc"
+        },
+        {
+          "url": "https://www.skindays.com/policies/terms-of-service",
+          "sha256": "34e7e584d8ea534c0487a32316291b1db0c7d6626201ba598ff0fbb744da605b"
+        },
+        {
+          "url": "https://www.skindays.com/pages/faq",
+          "sha256": "3299eeaedb2e8a666254141c2bb4e542ff9fcf94637b4dbce874f04597e7663a"
+        },
+        {
+          "url": "https://www.skindays.com/collections/new-in",
+          "sha256": "e7989d67aa3e81f91e19a90488dd6064007b3872c4dca24e3cf715b26b916c78"
+        },
+        {
+          "url": "https://www.skindays.com/collections/autumn-wardrobe",
+          "sha256": "7c056149d86ab260d72760b510ccbd132eae0ff0d82d5fe17418c4854b82c0c9"
+        },
+        {
+          "url": "https://www.skindays.com/collections/cleansers",
+          "sha256": "d51296fe3180772cae891f51a9363d64c0c11faf0e8d4937c72c7ec6c5738c82"
+        },
+        {
+          "url": "https://www.skindays.com/blogs/skin-diaries",
+          "sha256": "bc05bf62fec8c38507f5017e1bd92ff9d98aba5b0980bf99bb6bdbcbfa1753cd"
+        },
+        {
+          "url": "https://www.skindays.com/blogs/skin-diaries/everyones-talking-about-korean-skincare-and-for-a-good-reason",
+          "sha256": "5aa2ba92762cd2f23a8e3b2327900f4798b9ab75d3ea5522d14752dfd39fedaf"
+        },
+        {
+          "url": "https://www.skindays.com/blogs/skin-diaries/why-treating-hormonal-acne-is-about-more-than-just-breakouts",
+          "sha256": "ebfe0f04162152d68f6e19b66ae724f1c5827efe6abec7eba9a1ad0f9c038df4"
+        },
+        {
+          "url": "https://www.skindays.com/blogs/skin-diaries/why-sleep-is-the-most-powerful-skin-tool",
+          "sha256": "27fb326ecb5eb30d5fe1f219076827233202b297891196839f1c824f096fa5e8"
+        },
+        {
+          "url": "https://www.skindays.com/blogs/skin-diaries/tagged/sunday-self-care",
+          "sha256": "e0c4ebb53eae637c698a5b68b636107428a89d3148633ce6a41f5ce8812aad49"
+        },
+        {
+          "url": "https://www.skindays.com/blogs/skin-diaries/your-summer-energy-reset",
+          "sha256": "b5e6776f0cdc7ec3bc6d3693c696d1fe015be719acf93b3219525c827b9bdf2c"
+        },
+        {
+          "url": "https://www.skindays.com/blogs/skin-diaries/gut-imbalances-skin-health",
+          "sha256": "cef6a17f5e392999aa316695970aadb63d84a46d7b06496f87d6c0c179d6c86c"
+        },
+        {
+          "url": "https://www.skindays.com/pages/newsletter",
+          "sha256": "81ef5ad5afc07ff4acc39d339a3db1ddb33883a87e13572103a19d77f46dbad3"
+        },
+        {
+          "url": "https://www.skindays.com/pages/autumn-wardrobe",
+          "sha256": "830d1560bdee5dfd9891e7400327bfde15d3d02c423c16cbe4e8731e59eb176b"
+        },
+        {
+          "url": "https://www.skindays.com/pages/k-beauty",
+          "sha256": "bdde06d641370ff16d3dbc5c633fcebc14f829b4943203e1ebc7c3bfa6699bc7"
+        },
+        {
+          "url": "https://www.skindays.com/pages/find-your-match",
+          "sha256": "7d4e6dc0a7590e81a34057a9b2d5d7a770115708b8d46c9cf41d52e4f954f99c"
+        },
+        {
+          "url": "https://www.skindays.com/pages/acne-blemishes",
+          "sha256": "2f08ff10758ae0c45f73d098373e36581f9dd1f1ec1dac5e91baaba12caee0bc"
+        },
+        {
+          "url": "https://www.skindays.com/pages/anti-ageing",
+          "sha256": "4872a279ee6be0c0aaf3e9b20ba1a21fff13da41d48805080a628a9cafcf30a0"
+        },
+        {
+          "url": "https://www.skindays.com/pages/dryness-dehydration",
+          "sha256": "14eb5f1f99c2af99c0b8dcdd7ff364924d84db55ea76e07665c61c477b4cb579"
+        },
+        {
+          "url": "https://www.skindays.com/pages/oiliness-pores",
+          "sha256": "4df7b8d492e4ac2f6e4f7ef85f2f12d3bfcd7f86895c1e62bdaffa8dd61f5a13"
+        },
+        {
+          "url": "https://www.skindays.com/pages/hyperpigmentation",
+          "sha256": "7cd9d49b285ba6b1b6485ce32de230e9d127fba962235ef8c2a3d09056ec9cee"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "company": "Order Coffee Online | Portland Coffee Roasters",
+      "website": "https://www.portlandcoffeeroasters.com/",
+      "campaign": "B",
+      "state": "review",
+      "source_eligible": true,
+      "crawl_state": "partial",
+      "current_pages": 28,
+      "rendered_pages": 28,
+      "errors": {
+        "render": 27,
+        "ValueError": 1
+      },
+      "render_issues": {
+        "robots": 88,
+        "mutating_or_post_request_requires_review": 654,
+        "external_document_navigation": 4,
+        "javascript_error": 84,
+        "Resource exceeds configured size limit": 1,
+        "resource_requests_pending_at_snapshot": 7,
+        "http_404": 27
+      },
+      "screenshots_desktop_mobile": true,
+      "contacts": [],
+      "usable_published_contacts": 0,
+      "excluded_contacts": 0,
+      "review_candidates": 2,
+      "source_url": "https://www.portlandcoffeeroasters.com/collections/shop-coffee",
+      "research_notes": "Website research: partial; 28 saved pages, 28 issues, 106 URLs remaining. Confirm company, country, buyer role and selected opportunity; inspect the crawl report before making claims. Free service proposals use explicit public signals; review relevance, buyer fit and the proposed change.\nScreenshots: {\"desktop\": \"lead-11-1791697296-3aced2-desktop.png\", \"mobile\": \"lead-11-1791697296-3aced2-mobile.png\"}; render issues: 31",
+      "finding_previews": 2,
+      "pages": [
+        {
+          "url": "https://www.portlandcoffeeroasters.com/",
+          "sha256": "80d0f784785f213c183682f20522cbf6643024552cb7c647452a4b41a88a9ea6"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/pages/about-us",
+          "sha256": "2deb38fa6af3a37733abf64d3c784d6c194cd198dc4e41d4a78b36add04d8ef1"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/collections/shop",
+          "sha256": "a56b9cfdf328c7678d524f9aa4b861944a772df52252f4e044bc85c12e74930a"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/pages/contact",
+          "sha256": "e66841349c6ea7def8979f95c4c4be3c8c93ff374d05e2de2270558c70180e79"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/pages/faq",
+          "sha256": "3ae2a0aaad06def3fe84c7a6b64567561af2015febd0e1530db21cc18867ffca"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/products/endless-summer",
+          "sha256": "1fc74ff6ef34bf1e6b7063681b71271efb4be0808bf82e4bdcd0d795549e0dff"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/products/opbeans",
+          "sha256": "48696b3d0049ad1cbb5b06f85dcdc61a2dd88e649813e6720bb325b578eeb0ee"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/products/pcr-coffee-bean-necklace-antique-bronze",
+          "sha256": "cbb72d2c44253f1573327311d706eb91b50f40e1821066bf58decede047de0ba"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/products/anniversary-roast",
+          "sha256": "5e4d0f0d20ca1b5bcf4decb457ef4f4bc01042f0893805ca9bb0fdc7659c0000"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/pages/news",
+          "sha256": "4a1d0d656c695936128517b83112724bf581a08dfd510d441f683f26e8998ebd"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/pages/cafes",
+          "sha256": "68c08af8d5b56ab55fc270981e534633a0e76978581b0d4b29cf25b79fd752d1"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/pages/wholesale",
+          "sha256": "35cfb3029cc6a3026a5dfd393adc2fd34ab87398542893d06fed7d64283ccfba"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/search",
+          "sha256": "935007bd86e015191eda1b31822bd73b2bb2b4a0acb32523d3d04c2f0c9c40f1"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/pages/find-our-coffee",
+          "sha256": "d98e392dcce579bc861c88c64310b37df5048303d1b79262ea23305a1e3fa8e3"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/pages/privacy-policy",
+          "sha256": "df01dcb288d55a38cd820930b2184985f789ecb3b9df23b33439075599e7ba07"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/pages/data-sharing-opt-out",
+          "sha256": "1695bb79a083c51d67d3e473093ea0da90cc6face9f9a26a4a68d8a56aff09e6"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/pages/brew-guides",
+          "sha256": "7a12d673c5b1817feeae70855256c7949ab9af078666b158dcafabc268d05626"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/blogs/brew-guides/kalita-wave",
+          "sha256": "8dd6c6c304e44276203502271330b1fecf03287e1a000ac7125b6c7fe45d551c"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/blogs/brew-guides/french-press",
+          "sha256": "400f7a1d43870f51573ecd366dade7ca0e9a76c00c3ae6cb6283c414c25809d1"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/blogs/brew-guides/drip-machine",
+          "sha256": "5bb654c6a0b160717739834a7869cfb475648fb231159c1040c64ac7cad0ff90"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/blogs/brew-guides/chemex",
+          "sha256": "0a9e765b01b152e74c6410c00bab182bac90a50eb37462b92bafd0a93028f9ee"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/pages/coldbrew",
+          "sha256": "37c66362f14215b892e9ec199ab13ac9d6321bb7869f5173fd5b2918593e2eaa"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/agents.md",
+          "sha256": "099fa14b7b4d9f8ea6c894ec3b2a9f8afcf01ff4a7111c66c72c89c4a78b1464"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/pages/jobs",
+          "sha256": "2dfd95370c93e4a5290228eae51458fa4d47b6042c29f9bbf94c9d7d9c1c8de4"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/collections/all",
+          "sha256": "89eaf8492b49150101fa73ebe2bcd8fe9d25e177f95d3f265d4d9919e57f2feb"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/products/30th-anniversary-postcard",
+          "sha256": "975251fbce862eb4097b4585c2fe7e75f581c783accba669bfb90aa07c7548ff"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/products/best-sellers-subscription",
+          "sha256": "33b1835f466d9cb040e04225577d268856a6781acf205512f3ba72b3869f7b26"
+        },
+        {
+          "url": "https://www.portlandcoffeeroasters.com/products/coffeebeanpin",
+          "sha256": "d93f47f07b38f3312001a36ee632497be5097a5713fa5154c47a813c89ed53ce"
+        }
+      ]
+    }
+  ],
+  "jobs": [
+    {
+      "id": 8,
+      "kind": "discover",
+      "state": "done",
+      "attempts": 1,
+      "error": "",
+      "created_at": 1791695856.818111
+    },
+    {
+      "id": 9,
+      "kind": "discover",
+      "state": "done",
+      "attempts": 3,
+      "error": "",
+      "created_at": 1791695856.8288796
+    },
+    {
+      "id": 10,
+      "kind": "discover",
+      "state": "done",
+      "attempts": 1,
+      "error": "",
+      "created_at": 1791695856.838687
+    },
+    {
+      "id": 11,
+      "kind": "discover",
+      "state": "done",
+      "attempts": 1,
+      "error": "",
+      "created_at": 1791695856.849046
+    },
+    {
+      "id": 12,
+      "kind": "research",
+      "state": "done",
+      "attempts": 1,
+      "error": "",
+      "created_at": 1791695858.7430158
+    },
+    {
+      "id": 13,
+      "kind": "verify",
+      "state": "failed",
+      "attempts": 0,
+      "error": "Excluded before provider access: dedicated nonbuyer inbox",
+      "created_at": 1791695887.0122514
+    },
+    {
+      "id": 14,
+      "kind": "verify",
+      "state": "failed",
+      "attempts": 1,
+      "error": "HTTPStatusError",
+      "created_at": 1791695964.1743028
+    },
+    {
+      "id": 15,
+      "kind": "screenshot",
+      "state": "done",
+      "attempts": 1,
+      "error": "",
+      "created_at": 1791696090.6619046
+    },
+    {
+      "id": 16,
+      "kind": "research",
+      "state": "failed",
+      "attempts": 3,
+      "error": "Platform or directory is not an official company website",
+      "created_at": 1791696160.4538524
+    },
+    {
+      "id": 17,
+      "kind": "research",
+      "state": "done",
+      "attempts": 1,
+      "error": "",
+      "created_at": 1791696302.331795
+    },
+    {
+      "id": 18,
+      "kind": "research",
+      "state": "done",
+      "attempts": 1,
+      "error": "",
+      "created_at": 1791696494.521014
+    },
+    {
+      "id": 19,
+      "kind": "research",
+      "state": "done",
+      "attempts": 1,
+      "error": "",
+      "created_at": 1791696663.4468715
+    },
+    {
+      "id": 20,
+      "kind": "screenshot",
+      "state": "done",
+      "attempts": 1,
+      "error": "",
+      "created_at": 1791696759.7876503
+    },
+    {
+      "id": 21,
+      "kind": "verify",
+      "state": "failed",
+      "attempts": 1,
+      "error": "HTTPStatusError",
+      "created_at": 1791696815.6092327
+    },
+    {
+      "id": 22,
+      "kind": "verify",
+      "state": "failed",
+      "attempts": 1,
+      "error": "HTTPStatusError",
+      "created_at": 1791696815.6327252
+    },
+    {
+      "id": 23,
+      "kind": "verify",
+      "state": "failed",
+      "attempts": 1,
+      "error": "HTTPStatusError",
+      "created_at": 1791696815.6559272
+    },
+    {
+      "id": 24,
+      "kind": "verify",
+      "state": "failed",
+      "attempts": 1,
+      "error": "HTTPStatusError",
+      "created_at": 1791696815.6814342
+    },
+    {
+      "id": 25,
+      "kind": "screenshot",
+      "state": "done",
+      "attempts": 1,
+      "error": "",
+      "created_at": 1791697029.8721166
+    },
+    {
+      "id": 26,
+      "kind": "screenshot",
+      "state": "done",
+      "attempts": 1,
+      "error": "",
+      "created_at": 1791697296.0248954
+    }
+  ],
+  "searches": [
+    {
+      "query": "dental practice Leeds UK book appointment",
+      "campaign": "A",
+      "country_hint": "UK",
+      "lead_ids": [
+        7
+      ],
+      "queries": [
+        "dental practice Leeds UK book appointment",
+        "site:linkedin.com/company/ dental practice Leeds UK book appointment",
+        "site:x.com dental practice Leeds UK book appointment",
+        "site:peopleperhour.com dental practice Leeds UK book appointment",
+        "site:clutch.co dental practice Leeds UK book appointment",
+        "site:crunchbase.com dental practice Leeds UK book appointment",
+        "site:facebook.com dental practice Leeds UK book appointment",
+        "site:instagram.com dental practice Leeds UK book appointment",
+        "site:google.com/maps/ dental practice Leeds UK book appointment"
+      ],
+      "signal_count": 22,
+      "public_snapshot_states": {
+        "robots_denied": 15,
+        "captured": 1,
+        "unavailable": 6
+      },
+      "engine_reports": [
+        {
+          "query": "dental practice Leeds UK book appointment",
+          "engine_issues": [
+            [
+              "brave",
+              "too many requests"
+            ],
+            [
+              "google",
+              "access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:linkedin.com/company/ dental practice Leeds UK book appointment",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:x.com dental practice Leeds UK book appointment",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:peopleperhour.com dental practice Leeds UK book appointment",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:clutch.co dental practice Leeds UK book appointment",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:crunchbase.com dental practice Leeds UK book appointment",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:facebook.com dental practice Leeds UK book appointment",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:instagram.com dental practice Leeds UK book appointment",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:google.com/maps/ dental practice Leeds UK book appointment",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        }
+      ],
+      "errors": []
+    },
+    {
+      "query": "roofing contractor Raleigh North Carolina contact",
+      "campaign": "A",
+      "country_hint": "US",
+      "lead_ids": [
+        9
+      ],
+      "queries": [
+        "roofing contractor Raleigh North Carolina contact United States",
+        "site:linkedin.com/company/ roofing contractor Raleigh North Carolina contact United States",
+        "site:x.com roofing contractor Raleigh North Carolina contact United States",
+        "site:peopleperhour.com roofing contractor Raleigh North Carolina contact United States",
+        "site:clutch.co roofing contractor Raleigh North Carolina contact United States",
+        "site:crunchbase.com roofing contractor Raleigh North Carolina contact United States",
+        "site:facebook.com roofing contractor Raleigh North Carolina contact United States",
+        "site:instagram.com roofing contractor Raleigh North Carolina contact United States",
+        "site:google.com/maps/ roofing contractor Raleigh North Carolina contact United States"
+      ],
+      "signal_count": 10,
+      "public_snapshot_states": {
+        "robots_denied": 9,
+        "unavailable": 1
+      },
+      "engine_reports": [
+        {
+          "query": "roofing contractor Raleigh North Carolina contact United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:linkedin.com/company/ roofing contractor Raleigh North Carolina contact United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:x.com roofing contractor Raleigh North Carolina contact United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:peopleperhour.com roofing contractor Raleigh North Carolina contact United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:clutch.co roofing contractor Raleigh North Carolina contact United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:crunchbase.com roofing contractor Raleigh North Carolina contact United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:facebook.com roofing contractor Raleigh North Carolina contact United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:instagram.com roofing contractor Raleigh North Carolina contact United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:google.com/maps/ roofing contractor Raleigh North Carolina contact United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        }
+      ],
+      "errors": []
+    },
+    {
+      "query": "independent skincare brand UK shop",
+      "campaign": "B",
+      "country_hint": "UK",
+      "lead_ids": [
+        10
+      ],
+      "queries": [
+        "independent skincare brand UK shop",
+        "site:linkedin.com/company/ independent skincare brand UK shop",
+        "site:x.com independent skincare brand UK shop",
+        "site:peopleperhour.com independent skincare brand UK shop",
+        "site:clutch.co independent skincare brand UK shop",
+        "site:crunchbase.com independent skincare brand UK shop",
+        "site:facebook.com independent skincare brand UK shop",
+        "site:instagram.com independent skincare brand UK shop",
+        "site:google.com/maps/ independent skincare brand UK shop"
+      ],
+      "signal_count": 10,
+      "public_snapshot_states": {
+        "robots_denied": 8,
+        "unavailable": 2
+      },
+      "engine_reports": [
+        {
+          "query": "independent skincare brand UK shop",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:linkedin.com/company/ independent skincare brand UK shop",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:x.com independent skincare brand UK shop",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:peopleperhour.com independent skincare brand UK shop",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:clutch.co independent skincare brand UK shop",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:crunchbase.com independent skincare brand UK shop",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:facebook.com independent skincare brand UK shop",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:instagram.com independent skincare brand UK shop",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:google.com/maps/ independent skincare brand UK shop",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        }
+      ],
+      "errors": []
+    },
+    {
+      "query": "coffee roaster Portland Oregon shop",
+      "campaign": "B",
+      "country_hint": "US",
+      "lead_ids": [
+        11
+      ],
+      "queries": [
+        "coffee roaster Portland Oregon shop United States",
+        "site:linkedin.com/company/ coffee roaster Portland Oregon shop United States",
+        "site:x.com coffee roaster Portland Oregon shop United States",
+        "site:peopleperhour.com coffee roaster Portland Oregon shop United States",
+        "site:clutch.co coffee roaster Portland Oregon shop United States",
+        "site:crunchbase.com coffee roaster Portland Oregon shop United States",
+        "site:facebook.com coffee roaster Portland Oregon shop United States",
+        "site:instagram.com coffee roaster Portland Oregon shop United States",
+        "site:google.com/maps/ coffee roaster Portland Oregon shop United States"
+      ],
+      "signal_count": 10,
+      "public_snapshot_states": {
+        "robots_denied": 8,
+        "unavailable": 2
+      },
+      "engine_reports": [
+        {
+          "query": "coffee roaster Portland Oregon shop United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "Suspended: access denied"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:linkedin.com/company/ coffee roaster Portland Oregon shop United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:x.com coffee roaster Portland Oregon shop United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:peopleperhour.com coffee roaster Portland Oregon shop United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:clutch.co coffee roaster Portland Oregon shop United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ],
+            [
+              "yahoo",
+              "parsing error"
+            ]
+          ]
+        },
+        {
+          "query": "site:crunchbase.com coffee roaster Portland Oregon shop United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:facebook.com coffee roaster Portland Oregon shop United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:instagram.com coffee roaster Portland Oregon shop United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:google.com/maps/ coffee roaster Portland Oregon shop United States",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "limits": [
+    "Crawl completion remains partial when page/depth/render/robots limits apply.",
+    "A published inbox is not a verified mailbox or a confirmed relevant buyer.",
+    "The local Reacher syntax endpoint returned HTTP 404; no safe mailbox verdict established.",
+    "LinkedIn/X and other public platforms can return inaccessible/stale/ambiguous signals.",
+    "No qualified country/buyer/offer review, sequence approval or sending is fabricated."
+  ],
+  "fixes": [
+    "Privacy/security/automated inbox filtering and historical-contact probe guard.",
+    "Marketplace exclusion in discovery, CSV/imports, research, ownership and qualification.",
+    "Worker recovery marks interrupted captures honestly while retaining their evidence."
+  ],
+  "source_hashes": {
+    "outreach/aftercare.py": "6b6e76d55976bd8c5a512bf1bd2814041fa5d4f89a84e68a46fc4b0d276888ff",
+    "outreach/app.py": "5e033610a553bead65a695706a440a585c390361b50cfd1cb75fed26d8562a58",
+    "outreach/auth.py": "5ffc7139302a48e781bc9405a12654bcf66a4d4ab475d5da3c58b07088073262",
+    "outreach/browser.py": "3d7e98374e877eff00f360458ceb9168b86b4714226e67054b3837fce828d014",
+    "outreach/campaigns.py": "daaaf488e10831f7eb34aa5b0d6222acad57b8c7275f54bcfe8f82b4398e37b2",
+    "outreach/config.py": "f92b45487dd58bfabc3c54d24f9d6ba708438519f55c499cb81ab57182542144",
+    "outreach/db.py": "72a87d03d95715dda459d059ea580fd91091823e25647be1a7861786126d2d2b",
+    "outreach/deliverables.py": "9f3dca60b7475ad830dfac6ff82f7f1721e9f2acd673f21e0f2043fbfc4fb9e5",
+    "outreach/discovery.py": "d44d48a2255115f0d96719c143391d436619011ab90db75a81885883cabdb0e6",
+    "outreach/finance.py": "78c1c554d62dbc3287d2f07e5b68d93c8f36f220eb89f4a53ec9c725fbefd770",
+    "outreach/learning.py": "ad7339e35afd033c1a142686074bf624d21fcd2ac77367bc97956867f5f5040c",
+    "outreach/mail.py": "796f65d9457b57f3c7a765f4f0bb832dd176ade921c6c449f929e935b9473993",
+    "outreach/offers.py": "515774b913ec0cb838f396ffb95d3882b67140087498670eea41f5cd5da2cffb",
+    "outreach/opportunities.py": "79f66f359da183a46df053dd18c5eb2b30bf0ea42d9cc0cb49e5f36325848af5",
+    "outreach/performance.py": "ab5d54c584b3db9b562e717ef0ecca8f7815c93a090eeca65c58351094c538ff",
+    "outreach/preferences.py": "3e074cf6b225b2c1a4b31ef46bebf9d3de41d0b5bac2192bb660a91af7a90452",
+    "outreach/priorities.py": "38dd83447f538a542da949ce753e458b4b2ee0443de7688e22be2c5b7afb9419",
+    "outreach/profiles.py": "f8e52785faade5b323560aa6ccfb5974b45544d76b2953a5afa5d0ffabc4d46f",
+    "outreach/providers.py": "28dc0b312a30b643b8f4daf0898c4d41406222ae78bbec9e532a0e2b4f578966",
+    "outreach/research.py": "3b99980a799c6c73f55670dd266a747a0d911fb886bb97bb09a7ac952ccaf26c",
+    "outreach/research_status.py": "94c8c1ff85f62e6c3ccf44b722c8bb2754ddf5ae7177aafbf83c533acc88166b",
+    "outreach/sales.py": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c",
+    "outreach/sequence.py": "0cf282c76e684b39d5558404b68a58c37802362b64ea5103fc0b8687a5a162e6",
+    "outreach/web.py": "1f9ceb569d55766842e0cdcdd5276baef8abee567e2c4dbb4684098a535c705f",
+    "outreach/worker.py": "4528a08da7c72c456b7695a6927937e970572a33d0ab3ebf123bdde1d4dff581",
+    "outreach/workflow.py": "82519fe7e6d1f5cf4901b514a491652f3b84927594bf40b650ab569fb206a412",
+    "outreach/workflow_detail.py": "d07fcad8022c88f1536edb94423fd32c9c0dea2c9ce1172d157734bd1d6b8022",
+    "outreach/__init__.py": "ab294c3bf5d7f6d1721dc713a055a57d710ace1e738efcf93235f106cc46043f"
+  }
+}

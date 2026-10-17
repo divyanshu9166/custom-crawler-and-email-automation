@@ -1,0 +1,262 @@
+{
+  "checked_at": 1791638456.8992581,
+  "browser_hash_at_start": "43241eedd13b4f906ed1f71602b7a5a8fae51f32a7274819f598805d338f6b64",
+  "runtime_versions": {
+    "python": "3.14.7",
+    "playwright": "1.63.0"
+  },
+  "previous_goldstein_result": {
+    "saved_pages": 30,
+    "rendered_pages": 14,
+    "later_render_start_failures": 15,
+    "source_run": "data/benchmark-retries/run-20261010-092226-UTC-420b83"
+  },
+  "current_results": [
+    {
+      "company": "Goldstein Heather Architecture",
+      "website": "https://www.goldsteinheather.co.uk/",
+      "attempt_finished": true,
+      "job_error": "TimeoutError",
+      "saved_pages": 25,
+      "rendered_pages": 25,
+      "recovery_observations": [
+        {
+          "url": "https://www.goldsteinheather.co.uk/projects/the-red-lion-biggleswade/",
+          "issues": [
+            {
+              "url": "https://www.goldsteinheather.co.uk/wp-content/themes/goldstein-heather/fonts/Grtsk-Regular.woff",
+              "reason": "unowned_route_target_unavailable"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "30bb1af53b270b1d4433ed6c572cb2bc7f70eb220993ac970670ec5eb6e23389"
+        },
+        {
+          "url": "https://www.goldsteinheather.co.uk/projects/lion-mews-biggleswade/",
+          "issues": [
+            {
+              "url": "https://www.goldsteinheather.co.uk/projects/lion-mews-biggleswade/",
+              "reason": "browser_context_recreated_after_failure"
+            },
+            {
+              "url": "https://www.goldsteinheather.co.uk/wp-content/themes/goldstein-heather/fonts/Grtsk-Regular.woff",
+              "reason": "unowned_route_target_unavailable"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "1acb9d2dc9ad9def8647fbf91f0e56a56544212a2e2dfb24b75f7b27650f3145"
+        },
+        {
+          "url": "https://www.goldsteinheather.co.uk/projects/west-london-house-chiswick/",
+          "issues": [
+            {
+              "url": "https://www.goldsteinheather.co.uk/projects/west-london-house-chiswick/",
+              "reason": "browser_context_recreated_after_failure"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "0a0f99907005b05e88abe0abf4c41f3fadcf85e1ed9bb18329c9eaaf6ac8fc3f"
+        },
+        {
+          "url": "https://www.goldsteinheather.co.uk/projects/elmfield-bromley/",
+          "issues": [
+            {
+              "url": "https://www.goldsteinheather.co.uk/wp-content/themes/goldstein-heather/fonts/Grtsk-Regular.woff",
+              "reason": "unowned_route_target_unavailable"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "9b8e22aa35424126987630be9fc019147f87e055234d9a884d1b4e0a381b3288"
+        },
+        {
+          "url": "https://www.goldsteinheather.co.uk/projects/folded-house-isle-of-dogs/",
+          "issues": [
+            {
+              "url": "https://www.goldsteinheather.co.uk/projects/folded-house-isle-of-dogs/",
+              "reason": "browser_context_recreated_after_failure"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "39d0ca7c2d40a202e581ade3b971fd647c524f85d3bf4f68911eb983de70e378"
+        },
+        {
+          "url": "https://www.goldsteinheather.co.uk/projects/bromley-high-street-bromley/",
+          "issues": [
+            {
+              "url": "https://www.goldsteinheather.co.uk/wp-content/themes/goldstein-heather/fonts/Grtsk-Light.woff",
+              "reason": "unowned_route_target_unavailable"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "fd1e988bd74e583086fdff6c910a2fd168169b822987f2202d36d526b734a0c3"
+        },
+        {
+          "url": "https://www.goldsteinheather.co.uk/projects/mitre-wharf-willesden/",
+          "issues": [
+            {
+              "url": "https://www.goldsteinheather.co.uk/projects/mitre-wharf-willesden/",
+              "reason": "browser_context_recreated_after_failure"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "35b136ce1b41b61f79befc332b6bc0b3a2f94f84fa53a9df871522e89be0122a"
+        },
+        {
+          "url": "https://www.goldsteinheather.co.uk/projects/bromley-road-beckenham/",
+          "issues": [
+            {
+              "url": "https://www.goldsteinheather.co.uk/wp-content/themes/goldstein-heather/fonts/Grtsk-Regular.woff",
+              "reason": "unowned_route_target_unavailable"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "a74f25a0a031fc3d3a21bc09db9e7fc52abb1f03adbb818d17070dbeca8d2e85"
+        },
+        {
+          "url": "https://www.goldsteinheather.co.uk/projects/st-jamess-road-croydon/",
+          "issues": [
+            {
+              "url": "https://www.goldsteinheather.co.uk/projects/st-jamess-road-croydon/",
+              "reason": "browser_context_recreated_after_failure"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "b71ab69e3222f6b167f06fc125ff8e85f1721fb7423cb52a41c22bb6535a85ba"
+        }
+      ]
+    },
+    {
+      "company": "Austin Studio Architects",
+      "website": "https://austinstudioarchitects.com/",
+      "attempt_finished": true,
+      "job_error": "",
+      "saved_pages": 29,
+      "rendered_pages": 29,
+      "recovery_observations": [
+        {
+          "url": "https://austinstudioarchitects.com/",
+          "issues": [
+            {
+              "url": "https://austinstudioarchitects.com/wp-content/uploads/bb-plugin/icons/ultimate-icons/fonts/Ultimate-Icons.woff?1ddi1j",
+              "reason": "unowned_route_target_unavailable"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "71cdfcf719d9a1b5aae72b59dcd94335e765c706f203c3930c330b2ef694b729"
+        },
+        {
+          "url": "https://austinstudioarchitects.com/contact/",
+          "issues": [
+            {
+              "url": "https://austinstudioarchitects.com/contact/",
+              "reason": "browser_context_cleanup_failed",
+              "error_type": "TargetClosedError"
+            },
+            {
+              "url": "https://austinstudioarchitects.com/contact/",
+              "reason": "browser_context_recreated_after_failure"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "c78644cd8dbd550ab81c0b58a148e00d31aeed24c7291cb8611c0e236276bdfd"
+        }
+      ]
+    },
+    {
+      "company": "Yafa Queen",
+      "website": "https://yafaqueen.com/",
+      "attempt_finished": true,
+      "job_error": "",
+      "saved_pages": 30,
+      "rendered_pages": 30,
+      "recovery_observations": [
+        {
+          "url": "https://yafaqueen.com/",
+          "issues": [
+            {
+              "url": "https://yafaqueen.com/api/event/collect",
+              "reason": "unowned_route_target_unavailable"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "ae68e755b0d9151e6d9cc63303849a843369e9e7f9f971311b367263a2b2577d"
+        },
+        {
+          "url": "https://yafaqueen.com/pages/contact",
+          "issues": [
+            {
+              "url": "https://yafaqueen.com/pages/contact",
+              "reason": "browser_context_cleanup_failed",
+              "error_type": "TargetClosedError"
+            },
+            {
+              "url": "https://yafaqueen.com/pages/contact",
+              "reason": "browser_context_recreated_after_failure"
+            }
+          ],
+          "rendered_capture_saved": true,
+          "text_sha256": "f1aec3517f5bc7bdbb37b14735b2245c8b6cd730d8f1532a59c1dd70e57cf796"
+        }
+      ]
+    }
+  ],
+  "note": "Preserved earlier failures and timed-out attempts. Austin and Yafa exercised failed-cleanup recovery. Extended Goldstein is now terminal; inspect its budget, rendered count, job error and partial coverage separately. No imports, recipient probing or email.",
+  "extended_goldstein_result": {
+    "checked_at": 1791638456.8961737,
+    "run_status": "finished",
+    "source_run": "data/benchmark-extended-recovery/run-20261010-124552-UTC-13cea0",
+    "scope": {
+      "company_count": 1,
+      "max_pages": 30,
+      "max_depth": 3,
+      "render_mode": "always",
+      "company_concurrency": 1,
+      "job_timeout_seconds": 3600
+    },
+    "runtime_versions": {
+      "python": "3.14.7",
+      "playwright": "1.63.0"
+    },
+    "source_files_at_start": {
+      "outreach/web.py": "3d26984f977296940cc16478579a599bb05bdbe714649e905f96990926f7b49c",
+      "outreach/browser.py": "43241eedd13b4f906ed1f71602b7a5a8fae51f32a7274819f598805d338f6b64",
+      "outreach/config.py": "c75b906e7246c7dca4928f98057db2713f4809fb5b794e2f36b25b52ffc87342",
+      "scripts/benchmark.py": "0ca1163ed3c1e7d1069699ab5956611307099e63e5a5da9c1eb66c51da2f5064",
+      "requirements.lock": "886062d34b84734ecb0619ba721e1969e23f649e0818c6374ae95421af86c94f"
+    },
+    "companies": [
+      {
+        "company": "Goldstein Heather Architecture",
+        "website": "https://www.goldsteinheather.co.uk/",
+        "campaign": "A",
+        "country_hint": "UK",
+        "status": "partial",
+        "pages": 30,
+        "unique_page_urls": 30,
+        "rendered_pages": 30,
+        "published_emails": 8,
+        "other_domain_candidates": 0,
+        "published_named_contacts": 0,
+        "elapsed_seconds": 2098.21,
+        "detail_file": "company-001-goldsteinheather.co.uk.json",
+        "error": "",
+        "verified_emails": null,
+        "company_match": null,
+        "buyer_match": null,
+        "observation_accuracy": null,
+        "issues": {
+          "network_did_not_settle_within_10s": 30,
+          "resource_requests_pending_at_snapshot": 30,
+          "unowned_route_target_unavailable": 4,
+          "browser_context_recreated_after_failure": 4
+        }
+      }
+    ],
+    "full_page_budget_captured_and_rendered": true,
+    "observed_orphan_callback_warning_count": 0,
+    "coverage_note": "Rendered captures do not establish complete asset/website coverage or a successful deployed campaign. Preserve partial status and every reported issue.",
+    "imports": 0,
+    "recipient_probes": 0,
+    "sends": 0
+  }
+}

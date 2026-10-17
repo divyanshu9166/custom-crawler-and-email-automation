@@ -1,0 +1,19 @@
+backend_name = "outreach-verifier"
+http_host = "0.0.0.0"
+http_port = 8080
+hello_name = "localhost"
+from_email = "hello@localhost"
+smtp_timeout = 45
+webdriver_addr = "http://127.0.0.1:9515"
+[webdriver]
+[overrides.proxies]
+# SMTP only: no embedded Chrome, RabbitMQ or Postgres in this small-host profile.
+[overrides.hotmailb2c]
+type = "smtp"
+smtp_timeout = { secs = 45, nanos = 0 }
+[overrides.yahoo]
+type = "smtp"
+smtp_timeout = { secs = 45, nanos = 0 }
+[throttle]
+[worker]
+enable = false

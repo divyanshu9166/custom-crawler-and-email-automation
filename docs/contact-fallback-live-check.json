@@ -1,0 +1,1368 @@
+{
+  "checked_at": 1791711569.4820766,
+  "live_official_page_requests": true,
+  "search_index_condition": "Controlled empty results; no real discovery queries executed",
+  "scope": "Existing candidate recovery on real websites in isolation; not new prospect yield or qualified buyer acceptance",
+  "results": [
+    {
+      "domain": "skindays.com",
+      "campaign": "B",
+      "seconds": 30.81,
+      "report": {
+        "lead_id": 1,
+        "started_at": 1791711506.6817179,
+        "queries": [
+          {
+            "query": "site:skindays.com (contact OR email)",
+            "engine_issues": [],
+            "result_count": 0
+          },
+          {
+            "query": "site:skindays.com (founder OR owner OR leadership OR team)",
+            "engine_issues": [],
+            "result_count": 0
+          },
+          {
+            "query": "\"Skindays\" \"skindays.com\" contact email",
+            "engine_issues": [],
+            "result_count": 0
+          }
+        ],
+        "indexed_hints": [],
+        "pages_saved": 2,
+        "contact_ids": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "state": "partial",
+        "note": "Index/social snippets are discovery hints only. Contacts require a newly captured official page; buyer relevance and mailbox verification remain separate.",
+        "seed_sources": [
+          {
+            "url": "https://www.skindays.com/pages/about-us",
+            "origins": [
+              "saved_official_page"
+            ]
+          },
+          {
+            "url": "https://www.skindays.com/pages/contact",
+            "origins": [
+              "saved_official_page"
+            ]
+          }
+        ],
+        "navigation_fallback": false,
+        "crawl": {
+          "status": "partial",
+          "pages": [
+            {
+              "url": "https://www.skindays.com/pages/about-us",
+              "rendered": true,
+              "emails": 0,
+              "text_chars": 3519,
+              "contacts": [],
+              "review_candidates": [],
+              "visual": {
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                },
+                "horizontalOverflow": false,
+                "title": "About Us: Meet the Team Behind Skindays",
+                "forms": 12,
+                "fieldsWithoutExplicitLabels": 0,
+                "ctas": [
+                  {
+                    "text": "Contact",
+                    "href": "/pages/contact",
+                    "top": 913
+                  },
+                  {
+                    "text": "SIGN UP",
+                    "href": "",
+                    "top": 501
+                  }
+                ]
+              },
+              "http_seconds": 2.006,
+              "render_seconds": 12.25,
+              "document_reused": true
+            },
+            {
+              "url": "https://www.skindays.com/pages/contact",
+              "rendered": true,
+              "emails": 4,
+              "text_chars": 3996,
+              "contacts": [
+                {
+                  "email": "hello@skindays.com",
+                  "name": "",
+                  "role": "",
+                  "source_url": "https://www.skindays.com/pages/contact",
+                  "methods": [
+                    "mailto",
+                    "visible_text",
+                    "visible_obfuscation"
+                  ]
+                },
+                {
+                  "email": "partnerships@skindays.com",
+                  "name": "",
+                  "role": "",
+                  "source_url": "https://www.skindays.com/pages/contact",
+                  "methods": [
+                    "mailto",
+                    "visible_text",
+                    "visible_obfuscation"
+                  ]
+                },
+                {
+                  "email": "press@skindays.com",
+                  "name": "",
+                  "role": "",
+                  "source_url": "https://www.skindays.com/pages/contact",
+                  "methods": [
+                    "mailto",
+                    "visible_text",
+                    "visible_obfuscation"
+                  ]
+                },
+                {
+                  "email": "info@skindays.com",
+                  "name": "",
+                  "role": "",
+                  "source_url": "https://www.skindays.com/pages/contact",
+                  "methods": [
+                    "visible_text",
+                    "visible_obfuscation"
+                  ]
+                }
+              ],
+              "review_candidates": [
+                {
+                  "email": "jobs@skindays.co",
+                  "name": "",
+                  "role": "",
+                  "source_url": "https://www.skindays.com/pages/contact",
+                  "methods": [
+                    "mailto",
+                    "visible_text",
+                    "visible_obfuscation"
+                  ],
+                  "review_required": true,
+                  "reason": "Different email domain: company ownership and relevance are unconfirmed"
+                }
+              ],
+              "visual": {
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                },
+                "horizontalOverflow": false,
+                "title": "Contact Skindays: Get in Touch with Our Team",
+                "forms": 13,
+                "fieldsWithoutExplicitLabels": 0,
+                "ctas": [
+                  {
+                    "text": "Contact",
+                    "href": "/pages/contact",
+                    "top": 1703
+                  },
+                  {
+                    "text": "SIGN UP",
+                    "href": "",
+                    "top": 530
+                  }
+                ]
+              },
+              "http_seconds": 1.237,
+              "render_seconds": 7.002,
+              "document_reused": true
+            }
+          ],
+          "errors": [
+            {
+              "url": "https://www.skindays.com/pages/about-us",
+              "stage": "render",
+              "issues": [
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/checkouts/internal/preloads.js?locale=en-GB",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cdn/wpm/b7ec887c8w14f9f074p854094e1m1370c602l.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cdn/wpm/b7ec887c8w14f9f074p854094e1m1370c602l.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/about-us",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://skindays-london.myshopify.com/api/2026-07/graphql.json",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google.com/shopping/merchantverse/?screenWidth=1440&screenHeight=900&origin=https%3A%2F%2Fwww.skindays.com&position=LEFT_BOTTOM&merchant_id=5805723919",
+                  "reason": "external_document_navigation"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/about-us",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/about-us",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/about-us",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://shop.app/pay/hop?analytics_trace_id=91d676c4-0973-4f8a-9912-7d805bd87e01&target_origin=https%3A%2F%2Fwww.skindays.com&client_handle=skindays-london.myshopify.com",
+                  "reason": "external_document_navigation"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/logs",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/2026-01/graphql.json",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/2026-01/graphql.json",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/2026-01/graphql.json",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/about-us",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/api/2026-01/graphql.json",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/shopify_pay/accelerated_checkout",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/shopify_pay/accelerated_checkout",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/about-us",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/logs",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/logs",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://p.clarity.ms/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://p.clarity.ms/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://p.clarity.ms/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://p.clarity.ms/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-J20M0S9JQ3&gtm=45je6a72h1v873512866za20ozb862256611zd862256611xf1&_p=1791711517810&gcs=G100&gcd=13p3p3p3p5l1&npa=1&dma_cps=-&dma=0&gdid=dYWVlZG.dN2ZkMj&ecid=1111016703&_eu=AAAAAGAC&cid=1803533035.1791711521&ec_mode=a&frm=0&pscdl=denied&rcb=17&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=2&_s=1&tag_exp=115938465~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711520&sct=1&seg=0&dl=https%3A%2F%2Fwww.skindays.com%2Fpages%2Fabout-us&dt=About%20Us%3A%20Meet%20the%20Team%20Behind%20Skindays&_tu=CA&en=page_view&_fv=1&_nsi=1&_ss=1&ep.anonymizeIp=true&tfd=3060",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://pagead2.googlesyndication.com/ccm/collect?rcb=8&frm=0&apvc=1&tid=AW-350759180&en=page_view&dl=https%3A%2F%2Fwww.skindays.com%2Fpages%2Fabout-us&scrsrc=www.googletagmanager.com&rnd=1862557161.1791711521&navt=n&npa=1&did=dYWVlZG&gdid=dYWVlZG.dN2ZkMj&_tu=CA&gtm=45be6a72h1v879328233za20ozb862256611zd862256611xecxf1&gcs=G100&gcd=13p3p3p3p5l1&dma_cps=-&dma=0&tag_exp=115616985~115938465~115938468~118897920~118897930~120213116~120385422~120469145~120469153~121046263~121046271~121246026~121246034&tft=1791711520600&tfd=3063&tids=AW-350759180&fmt=8",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-J20M0S9JQ3&gtm=45je6a72h1v873512866za20ozb862256611zd862256611xf1&_p=1791711517810&gcs=G100&gcd=13p3p3p3p5l1&npa=1&dma_cps=-&dma=0&gdid=dYWVlZG.dN2ZkMj&ecid=1111016703&_eu=AAAAAGAC&cid=1803533035.1791711521&ec_mode=a&frm=0&pscdl=denied&rcb=17&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=2&_s=1&tag_exp=115938465~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711520&sct=1&seg=0&dl=https%3A%2F%2Fwww.skindays.com%2Fpages%2Fabout-us&dt=About%20Us%3A%20Meet%20the%20Team%20Behind%20Skindays&_tu=CA&en=page_view&_fv=1&_nsi=1&_ss=1&ep.anonymizeIp=true&tfd=3060",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://pagead2.googlesyndication.com/ccm/collect?rcb=8&frm=0&apvc=1&tid=AW-350759180&en=page_view&dl=https%3A%2F%2Fwww.skindays.com%2Fpages%2Fabout-us&scrsrc=www.googletagmanager.com&rnd=1862557161.1791711521&navt=n&npa=1&did=dYWVlZG&gdid=dYWVlZG.dN2ZkMj&_tu=CA&gtm=45be6a72h1v879328233za20ozb862256611zd862256611xecxf1&gcs=G100&gcd=13p3p3p3p5l1&dma_cps=-&dma=0&tag_exp=115616985~115938465~115938468~118897920~118897930~120213116~120385422~120469145~120469153~121046263~121046271~121246026~121246034&tft=1791711520600&tfd=3063&tids=AW-350759180&fmt=8",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google.com/g/collect?v=2&tid=G-J20M0S9JQ3&gtm=45je6a72h1v873512866za20ozb862256611zd862256611xf1&_p=1791711517810&gcs=G100&gcd=13p3p3p3p5l1&npa=1&dma_cps=-&dma=0&gdid=dYWVlZG.dN2ZkMj&ecid=1111016703&_eu=AAAAAGAC&cid=1803533035.1791711521&ec_mode=a&frm=0&pscdl=denied&rcb=17&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=3&_s=1&tag_exp=115938465~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711520&sct=1&seg=0&dl=https%3A%2F%2Fwww.skindays.com%2Fpages%2Fabout-us&dt=About%20Us%3A%20Meet%20the%20Team%20Behind%20Skindays&_tu=CA&en=page_view&_fv=1&_nsi=1&_ss=1&ep.anonymizeIp=true&tfd=3060",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google.com/g/collect?v=2&tid=G-J20M0S9JQ3&gtm=45je6a72h1v873512866za20ozb862256611zd862256611xf1&_p=1791711517810&gcs=G100&gcd=13p3p3p3p5l1&npa=1&dma_cps=-&dma=0&gdid=dYWVlZG.dN2ZkMj&ecid=1111016703&_eu=AAAAAGAC&cid=1803533035.1791711521&ec_mode=a&frm=0&pscdl=denied&rcb=17&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=3&_s=1&tag_exp=115938465~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711520&sct=1&seg=0&dl=https%3A%2F%2Fwww.skindays.com%2Fpages%2Fabout-us&dt=About%20Us%3A%20Meet%20the%20Team%20Behind%20Skindays&_tu=CA&en=page_view&_fv=1&_nsi=1&_ss=1&ep.anonymizeIp=true&tfd=3060",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/services/login_with_shop/authorize?analytics_context=loginWithShopEmbed&analytics_trace_id=05758686-2f2b-4f11-a873-00d3189a5836&compact_layout=true&flow=embed&flow_version=chat_agent&locale=en&preact=true&redirect_uri=https%3A%2F%2Fwww.skindays.com&response_mode=web_message&response_type=id_token&scope=openid+email%3Averified+pay%3Asession_token+profile+shop%3Aaccount_uuid&storefront_domain=https%3A%2F%2Fwww.skindays.com&target_origin=https%3A%2F%2Fwww.skindays.com&ux_mode=windoid&ux_role=prompt",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/services/login_with_shop/authorize?analytics_context=loginWithShopEmbed&analytics_trace_id=ea2a8b30-ce1b-46fe-9000-77c85d424950&compact_layout=true&flow=embed&flow_version=account_menu&locale=en&preact=true&redirect_uri=https%3A%2F%2Fwww.skindays.com&response_mode=web_message&response_type=id_token&scope=openid+email%3Averified+pay%3Asession_token+profile+shop%3Aaccount_uuid&storefront_domain=https%3A%2F%2Fwww.skindays.com&target_origin=https%3A%2F%2Fwww.skindays.com&ux_mode=windoid&ux_role=prompt",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/services/login_with_shop/authorize?analytics_context=loginWithShopEmbed&analytics_trace_id=c3a5260d-f181-4913-9de8-1ec4774391d8&compact_layout=true&flow=embed&flow_version=account_menu&locale=en&preact=true&redirect_uri=https%3A%2F%2Fwww.skindays.com&response_mode=web_message&response_type=id_token&scope=openid+email%3Averified+pay%3Asession_token+profile+shop%3Aaccount_uuid&storefront_domain=https%3A%2F%2Fwww.skindays.com&target_origin=https%3A%2F%2Fwww.skindays.com&ux_mode=windoid&ux_role=prompt",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/services/login_with_shop/authorize?analytics_context=loginWithShopEmbed&analytics_trace_id=05758686-2f2b-4f11-a873-00d3189a5836&compact_layout=true&flow=embed&flow_version=chat_agent&locale=en&preact=true&redirect_uri=https%3A%2F%2Fwww.skindays.com&response_mode=web_message&response_type=id_token&scope=openid+email%3Averified+pay%3Asession_token+profile+shop%3Aaccount_uuid&storefront_domain=https%3A%2F%2Fwww.skindays.com&target_origin=https%3A%2F%2Fwww.skindays.com&ux_mode=windoid&ux_role=prompt",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/services/login_with_shop/authorize?analytics_context=loginWithShopEmbed&analytics_trace_id=ea2a8b30-ce1b-46fe-9000-77c85d424950&compact_layout=true&flow=embed&flow_version=account_menu&locale=en&preact=true&redirect_uri=https%3A%2F%2Fwww.skindays.com&response_mode=web_message&response_type=id_token&scope=openid+email%3Averified+pay%3Asession_token+profile+shop%3Aaccount_uuid&storefront_domain=https%3A%2F%2Fwww.skindays.com&target_origin=https%3A%2F%2Fwww.skindays.com&ux_mode=windoid&ux_role=prompt",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/services/login_with_shop/authorize?analytics_context=loginWithShopEmbed&analytics_trace_id=c3a5260d-f181-4913-9de8-1ec4774391d8&compact_layout=true&flow=embed&flow_version=account_menu&locale=en&preact=true&redirect_uri=https%3A%2F%2Fwww.skindays.com&response_mode=web_message&response_type=id_token&scope=openid+email%3Averified+pay%3Asession_token+profile+shop%3Aaccount_uuid&storefront_domain=https%3A%2F%2Fwww.skindays.com&target_origin=https%3A%2F%2Fwww.skindays.com&ux_mode=windoid&ux_role=prompt",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/about-us",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/about-us",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/about-us",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/a/msba/api/config/read?clientId=e35b1e5e-d949-437c-a3ab-5615fe5c3b23&lang=en&countryCode=GB&currencyCode=GBP&clientInformation=%7B%22userAgentInformation%22%3A%7B%22schemaVersion%22%3A%221.0%22%2C%22deviceName%22%3A%22%22%2C%22deviceVendor%22%3A%22%22%2C%22deviceType%22%3A%22%22%2C%22browserName%22%3A%22%22%2C%22browserVersion%22%3A%22%22%2C%22osName%22%3A%22%22%2C%22osVersion%22%3A%22%22%2C%22engineName%22%3A%22%22%2C%22engineVersion%22%3A%22%22%2C%22device%22%3A%22%22%2C%22os%22%3A%22Windows+none%22%2C%22browser%22%3A%22none+none%22%2C%22engine%22%3A%22none+none%22%2C%22userAgent%22%3A%22OutreachResearchBot%2F0.1%22%7D%2C%22clarityInformation%22%3A%7B%22sessionId%22%3A%22%22%2C%22userId%22%3A%22%22%2C%22projectId%22%3A%22%22%7D%2C%22landingPageInformation%22%3A%7B%22pageUrl%22%3A%22https%3A%2F%2Fwww.skindays.com%2Fpages%2Fabout-us%22%2C%22referrerUrl%22%3A%22%22%2C%22utmSource%22%3Anull%2C%22utmMedium%22%3Anull%2C%22utmCampaign%22%3Anull%7D%2C%22conversationId%22%3A%22%22%2C%22userConsent%22%3A%22%7B%5C%22ads%5C%22%3Atrue%2C%5C%22training%5C%22%3Atrue%7D%22%2C%22platform%22%3A%22Shopify%22%2C%22platformSessionId%22%3A%22%22%2C%22platformUserId%22%3A%22%22%7D",
+                  "reason": "http_403"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://api-eu.mixpanel.com/track/?verbose=1&ip=1&_=1791711523447",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://a.klaviyo.com/onsite/track-analytics?company_id=SW3paZ",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://a.klaviyo.com/onsite/track-analytics?company_id=SW3paZ",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                }
+              ]
+            },
+            {
+              "url": "https://www.skindays.com/pages/contact",
+              "stage": "render",
+              "issues": [
+                {
+                  "url": "https://www.skindays.com/checkouts/internal/preloads.js?locale=en-GB",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cdn/wpm/b7ec887c8w14f9f074p854094e1m1370c602l.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cdn/wpm/b7ec887c8w14f9f074p854094e1m1370c602l.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/logs",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google.com/shopping/merchantverse/?screenWidth=1440&screenHeight=900&origin=https%3A%2F%2Fwww.skindays.com&position=LEFT_BOTTOM&merchant_id=5805723919",
+                  "reason": "external_document_navigation"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/contact",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/contact",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/contact",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/.well-known/shopify/monorail/unstable/produce_batch",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://skindays-london.myshopify.com/api/2026-07/graphql.json",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/contact",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/contact",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://skindays-london.myshopify.com/api/2026-07/graphql.json",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/2026-01/graphql.json",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/2026-01/graphql.json",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/2026-01/graphql.json",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/2026-01/graphql.json",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/logs",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/logs",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/shopify_pay/accelerated_checkout",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/logs",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/shopify_pay/accelerated_checkout",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/contact",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://i.clarity.ms/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://i.clarity.ms/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://i.clarity.ms/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://i.clarity.ms/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://pagead2.googlesyndication.com/ccm/collect?rcb=16&frm=0&apvc=1&tid=AW-350759180&en=page_view&dl=https%3A%2F%2Fwww.skindays.com%2Fpages%2Fcontact&scrsrc=www.googletagmanager.com&rnd=815855526.1791711532&navt=n&npa=1&did=dYWVlZG&gdid=dYWVlZG.dN2ZkMj&_tu=CA&gtm=45be6a72h1v879328233za20ozb862256611zd862256611xecxf1&gcs=G100&gcd=13p3p3p3p5l1&dma_cps=-&dma=0&tag_exp=115938465~115938469~118897920~118897930~120213116~120385422~120469145~120469153~121046263~121046271~121246026~121246034&tft=1791711532147&tfd=1473&tids=AW-350759180&fmt=8",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-J20M0S9JQ3&gtm=45je6a72h1v873512866za20ozb862256611zd862256611xf1&_p=1791711530924&em=tv.1~em.fyEFxk94qwI2b61CVONrN6bc2ifBCAlYO9YhcRoI0qk&emd=tvd.1~i1.fem.ma.r16.n16.lA.s!b64!I3Nob3BpZnktc2VjdGlvbi10ZW1wbGF0ZS0tMjgwOTQ4ODM5MjIyNDhfX21haW4-LnM&gcs=G100&gcd=13p3p3p3p5l1&npa=1&dma_cps=-&dma=0&gdid=dYWVlZG.dN2ZkMj&ecid=1077550509&_eu=AAAAAGAC&cid=692714436.1791711532&ec_mode=a&frm=0&pscdl=denied&rcb=2&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=2&_s=1&tag_exp=115616985~115938465~115938469~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711531&sct=1&seg=0&dl=https%3A%2F%2Fwww.skindays.com%2Fpages%2Fcontact&dt=Contact%20Skindays%3A%20Get%20in%20Touch%20with%20Our%20Team&_tu=CA&en=page_view&_fv=1&_nsi=1&_ss=1&ep.anonymizeIp=true&tfd=1476",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://pagead2.googlesyndication.com/ccm/collect?rcb=16&frm=0&apvc=1&tid=AW-350759180&en=page_view&dl=https%3A%2F%2Fwww.skindays.com%2Fpages%2Fcontact&scrsrc=www.googletagmanager.com&rnd=815855526.1791711532&navt=n&npa=1&did=dYWVlZG&gdid=dYWVlZG.dN2ZkMj&_tu=CA&gtm=45be6a72h1v879328233za20ozb862256611zd862256611xecxf1&gcs=G100&gcd=13p3p3p3p5l1&dma_cps=-&dma=0&tag_exp=115938465~115938469~118897920~118897930~120213116~120385422~120469145~120469153~121046263~121046271~121246026~121246034&tft=1791711532147&tfd=1473&tids=AW-350759180&fmt=8",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-J20M0S9JQ3&gtm=45je6a72h1v873512866za20ozb862256611zd862256611xf1&_p=1791711530924&em=tv.1~em.fyEFxk94qwI2b61CVONrN6bc2ifBCAlYO9YhcRoI0qk&emd=tvd.1~i1.fem.ma.r16.n16.lA.s!b64!I3Nob3BpZnktc2VjdGlvbi10ZW1wbGF0ZS0tMjgwOTQ4ODM5MjIyNDhfX21haW4-LnM&gcs=G100&gcd=13p3p3p3p5l1&npa=1&dma_cps=-&dma=0&gdid=dYWVlZG.dN2ZkMj&ecid=1077550509&_eu=AAAAAGAC&cid=692714436.1791711532&ec_mode=a&frm=0&pscdl=denied&rcb=2&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=2&_s=1&tag_exp=115616985~115938465~115938469~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711531&sct=1&seg=0&dl=https%3A%2F%2Fwww.skindays.com%2Fpages%2Fcontact&dt=Contact%20Skindays%3A%20Get%20in%20Touch%20with%20Our%20Team&_tu=CA&en=page_view&_fv=1&_nsi=1&_ss=1&ep.anonymizeIp=true&tfd=1476",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google.com/g/collect?v=2&tid=G-J20M0S9JQ3&gtm=45je6a72h1v873512866za20ozb862256611zd862256611xf1&_p=1791711530924&em=tv.1~em.fyEFxk94qwI2b61CVONrN6bc2ifBCAlYO9YhcRoI0qk&emd=tvd.1~i1.fem.ma.r16.n16.lA.s!b64!I3Nob3BpZnktc2VjdGlvbi10ZW1wbGF0ZS0tMjgwOTQ4ODM5MjIyNDhfX21haW4-LnM&gcs=G100&gcd=13p3p3p3p5l1&npa=1&dma_cps=-&dma=0&gdid=dYWVlZG.dN2ZkMj&ecid=1077550509&_eu=AAAAAGAC&cid=692714436.1791711532&ec_mode=a&frm=0&pscdl=denied&rcb=2&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=3&_s=1&tag_exp=115616985~115938465~115938469~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711531&sct=1&seg=0&dl=https%3A%2F%2Fwww.skindays.com%2Fpages%2Fcontact&dt=Contact%20Skindays%3A%20Get%20in%20Touch%20with%20Our%20Team&_tu=CA&en=page_view&_fv=1&_nsi=1&_ss=1&ep.anonymizeIp=true&tfd=1476",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google.com/g/collect?v=2&tid=G-J20M0S9JQ3&gtm=45je6a72h1v873512866za20ozb862256611zd862256611xf1&_p=1791711530924&em=tv.1~em.fyEFxk94qwI2b61CVONrN6bc2ifBCAlYO9YhcRoI0qk&emd=tvd.1~i1.fem.ma.r16.n16.lA.s!b64!I3Nob3BpZnktc2VjdGlvbi10ZW1wbGF0ZS0tMjgwOTQ4ODM5MjIyNDhfX21haW4-LnM&gcs=G100&gcd=13p3p3p3p5l1&npa=1&dma_cps=-&dma=0&gdid=dYWVlZG.dN2ZkMj&ecid=1077550509&_eu=AAAAAGAC&cid=692714436.1791711532&ec_mode=a&frm=0&pscdl=denied&rcb=2&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=3&_s=1&tag_exp=115616985~115938465~115938469~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711531&sct=1&seg=0&dl=https%3A%2F%2Fwww.skindays.com%2Fpages%2Fcontact&dt=Contact%20Skindays%3A%20Get%20in%20Touch%20with%20Our%20Team&_tu=CA&en=page_view&_fv=1&_nsi=1&_ss=1&ep.anonymizeIp=true&tfd=1476",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/services/login_with_shop/authorize?analytics_context=loginWithShopEmbed&analytics_trace_id=88ab65b7-413c-4429-9f10-6fa60b44d84e&compact_layout=true&flow=embed&flow_version=chat_agent&locale=en&preact=true&redirect_uri=https%3A%2F%2Fwww.skindays.com&response_mode=web_message&response_type=id_token&scope=openid+email%3Averified+pay%3Asession_token+profile+shop%3Aaccount_uuid&storefront_domain=https%3A%2F%2Fwww.skindays.com&target_origin=https%3A%2F%2Fwww.skindays.com&ux_mode=windoid&ux_role=prompt",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/services/login_with_shop/authorize?analytics_context=loginWithShopEmbed&analytics_trace_id=2abf4264-abd0-4454-ae4b-04a453b600a1&compact_layout=true&flow=embed&flow_version=account_menu&locale=en&preact=true&redirect_uri=https%3A%2F%2Fwww.skindays.com&response_mode=web_message&response_type=id_token&scope=openid+email%3Averified+pay%3Asession_token+profile+shop%3Aaccount_uuid&storefront_domain=https%3A%2F%2Fwww.skindays.com&target_origin=https%3A%2F%2Fwww.skindays.com&ux_mode=windoid&ux_role=prompt",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/services/login_with_shop/authorize?analytics_context=loginWithShopEmbed&analytics_trace_id=5cf5737d-3146-482e-8803-96a4111bd2e6&compact_layout=true&flow=embed&flow_version=account_menu&locale=en&preact=true&redirect_uri=https%3A%2F%2Fwww.skindays.com&response_mode=web_message&response_type=id_token&scope=openid+email%3Averified+pay%3Asession_token+profile+shop%3Aaccount_uuid&storefront_domain=https%3A%2F%2Fwww.skindays.com&target_origin=https%3A%2F%2Fwww.skindays.com&ux_mode=windoid&ux_role=prompt",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/services/login_with_shop/authorize?analytics_context=loginWithShopEmbed&analytics_trace_id=88ab65b7-413c-4429-9f10-6fa60b44d84e&compact_layout=true&flow=embed&flow_version=chat_agent&locale=en&preact=true&redirect_uri=https%3A%2F%2Fwww.skindays.com&response_mode=web_message&response_type=id_token&scope=openid+email%3Averified+pay%3Asession_token+profile+shop%3Aaccount_uuid&storefront_domain=https%3A%2F%2Fwww.skindays.com&target_origin=https%3A%2F%2Fwww.skindays.com&ux_mode=windoid&ux_role=prompt",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/services/login_with_shop/authorize?analytics_context=loginWithShopEmbed&analytics_trace_id=2abf4264-abd0-4454-ae4b-04a453b600a1&compact_layout=true&flow=embed&flow_version=account_menu&locale=en&preact=true&redirect_uri=https%3A%2F%2Fwww.skindays.com&response_mode=web_message&response_type=id_token&scope=openid+email%3Averified+pay%3Asession_token+profile+shop%3Aaccount_uuid&storefront_domain=https%3A%2F%2Fwww.skindays.com&target_origin=https%3A%2F%2Fwww.skindays.com&ux_mode=windoid&ux_role=prompt",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/services/login_with_shop/authorize?analytics_context=loginWithShopEmbed&analytics_trace_id=5cf5737d-3146-482e-8803-96a4111bd2e6&compact_layout=true&flow=embed&flow_version=account_menu&locale=en&preact=true&redirect_uri=https%3A%2F%2Fwww.skindays.com&response_mode=web_message&response_type=id_token&scope=openid+email%3Averified+pay%3Asession_token+profile+shop%3Aaccount_uuid&storefront_domain=https%3A%2F%2Fwww.skindays.com&target_origin=https%3A%2F%2Fwww.skindays.com&ux_mode=windoid&ux_role=prompt",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/contact",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/contact",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/pages/contact",
+                  "reason": "javascript_error"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/a/msba/api/config/read?clientId=e35b1e5e-d949-437c-a3ab-5615fe5c3b23&lang=en&countryCode=GB&currencyCode=GBP&clientInformation=%7B%22userAgentInformation%22%3A%7B%22schemaVersion%22%3A%221.0%22%2C%22deviceName%22%3A%22%22%2C%22deviceVendor%22%3A%22%22%2C%22deviceType%22%3A%22%22%2C%22browserName%22%3A%22%22%2C%22browserVersion%22%3A%22%22%2C%22osName%22%3A%22%22%2C%22osVersion%22%3A%22%22%2C%22engineName%22%3A%22%22%2C%22engineVersion%22%3A%22%22%2C%22device%22%3A%22%22%2C%22os%22%3A%22Windows+none%22%2C%22browser%22%3A%22none+none%22%2C%22engine%22%3A%22none+none%22%2C%22userAgent%22%3A%22OutreachResearchBot%2F0.1%22%7D%2C%22clarityInformation%22%3A%7B%22sessionId%22%3A%22xndn67%22%2C%22userId%22%3A%2296nwp1%22%2C%22projectId%22%3A%22yjz7ppu40j%22%7D%2C%22landingPageInformation%22%3A%7B%22pageUrl%22%3A%22https%3A%2F%2Fwww.skindays.com%2Fpages%2Fcontact%22%2C%22referrerUrl%22%3A%22%22%2C%22utmSource%22%3Anull%2C%22utmMedium%22%3Anull%2C%22utmCampaign%22%3Anull%7D%2C%22conversationId%22%3A%22%22%2C%22userConsent%22%3A%22%7B%5C%22ads%5C%22%3Atrue%2C%5C%22training%5C%22%3Atrue%7D%22%2C%22platform%22%3A%22Shopify%22%2C%22platformSessionId%22%3A%22%22%2C%22platformUserId%22%3A%22%22%7D",
+                  "reason": "http_403"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://api-eu.mixpanel.com/track/?verbose=1&ip=1&_=1791711536116",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/api/collect",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://a.klaviyo.com/onsite/track-analytics?company_id=SW3paZ",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://a.klaviyo.com/onsite/track-analytics?company_id=SW3paZ",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                },
+                {
+                  "url": "https://www.skindays.com/cart.js",
+                  "reason": "robots"
+                }
+              ]
+            }
+          ],
+          "skipped": [],
+          "sitemaps": [],
+          "activity": {
+            "stage": "save",
+            "url": "https://www.skindays.com/pages/contact",
+            "started_at": 1791711536.966642
+          },
+          "checkpoint": {
+            "website": "https://www.skindays.com/",
+            "frontier": [],
+            "seen": [
+              "https://www.skindays.com/pages/about-us",
+              "https://www.skindays.com/pages/contact"
+            ],
+            "sitemap_queue": [],
+            "sitemap_seen": [],
+            "depth_limited": []
+          },
+          "first_page_seconds": 15.801,
+          "attempted": 2,
+          "pass_attempted": 2,
+          "remaining": 0,
+          "sitemaps_remaining": 0,
+          "seconds": 24.615,
+          "depth_limited_urls": 0,
+          "scope": {
+            "domain": "skindays.com",
+            "max_pages": 6,
+            "max_depth": 3,
+            "render_mode": "always",
+            "seeded_only": true
+          },
+          "budget_reached": false,
+          "finished_at": 1791711537.3545623
+        },
+        "seed_urls": [
+          "https://www.skindays.com/pages/about-us",
+          "https://www.skindays.com/pages/contact"
+        ],
+        "finished_at": 1791711537.4253929
+      },
+      "published_contacts": [
+        {
+          "email": "hello@skindays.com",
+          "source_url": "https://www.skindays.com/pages/contact",
+          "verification": "unverified",
+          "source_eligible": true,
+          "source_issue": ""
+        },
+        {
+          "email": "info@skindays.com",
+          "source_url": "https://www.skindays.com/pages/contact",
+          "verification": "unverified",
+          "source_eligible": true,
+          "source_issue": ""
+        },
+        {
+          "email": "partnerships@skindays.com",
+          "source_url": "https://www.skindays.com/pages/contact",
+          "verification": "unverified",
+          "source_eligible": true,
+          "source_issue": ""
+        },
+        {
+          "email": "press@skindays.com",
+          "source_url": "https://www.skindays.com/pages/contact",
+          "verification": "unverified",
+          "source_eligible": true,
+          "source_issue": ""
+        }
+      ],
+      "new_to_isolated_database_only": true,
+      "new_discovery": false,
+      "mailbox_verified": false,
+      "buyer_relevance_reviewed": false,
+      "refreshed_sources": [
+        {
+          "url": "https://www.skindays.com/pages/about-us",
+          "sha256": "6161474af76fce171c3393077a314163df1b1be7bf178283f042aaed6da6745e"
+        },
+        {
+          "url": "https://www.skindays.com/pages/contact",
+          "sha256": "3c71526f5f2093b3a651d8950b81921c1b5ce1dda7fa6ab3e8cc35986510a6f7"
+        }
+      ]
+    },
+    {
+      "domain": "smartroof.com",
+      "campaign": "A",
+      "seconds": 31.394,
+      "report": {
+        "lead_id": 2,
+        "started_at": 1791711538.0739744,
+        "queries": [
+          {
+            "query": "site:smartroof.com (contact OR email)",
+            "engine_issues": [],
+            "result_count": 0
+          },
+          {
+            "query": "site:smartroof.com (founder OR owner OR leadership OR team)",
+            "engine_issues": [],
+            "result_count": 0
+          },
+          {
+            "query": "\"Roofing Contractors in Raleigh, North Carolina\" \"smartroof.com\" contact email",
+            "engine_issues": [],
+            "result_count": 0
+          }
+        ],
+        "indexed_hints": [],
+        "pages_saved": 2,
+        "contact_ids": [],
+        "state": "partial",
+        "note": "Index/social snippets are discovery hints only. Contacts require a newly captured official page; buyer relevance and mailbox verification remain separate.",
+        "seed_sources": [
+          {
+            "url": "https://smartroof.com/contact-us/",
+            "origins": [
+              "saved_official_page"
+            ]
+          },
+          {
+            "url": "https://smartroof.com/contact-us/contact-confirmation/",
+            "origins": [
+              "saved_official_page"
+            ]
+          }
+        ],
+        "navigation_fallback": false,
+        "crawl": {
+          "status": "partial",
+          "pages": [
+            {
+              "url": "https://smartroof.com/contact-us/",
+              "rendered": true,
+              "emails": 0,
+              "text_chars": 2723,
+              "contacts": [],
+              "review_candidates": [],
+              "visual": {
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                },
+                "horizontalOverflow": false,
+                "title": "Contact Us | SmartRoof",
+                "forms": 1,
+                "fieldsWithoutExplicitLabels": 1,
+                "ctas": [
+                  {
+                    "text": "Contact Us",
+                    "href": "https://smartroof.com/contact-us/",
+                    "top": 306
+                  },
+                  {
+                    "text": "Contact Us",
+                    "href": "",
+                    "top": 608
+                  },
+                  {
+                    "text": "Contact Us",
+                    "href": "https://smartroof.com/contact-us/",
+                    "top": 1663
+                  }
+                ]
+              },
+              "http_seconds": 1.884,
+              "render_seconds": 11.594,
+              "document_reused": true
+            },
+            {
+              "url": "https://smartroof.com/contact-us/contact-confirmation/",
+              "rendered": true,
+              "emails": 0,
+              "text_chars": 1145,
+              "contacts": [],
+              "review_candidates": [],
+              "visual": {
+                "viewport": {
+                  "width": 1440,
+                  "height": 900
+                },
+                "horizontalOverflow": false,
+                "title": "Contact - Confirmation | SmartRoof",
+                "forms": 0,
+                "fieldsWithoutExplicitLabels": 1,
+                "ctas": []
+              },
+              "http_seconds": 1.441,
+              "render_seconds": 8.938,
+              "document_reused": true
+            }
+          ],
+          "errors": [
+            {
+              "url": "https://smartroof.com/contact-us/",
+              "stage": "render",
+              "issues": [
+                {
+                  "url": "https://pagead2.googlesyndication.com/ccm/collect?rcb=5&frm=0&apvc=1&ae=g&en=page_view&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2F&scrsrc=www.googletagmanager.com&rnd=1831872827.1791711552&navt=n&npa=1&ep.ads_data_redaction=0&gdid=dZDk4Nz&gtm=45He6a72v811178307za200zd811178307xeaxf1&gcs=G100&gcd=13q3q3q3q5l1&dma_cps=-&dma=0&tag_exp=115938466~115938468~118897920~118897930~120385423~120469145~120469153~121046263~121046271~121246026~121246034&tft=1791711552088&tfd=3249&fmt=8",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google.com/recaptcha/enterprise/anchor?ar=1&k=6Ldyv-ArAAAAAGODoZbgHs4qhnvVV4WyHMiZOdFO&co=aHR0cHM6Ly9zbWFydHJvb2YuY29tOjQ0Mw..&hl=en&v=nY0xPItgwtlvjEjk2TqdwOQz&size=invisible&anchor-ms=20000&execute-ms=30000&cb=2pwhaw5hgrp1",
+                  "reason": "external_document_navigation"
+                },
+                {
+                  "url": "https://script.crazyegg.com/pages/scripts/0097/1431.js",
+                  "reason": "http_403"
+                },
+                {
+                  "url": "https://pagead2.googlesyndication.com/ccm/collect?rcb=16&frm=0&apvc=0&tid=AW-792973313&en=page_view&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2F&scrsrc=www.googletagmanager.com&rnd=1831872827.1791711552&navt=n&npa=1&did=dZDk4Nz&gdid=dZDk4Nz&gtm=45be6a72v9186990006za20ozb811178307zd811178307xecxf1&gcs=G100&gcd=13q3q3q3q5l1&dma_cps=-&dma=0&tag_exp=115938466~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&tft=1791711552890&tfd=4051&tids=AW-792973313&fmt=8",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://pagead2.googlesyndication.com/ccm/collect?rcb=16&frm=0&apvc=0&ae=g&tid=AW-792973313&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2F&scrsrc=www.googletagmanager.com&rnd=1831872827.1791711552&navt=n&npa=1&did=dZDk4Nz&gdid=dZDk4Nz&_tu=CA&gtm=45be6a72v9186990006z8811178307za20gzb811178307zd811178307xeaxf1&gcs=G100&gcd=13q3q3q3q5l1&dma_cps=-&dma=0&tag_exp=115938466~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&tft=1791711552892&tfd=4054&tids=AW-792973313&fmt=8",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-J33V56HFWB&gtm=45je6a72v9116355216za20ozb811178307zd811178307xf1&_p=1791711550080&gcs=G100&gcd=13q3q3q3q5l1&npa=1&dma_cps=-&dma=0&gdid=dZDk4Nz&_eu=AAAAAGAC&cid=894530271.1791711553&frm=0&pscdl=denied&rcb=3&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=2&_s=1&tag_exp=115938466~115938469~118897920~118897930~120213116~120385422~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711552&sct=1&seg=0&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2F&dt=Contact%20Us%20%7C%20SmartRoof&en=page_view&_fv=1&_nsi=1&_ss=1&tfd=4164",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-F5Z2KYV488&gtm=45je6a72v9116355216za20ozb811178307zd811178307xf1&_p=1791711550080&gcs=G100&gcd=13q3q3q3q5l1&npa=1&dma_cps=-&dma=0&gdid=dZDk4Nz&_eu=AAAAAGAC&cid=894530271.1791711553&frm=0&pscdl=denied&rcb=3&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=2&_s=1&tag_exp=115938466~115938469~118897920~118897930~120213116~120385422~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711553&sct=1&seg=0&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2F&dt=Contact%20Us%20%7C%20SmartRoof&en=page_view&_fv=1&_ss=1&tfd=4170",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google.com/g/collect?v=2&tid=G-J33V56HFWB&gtm=45je6a72v9116355216za20ozb811178307zd811178307xf1&_p=1791711550080&gcs=G100&gcd=13q3q3q3q5l1&npa=1&dma_cps=-&dma=0&gdid=dZDk4Nz&_eu=AAAAAGAC&cid=894530271.1791711553&frm=0&pscdl=denied&rcb=3&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=3&_s=1&tag_exp=115938466~115938469~118897920~118897930~120213116~120385422~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711552&sct=1&seg=0&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2F&dt=Contact%20Us%20%7C%20SmartRoof&en=page_view&_fv=1&_nsi=1&_ss=1&tfd=4164",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google.com/g/collect?v=2&tid=G-F5Z2KYV488&gtm=45je6a72v9116355216za20ozb811178307zd811178307xf1&_p=1791711550080&gcs=G100&gcd=13q3q3q3q5l1&npa=1&dma_cps=-&dma=0&gdid=dZDk4Nz&_eu=AAAAAGAC&cid=894530271.1791711553&frm=0&pscdl=denied&rcb=3&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=3&_s=1&tag_exp=115938466~115938469~118897920~118897930~120213116~120385422~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711553&sct=1&seg=0&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2F&dt=Contact%20Us%20%7C%20SmartRoof&en=page_view&_fv=1&_ss=1&tfd=4170",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://smartroof.com/contact-us/",
+                  "reason": "resource_requests_pending_at_snapshot",
+                  "count": 1
+                }
+              ]
+            },
+            {
+              "url": "https://smartroof.com/contact-us/contact-confirmation/",
+              "stage": "render",
+              "issues": [
+                {
+                  "url": "https://script.crazyegg.com/pages/scripts/0097/1431.js",
+                  "reason": "http_403"
+                },
+                {
+                  "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-J33V56HFWB&gtm=45je6a72v9116355216za20ozb811178307zd811178307xf1&_p=1791711561947&gcs=G100&gcd=13p3p3p3p5l1&npa=1&dma_cps=-&dma=0&gdid=dZDk4Nz&_eu=AAAAAGAC&cid=447353224.1791711563&frm=0&pscdl=denied&rcb=3&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=2&_s=1&tag_exp=115938466~115938469~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711562&sct=1&seg=0&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2Fcontact-confirmation%2F&dt=Contact%20-%20Confirmation%20%7C%20SmartRoof&en=page_view&_fv=1&_nsi=1&_ss=1&tfd=1892",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-F5Z2KYV488&gtm=45je6a72v9116355216za20ozb811178307zd811178307xf1&_p=1791711561947&gcs=G100&gcd=13p3p3p3p5l1&npa=1&dma_cps=-&dma=0&gdid=dZDk4Nz&_eu=AAAAAGAC&cid=447353224.1791711563&frm=0&pscdl=denied&rcb=3&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=2&_s=1&tag_exp=115938466~115938469~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711562&sct=1&seg=0&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2Fcontact-confirmation%2F&dt=Contact%20-%20Confirmation%20%7C%20SmartRoof&en=page_view&_fv=1&_ss=1&tfd=1897",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://pagead2.googlesyndication.com/ccm/collect?rcb=3&frm=0&apvc=1&ae=g&en=page_view&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2Fcontact-confirmation%2F&scrsrc=www.googletagmanager.com&rnd=360928055.1791711563&navt=n&npa=1&ep.ads_data_redaction=0&gdid=dZDk4Nz&gtm=45He6a72v811178307za200zd811178307xeaxf1&gcs=G100&gcd=13p3p3p3p5l1&dma_cps=-&dma=0&tag_exp=115938466~115938469~118897920~118897930~120385423~120469145~120469153~121046263~121046271~121246026~121246034&tft=1791711562794&tfd=1897&fmt=8",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://pagead2.googlesyndication.com/ccm/collect?rcb=10&frm=0&apvc=0&tid=AW-792973313&en=page_view&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2Fcontact-confirmation%2F&scrsrc=www.googletagmanager.com&rnd=360928055.1791711563&navt=n&npa=1&did=dZDk4Nz&gdid=dZDk4Nz&_tu=CA&gtm=45be6a72v9186990006za20ozb811178307zd811178307xecxf1&gcs=G100&gcd=13p3p3p3p5l1&dma_cps=-&dma=0&tag_exp=115616986~115938466~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&tft=1791711562797&tfd=1900&tids=AW-792973313&fmt=8",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://pagead2.googlesyndication.com/ccm/collect?rcb=10&frm=0&apvc=0&ae=g&tid=AW-792973313&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2Fcontact-confirmation%2F&scrsrc=www.googletagmanager.com&rnd=360928055.1791711563&navt=n&npa=1&did=dZDk4Nz&gdid=dZDk4Nz&_tu=CA&gtm=45be6a72v9186990006z8811178307za20gzb811178307zd811178307xeaxf1&gcs=G100&gcd=13p3p3p3p5l1&dma_cps=-&dma=0&tag_exp=115616986~115938466~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&tft=1791711562798&tfd=1901&tids=AW-792973313&fmt=8",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google.com/g/collect?v=2&tid=G-J33V56HFWB&gtm=45je6a72v9116355216za20ozb811178307zd811178307xf1&_p=1791711561947&gcs=G100&gcd=13p3p3p3p5l1&npa=1&dma_cps=-&dma=0&gdid=dZDk4Nz&_eu=AAAAAGAC&cid=447353224.1791711563&frm=0&pscdl=denied&rcb=3&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=3&_s=1&tag_exp=115938466~115938469~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711562&sct=1&seg=0&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2Fcontact-confirmation%2F&dt=Contact%20-%20Confirmation%20%7C%20SmartRoof&en=page_view&_fv=1&_nsi=1&_ss=1&tfd=1892",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google.com/g/collect?v=2&tid=G-F5Z2KYV488&gtm=45je6a72v9116355216za20ozb811178307zd811178307xf1&_p=1791711561947&gcs=G100&gcd=13p3p3p3p5l1&npa=1&dma_cps=-&dma=0&gdid=dZDk4Nz&_eu=AAAAAGAC&cid=447353224.1791711563&frm=0&pscdl=denied&rcb=3&sr=1440x900&uaa=x86&uab=64&uafvl=HeadlessChrome%3B153.0.8010.12%7CNot_A%2520Brand%3B8.0.0.0%7CChromium%3B153.0.8010.12&uam=&uamb=0&uap=Windows&uapv=&uaw=0&ul=en-gb&gaf=3&_s=1&tag_exp=115938466~115938469~118897920~118897930~120213116~120385423~120469145~120469153~121046263~121046271~121246026~121246034&sid=1791711562&sct=1&seg=0&dl=https%3A%2F%2Fsmartroof.com%2Fcontact-us%2Fcontact-confirmation%2F&dt=Contact%20-%20Confirmation%20%7C%20SmartRoof&en=page_view&_fv=1&_ss=1&tfd=1897",
+                  "reason": "mutating_or_post_request_requires_review"
+                },
+                {
+                  "url": "https://www.google.com/recaptcha/enterprise/anchor?ar=1&k=6Ldyv-ArAAAAAGODoZbgHs4qhnvVV4WyHMiZOdFO&co=aHR0cHM6Ly9zbWFydHJvb2YuY29tOjQ0Mw..&hl=en&v=nY0xPItgwtlvjEjk2TqdwOQz&size=invisible&anchor-ms=20000&execute-ms=30000&cb=e7762u90nzzy",
+                  "reason": "external_document_navigation"
+                },
+                {
+                  "url": "https://smartroof.com/contact-us/contact-confirmation/",
+                  "reason": "resource_requests_pending_at_snapshot",
+                  "count": 1
+                }
+              ]
+            }
+          ],
+          "skipped": [],
+          "sitemaps": [],
+          "activity": {
+            "stage": "save",
+            "url": "https://smartroof.com/contact-us/contact-confirmation/",
+            "started_at": 1791711569.2185853
+          },
+          "checkpoint": {
+            "website": "https://smartroof.com/",
+            "frontier": [],
+            "seen": [
+              "https://smartroof.com/contact-us/",
+              "https://smartroof.com/contact-us/contact-confirmation/"
+            ],
+            "sitemap_queue": [],
+            "sitemap_seen": [],
+            "depth_limited": []
+          },
+          "first_page_seconds": 14.65,
+          "attempted": 2,
+          "pass_attempted": 2,
+          "remaining": 0,
+          "sitemaps_remaining": 0,
+          "seconds": 25.258,
+          "depth_limited_urls": 0,
+          "scope": {
+            "domain": "smartroof.com",
+            "max_pages": 6,
+            "max_depth": 3,
+            "render_mode": "always",
+            "seeded_only": true
+          },
+          "budget_reached": false,
+          "finished_at": 1791711569.3993948
+        },
+        "seed_urls": [
+          "https://smartroof.com/contact-us/",
+          "https://smartroof.com/contact-us/contact-confirmation/"
+        ],
+        "finished_at": 1791711569.426123
+      },
+      "published_contacts": [],
+      "new_to_isolated_database_only": true,
+      "new_discovery": false,
+      "mailbox_verified": false,
+      "buyer_relevance_reviewed": false,
+      "refreshed_sources": [
+        {
+          "url": "https://smartroof.com/contact-us/",
+          "sha256": "e5e0dab29bdd28220548e72ebc8f4f6ba7de52325f6024549d4b0fd266c9314b"
+        },
+        {
+          "url": "https://smartroof.com/contact-us/contact-confirmation/",
+          "sha256": "a4dfa54b33fb685de5636fef7090fb2205890748c078d7cc70d1c7f8da4564db"
+        }
+      ]
+    }
+  ],
+  "normal_database_counters_unchanged": true,
+  "sending_enabled": false,
+  "external_messages_sent": 0,
+  "verification_jobs_executed": 0,
+  "source_hashes": {
+    "outreach/contact_recovery.py": "cb5d50130c9997e7c8374369dc5ebc183cc9d2dc791ca59a1fed3a4138f651f9",
+    "outreach/web.py": "1f549299d92b5d185fd642d3d097c3f6be636a07297ae2971756f523346dc398",
+    "outreach/research.py": "051123ad3b08be4f6ce13ad48e8874ed55a61d7c566eea4b29c4a95a13357113"
+  },
+  "limits": [
+    "Published contacts are candidates, not confirmed decision-makers.",
+    "No private social platform email access established.",
+    "Reacher backend remains unavailable; no mailbox existence verdict established."
+  ]
+}

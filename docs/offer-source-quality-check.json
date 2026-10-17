@@ -1,0 +1,650 @@
+{
+  "checked_at": 1791713076.027345,
+  "scope": "Read-only replay of saved real public pages; not new live acquisition or qualified outreach",
+  "results": [
+    {
+      "lead_id": 1,
+      "company": "Contact Us - imageskincare.co.uk",
+      "domain": "imageskincare.co.uk",
+      "stored_status": "review",
+      "country_reviewed": false,
+      "campaign": "B",
+      "current_pages": 30,
+      "offer_candidates": [
+        {
+          "evidence_id": 10,
+          "quote": "\u00a3115.00 Decrease quantity Decrease quantity Add to cart Free shipping on orders over \u00a375 Next working day shipping* October Offer Spend \u00a3120, get 2 treats.",
+          "source_url": "https://imageskincare.co.uk/products/ageless-total-anti-aging-serum",
+          "observation": "The saved page includes a public shopping or order invitation: \u00a3115.00 Decrease quantity Decrease quantity Add to cart Free shipping on orders over \u00a375 Next working day shipping* October Offer Spend \u00a3120, get 2 treats.",
+          "suggestion": "Review one product-to-purchase journey and choose a focused test; confirm actual checkout behavior and measurement first.",
+          "service": "store_improvement",
+          "priority": 85,
+          "review_required": true,
+          "kind": "opportunity",
+          "proposal_method": "explicit_public_signal",
+          "source_selection": "Explicit business action or support signal",
+          "limitations": "Proposed relevance only; not a verified pain point, buyer fit, absence claim or predicted conversion gain."
+        },
+        {
+          "evidence_id": 7,
+          "quote": "Formulas That Deliver Results Let's talk skin Questions about products? Need help perfecting your skincare regimen? Our customer care team is here to help! INFO@IMAGESKINCARE",
+          "source_url": "https://imageskincare.co.uk/pages/contact-us",
+          "observation": "The saved page includes customer-question or support information: Formulas That Deliver Results Let's talk skin Questions about products? Need help perfecting your skincare regimen? Our customer care team is here to help! INFO@IMAGESKINCARE",
+          "suggestion": "Review a shopping/support assistant with approved answers, clear limitations and a human handoff.",
+          "service": "chatbot",
+          "priority": 60,
+          "review_required": true,
+          "kind": "opportunity",
+          "proposal_method": "explicit_public_signal",
+          "source_selection": "Explicit business action or support signal",
+          "limitations": "Proposed relevance only; not a verified pain point, buyer fit, absence claim or predicted conversion gain."
+        }
+      ],
+      "unqualified_draft_preview": [
+        {
+          "step": 0,
+          "subject": "An idea for Contact Us - imageskincare.co.uk",
+          "body": "Hi Contact Us - imageskincare.co.uk team,\n\nI was looking at this page from Contact Us - imageskincare.co.uk: https://imageskincare.co.uk/products/ageless-total-anti-aging-serum\nThe saved page includes a public shopping or order invitation: \u00a3115.00 Decrease quantity Decrease quantity Add to cart Free shipping on orders over \u00a375 Next working day shipping* October Offer Spend \u00a3120, get 2 treats.\n\nI help businesses make product selection and purchase steps clearer. One idea worth exploring: Review one product-to-purchase journey and choose a focused test; confirm actual checkout behavior and measurement first.\n\nWould it be useful if I sent a short shopping journey review specific to your business?",
+          "evidence_ids": [
+            10
+          ]
+        },
+        {
+          "step": 1,
+          "subject": "Re: An idea for Contact Us - imageskincare.co.uk",
+          "body": "Hi Contact Us - imageskincare.co.uk team,\n\nOne extra thought: Review one product-to-purchase journey first and agree which completion and support metrics to compare before expanding the work.\n\nWould a short outline help your team assess whether this is worth testing?",
+          "evidence_ids": [
+            10
+          ]
+        },
+        {
+          "step": 2,
+          "subject": "Re: An idea for Contact Us - imageskincare.co.uk",
+          "body": "Hi Contact Us - imageskincare.co.uk team,\n\nIf your team is reviewing shopping journey, I could put together a short shopping journey review around the page I mentioned.\n\nWould that be useful, or is another area more important right now?",
+          "evidence_ids": [
+            10
+          ]
+        },
+        {
+          "step": 3,
+          "subject": "Re: An idea for Contact Us - imageskincare.co.uk",
+          "body": "Hi Contact Us - imageskincare.co.uk team,\n\nI'll close the loop here. If your team prioritizes shopping journey later, feel free to reply.\n\nAll the best.",
+          "evidence_ids": [
+            10
+          ]
+        }
+      ],
+      "source_snapshots": [
+        {
+          "id": 10,
+          "url": "https://imageskincare.co.uk/products/ageless-total-anti-aging-serum",
+          "sha256": "6d5404dbbf8a34f0af0f2cc70034affc4b4b18771d55c97fbc8bea66e4475af3",
+          "fetched_at": 1791640904.1175148
+        },
+        {
+          "id": 7,
+          "url": "https://imageskincare.co.uk/pages/contact-us",
+          "sha256": "d637a6a94b3c3eb2595330c7139d6053c34d8bd5334a0cc3782059eece3cf62d",
+          "fetched_at": 1791640873.6182382
+        }
+      ]
+    },
+    {
+      "lead_id": 2,
+      "company": "IMAGE Skincare UK",
+      "domain": "profile:4fef86c60898e8c990ded67269906e03c985dc651df9ad785b76a84fe425c1d6",
+      "stored_status": "profile_unavailable",
+      "country_reviewed": false,
+      "campaign": "B",
+      "current_pages": 0,
+      "offer_candidates": [],
+      "unqualified_draft_preview": [],
+      "source_snapshots": []
+    },
+    {
+      "lead_id": 3,
+      "company": "Contact Us - Dental Clinic London",
+      "domain": "dentalclinic.london",
+      "stored_status": "review",
+      "country_reviewed": false,
+      "campaign": "A",
+      "current_pages": 16,
+      "offer_candidates": [
+        {
+          "evidence_id": 36,
+          "quote": "Blog 020 71830527 Book Online Online Booking Book Your Appointment Select a service, choose your preferred date and time, and book your appointment in minutes. No payment",
+          "source_url": "https://www.dentalclinic.london/book",
+          "observation": "The saved page includes a public inquiry or booking invitation: Blog 020 71830527 Book Online Online Booking Book Your Appointment Select a service, choose your preferred date and time, and book your appointment in minutes. No payment",
+          "suggestion": "Review that inquiry journey and test a clearer explanation of the next step; agree on a success metric before making changes.",
+          "service": "website_improvement",
+          "priority": 85,
+          "review_required": true,
+          "kind": "opportunity",
+          "proposal_method": "explicit_public_signal",
+          "source_selection": "Explicit business action or support signal",
+          "limitations": "Proposed relevance only; not a verified pain point, buyer fit, absence claim or predicted conversion gain."
+        },
+        {
+          "evidence_id": 39,
+          "quote": "starting point for anyone considering veneers Frequently Asked Questions How big a gap can veneers close between front teeth? Veneers are generally best suited to closing small",
+          "source_url": "https://www.dentalclinic.london/blog/can-veneers-help-close-small-gaps-between-front-teeth",
+          "observation": "The saved page includes customer-question or support information: starting point for anyone considering veneers Frequently Asked Questions How big a gap can veneers close between front teeth? Veneers are generally best suited to closing small",
+          "suggestion": "Review whether a narrow assistant using approved answers and a clear human handoff would help customers reach the next step.",
+          "service": "chatbot",
+          "priority": 60,
+          "review_required": true,
+          "kind": "opportunity",
+          "proposal_method": "explicit_public_signal",
+          "source_selection": "Explicit business action or support signal",
+          "limitations": "Proposed relevance only; not a verified pain point, buyer fit, absence claim or predicted conversion gain."
+        }
+      ],
+      "unqualified_draft_preview": [
+        {
+          "step": 0,
+          "subject": "An idea for Contact Us - Dental Clinic London",
+          "body": "Hi Contact Us - Dental Clinic London team,\n\nI was looking at this page from Contact Us - Dental Clinic London: https://www.dentalclinic.london/book\nThe saved page includes a public inquiry or booking invitation: Blog 020 71830527 Book Online Online Booking Book Your Appointment Select a service, choose your preferred date and time, and book your appointment in minutes. No payment\n\nI help businesses make the next step clearer for visitors. One idea worth exploring: Review that inquiry journey and test a clearer explanation of the next step; agree on a success metric before making changes.\n\nWould it be useful if I sent a short page improvement outline specific to your business?",
+          "evidence_ids": [
+            36
+          ]
+        },
+        {
+          "step": 1,
+          "subject": "Re: An idea for Contact Us - Dental Clinic London",
+          "body": "Hi Contact Us - Dental Clinic London team,\n\nOne extra thought: Check whether a first-time visitor can explain the offer and identify the next step; compare inquiry quality before and after a small change.\n\nWould a short outline help your team assess whether this is worth testing?",
+          "evidence_ids": [
+            36
+          ]
+        },
+        {
+          "step": 2,
+          "subject": "Re: An idea for Contact Us - Dental Clinic London",
+          "body": "Hi Contact Us - Dental Clinic London team,\n\nIf your team is reviewing website journey, I could put together a short page improvement outline around the page I mentioned.\n\nWould that be useful, or is another area more important right now?",
+          "evidence_ids": [
+            36
+          ]
+        },
+        {
+          "step": 3,
+          "subject": "Re: An idea for Contact Us - Dental Clinic London",
+          "body": "Hi Contact Us - Dental Clinic London team,\n\nI'll close the loop here. If your team prioritizes website journey later, feel free to reply.\n\nAll the best.",
+          "evidence_ids": [
+            36
+          ]
+        }
+      ],
+      "source_snapshots": [
+        {
+          "id": 36,
+          "url": "https://www.dentalclinic.london/book",
+          "sha256": "a6505863b0b9590da5092cf00f3557a5343a335af5904e3bc84ce4edeb67b1b6",
+          "fetched_at": 1791661511.3071432
+        },
+        {
+          "id": 39,
+          "url": "https://www.dentalclinic.london/blog/can-veneers-help-close-small-gaps-between-front-teeth",
+          "sha256": "0c387678f06bc40780fd5e2b7889c04eb8c85c78769ebf427651eb0a5b4a0858",
+          "fetched_at": 1791661542.2860746
+        }
+      ]
+    },
+    {
+      "lead_id": 4,
+      "company": "Austin Roofing Company | Roof Repair & Replacement | WDR",
+      "domain": "austinroofingandwaterdamage.com",
+      "stored_status": "review",
+      "country_reviewed": false,
+      "campaign": "A",
+      "current_pages": 1,
+      "offer_candidates": [
+        {
+          "evidence_id": 66,
+          "quote": "are available 24/7. For additional questions, call us at (512) 820-6505 or on Yelp . Austin Roofing Company & Water Damage | WDR 9711 Beck Cir, Austin, TX",
+          "source_url": "https://austinroofingandwaterdamage.com/",
+          "observation": "The saved page includes a public inquiry or booking invitation: are available 24/7. For additional questions, call us at (512) 820-6505 or on Yelp . Austin Roofing Company & Water Damage | WDR 9711 Beck Cir, Austin, TX",
+          "suggestion": "Review that inquiry journey and test a clearer explanation of the next step; agree on a success metric before making changes.",
+          "service": "website_improvement",
+          "priority": 85,
+          "review_required": true,
+          "kind": "opportunity",
+          "proposal_method": "explicit_public_signal",
+          "source_selection": "Contextual contact route",
+          "limitations": "Proposed relevance only; not a verified pain point, buyer fit, absence claim or predicted conversion gain."
+        }
+      ],
+      "unqualified_draft_preview": [
+        {
+          "step": 0,
+          "subject": "An idea for Austin Roofing Company | Roof Repair & Replacement | WDR",
+          "body": "Hi Austin Roofing Company | Roof Repair & Replacement | WDR team,\n\nI was looking at this page from Austin Roofing Company | Roof Repair & Replacement | WDR: https://austinroofingandwaterdamage.com/\nThe saved page includes a public inquiry or booking invitation: are available 24/7. For additional questions, call us at (512) 820-6505 or on Yelp . Austin Roofing Company & Water Damage | WDR 9711 Beck Cir, Austin, TX\n\nI help businesses make the next step clearer for visitors. One idea worth exploring: Review that inquiry journey and test a clearer explanation of the next step; agree on a success metric before making changes.\n\nWould it be useful if I sent a short page improvement outline specific to your business?",
+          "evidence_ids": [
+            66
+          ]
+        },
+        {
+          "step": 1,
+          "subject": "Re: An idea for Austin Roofing Company | Roof Repair & Replacement | WDR",
+          "body": "Hi Austin Roofing Company | Roof Repair & Replacement | WDR team,\n\nOne extra thought: Check whether a first-time visitor can explain the offer and identify the next step; compare inquiry quality before and after a small change.\n\nWould a short outline help your team assess whether this is worth testing?",
+          "evidence_ids": [
+            66
+          ]
+        },
+        {
+          "step": 2,
+          "subject": "Re: An idea for Austin Roofing Company | Roof Repair & Replacement | WDR",
+          "body": "Hi Austin Roofing Company | Roof Repair & Replacement | WDR team,\n\nIf your team is reviewing website journey, I could put together a short page improvement outline around the page I mentioned.\n\nWould that be useful, or is another area more important right now?",
+          "evidence_ids": [
+            66
+          ]
+        },
+        {
+          "step": 3,
+          "subject": "Re: An idea for Austin Roofing Company | Roof Repair & Replacement | WDR",
+          "body": "Hi Austin Roofing Company | Roof Repair & Replacement | WDR team,\n\nI'll close the loop here. If your team prioritizes website journey later, feel free to reply.\n\nAll the best.",
+          "evidence_ids": [
+            66
+          ]
+        }
+      ],
+      "source_snapshots": [
+        {
+          "id": 66,
+          "url": "https://austinroofingandwaterdamage.com/",
+          "sha256": "47cdf98d76d95a0234351b42157ec0fbdc1605c15938b0958ad2fd633682af87",
+          "fetched_at": 1791661558.4019666
+        }
+      ]
+    },
+    {
+      "lead_id": 5,
+      "company": "Tanuki Coffee Roasters",
+      "domain": "tanukicoffeeroasters.com",
+      "stored_status": "review",
+      "country_reviewed": false,
+      "campaign": "B",
+      "current_pages": 19,
+      "offer_candidates": [
+        {
+          "evidence_id": 50,
+          "quote": "Increase quantity for Colombia Palo Rosa Decaf Add to cart More payment options Brew Recomendations | Aero Press | Auto Drip | French Press | V60 | Sugar cane",
+          "source_url": "https://tanukicoffeeroasters.com/products/colombia-palo-rosa-decaf",
+          "observation": "The saved page includes a public shopping or order invitation: Increase quantity for Colombia Palo Rosa Decaf Add to cart More payment options Brew Recomendations | Aero Press | Auto Drip | French Press | V60 | Sugar cane",
+          "suggestion": "Review one product-to-purchase journey and choose a focused test; confirm actual checkout behavior and measurement first.",
+          "service": "store_improvement",
+          "priority": 85,
+          "review_required": true,
+          "kind": "opportunity",
+          "proposal_method": "explicit_public_signal",
+          "source_selection": "Explicit business action or support signal",
+          "limitations": "Proposed relevance only; not a verified pain point, buyer fit, absence claim or predicted conversion gain."
+        }
+      ],
+      "unqualified_draft_preview": [
+        {
+          "step": 0,
+          "subject": "An idea for Tanuki Coffee Roasters",
+          "body": "Hi Tanuki Coffee Roasters team,\n\nI was looking at this page from Tanuki Coffee Roasters: https://tanukicoffeeroasters.com/products/colombia-palo-rosa-decaf\nThe saved page includes a public shopping or order invitation: Increase quantity for Colombia Palo Rosa Decaf Add to cart More payment options Brew Recomendations | Aero Press | Auto Drip | French Press | V60 | Sugar cane\n\nI help businesses make product selection and purchase steps clearer. One idea worth exploring: Review one product-to-purchase journey and choose a focused test; confirm actual checkout behavior and measurement first.\n\nWould it be useful if I sent a short shopping journey review specific to your business?",
+          "evidence_ids": [
+            50
+          ]
+        },
+        {
+          "step": 1,
+          "subject": "Re: An idea for Tanuki Coffee Roasters",
+          "body": "Hi Tanuki Coffee Roasters team,\n\nOne extra thought: Review one product-to-purchase journey first and agree which completion and support metrics to compare before expanding the work.\n\nWould a short outline help your team assess whether this is worth testing?",
+          "evidence_ids": [
+            50
+          ]
+        },
+        {
+          "step": 2,
+          "subject": "Re: An idea for Tanuki Coffee Roasters",
+          "body": "Hi Tanuki Coffee Roasters team,\n\nIf your team is reviewing shopping journey, I could put together a short shopping journey review around the page I mentioned.\n\nWould that be useful, or is another area more important right now?",
+          "evidence_ids": [
+            50
+          ]
+        },
+        {
+          "step": 3,
+          "subject": "Re: An idea for Tanuki Coffee Roasters",
+          "body": "Hi Tanuki Coffee Roasters team,\n\nI'll close the loop here. If your team prioritizes shopping journey later, feel free to reply.\n\nAll the best.",
+          "evidence_ids": [
+            50
+          ]
+        }
+      ],
+      "source_snapshots": [
+        {
+          "id": 50,
+          "url": "https://tanukicoffeeroasters.com/products/colombia-palo-rosa-decaf",
+          "sha256": "ed8a562b76f88329e6d54fea1116635c9a35cec261d84153e0fa73d332f63be6",
+          "fetched_at": 1791661690.8157449
+        }
+      ]
+    },
+    {
+      "lead_id": 6,
+      "company": "MYSKIN Shop UK \u2022 Buy Skincare \u2022 Make-up \u2022 Beauty Products \u2022",
+      "domain": "myskinshop.co.uk",
+      "stored_status": "research_failed",
+      "country_reviewed": false,
+      "campaign": "B",
+      "current_pages": 0,
+      "offer_candidates": [],
+      "unqualified_draft_preview": [],
+      "source_snapshots": []
+    },
+    {
+      "lead_id": 7,
+      "company": "Dentists in Leeds | mydentist",
+      "domain": "mydentist.co.uk",
+      "stored_status": "review",
+      "country_reviewed": false,
+      "campaign": "A",
+      "current_pages": 30,
+      "offer_candidates": [
+        {
+          "evidence_id": 90,
+          "quote": "If you notice any of these signs or symptoms, book an appointment with your local mydentist practice to ensure your teeth and gums stay in top condition. Nyree concludes",
+          "source_url": "https://www.mydentist.co.uk/big-smiles-blog/article/the-dental-blog/2026/10/09/6-signs-you-need-to-see-your-dentist",
+          "observation": "The saved page includes a public inquiry or booking invitation: If you notice any of these signs or symptoms, book an appointment with your local mydentist practice to ensure your teeth and gums stay in top condition. Nyree concludes",
+          "suggestion": "Review that inquiry journey and test a clearer explanation of the next step; agree on a success metric before making changes.",
+          "service": "website_improvement",
+          "priority": 85,
+          "review_required": true,
+          "kind": "opportunity",
+          "proposal_method": "explicit_public_signal",
+          "source_selection": "Explicit business action or support signal",
+          "limitations": "Proposed relevance only; not a verified pain point, buyer fit, absence claim or predicted conversion gain."
+        }
+      ],
+      "unqualified_draft_preview": [
+        {
+          "step": 0,
+          "subject": "An idea for Dentists in Leeds | mydentist",
+          "body": "Hi Dentists in Leeds | mydentist team,\n\nI was looking at this page from Dentists in Leeds | mydentist: https://www.mydentist.co.uk/big-smiles-blog/article/the-dental-blog/2026/10/09/6-signs-you-need-to-see-your-dentist\nThe saved page includes a public inquiry or booking invitation: If you notice any of these signs or symptoms, book an appointment with your local mydentist practice to ensure your teeth and gums stay in top condition. Nyree concludes\n\nI help businesses make the next step clearer for visitors. One idea worth exploring: Review that inquiry journey and test a clearer explanation of the next step; agree on a success metric before making changes.\n\nWould it be useful if I sent a short page improvement outline specific to your business?",
+          "evidence_ids": [
+            90
+          ]
+        },
+        {
+          "step": 1,
+          "subject": "Re: An idea for Dentists in Leeds | mydentist",
+          "body": "Hi Dentists in Leeds | mydentist team,\n\nOne extra thought: Check whether a first-time visitor can explain the offer and identify the next step; compare inquiry quality before and after a small change.\n\nWould a short outline help your team assess whether this is worth testing?",
+          "evidence_ids": [
+            90
+          ]
+        },
+        {
+          "step": 2,
+          "subject": "Re: An idea for Dentists in Leeds | mydentist",
+          "body": "Hi Dentists in Leeds | mydentist team,\n\nIf your team is reviewing website journey, I could put together a short page improvement outline around the page I mentioned.\n\nWould that be useful, or is another area more important right now?",
+          "evidence_ids": [
+            90
+          ]
+        },
+        {
+          "step": 3,
+          "subject": "Re: An idea for Dentists in Leeds | mydentist",
+          "body": "Hi Dentists in Leeds | mydentist team,\n\nI'll close the loop here. If your team prioritizes website journey later, feel free to reply.\n\nAll the best.",
+          "evidence_ids": [
+            90
+          ]
+        }
+      ],
+      "source_snapshots": [
+        {
+          "id": 90,
+          "url": "https://www.mydentist.co.uk/big-smiles-blog/article/the-dental-blog/2026/10/09/6-signs-you-need-to-see-your-dentist",
+          "sha256": "2901cc9290b35171f20feda898a6528f2d89cb91e0a07d9ddd69b6ddfc261d07",
+          "fetched_at": 1791696028.7269757
+        }
+      ]
+    },
+    {
+      "lead_id": 8,
+      "company": "Roofing Contractors Services, Roofing Contractors in India",
+      "domain": "m.indiamart.com",
+      "stored_status": "research_failed",
+      "country_reviewed": false,
+      "campaign": "A",
+      "current_pages": 11,
+      "offer_candidates": [],
+      "unqualified_draft_preview": [],
+      "source_snapshots": []
+    },
+    {
+      "lead_id": 9,
+      "company": "Roofing Contractors in Raleigh, North Carolina | SmartRoof",
+      "domain": "smartroof.com",
+      "stored_status": "review",
+      "country_reviewed": false,
+      "campaign": "A",
+      "current_pages": 41,
+      "offer_candidates": [
+        {
+          "evidence_id": 144,
+          "quote": "damage roof repair recommendations with you. Contact us to schedule your storm damage roof inspection or roof repair. Siding, Windows, Gutters, and More In",
+          "source_url": "https://smartroof.com/location/baltimore-md/",
+          "observation": "The saved page includes a public inquiry or booking invitation: damage roof repair recommendations with you. Contact us to schedule your storm damage roof inspection or roof repair. Siding, Windows, Gutters, and More In",
+          "suggestion": "Review that inquiry journey and test a clearer explanation of the next step; agree on a success metric before making changes.",
+          "service": "website_improvement",
+          "priority": 85,
+          "review_required": true,
+          "kind": "opportunity",
+          "proposal_method": "explicit_public_signal",
+          "source_selection": "Contextual contact route",
+          "limitations": "Proposed relevance only; not a verified pain point, buyer fit, absence claim or predicted conversion gain."
+        },
+        {
+          "evidence_id": 146,
+          "quote": "you need to file an insurance claim. Book Now Frequently Asked Questions General Questions Product & Service Questions Financing & Insurance Questions General Questions FAQ",
+          "source_url": "https://smartroof.com/frequently-asked-questions/",
+          "observation": "The saved page includes customer-question or support information: you need to file an insurance claim. Book Now Frequently Asked Questions General Questions Product & Service Questions Financing & Insurance Questions General Questions FAQ",
+          "suggestion": "Review whether a narrow assistant using approved answers and a clear human handoff would help customers reach the next step.",
+          "service": "chatbot",
+          "priority": 60,
+          "review_required": true,
+          "kind": "opportunity",
+          "proposal_method": "explicit_public_signal",
+          "source_selection": "Explicit business action or support signal",
+          "limitations": "Proposed relevance only; not a verified pain point, buyer fit, absence claim or predicted conversion gain."
+        }
+      ],
+      "unqualified_draft_preview": [
+        {
+          "step": 0,
+          "subject": "An idea for Roofing Contractors in Raleigh, North Carolina | SmartRoof",
+          "body": "Hi Roofing Contractors in Raleigh, North Carolina | SmartRoof team,\n\nI was looking at this page from Roofing Contractors in Raleigh, North Carolina | SmartRoof: https://smartroof.com/location/baltimore-md/\nThe saved page includes a public inquiry or booking invitation: damage roof repair recommendations with you. Contact us to schedule your storm damage roof inspection or roof repair. Siding, Windows, Gutters, and More In\n\nI help businesses make the next step clearer for visitors. One idea worth exploring: Review that inquiry journey and test a clearer explanation of the next step; agree on a success metric before making changes.\n\nWould it be useful if I sent a short page improvement outline specific to your business?",
+          "evidence_ids": [
+            144
+          ]
+        },
+        {
+          "step": 1,
+          "subject": "Re: An idea for Roofing Contractors in Raleigh, North Carolina | SmartRoof",
+          "body": "Hi Roofing Contractors in Raleigh, North Carolina | SmartRoof team,\n\nOne extra thought: Check whether a first-time visitor can explain the offer and identify the next step; compare inquiry quality before and after a small change.\n\nWould a short outline help your team assess whether this is worth testing?",
+          "evidence_ids": [
+            144
+          ]
+        },
+        {
+          "step": 2,
+          "subject": "Re: An idea for Roofing Contractors in Raleigh, North Carolina | SmartRoof",
+          "body": "Hi Roofing Contractors in Raleigh, North Carolina | SmartRoof team,\n\nIf your team is reviewing website journey, I could put together a short page improvement outline around the page I mentioned.\n\nWould that be useful, or is another area more important right now?",
+          "evidence_ids": [
+            144
+          ]
+        },
+        {
+          "step": 3,
+          "subject": "Re: An idea for Roofing Contractors in Raleigh, North Carolina | SmartRoof",
+          "body": "Hi Roofing Contractors in Raleigh, North Carolina | SmartRoof team,\n\nI'll close the loop here. If your team prioritizes website journey later, feel free to reply.\n\nAll the best.",
+          "evidence_ids": [
+            144
+          ]
+        }
+      ],
+      "source_snapshots": [
+        {
+          "id": 144,
+          "url": "https://smartroof.com/location/baltimore-md/",
+          "sha256": "7250be299b92ee2133895b0f46d3bf86bdf635db0efe38e9d01345e38c683186",
+          "fetched_at": 1791696714.4194777
+        },
+        {
+          "id": 146,
+          "url": "https://smartroof.com/frequently-asked-questions/",
+          "sha256": "94759f0ee69f660fbfa1274a49c7db3eb5e2a433496f3da41d898fc1b2b9ba48",
+          "fetched_at": 1791696738.6783035
+        }
+      ]
+    },
+    {
+      "lead_id": 10,
+      "company": "Skindays | Curated Indie Skincare, Haircare & Wellness UK",
+      "domain": "skindays.com",
+      "stored_status": "review",
+      "country_reviewed": false,
+      "campaign": "B",
+      "current_pages": 24,
+      "offer_candidates": [
+        {
+          "evidence_id": 155,
+          "quote": "- Phytoestrogen & Peptide Sale price \u00a335.00 Add to cart HigherDOSE Supercharge Copper Body Brush Sale price \u00a369.00 Add to cart Save 38% Choose options Verden",
+          "source_url": "https://www.skindays.com/collections/autumn-wardrobe",
+          "observation": "The saved page includes a public shopping or order invitation: - Phytoestrogen & Peptide Sale price \u00a335.00 Add to cart HigherDOSE Supercharge Copper Body Brush Sale price \u00a369.00 Add to cart Save 38% Choose options Verden",
+          "suggestion": "Review one product-to-purchase journey and choose a focused test; confirm actual checkout behavior and measurement first.",
+          "service": "store_improvement",
+          "priority": 85,
+          "review_required": true,
+          "kind": "opportunity",
+          "proposal_method": "explicit_public_signal",
+          "source_selection": "Explicit business action or support signal",
+          "limitations": "Proposed relevance only; not a verified pain point, buyer fit, absence claim or predicted conversion gain."
+        }
+      ],
+      "unqualified_draft_preview": [
+        {
+          "step": 0,
+          "subject": "An idea for Skindays | Curated Indie Skincare, Haircare & Wellness UK",
+          "body": "Hi Skindays | Curated Indie Skincare, Haircare & Wellness UK team,\n\nI was looking at this page from Skindays | Curated Indie Skincare, Haircare & Wellness UK: https://www.skindays.com/collections/autumn-wardrobe\nThe saved page includes a public shopping or order invitation: - Phytoestrogen & Peptide Sale price \u00a335.00 Add to cart HigherDOSE Supercharge Copper Body Brush Sale price \u00a369.00 Add to cart Save 38% Choose options Verden\n\nI help businesses make product selection and purchase steps clearer. One idea worth exploring: Review one product-to-purchase journey and choose a focused test; confirm actual checkout behavior and measurement first.\n\nWould it be useful if I sent a short shopping journey review specific to your business?",
+          "evidence_ids": [
+            155
+          ]
+        },
+        {
+          "step": 1,
+          "subject": "Re: An idea for Skindays | Curated Indie Skincare, Haircare & Wellness UK",
+          "body": "Hi Skindays | Curated Indie Skincare, Haircare & Wellness UK team,\n\nOne extra thought: Review one product-to-purchase journey first and agree which completion and support metrics to compare before expanding the work.\n\nWould a short outline help your team assess whether this is worth testing?",
+          "evidence_ids": [
+            155
+          ]
+        },
+        {
+          "step": 2,
+          "subject": "Re: An idea for Skindays | Curated Indie Skincare, Haircare & Wellness UK",
+          "body": "Hi Skindays | Curated Indie Skincare, Haircare & Wellness UK team,\n\nIf your team is reviewing shopping journey, I could put together a short shopping journey review around the page I mentioned.\n\nWould that be useful, or is another area more important right now?",
+          "evidence_ids": [
+            155
+          ]
+        },
+        {
+          "step": 3,
+          "subject": "Re: An idea for Skindays | Curated Indie Skincare, Haircare & Wellness UK",
+          "body": "Hi Skindays | Curated Indie Skincare, Haircare & Wellness UK team,\n\nI'll close the loop here. If your team prioritizes shopping journey later, feel free to reply.\n\nAll the best.",
+          "evidence_ids": [
+            155
+          ]
+        }
+      ],
+      "source_snapshots": [
+        {
+          "id": 155,
+          "url": "https://www.skindays.com/collections/autumn-wardrobe",
+          "sha256": "7c056149d86ab260d72760b510ccbd132eae0ff0d82d5fe17418c4854b82c0c9",
+          "fetched_at": 1791696870.8661735
+        }
+      ]
+    },
+    {
+      "lead_id": 11,
+      "company": "Order Coffee Online | Portland Coffee Roasters",
+      "domain": "portlandcoffeeroasters.com",
+      "stored_status": "review",
+      "country_reviewed": false,
+      "campaign": "B",
+      "current_pages": 29,
+      "offer_candidates": [
+        {
+          "evidence_id": 197,
+          "quote": "/ French Press 5lb / Espresso Regular price Add to Cart , Costa Rica Dark Roast | (10 ct.) Nespresso-Compatible Capsules $9.00 Regular price Add to Cart ,",
+          "source_url": "https://www.portlandcoffeeroasters.com/collections/all",
+          "observation": "The saved page includes a public shopping or order invitation: / French Press 5lb / Espresso Regular price Add to Cart , Costa Rica Dark Roast | (10 ct.) Nespresso-Compatible Capsules $9.00 Regular price Add to Cart ,",
+          "suggestion": "Review one product-to-purchase journey and choose a focused test; confirm actual checkout behavior and measurement first.",
+          "service": "store_improvement",
+          "priority": 85,
+          "review_required": true,
+          "kind": "opportunity",
+          "proposal_method": "explicit_public_signal",
+          "source_selection": "Explicit business action or support signal",
+          "limitations": "Proposed relevance only; not a verified pain point, buyer fit, absence claim or predicted conversion gain."
+        }
+      ],
+      "unqualified_draft_preview": [
+        {
+          "step": 0,
+          "subject": "An idea for Order Coffee Online | Portland Coffee Roasters",
+          "body": "Hi Order Coffee Online | Portland Coffee Roasters team,\n\nI was looking at this page from Order Coffee Online | Portland Coffee Roasters: https://www.portlandcoffeeroasters.com/collections/all\nThe saved page includes a public shopping or order invitation: / French Press 5lb / Espresso Regular price Add to Cart , Costa Rica Dark Roast | (10 ct.) Nespresso-Compatible Capsules $9.00 Regular price Add to Cart ,\n\nI help businesses make product selection and purchase steps clearer. One idea worth exploring: Review one product-to-purchase journey and choose a focused test; confirm actual checkout behavior and measurement first.\n\nWould it be useful if I sent a short shopping journey review specific to your business?",
+          "evidence_ids": [
+            197
+          ]
+        },
+        {
+          "step": 1,
+          "subject": "Re: An idea for Order Coffee Online | Portland Coffee Roasters",
+          "body": "Hi Order Coffee Online | Portland Coffee Roasters team,\n\nOne extra thought: Review one product-to-purchase journey first and agree which completion and support metrics to compare before expanding the work.\n\nWould a short outline help your team assess whether this is worth testing?",
+          "evidence_ids": [
+            197
+          ]
+        },
+        {
+          "step": 2,
+          "subject": "Re: An idea for Order Coffee Online | Portland Coffee Roasters",
+          "body": "Hi Order Coffee Online | Portland Coffee Roasters team,\n\nIf your team is reviewing shopping journey, I could put together a short shopping journey review around the page I mentioned.\n\nWould that be useful, or is another area more important right now?",
+          "evidence_ids": [
+            197
+          ]
+        },
+        {
+          "step": 3,
+          "subject": "Re: An idea for Order Coffee Online | Portland Coffee Roasters",
+          "body": "Hi Order Coffee Online | Portland Coffee Roasters team,\n\nI'll close the loop here. If your team prioritizes shopping journey later, feel free to reply.\n\nAll the best.",
+          "evidence_ids": [
+            197
+          ]
+        }
+      ],
+      "source_snapshots": [
+        {
+          "id": 197,
+          "url": "https://www.portlandcoffeeroasters.com/collections/all",
+          "sha256": "89eaf8492b49150101fa73ebe2bcd8fe9d25e177f95d3f265d4d9919e57f2feb",
+          "fetched_at": 1791697266.950337
+        }
+      ]
+    }
+  ],
+  "normal_records_unchanged": true,
+  "network_requests": 0,
+  "verification_jobs_executed": 0,
+  "messages_persisted": 0,
+  "external_messages_sent": 0,
+  "sending_paused": true,
+  "manual_country_buyer_and_offer_review_required": true,
+  "source_hashes": {
+    "outreach/opportunities.py": "5034f95df0af0e0cd705705739ac2cd4256dbe4e195da45f7c0591def9112989",
+    "outreach/campaigns.py": "daaaf488e10831f7eb34aa5b0d6222acad57b8c7275f54bcfe8f82b4398e37b2",
+    "scripts/verify_offer_sources_saved.py": "1dbe8b12ef1744f637ba88bb62ea1c04a17538e1faec4f18454f74cdb67c63b3"
+  }
+}

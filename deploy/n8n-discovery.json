@@ -1,0 +1,12 @@
+{
+  "name": "Outreach - daily public-web discovery",
+  "active": false,
+  "nodes": [
+    {"id": "schedule", "name": "Daily discovery", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [0, 0], "parameters": {"rule": {"interval": [{"field": "days", "daysInterval": 1, "triggerAtHour": 8}]}}},
+    {"id": "discover", "name": "Queue discovery in workbench", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [260, 0], "parameters": {"method": "POST", "url": "http://app:8000/api/discover", "authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth", "sendBody": true, "specifyBody": "json", "jsonBody": "{\"query\":\"IT consulting London contact\",\"campaign\":\"A\",\"country_hint\":\"UK\",\"limit\":10}", "options": {"timeout": 30000}}}
+  ],
+  "connections": {"Daily discovery": {"main": [[{"node": "Queue discovery in workbench", "type": "main", "index": 0}]]}},
+  "settings": {"executionOrder": "v1", "timezone": "Asia/Kolkata"},
+  "pinData": {},
+  "tags": []
+}

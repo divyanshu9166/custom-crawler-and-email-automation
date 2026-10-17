@@ -1,0 +1,748 @@
+{
+  "checked_at": 1791718573.6779335,
+  "live": true,
+  "fixtures": false,
+  "normal_dashboard": true,
+  "lead_id": 12,
+  "company": "Bouquets For Days",
+  "website": "https://www.bouquetsfordays.co.uk/",
+  "country": "UK",
+  "country_basis": "Official About page identifies Bristol and South West/Cotswolds activity; UK location is a research interpretation, not legal-entity confirmation",
+  "campaign": "A",
+  "selected_service": "chatbot",
+  "research_review_saved": true,
+  "query": "\"Bouquets For Days\" Bristol wedding florist",
+  "discovery": {
+    "run_id": "54cd9acd3666abc6da4220ff",
+    "base_query": "\"Bouquets For Days\" Bristol wedding florist",
+    "campaign": "A",
+    "country_hint": "UK",
+    "query": "\"Bouquets For Days\" Bristol wedding florist",
+    "lead_ids": [
+      12
+    ],
+    "candidates": 1,
+    "report": {
+      "queries": [
+        "\"Bouquets For Days\" Bristol wedding florist United Kingdom",
+        "site:linkedin.com/company/ \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+        "site:x.com \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+        "site:peopleperhour.com \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+        "site:clutch.co \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+        "site:crunchbase.com \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+        "site:facebook.com \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+        "site:instagram.com \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+        "site:google.com/maps/ \"Bouquets For Days\" Bristol wedding florist United Kingdom"
+      ],
+      "signals": [
+        {
+          "source_url": "https://www.facebook.com/106624664552834/",
+          "source_title": "Bouquets for Days | Bristol - Facebook",
+          "indexed_snippet": "Bouquets for Days, Bristol, United Kingdom. 26 likes. Wedding florist + seasonal bouquets delivered weekly across Bristol (UK).",
+          "indexed_signal_only": true,
+          "platform": "facebook.com",
+          "website": "https://www.bouquetsfordays.co.uk/",
+          "state": "exact_brand_domain_candidate",
+          "public_snapshot": {
+            "state": "robots_denied",
+            "url": "https://www.facebook.com/106624664552834/"
+          },
+          "indexed_email_candidates": [],
+          "indexed_sha256": "2e4d0c69e8b354bffbc1292b45a207f385e49f7c2f5243fce2f1dbdfac9ba9c9",
+          "company": "Bouquets for Days",
+          "website_search": {
+            "query": "\"Bouquets for Days\" official website UK",
+            "completed": true,
+            "checked_at": 1791717794.7212036,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "result_count": 9,
+            "note": "Search coverage only; no result does not establish that a website does not exist."
+          },
+          "resolution_candidates": [
+            {
+              "website": "https://www.bouquetsfordays.co.uk/",
+              "snapshot_state": "captured",
+              "name_matches_official": true
+            },
+            {
+              "website": "https://www.bristol.rocks/",
+              "snapshot_state": "captured",
+              "name_matches_official": false
+            }
+          ],
+          "resolution_search_url": "https://www.bouquetsfordays.co.uk/",
+          "official_snapshot_sha256": "0d5b2d6904cf364134d7658c3f642d26afbbdcb0af0e4e98a3267e3c3aab4c93",
+          "match_note": "Name/domain/content correlation only; not verified identity or contact ownership"
+        },
+        {
+          "source_url": "https://www.facebook.com/people/Bouquets-for-Days/100063802969441/",
+          "source_title": "Bouquets for Days | Bristol - Facebook",
+          "indexed_snippet": "Bouquets for Days, Bristol, United Kingdom. 29 likes. Wedding florist + seasonal bouquets delivered weekly across Bristol (UK).",
+          "indexed_signal_only": true,
+          "platform": "facebook.com",
+          "website": "https://www.bouquetsfordays.co.uk/",
+          "state": "exact_brand_domain_candidate",
+          "public_snapshot": {
+            "state": "robots_denied",
+            "url": "https://www.facebook.com/people/Bouquets-for-Days/100063802969441/"
+          },
+          "indexed_email_candidates": [],
+          "indexed_sha256": "037b31fc78104b82c5093e70b29255a85590a0a26867a27f291d222bfd01c951",
+          "company": "Bouquets for Days",
+          "website_search": {
+            "query": "\"Bouquets for Days\" official website UK",
+            "completed": true,
+            "checked_at": 1791717848.7492511,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "result_count": 9,
+            "note": "Search coverage only; no result does not establish that a website does not exist."
+          },
+          "resolution_candidates": [
+            {
+              "website": "https://www.bouquetsfordays.co.uk/",
+              "snapshot_state": "captured",
+              "name_matches_official": true
+            },
+            {
+              "website": "https://www.bristol.rocks/",
+              "snapshot_state": "captured",
+              "name_matches_official": false
+            }
+          ],
+          "resolution_search_url": "https://www.bouquetsfordays.co.uk/",
+          "official_snapshot_sha256": "0d5b2d6904cf364134d7658c3f642d26afbbdcb0af0e4e98a3267e3c3aab4c93",
+          "match_note": "Name/domain/content correlation only; not verified identity or contact ownership"
+        },
+        {
+          "source_url": "https://www.instagram.com/bouquets.for.days/",
+          "source_title": "Bristol Florist - Ellie (@bouquets.for.days) - Instagram",
+          "indexed_snippet": "1,538 Followers, 1,624 Following, 343 Posts - Bristol Florist - Ellie (@bouquets.for.days) on Instagram: \"\ud83d\udc90 Seasonal & sustainable flowers for weddings & events \ud83d\udc90 Freelance Florist working in Bristol & beyond\"",
+          "indexed_signal_only": true,
+          "platform": "instagram.com",
+          "website": "",
+          "state": "ambiguous_search_matches",
+          "public_snapshot": {
+            "state": "robots_denied",
+            "url": "https://www.instagram.com/bouquets.for.days/"
+          },
+          "indexed_email_candidates": [],
+          "indexed_sha256": "253b3f5b986ab3f0adb150150ed8aa90da5df27afda5e92132e965a8ee8ebd34",
+          "company": "Bristol Florist",
+          "website_search": {
+            "query": "\"Bristol Florist\" official website UK",
+            "completed": true,
+            "checked_at": 1791717864.5697985,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "result_count": 7,
+            "note": "Search coverage only; no result does not establish that a website does not exist."
+          },
+          "resolution_candidates": [
+            {
+              "website": "https://rootsfloraldesigns.co.uk/",
+              "snapshot_state": "captured",
+              "name_matches_official": true
+            },
+            {
+              "website": "https://www.theramblingrosebristol.com/",
+              "snapshot_state": "captured",
+              "name_matches_official": true
+            },
+            {
+              "website": "https://bristolfloraldesign.co.uk/",
+              "snapshot_state": "captured",
+              "name_matches_official": true
+            },
+            {
+              "website": "https://www.hauteflorist.co.uk/",
+              "snapshot_state": "captured",
+              "name_matches_official": false
+            }
+          ]
+        }
+      ],
+      "errors": [],
+      "skipped": [
+        {
+          "url": "https://www.facebook.com/BristolMarket.co.uk/posts/bouquetsfordays-is-an-online-shop-for-fresh-flower-bouquets-delivering-exclusive/4024493807623149/",
+          "reason": "not_a_supported_specific_business_profile"
+        },
+        {
+          "url": "https://www.instagram.com/bouquets.for.days/reels/",
+          "reason": "not_a_supported_specific_business_profile"
+        },
+        {
+          "url": "https://www.instagram.com/reel/DDEVZdaMuR6/",
+          "reason": "not_a_supported_specific_business_profile"
+        },
+        {
+          "url": "https://www.instagram.com/p/C19-rGIsVjL/",
+          "reason": "not_a_supported_specific_business_profile"
+        },
+        {
+          "url": "https://www.instagram.com/p/DBYE1b0sn26/",
+          "reason": "not_a_supported_specific_business_profile"
+        }
+      ],
+      "engine_reports": [
+        {
+          "query": "\"Bouquets For Days\" Bristol wedding florist United Kingdom",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:linkedin.com/company/ \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "unexpected crash"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:x.com \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "unexpected crash"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:peopleperhour.com \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "unexpected crash"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:clutch.co \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:crunchbase.com \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:facebook.com \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:instagram.com \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        },
+        {
+          "query": "site:google.com/maps/ \"Bouquets For Days\" Bristol wedding florist United Kingdom",
+          "engine_issues": [
+            [
+              "brave",
+              "Suspended: too many requests"
+            ],
+            [
+              "duckduckgo",
+              "CAPTCHA"
+            ],
+            [
+              "google",
+              "Suspended: access denied"
+            ],
+            [
+              "qwant",
+              "CAPTCHA"
+            ]
+          ]
+        }
+      ],
+      "candidate_domains_before_limit": 5,
+      "country_hint": "UK",
+      "note": "Automatic indexed/public research. Every company, geography, contact owner and offer remains unqualified until reviewed; indexed snippets can be stale."
+    }
+  },
+  "jobs": [
+    {
+      "id": 33,
+      "kind": "discover",
+      "state": "done",
+      "error": ""
+    },
+    {
+      "id": 34,
+      "kind": "research",
+      "state": "done",
+      "error": ""
+    },
+    {
+      "id": 35,
+      "kind": "verify",
+      "state": "done",
+      "error": ""
+    },
+    {
+      "id": 36,
+      "kind": "screenshot",
+      "state": "done",
+      "error": ""
+    },
+    {
+      "id": 37,
+      "kind": "contact_research",
+      "state": "done",
+      "error": ""
+    }
+  ],
+  "crawl": {
+    "status": "partial",
+    "current_pages": 21,
+    "rendered_pages": 21,
+    "issues": 22,
+    "remaining": 0
+  },
+  "sources": [
+    {
+      "id": 213,
+      "url": "https://www.bouquetsfordays.co.uk/",
+      "sha256": "2702e9941e9717952acdf47563510ebbcd01e1593d29204f5db468c709cc1a7e",
+      "fetched_at": 1791717837.316306
+    },
+    {
+      "id": 214,
+      "url": "https://www.bouquetsfordays.co.uk/contact",
+      "sha256": "afaaf9b9b2db89dbc985329b464b29a67b22b325deccc80f327becd183115d62",
+      "fetched_at": 1791718077.5920827
+    },
+    {
+      "id": 215,
+      "url": "https://www.bouquetsfordays.co.uk/about",
+      "sha256": "79781b8b9c5974ca05e46cc0b763fa726fa01807f434fcb5a3f23cb0a2b07967",
+      "fetched_at": 1791718063.861881
+    },
+    {
+      "id": 216,
+      "url": "https://www.bouquetsfordays.co.uk/weddings",
+      "sha256": "074eb734c6ba38c2f17cab8c946bfceefde4c7a58b24b99fa4f502daa01c8a32",
+      "fetched_at": 1791717876.8372662
+    },
+    {
+      "id": 217,
+      "url": "https://www.bouquetsfordays.co.uk/gallery",
+      "sha256": "a2e67187d10825ffb52f6ce90554194441ba6bb90eb392cabae8ca359b8291ec",
+      "fetched_at": 1791718085.5985723
+    },
+    {
+      "id": 218,
+      "url": "https://www.bouquetsfordays.co.uk/sustainability",
+      "sha256": "fa2afa275fde5ad2d3fafcc27ed34b47366d032cf9060a7d99430b83c092b71f",
+      "fetched_at": 1791717892.0824597
+    },
+    {
+      "id": 219,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide",
+      "sha256": "8fab530bb46a576728587b7997c4921c82232aed6e2ec406ba2ae1d5765eb21c",
+      "fetched_at": 1791718095.6967514
+    },
+    {
+      "id": 220,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide/december-spotlight-bay",
+      "sha256": "567cdfac701d3a5e1644d38766c76d1339579a1f78210372990dc1d6e025653a",
+      "fetched_at": 1791718104.6358068
+    },
+    {
+      "id": 221,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide/november-spotlight-chrysanthemums",
+      "sha256": "f9ed5cd7b5e2927ee1932c5609badba195825b3404ad23f75ef4a8bed3253f4c",
+      "fetched_at": 1791717919.8321714
+    },
+    {
+      "id": 222,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide/october-spotlight-zinnias",
+      "sha256": "33dfa9b7b65290bbf3e5202bcb47e6b6498057daf829d24693dbdbd1dbe97b15",
+      "fetched_at": 1791717928.5349126
+    },
+    {
+      "id": 223,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide/september-spotlight",
+      "sha256": "69f901f6ac5fc18a239743099a2df8e2b17808d1bb86c2d75f314cafe05fa64b",
+      "fetched_at": 1791717937.5771475
+    },
+    {
+      "id": 224,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide/august-spotlight",
+      "sha256": "adc5844b2df9eaa9e829ec4e63cbdebc96b1a9cbdd38f7a1f0eb2a2a9468dc29",
+      "fetched_at": 1791717946.1672244
+    },
+    {
+      "id": 225,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide/july-spotlight-sweet-peas",
+      "sha256": "a5ebf32bb85c2082dadfb4962ed57689104bb59f94b4372291d03de0f7e31985",
+      "fetched_at": 1791717955.0341623
+    },
+    {
+      "id": 226,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide/june-spotlight-delphiniums",
+      "sha256": "086bed61b070d17ceca668d71c70269dfb660f3cefb1a44b603096971ff0d48d",
+      "fetched_at": 1791718113.4722414
+    },
+    {
+      "id": 227,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide/may-spotlight-cornflowers",
+      "sha256": "bf2a0198f590b0166b76ea46b8284e5a09b1e86c0d5b2620d0e2d7bf92c0cd58",
+      "fetched_at": 1791717972.399549
+    },
+    {
+      "id": 228,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide/april-spotlight-anemones",
+      "sha256": "c71612d85ba3d297ceb536f18bde73bebc74f93e0cab4c73a31bae807bac0b23",
+      "fetched_at": 1791717981.2290776
+    },
+    {
+      "id": 229,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide/january-spotlight-lunaria-9438m-f3xz3",
+      "sha256": "3c4e43d32555099496de3febce89d34a9aeccada7bf05ac1bb31bb37ec1ba806",
+      "fetched_at": 1791717990.7561817
+    },
+    {
+      "id": 230,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide/january-spotlight-lunaria-9438m",
+      "sha256": "69df394c181d0a3e5784ba9d3be6318497eae625185b1075a3b26204593404bb",
+      "fetched_at": 1791717999.5161774
+    },
+    {
+      "id": 231,
+      "url": "https://www.bouquetsfordays.co.uk/seasonal-flower-guide/january-spotlight-lunaria",
+      "sha256": "f5f6e2f41ff6f200db70794075ba42e136a828879b25caccc93c3506220fa4fd",
+      "fetched_at": 1791718008.6375508
+    },
+    {
+      "id": 232,
+      "url": "https://www.bouquetsfordays.co.uk/home-adirondack",
+      "sha256": "8c3c7f3979401caaf82cce8727bf3c2063940a7b6a81023558c271fa1bf4761b",
+      "fetched_at": 1791718017.0150673
+    },
+    {
+      "id": 233,
+      "url": "https://www.bouquetsfordays.co.uk/home",
+      "sha256": "3d55b2a823a9f8625bd5fa9187e00d75a80dffd3cb2c2d7864556121f7b798a7",
+      "fetched_at": 1791718028.0460842
+    }
+  ],
+  "contact": {
+    "id": 10,
+    "email": "ellie@bouquetsfordays.co.uk",
+    "name": "Ellie Jones",
+    "role": "Florist; named business contact (official About and Contact pages)",
+    "source_url": "https://www.bouquetsfordays.co.uk/contact",
+    "publication_current": true,
+    "verification": "safe",
+    "verified_at": 1791717895.890331,
+    "provider_result": {
+      "input": "ellie@bouquetsfordays.co.uk",
+      "is_reachable": "safe",
+      "misc": {
+        "is_disposable": false,
+        "is_role_account": false,
+        "is_b2c": false,
+        "gravatar_url": null,
+        "haveibeenpwned": null
+      },
+      "mx": {
+        "accepts_mail": true,
+        "records": [
+          "alt1.aspmx.l.google.com.",
+          "alt2.aspmx.l.google.com.",
+          "alt3.aspmx.l.google.com.",
+          "aspmx.l.google.com.",
+          "alt4.aspmx.l.google.com."
+        ]
+      },
+      "smtp": {
+        "can_connect_smtp": true,
+        "has_full_inbox": false,
+        "is_catch_all": false,
+        "is_deliverable": true,
+        "is_disabled": false
+      },
+      "syntax": {
+        "address": "ellie@bouquetsfordays.co.uk",
+        "domain": "bouquetsfordays.co.uk",
+        "is_valid_syntax": true,
+        "username": "ellie",
+        "normalized_email": "ellie@bouquetsfordays.co.uk",
+        "suggestion": null
+      },
+      "debug": {
+        "backend_name": "outreach-verifier",
+        "start_time": "2026-10-11T11:24:53.846631800Z",
+        "end_time": "2026-10-11T11:24:55.883779900Z",
+        "duration": {
+          "secs": 2,
+          "nanos": 37148100
+        },
+        "smtp": {
+          "verif_method": {
+            "type": "Smtp",
+            "host": "aspmx.l.google.com.",
+            "verif_method": {
+              "from_email": "hello@localhost",
+              "hello_name": "localhost",
+              "proxy": null,
+              "smtp_port": 25,
+              "smtp_timeout": {
+                "secs": 45,
+                "nanos": 0
+              },
+              "retries": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  "new_candidates": 1,
+  "new_published_contacts": 1,
+  "application_recipient_verifications": 1,
+  "four_unscheduled_drafts": [
+    {
+      "id": 1,
+      "step": 0,
+      "subject": "An idea for Bouquets For Days",
+      "body": "Hi Ellie,\n\nI was looking at this page from Bouquets For Days: https://www.bouquetsfordays.co.uk/weddings\nYour wedding page explains that couples can feel unsure about flower choices and that they can start by getting in touch.\n\nI help businesses give visitors clearer answers and a route to human support. One idea worth exploring: Explore a small wedding-enquiry helper using your approved seasonal and process information, with a clear handoff to you for availability, pricing and bespoke advice. Treat it as a test rather than a confirmed need.\n\nWould it be useful if I sent a small FAQ assistant outline specific to your business?",
+      "state": "draft",
+      "due_at": null
+    },
+    {
+      "id": 2,
+      "step": 1,
+      "subject": "Re: An idea for Bouquets For Days",
+      "body": "Hi Ellie,\n\nOne extra thought: Start with a narrow set of questions from approved content, a clear human handoff and a way to review incorrect or unanswered responses.\n\nWould a short outline help your team assess whether this is worth testing?",
+      "state": "draft",
+      "due_at": null
+    },
+    {
+      "id": 3,
+      "step": 2,
+      "subject": "Re: An idea for Bouquets For Days",
+      "body": "Hi Ellie,\n\nIf your team is reviewing customer questions, I could put together a small FAQ assistant outline around the page I mentioned.\n\nWould that be useful, or is another area more important right now?",
+      "state": "draft",
+      "due_at": null
+    },
+    {
+      "id": 4,
+      "step": 3,
+      "subject": "Re: An idea for Bouquets For Days",
+      "body": "Hi Ellie,\n\nI'll close the loop here. If your team prioritizes customer questions later, feel free to reply.\n\nAll the best.",
+      "state": "draft",
+      "due_at": null
+    }
+  ],
+  "faq_artifact": {
+    "checked_at": 1791718345.9278238,
+    "artifact_id": 1,
+    "lead_id": 12,
+    "kind": "faq_demo",
+    "state": "draft",
+    "questions": 3,
+    "current_source_snapshot": true,
+    "local_export": "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\current-acquisition-faq.html",
+    "delivered_to_prospect": false,
+    "live_ai_integration": false,
+    "outreach_messages_sent": 0
+  },
+  "faq_browser_check": {
+    "checked_at": 1791718421.567859,
+    "interactive_questions_checked": 3,
+    "answers_match_saved_official_quotes": true,
+    "desktop_mobile": true,
+    "js_errors": 0,
+    "overflow": false,
+    "network_requests": 0,
+    "local_review_only": true,
+    "outreach_messages_sent": 0
+  },
+  "normal_dashboard_check": "data/complete-workflow-normal-check.json",
+  "private_configuration_unchanged": true,
+  "sequence_approvals": 0,
+  "outreach_messages_sent": 0,
+  "sending_enabled": false,
+  "sending_paused": true,
+  "limits": [
+    "A single researched candidate and provider verdict are not consistent yield or broad mailbox accuracy.",
+    "Crawl/render coverage remains partial; no private platform access or bypass demonstrated.",
+    "Legal entity, purchasing authority, need, budget, interest and outreach eligibility remain unconfirmed.",
+    "FAQ is a local prototype with public excerpts; not a deployed AI chatbot or prospect-approved integration.",
+    "Reacher used local development verification identity; production identity, reputation and provider/resource acceptance remain unverified.",
+    "No conversation, proposal, agreement, payment, project delivery or measured client result is claimed."
+  ],
+  "source_hashes": {
+    "outreach/discovery.py": "d44d48a2255115f0d96719c143391d436619011ab90db75a81885883cabdb0e6",
+    "outreach/research.py": "62199cc5dc6cdf100f8699250031b2ff46ead371e5aab608339092514f8b738d",
+    "outreach/web.py": "1f549299d92b5d185fd642d3d097c3f6be636a07297ae2971756f523346dc398",
+    "outreach/browser.py": "3d7e98374e877eff00f360458ceb9168b86b4714226e67054b3837fce828d014",
+    "outreach/providers.py": "071ca72de9313fc934eba6061e6a4597dc107ea4ac8bd5c3db4e11aec5ed05e4",
+    "outreach/campaigns.py": "561190e7cf16ffc8caa0293b3427e49f5d22885cd72591bc59c5cb44e37e9ca0",
+    "outreach/deliverables.py": "9f3dca60b7475ad830dfac6ff82f7f1721e9f2acd673f21e0f2043fbfc4fb9e5"
+  }
+}

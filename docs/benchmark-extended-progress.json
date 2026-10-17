@@ -1,0 +1,58 @@
+{
+  "checked_at": 1791638456.8961737,
+  "run_status": "finished",
+  "source_run": "data/benchmark-extended-recovery/run-20261010-124552-UTC-13cea0",
+  "scope": {
+    "company_count": 1,
+    "max_pages": 30,
+    "max_depth": 3,
+    "render_mode": "always",
+    "company_concurrency": 1,
+    "job_timeout_seconds": 3600
+  },
+  "runtime_versions": {
+    "python": "3.14.7",
+    "playwright": "1.63.0"
+  },
+  "source_files_at_start": {
+    "outreach/web.py": "3d26984f977296940cc16478579a599bb05bdbe714649e905f96990926f7b49c",
+    "outreach/browser.py": "43241eedd13b4f906ed1f71602b7a5a8fae51f32a7274819f598805d338f6b64",
+    "outreach/config.py": "c75b906e7246c7dca4928f98057db2713f4809fb5b794e2f36b25b52ffc87342",
+    "scripts/benchmark.py": "0ca1163ed3c1e7d1069699ab5956611307099e63e5a5da9c1eb66c51da2f5064",
+    "requirements.lock": "886062d34b84734ecb0619ba721e1969e23f649e0818c6374ae95421af86c94f"
+  },
+  "companies": [
+    {
+      "company": "Goldstein Heather Architecture",
+      "website": "https://www.goldsteinheather.co.uk/",
+      "campaign": "A",
+      "country_hint": "UK",
+      "status": "partial",
+      "pages": 30,
+      "unique_page_urls": 30,
+      "rendered_pages": 30,
+      "published_emails": 8,
+      "other_domain_candidates": 0,
+      "published_named_contacts": 0,
+      "elapsed_seconds": 2098.21,
+      "detail_file": "company-001-goldsteinheather.co.uk.json",
+      "error": "",
+      "verified_emails": null,
+      "company_match": null,
+      "buyer_match": null,
+      "observation_accuracy": null,
+      "issues": {
+        "network_did_not_settle_within_10s": 30,
+        "resource_requests_pending_at_snapshot": 30,
+        "unowned_route_target_unavailable": 4,
+        "browser_context_recreated_after_failure": 4
+      }
+    }
+  ],
+  "full_page_budget_captured_and_rendered": true,
+  "observed_orphan_callback_warning_count": 0,
+  "coverage_note": "Rendered captures do not establish complete asset/website coverage or a successful deployed campaign. Preserve partial status and every reported issue.",
+  "imports": 0,
+  "recipient_probes": 0,
+  "sends": 0
+}

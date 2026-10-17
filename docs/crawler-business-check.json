@@ -1,0 +1,146 @@
+{
+  "check_date": "2026-10-10",
+  "scope": "Four public US/UK service/ecommerce candidate sites; two-page research budget. Defaults remain 30 pages with Chromium enabled.",
+  "run_reference": "run-20261010-070045-UTC-f2a079",
+  "unhandled_callback_errors_observed": false,
+  "database_imports": 0,
+  "recipient_verifications": 0,
+  "emails_sent": 0,
+  "full_stack_memory": null,
+  "companies": [
+    {
+      "company": "Austin Studio Architects",
+      "website": "https://austinstudioarchitects.com/",
+      "campaign": "A",
+      "country_hint": "US",
+      "status": "partial",
+      "pages": 2,
+      "rendered_pages": 2,
+      "published_emails": 1,
+      "elapsed_seconds": 44.04,
+      "error": "",
+      "remaining_urls": 189,
+      "issue_counts": {
+        "mutating_or_post_request_requires_review": 25,
+        "network_did_not_settle_within_10s": 1,
+        "http_405": 1,
+        "resource_requests_pending_at_snapshot": 2,
+        "external_document_navigation": 1
+      },
+      "pages_checked": [
+        {
+          "url": "https://austinstudioarchitects.com/",
+          "sha256": "afc4c6bcfb88e4e323e878b3f09cebbdffc9521b184e61e6fad90c1a4ed4e6d8",
+          "text_chars": 2472,
+          "rendered": true
+        },
+        {
+          "url": "https://austinstudioarchitects.com/contact/",
+          "sha256": "0d44c04ba19c61066c8efcc500960fc13cc9512b4539c1f01bcf31901add99b4",
+          "text_chars": 953,
+          "rendered": true
+        }
+      ]
+    },
+    {
+      "company": "Artefact",
+      "website": "https://artefact-studio.com/",
+      "campaign": "A",
+      "country_hint": "UK",
+      "status": "partial",
+      "pages": 2,
+      "rendered_pages": 2,
+      "published_emails": 1,
+      "elapsed_seconds": 43.21,
+      "error": "",
+      "remaining_urls": 11,
+      "issue_counts": {
+        "mutating_or_post_request_requires_review": 4,
+        "Resource exceeds configured size limit": 2
+      },
+      "pages_checked": [
+        {
+          "url": "https://artefact-studio.com/",
+          "sha256": "c573349bec64cf137ae5088ad0dec46d1163c25a79c4acb9c6b6a6c15386883c",
+          "text_chars": 858,
+          "rendered": true
+        },
+        {
+          "url": "https://artefact-studio.com/About-1",
+          "sha256": "6e7715054b097cfec71fe1a2f7b3935bf055652ede1f964d3e9ef12916ba9bf7",
+          "text_chars": 2928,
+          "rendered": true
+        }
+      ]
+    },
+    {
+      "company": "Blissani",
+      "website": "https://blissani.com/",
+      "campaign": "B",
+      "country_hint": "US",
+      "status": "partial",
+      "pages": 2,
+      "rendered_pages": 2,
+      "published_emails": 0,
+      "elapsed_seconds": 34.85,
+      "error": "",
+      "remaining_urls": 25,
+      "issue_counts": {
+        "robots": 9,
+        "mutating_or_post_request_requires_review": 35,
+        "javascript_error": 11,
+        "external_document_navigation": 1,
+        "resource_requests_pending_at_snapshot": 2
+      },
+      "pages_checked": [
+        {
+          "url": "https://blissani.com/",
+          "sha256": "bfc80f0c007ca59d93d64eab56afae3e27fe0e25d5719a90ac219cd445a0ee6a",
+          "text_chars": 6410,
+          "rendered": true
+        },
+        {
+          "url": "https://blissani.com/pages/about-blissani",
+          "sha256": "24445f3e21d6a31f7d8a092fb705f9dd3bce92f9595283910e184154ad5e528f",
+          "text_chars": 2343,
+          "rendered": true
+        }
+      ]
+    },
+    {
+      "company": "Nothing Nasty",
+      "website": "https://nothingnasty.co.uk/",
+      "campaign": "B",
+      "country_hint": "UK",
+      "status": "partial",
+      "pages": 2,
+      "rendered_pages": 2,
+      "published_emails": 0,
+      "elapsed_seconds": 35.07,
+      "error": "",
+      "remaining_urls": 34,
+      "issue_counts": {
+        "mutating_or_post_request_requires_review": 34,
+        "robots": 8,
+        "javascript_error": 9,
+        "external_document_navigation": 1,
+        "resource_requests_pending_at_snapshot": 2
+      },
+      "pages_checked": [
+        {
+          "url": "https://nothingnasty.co.uk/",
+          "sha256": "7e1efdf52e3597825acba9d1acb379e8804795b418c442780c8bded8d53f8182",
+          "text_chars": 11035,
+          "rendered": true
+        },
+        {
+          "url": "https://nothingnasty.co.uk/pages/about-us",
+          "sha256": "acce33d6ee5ce021f9ff0ff00f44babb121175ac78779034019572154d533af3",
+          "text_chars": 2871,
+          "rendered": true
+        }
+      ]
+    }
+  ],
+  "note": "All reports are partial, not complete website audits. Rendered means HTML was captured; blocked POST/external navigation, oversized/pending resources and site script errors still require review. Company/buyer/country eligibility, email validity and business opportunities were not approved. Timings are workstation observations, not a VPS or acquisition benchmark."
+}

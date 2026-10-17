@@ -1,0 +1,1859 @@
+{
+  "checked_at": 1791735070.1710637,
+  "live": true,
+  "fixtures": false,
+  "sending_enabled": false,
+  "messages_sent": 0,
+  "email_verification_jobs_executed_this_check": 0,
+  "normal_database_unchanged": true,
+  "tests_passed": 575,
+  "junit_path": "data/live-lead-final-tests.xml",
+  "matrix": [
+    {
+      "market": "UK",
+      "campaign": "A",
+      "segment": "dental",
+      "wave_1_candidates": 2,
+      "wave_2_candidates": 2,
+      "domains_reused": true,
+      "ids_reused": true
+    },
+    {
+      "market": "UK",
+      "campaign": "A",
+      "segment": "florist",
+      "wave_1_candidates": 2,
+      "wave_2_candidates": 2,
+      "domains_reused": true,
+      "ids_reused": true
+    },
+    {
+      "market": "US",
+      "campaign": "A",
+      "segment": "dental",
+      "wave_1_candidates": 2,
+      "wave_2_candidates": 2,
+      "domains_reused": true,
+      "ids_reused": true
+    },
+    {
+      "market": "UK",
+      "campaign": "B",
+      "segment": "skincare",
+      "wave_1_candidates": 2,
+      "wave_2_candidates": 2,
+      "domains_reused": true,
+      "ids_reused": true
+    },
+    {
+      "market": "US",
+      "campaign": "A",
+      "segment": "roofing",
+      "wave_1_candidates": 2,
+      "wave_2_candidates": 2,
+      "domains_reused": true,
+      "ids_reused": true
+    },
+    {
+      "market": "UK",
+      "campaign": "B",
+      "segment": "coffee",
+      "wave_1_candidates": 2,
+      "wave_2_candidates": 2,
+      "domains_reused": true,
+      "ids_reused": true
+    },
+    {
+      "market": "US",
+      "campaign": "B",
+      "segment": "coffee",
+      "wave_1_candidates": 2,
+      "wave_2_candidates": 2,
+      "domains_reused": true,
+      "ids_reused": true
+    },
+    {
+      "market": "US",
+      "campaign": "B",
+      "segment": "skincare",
+      "wave_1_candidates": 2,
+      "wave_2_candidates": 2,
+      "domains_reused": true,
+      "ids_reused": true
+    }
+  ],
+  "researched_representatives": [
+    {
+      "market": "UK",
+      "campaign": "A",
+      "segment": "Dental",
+      "domain": "bespokedentalclinics.co.uk",
+      "company": "Contact Us | Bespoke Dental Clinics",
+      "lead_id": 3,
+      "isolated_database": "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\live-lead-acceptance\\20261011-211327\\outreach.db",
+      "current_pages": 26,
+      "crawl_status": "interrupted",
+      "crawl_issues": 27,
+      "remaining_urls": null,
+      "contacts": [],
+      "review_candidates": [],
+      "country_review": {
+        "quote": "Manchester M30 7HZ",
+        "url": "https://bespokedentalclinics.co.uk/contact/",
+        "evidence_id": 4,
+        "sha256": "8c51d514d9dd4734d462b1135940d85f6e6c6f9962ce2c7b7ef954b2da00273d",
+        "interpretation": "Researcher geographic interpretation of current official publication; not registered legal-entity or buyer validation"
+      },
+      "evidence": [
+        {
+          "id": 2,
+          "url": "https://bespokedentalclinics.co.uk/",
+          "sha256": "397386ce38229094b99c44a083f86c353e7aae4acea74abe97d1d30acf526aa8",
+          "fetched_at": 1791733454.3231442
+        },
+        {
+          "id": 4,
+          "url": "https://bespokedentalclinics.co.uk/contact/",
+          "sha256": "8c51d514d9dd4734d462b1135940d85f6e6c6f9962ce2c7b7ef954b2da00273d",
+          "fetched_at": 1791733465.2801156
+        },
+        {
+          "id": 6,
+          "url": "https://bespokedentalclinics.co.uk/contact-manchester/",
+          "sha256": "fc82e00417ec725c355f5e6ef14bc2d025957f8caf4e6c631fa14f1e4204f61c",
+          "fetched_at": 1791733480.2672262
+        },
+        {
+          "id": 7,
+          "url": "https://bespokedentalclinics.co.uk/thank-you-contact/",
+          "sha256": "558610dace5e63f0c7e0750428b1356b28969aebbcf4c22268af0a48da0cda40",
+          "fetched_at": 1791733491.7795746
+        },
+        {
+          "id": 9,
+          "url": "https://bespokedentalclinics.co.uk/the-team/",
+          "sha256": "12a632342685153591489661d00fb7c906ee83c2ae6aa5a29004f51d5b5b022e",
+          "fetched_at": 1791733505.8964279
+        },
+        {
+          "id": 10,
+          "url": "https://bespokedentalclinics.co.uk/everything-you-need-to-know-about-dental-bridges/",
+          "sha256": "af7a526233c307fc60941ad51c89738d44cdc1a25ebc146e2a203418c37edf96",
+          "fetched_at": 1791733519.772494
+        },
+        {
+          "id": 12,
+          "url": "https://bespokedentalclinics.co.uk/everything-you-need-to-know-about-veneers/",
+          "sha256": "0645fcf0371c6a6f0fb9f681bd74a9ef5747b732429cc6a77e97ef43f625521e",
+          "fetched_at": 1791733533.7631233
+        },
+        {
+          "id": 14,
+          "url": "https://bespokedentalclinics.co.uk/composite-bonding-packages-in-manchester-pricing-and-whats-included/",
+          "sha256": "0660fc5af11fc31402c388a8b095e76729fe906fc51e35cceb114ca2b36d5186",
+          "fetched_at": 1791733547.5288796
+        },
+        {
+          "id": 15,
+          "url": "https://bespokedentalclinics.co.uk/root-canal-treatment-cost-in-manchester-your-private-pricing-guide/",
+          "sha256": "f0260e89381ad24f1a4adc0ee85efd089b3cccaac4ec73b417dad3faf5f50132",
+          "fetched_at": 1791733559.3957565
+        },
+        {
+          "id": 17,
+          "url": "https://bespokedentalclinics.co.uk/treatments/crowns/",
+          "sha256": "9d19357d6fac7f208a089e93f96431de5d289ee58fdb0c345a547db3af88f25b",
+          "fetched_at": 1791733575.0045612
+        },
+        {
+          "id": 19,
+          "url": "https://bespokedentalclinics.co.uk/treatments/sedation/",
+          "sha256": "f5b894a377bb02a718be381dcec123a20e81450766d02266d40a00779c9a2607",
+          "fetched_at": 1791733589.4742534
+        },
+        {
+          "id": 20,
+          "url": "https://bespokedentalclinics.co.uk/dental-implants-manchester/",
+          "sha256": "862c9c68e1e8ce7af5d2207a0e5db8c52359fb5636b89aa447453f08bde9aa08",
+          "fetched_at": 1791733605.900794
+        },
+        {
+          "id": 22,
+          "url": "https://bespokedentalclinics.co.uk/treatments/dentures/",
+          "sha256": "f74293308bb98f34b4cc74ab716808608ea678e9637af0fbfdd01a10160ecedd",
+          "fetched_at": 1791733620.3994896
+        },
+        {
+          "id": 24,
+          "url": "https://bespokedentalclinics.co.uk/thank-you-newsletter/",
+          "sha256": "cda187b01254e20b8ed3d04d6958fdd4fe8aadbd1c76fe1d567675a03e8ae32f",
+          "fetched_at": 1791733629.8502226
+        },
+        {
+          "id": 25,
+          "url": "https://bespokedentalclinics.co.uk/emergency-dentist/",
+          "sha256": "7f4cfbab506e6c53045437e5b9f51097bf094ec47384b63d6fb4b9cbf994afd7",
+          "fetched_at": 1791733642.4638777
+        },
+        {
+          "id": 27,
+          "url": "https://bespokedentalclinics.co.uk/conditions/broken-teeth/",
+          "sha256": "1f5c29b37ecb10849a2efd273ae996e463708dab0cc1687218d138ccbecbfb15",
+          "fetched_at": 1791733654.6974761
+        },
+        {
+          "id": 29,
+          "url": "https://bespokedentalclinics.co.uk/conditions/missing-teeth/",
+          "sha256": "3291eb56870738b53e908853fa6b5415a69ff7f9fa5d92442d4ae03937aa9f3c",
+          "fetched_at": 1791733666.7473605
+        },
+        {
+          "id": 30,
+          "url": "https://bespokedentalclinics.co.uk/treatments/fillings/",
+          "sha256": "d0f0a7888dedb8ffc1b3ca1203804039e5f1554549abcfde6549a4ad74170119",
+          "fetched_at": 1791733678.9909458
+        },
+        {
+          "id": 32,
+          "url": "https://bespokedentalclinics.co.uk/treatments/root-canal/",
+          "sha256": "010dd558f1c54e8c043bbc220fa9d19f0c610d237de656ebe06a4711a7d51063",
+          "fetched_at": 1791733691.4005835
+        },
+        {
+          "id": 34,
+          "url": "https://bespokedentalclinics.co.uk/treatments/composite-bonding/",
+          "sha256": "344976ab99eaff3c5fe4736eacb07d8606060077496804989500d42994a8a265",
+          "fetched_at": 1791733704.0779364
+        },
+        {
+          "id": 36,
+          "url": "https://bespokedentalclinics.co.uk/treatments/invisalign/",
+          "sha256": "fbe2caadf2ad4500af9ed30e83cd9c21dfa282066d511004bdf89bc99d621a24",
+          "fetched_at": 1791733716.7011294
+        },
+        {
+          "id": 37,
+          "url": "https://bespokedentalclinics.co.uk/treatments/veneers/",
+          "sha256": "1abd2b1be386a7bc313367b300850020981f121d5a2595e1320657f701d2203a",
+          "fetched_at": 1791733729.2750838
+        },
+        {
+          "id": 39,
+          "url": "https://bespokedentalclinics.co.uk/treatments/teeth-whitening/",
+          "sha256": "dc6f108ad83bf63d70b6c44393e8982861535ff673aa70daa0a7decc31deda31",
+          "fetched_at": 1791733741.5118296
+        },
+        {
+          "id": 40,
+          "url": "https://bespokedentalclinics.co.uk/treatments/smile-makeover/",
+          "sha256": "2a40b677f8572fcb36a6d56de84b701c3f8d40886f94a770f05f5038aadc67ad",
+          "fetched_at": 1791733753.800714
+        },
+        {
+          "id": 42,
+          "url": "https://bespokedentalclinics.co.uk/treatments/dental-implants/",
+          "sha256": "eab6df454457dc52644c3b755705858a059038e668b812bde075ccd5a40d601e",
+          "fetched_at": 1791733765.981589
+        },
+        {
+          "id": 44,
+          "url": "https://bespokedentalclinics.co.uk/terms-conditions/",
+          "sha256": "c5422c501981c883b9a1264c28c74e45d1ccfe0301e99f94f0fa8e394ea48984",
+          "fetched_at": 1791733777.035482
+        }
+      ],
+      "outreach_qualified": false
+    },
+    {
+      "market": "UK",
+      "campaign": "A",
+      "segment": "Florist",
+      "domain": "bristolfloraldesign.co.uk",
+      "company": "Flower Delivery Bristol | Clifton Florist, Same-Day by 11am",
+      "lead_id": 1,
+      "isolated_database": "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\live-lead-acceptance\\20261011-211327\\outreach.db",
+      "current_pages": 38,
+      "crawl_status": "interrupted",
+      "crawl_issues": 40,
+      "remaining_urls": null,
+      "contacts": [
+        {
+          "email": "hello@bristolfloraldesign.co.uk",
+          "source_url": "https://bristolfloraldesign.co.uk/sympathy-flowers-bristol/",
+          "name": "",
+          "role": "",
+          "verification": "unverified",
+          "status": "new",
+          "publication_guard": true,
+          "same_company_domain": true
+        }
+      ],
+      "review_candidates": [],
+      "country_review": {
+        "quote": "1 Waterloo Street, Clifton, Bristol, BS8 4BT",
+        "url": "https://bristolfloraldesign.co.uk/",
+        "evidence_id": 1,
+        "sha256": "eee6dcc8ce877cd5c9ae8e3c407fb21c5c34fb2d5fa3ce7cf94eb8d894d4d249",
+        "interpretation": "Researcher geographic interpretation of current official publication; not registered legal-entity or buyer validation"
+      },
+      "evidence": [
+        {
+          "id": 1,
+          "url": "https://bristolfloraldesign.co.uk/",
+          "sha256": "eee6dcc8ce877cd5c9ae8e3c407fb21c5c34fb2d5fa3ce7cf94eb8d894d4d249",
+          "fetched_at": 1791733445.5455525
+        },
+        {
+          "id": 3,
+          "url": "https://bristolfloraldesign.co.uk/about-us/",
+          "sha256": "9d1b86a396e41033f105cbb89bcb6d92ea64e44ce79b88974dd9ae622e195881",
+          "fetched_at": 1791733461.997684
+        },
+        {
+          "id": 5,
+          "url": "https://bristolfloraldesign.co.uk/local-florist-bristol-contact/",
+          "sha256": "dc7d07bfbbf5fd205a5b5507891161bfd80bb11f9c4d8a62c85fdf1a57591e53",
+          "fetched_at": 1791733480.1706116
+        },
+        {
+          "id": 8,
+          "url": "https://bristolfloraldesign.co.uk/wedding-packages-pricing-guide/",
+          "sha256": "c595f61f433412a872417ac45a68c30162d96adeaf8c92933b4aaac20491ccf8",
+          "fetched_at": 1791733499.6247022
+        },
+        {
+          "id": 11,
+          "url": "https://bristolfloraldesign.co.uk/shop/",
+          "sha256": "b4edfe85d1c75998a3ed7d20446738632e7e0c170e1ce92c50af07be5e5f0aca",
+          "fetched_at": 1791733520.810099
+        },
+        {
+          "id": 13,
+          "url": "https://bristolfloraldesign.co.uk/floral-workshops-bristol/",
+          "sha256": "7c1d59a57497b32de09767db25e5a3e167eb532fa6dff2615e88c7a9d643cece",
+          "fetched_at": 1791733541.463729
+        },
+        {
+          "id": 16,
+          "url": "https://bristolfloraldesign.co.uk/shop/bespoke-bouquets/the-pumpkin-spice/",
+          "sha256": "f74f60815fbc7c80cd00354cba0abed3ef90ff048d51d3c1023700ce74629be2",
+          "fetched_at": 1791733562.825479
+        },
+        {
+          "id": 18,
+          "url": "https://bristolfloraldesign.co.uk/shop/bespoke-bouquets/the-summer-supreme/",
+          "sha256": "c42fadf9f0b077ce669938be5c53447e4832eb0c8ac560a348491b48b724d1d8",
+          "fetched_at": 1791733584.3984914
+        },
+        {
+          "id": 21,
+          "url": "https://bristolfloraldesign.co.uk/shop/bespoke-bouquets/florist-choice-seasonal/",
+          "sha256": "c485e97fe94b56b6eb49549d6487489bd7097c0da07e8e0ce9d7af62ef304546",
+          "fetched_at": 1791733606.5804899
+        },
+        {
+          "id": 23,
+          "url": "https://bristolfloraldesign.co.uk/shop/funeral-flowers/traditional-funeral-wreath/",
+          "sha256": "fe88861861581b1e469258e6ed547505963e1381a577b044cf2c8e460728ee65",
+          "fetched_at": 1791733627.2117133
+        },
+        {
+          "id": 26,
+          "url": "https://bristolfloraldesign.co.uk/our-blog/",
+          "sha256": "881fa9577339ccb751a49662a6c1258656071e6d49d08878e55a41341c1d3700",
+          "fetched_at": 1791733646.164998
+        },
+        {
+          "id": 28,
+          "url": "https://bristolfloraldesign.co.uk/same-day-flower-delivery-bristol/",
+          "sha256": "51ce2e62168e5e888c2ff1c036359ddfc5baaaabadfc2c8687ce293d1b75f451",
+          "fetched_at": 1791733665.2683525
+        },
+        {
+          "id": 31,
+          "url": "https://bristolfloraldesign.co.uk/bristol-florist-bespoke-bouquets/",
+          "sha256": "d51c9b7f1e93b3775f0e8e54e0d1371da974ac0e34ff69c43eacf3675eea9596",
+          "fetched_at": 1791733683.1576478
+        },
+        {
+          "id": 33,
+          "url": "https://bristolfloraldesign.co.uk/my-account/",
+          "sha256": "ec41986e83b72e1fbc7378d0790fc9cf0e094ae4eb664fbeb854fd829281e836",
+          "fetched_at": 1791733699.119577
+        },
+        {
+          "id": 35,
+          "url": "https://bristolfloraldesign.co.uk/occasions/",
+          "sha256": "78d9b391f0629d09a891d6d6055c60d139282961f3916aaec67cbb95a1a0e415",
+          "fetched_at": 1791733715.3597488
+        },
+        {
+          "id": 38,
+          "url": "https://bristolfloraldesign.co.uk/funeral-flowers-bristol/",
+          "sha256": "edc3bbeff3256b858688db6ce2a89ee8807670e167e50b0f054ecb2a2ca57f2f",
+          "fetched_at": 1791733734.0955598
+        },
+        {
+          "id": 41,
+          "url": "https://bristolfloraldesign.co.uk/wedding-flowers-bristol/",
+          "sha256": "a26df316d5da44781638f60efa938d7633e1a1bf4cf3f51ef845719a79967f8a",
+          "fetched_at": 1791733757.2929041
+        },
+        {
+          "id": 43,
+          "url": "https://bristolfloraldesign.co.uk/sustainable-florist-bristol/",
+          "sha256": "64da8ad464d36c6b04d29e448610ff9f7c4f76f3f360a70918cc9c46cb95ea9a",
+          "fetched_at": 1791733774.7955709
+        },
+        {
+          "id": 142,
+          "url": "https://bristolfloraldesign.co.uk/shop/funeral-flowers/personalised-letter-tribute/",
+          "sha256": "ea1555905debbe9a540394b6502f21862a21cde157a634303c833caea8bd70ce",
+          "fetched_at": 1791734473.7743056
+        },
+        {
+          "id": 145,
+          "url": "https://bristolfloraldesign.co.uk/shop/funeral-flowers/heart-tribute/",
+          "sha256": "451bc5a302b9e477e2b7b461ced1d494df2ae3b3679da29fbb8fcb439543f1b3",
+          "fetched_at": 1791734495.5350606
+        },
+        {
+          "id": 148,
+          "url": "https://bristolfloraldesign.co.uk/shop/workshops/bouquet-arrangement-workshop/",
+          "sha256": "df230c474c85782a83971a8e66a8fc488b6c2c941f3c88c6704f5eb3a5f08bae",
+          "fetched_at": 1791734514.5441606
+        },
+        {
+          "id": 151,
+          "url": "https://bristolfloraldesign.co.uk/shop/workshops/floral-crown-workshop/",
+          "sha256": "202983a6bbc6f5d663eb16a5b40758a0218736d0bc5f0266a8e5ad20a862bdc3",
+          "fetched_at": 1791734533.9400077
+        },
+        {
+          "id": 153,
+          "url": "https://bristolfloraldesign.co.uk/shop/workshops/christmas-wreath-making-workshop-bristol/",
+          "sha256": "66b0a2f42c06bcfd01211d0e651947c8dffde7018f8f8562c3287185b4204761",
+          "fetched_at": 1791734553.367716
+        },
+        {
+          "id": 156,
+          "url": "https://bristolfloraldesign.co.uk/flower-delivery-stoke-bishop-bristol/",
+          "sha256": "a47754ba90dfbc823574057142724ba882d34eb4bff51781504c464cd514b41e",
+          "fetched_at": 1791734570.9075322
+        },
+        {
+          "id": 159,
+          "url": "https://bristolfloraldesign.co.uk/flower-subscription-bristol/",
+          "sha256": "2ee7e3200e04c7dee027ff8520b35ef399e72cdc29d3294fae2d865e80ae087e",
+          "fetched_at": 1791734587.5503237
+        },
+        {
+          "id": 162,
+          "url": "https://bristolfloraldesign.co.uk/corporate-floristry-bristol/",
+          "sha256": "d096759ef61cd95dda7cf21a0e3b6311bf38beb6aae7224e63a501ea89bfa4a9",
+          "fetched_at": 1791734606.4895077
+        },
+        {
+          "id": 164,
+          "url": "https://bristolfloraldesign.co.uk/delivery/",
+          "sha256": "9519435980e9e6a39ba796d0963abb3a8208926bcad1d8b9ab838805e61a7b73",
+          "fetched_at": 1791734621.8663945
+        },
+        {
+          "id": 167,
+          "url": "https://bristolfloraldesign.co.uk/plants-delivered-same-day-bristol/",
+          "sha256": "aaf78a9775a959ab21fbc779d88d5b1fca7ff2352d17885db829eed6ee66ba6f",
+          "fetched_at": 1791734638.8759308
+        },
+        {
+          "id": 169,
+          "url": "https://bristolfloraldesign.co.uk/bouquet-presentation-options/",
+          "sha256": "c56a9b252e2451f1b6d6b818516ee1a223e497369df5a5a33e4694d433b35492",
+          "fetched_at": 1791734657.1284516
+        },
+        {
+          "id": 172,
+          "url": "https://bristolfloraldesign.co.uk/privacy-policy/",
+          "sha256": "e6173f7776778b72eb02f53001c3eeb970ecbedf53e03d6c0e2d1846a4b29303",
+          "fetched_at": 1791734672.3147557
+        },
+        {
+          "id": 174,
+          "url": "https://bristolfloraldesign.co.uk/terms-of-use/",
+          "sha256": "bea0dbeef3b607dac94f1611ccedab8545aecda347ae74ad47a8f714d4ecd92f",
+          "fetched_at": 1791734687.5913658
+        },
+        {
+          "id": 176,
+          "url": "https://bristolfloraldesign.co.uk/returns-refunds/",
+          "sha256": "8dca7de53deddec2ce3a908acead78a07ffdd5e16cb619f6d43d857dd0c3ef6d",
+          "fetched_at": 1791734702.7332604
+        },
+        {
+          "id": 179,
+          "url": "https://bristolfloraldesign.co.uk/flower-delivery-areas-bristol/",
+          "sha256": "218cad81cf6a671ad8843e8d8aa415518b1d3e33d600a37a8ad1d4419f24423d",
+          "fetched_at": 1791734718.3352616
+        },
+        {
+          "id": 181,
+          "url": "https://bristolfloraldesign.co.uk/christmas-wreaths-bristol/",
+          "sha256": "2eff42d2557b20f3698f82529a31b7669c16d1a18a0ff12895119e2c5266107d",
+          "fetched_at": 1791734735.2203932
+        },
+        {
+          "id": 184,
+          "url": "https://bristolfloraldesign.co.uk/what-flowers-to-send-to-a-funeral/",
+          "sha256": "c605a4c97c952f96d47d5c352fd1763250e2e0fe86602a1ff3ff5ba5b460969c",
+          "fetched_at": 1791734750.58804
+        },
+        {
+          "id": 186,
+          "url": "https://bristolfloraldesign.co.uk/funeral-flower-meanings/",
+          "sha256": "db3e6723d67ee5c1b43d751e8058f8467649243311195c2a035c7689373dcb49",
+          "fetched_at": 1791734765.784095
+        },
+        {
+          "id": 188,
+          "url": "https://bristolfloraldesign.co.uk/what-to-write-on-a-funeral-flower-card/",
+          "sha256": "9b3f78b4be19cacf180af9bda5a17247fe67174ded4c9b3f6807af9ac8c134c2",
+          "fetched_at": 1791734780.906784
+        },
+        {
+          "id": 190,
+          "url": "https://bristolfloraldesign.co.uk/sympathy-flowers-bristol/",
+          "sha256": "370f84d9353bdc01b3d2157825b5960cc338b2fc1e9efe4967d54e37fb5d5c6d",
+          "fetched_at": 1791734796.4756172
+        }
+      ],
+      "outreach_qualified": false
+    },
+    {
+      "market": "UK",
+      "campaign": "B",
+      "segment": "Beauty retail",
+      "domain": "blommabeauty.com",
+      "company": "Shop UK Organic & Natural Skincare Brands | Blomma Beauty",
+      "lead_id": 9,
+      "isolated_database": "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\live-lead-acceptance\\20261011-211327\\outreach.db",
+      "current_pages": 30,
+      "crawl_status": "partial",
+      "crawl_issues": 30,
+      "remaining_urls": 1017,
+      "contacts": [
+        {
+          "email": "info@blommabeauty.com",
+          "source_url": "https://blommabeauty.com/policies/refund-policy",
+          "name": "",
+          "role": "",
+          "verification": "unverified",
+          "status": "new",
+          "publication_guard": true,
+          "same_company_domain": true
+        }
+      ],
+      "review_candidates": [
+        {
+          "email": "blommabeauty@gmail.com",
+          "name": "",
+          "role": "",
+          "source_url": "https://blommabeauty.com/es/policies/terms-of-service",
+          "methods": [
+            "visible_text",
+            "visible_obfuscation"
+          ],
+          "review_required": true,
+          "reason": "Different email domain: company ownership and relevance are unconfirmed",
+          "lead_id": 9,
+          "evidence_sha256": "2d4eed9d07ad4e7e4463e84a213e3afc88ef9d571ebfd041ad7da3afc7111739"
+        }
+      ],
+      "country_review": {
+        "quote": "London EC1V 1NQ United Kingdom",
+        "url": "https://blommabeauty.com/products/flower-facial-steam-inlight-beauty",
+        "evidence_id": 54,
+        "sha256": "7646a51aebcc1c69ec52760f13ccc06ec8c0f5a78283e6543ef2cd211976d6a5",
+        "interpretation": "Researcher geographic interpretation of current official publication; not registered legal-entity or buyer validation"
+      },
+      "evidence": [
+        {
+          "id": 45,
+          "url": "https://blommabeauty.com/",
+          "sha256": "5bcf9ea6b7002ba20ff06b82dfa017e5e9720955b89c8755ea07f9acf8012158",
+          "fetched_at": 1791733804.4418716
+        },
+        {
+          "id": 48,
+          "url": "https://blommabeauty.com/blogs/natural-beauty-wellbeing-blog/whats-the-best-skincare-routine-for-menopausal-and-perimenopausal-skin?_pos=5&_sid=a55a288c4&_ss=r",
+          "sha256": "dd7355a8aec2345787e75b202fb1ab5a671c7077877c180c1cb9478559b94a4f",
+          "fetched_at": 1791733821.0943391
+        },
+        {
+          "id": 50,
+          "url": "https://blommabeauty.com/pages/about-us",
+          "sha256": "527d8f25a5ad7d0ff0f0806fca2710f79811f101332b45db588d4ef3757af8e9",
+          "fetched_at": 1791733832.1380563
+        },
+        {
+          "id": 51,
+          "url": "https://blommabeauty.com/pages/natural-beauty-store-london-team",
+          "sha256": "b24670c34ead6f3c48f0296b73ede9d39a7684717ff096eabb2424a85fecb90c",
+          "fetched_at": 1791733845.9054966
+        },
+        {
+          "id": 53,
+          "url": "https://blommabeauty.com/pages/contactus",
+          "sha256": "b7df722789a2bde84bda4f8192f836ccf58a5cbba22e78387a3e20067c67c187",
+          "fetched_at": 1791733856.0643358
+        },
+        {
+          "id": 54,
+          "url": "https://blommabeauty.com/products/flower-facial-steam-inlight-beauty",
+          "sha256": "7646a51aebcc1c69ec52760f13ccc06ec8c0f5a78283e6543ef2cd211976d6a5",
+          "fetched_at": 1791733867.8238149
+        },
+        {
+          "id": 57,
+          "url": "https://blommabeauty.com/policies/terms-of-service",
+          "sha256": "3302c62c386a04f5034b5707e59c11726f0ad8f4a64d6f19abee940da1fce3ff",
+          "fetched_at": 1791733886.4014385
+        },
+        {
+          "id": 58,
+          "url": "https://blommabeauty.com/es/products/flower-facial-steam-inlight-beauty",
+          "sha256": "7922b481e9ad1e919e4b1abcb0e5f502368f948ac1ff41f4c2731c073ee0c012",
+          "fetched_at": 1791733899.0336826
+        },
+        {
+          "id": 60,
+          "url": "https://blommabeauty.com/products/calm-london-book",
+          "sha256": "4e59461a019578005bb70dd379302412d93eda70a51e308727bb8b294723c932",
+          "fetched_at": 1791733909.116784
+        },
+        {
+          "id": 62,
+          "url": "https://blommabeauty.com/es/products/calm-london-book",
+          "sha256": "56bfd3d36d443eb0c48d4b75eaffaae7cfba880dfb877dde510a547d3a5b5348",
+          "fetched_at": 1791733926.8418903
+        },
+        {
+          "id": 65,
+          "url": "https://blommabeauty.com/es/policies/terms-of-service",
+          "sha256": "2d4eed9d07ad4e7e4463e84a213e3afc88ef9d571ebfd041ad7da3afc7111739",
+          "fetched_at": 1791733944.254487
+        },
+        {
+          "id": 66,
+          "url": "https://blommabeauty.com/collections/natural-beauty-gift-sets",
+          "sha256": "8add228b27e0afed5364a566befd4e0b165aa35322eacea1b935ccf294222cfb",
+          "fetched_at": 1791733955.9669466
+        },
+        {
+          "id": 69,
+          "url": "https://blommabeauty.com/collections/gift-cards",
+          "sha256": "fe280af3be7c2ee1f20a030231ec8804d3058dce320507dbd875854e9c45784b",
+          "fetched_at": 1791733974.3097558
+        },
+        {
+          "id": 70,
+          "url": "https://blommabeauty.com/collections/natural-beauty-gifts-under-15",
+          "sha256": "0800b1124cf1b9d7a49dd6c891fb4a80909dc1df5a5d3a62aacd857ff7070e69",
+          "fetched_at": 1791733984.903637
+        },
+        {
+          "id": 72,
+          "url": "https://blommabeauty.com/collections/skincare-wellbeing-gifts-under-20",
+          "sha256": "95d6dc0d55ea2bf7a91c8c45c5098341f3bdab83ef3c797564194600c5bb832f",
+          "fetched_at": 1791733995.3054972
+        },
+        {
+          "id": 74,
+          "url": "https://blommabeauty.com/collections/natural-beauty-gift-sets-under-30",
+          "sha256": "4f067baa8bed30677887fa52bfd51ed9e31f889bfb9ac2f4fba0013ff8228cda",
+          "fetched_at": 1791734005.5842795
+        },
+        {
+          "id": 75,
+          "url": "https://blommabeauty.com/collections/natural-beauty-gift-sets-under-50",
+          "sha256": "aba5ec35bf20ad81e5a08224359ad52b9e11e0c2a9c68c1559b2611bd9ace41c",
+          "fetched_at": 1791734015.7568502
+        },
+        {
+          "id": 77,
+          "url": "https://blommabeauty.com/blogs/natural-skincare-ingredients",
+          "sha256": "c408ba12cc91899986b55188acb932cf887a481514d8d404f14917270488bf90",
+          "fetched_at": 1791734026.064792
+        },
+        {
+          "id": 79,
+          "url": "https://blommabeauty.com/blogs/natural-beauty-wellbeing-blog",
+          "sha256": "2849df4c121963fd019c445aa0552fcc1fb7a10f8d0a711beb6a0781bea970fa",
+          "fetched_at": 1791734034.7820177
+        },
+        {
+          "id": 80,
+          "url": "https://blommabeauty.com/blogs/natural-beauty-wellbeing-blog/supporting-mental-wellbeing-through-movement-and-sensory-rituals",
+          "sha256": "598067ba80d59e46cb43257807fbc0fa013b500d47593fc39eb432421d8dd492",
+          "fetched_at": 1791734043.093547
+        },
+        {
+          "id": 82,
+          "url": "https://blommabeauty.com/blogs/meet-our-brands",
+          "sha256": "56566bf8d197647add309787c91b9ddb7358c2cf6ebefa2effd9baeb43a46047",
+          "fetched_at": 1791734056.556455
+        },
+        {
+          "id": 84,
+          "url": "https://blommabeauty.com/blogs/natural-skincare-ingredients/bakuchiol-the-natural-alternative-to-retinol-for-glowing-skin?_pos=1&_sid=b7a9d4064&_ss=r",
+          "sha256": "5f2ebb4b8b68e52f33488669de49546b566a43f9687099b6f03c4054eb54eafc",
+          "fetched_at": 1791734065.4231465
+        },
+        {
+          "id": 86,
+          "url": "https://blommabeauty.com/blogs/natural-skincare-ingredients/sea-buckthorn?_pos=3&_sid=ec09418b1&_ss=r",
+          "sha256": "6cbfe4b4fd8046dd441a66b5cc0356f874e5b5746b819578424fdd8ca48ed66e",
+          "fetched_at": 1791734073.2304373
+        },
+        {
+          "id": 87,
+          "url": "https://blommabeauty.com/es/blogs/natural-skincare-ingredients",
+          "sha256": "74498ea0ba232d90868dd39f0e229e03bf61e68cff330933f9a9e168de6d1947",
+          "fetched_at": 1791734082.152917
+        },
+        {
+          "id": 89,
+          "url": "https://blommabeauty.com/pages/our-natural-beauty-store",
+          "sha256": "b0f72e38106ade5fb023ed270b12aff8b767629d3744388460349102d3e9f5ff",
+          "fetched_at": 1791734090.135078
+        },
+        {
+          "id": 90,
+          "url": "https://blommabeauty.com/pages/how-we-choose-brands",
+          "sha256": "b893b02e9f04fa2459ce2db1bd98b9c5d314ffe6b30e0b905859ebdeca70911b",
+          "fetched_at": 1791734097.925997
+        },
+        {
+          "id": 92,
+          "url": "https://blommabeauty.com/pages/sustainability",
+          "sha256": "bc6db469aa7907b5dfc57f97228f543b9fde1f69a0d1cf415ceff4fa62546a6d",
+          "fetched_at": 1791734107.3424625
+        },
+        {
+          "id": 93,
+          "url": "https://blommabeauty.com/pages/careers-natural-organic-skincare-jobs-london",
+          "sha256": "5e01069cf9519d3b2ab6d055fd8cc3dd83efaf49eb2404f9434eea38a67bc3d0",
+          "fetched_at": 1791734115.649002
+        },
+        {
+          "id": 95,
+          "url": "https://blommabeauty.com/policies/shipping-policy",
+          "sha256": "b88d3cca0db2056448021b9ec867dc9bc553edcb57216390ae2deab3271e45dd",
+          "fetched_at": 1791734124.0206852
+        },
+        {
+          "id": 97,
+          "url": "https://blommabeauty.com/policies/refund-policy",
+          "sha256": "3718190bbcf7b1c41633428b34cf83d33bfa13d2a967a5b634cbb986e9aab9b6",
+          "fetched_at": 1791734131.8475635
+        }
+      ],
+      "outreach_qualified": false
+    },
+    {
+      "market": "UK",
+      "campaign": "B",
+      "segment": "Coffee",
+      "domain": "origincoffee.co.uk",
+      "company": "Speciality Coffee Online - Next Day Coffee | Origin",
+      "lead_id": 13,
+      "isolated_database": "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\live-lead-acceptance\\20261011-211327\\outreach.db",
+      "current_pages": 23,
+      "crawl_status": "interrupted",
+      "crawl_issues": 25,
+      "remaining_urls": null,
+      "contacts": [
+        {
+          "email": "info@origincoffee.co.uk",
+          "source_url": "https://www.origincoffee.co.uk/pages/coffee-quiz",
+          "name": "",
+          "role": "",
+          "verification": "unverified",
+          "status": "new",
+          "publication_guard": true,
+          "same_company_domain": true
+        },
+        {
+          "email": "technical@origincoffee.co.uk",
+          "source_url": "https://www.origincoffee.co.uk/pages/wholesale-coffee",
+          "name": "",
+          "role": "",
+          "verification": "unverified",
+          "status": "new",
+          "publication_guard": true,
+          "same_company_domain": true
+        }
+      ],
+      "review_candidates": [],
+      "country_review": {
+        "quote": "Cornwall England United Kingdom",
+        "url": "https://www.origincoffee.co.uk/pages/contact-us",
+        "evidence_id": 47,
+        "sha256": "95ea6532f0a73b97265e5732043c040cd3efe6d448cd2d589c3a4fb2197bfb9e",
+        "interpretation": "Researcher geographic interpretation of current official publication; not registered legal-entity or buyer validation"
+      },
+      "evidence": [
+        {
+          "id": 46,
+          "url": "https://www.origincoffee.co.uk/",
+          "sha256": "518fb4e16e571d09537d9aacc298fd342d5d35a7c072f9333a39c39c2d692e6d",
+          "fetched_at": 1791733807.5408907
+        },
+        {
+          "id": 47,
+          "url": "https://www.origincoffee.co.uk/pages/contact-us",
+          "sha256": "95ea6532f0a73b97265e5732043c040cd3efe6d448cd2d589c3a4fb2197bfb9e",
+          "fetched_at": 1791733818.0167058
+        },
+        {
+          "id": 49,
+          "url": "https://www.origincoffee.co.uk/pages/help-centre",
+          "sha256": "f4fd501be17b7c67c568356da38215a972563a9fb80425998f836acd66944afa",
+          "fetched_at": 1791733831.8086355
+        },
+        {
+          "id": 52,
+          "url": "https://www.origincoffee.co.uk/products/sage-steam-wand-cleaner",
+          "sha256": "5f0d29dd8d22e1894897432bcb83d1232c99c54453a7353a4532360503714cb7",
+          "fetched_at": 1791733854.5091956
+        },
+        {
+          "id": 55,
+          "url": "https://www.origincoffee.co.uk/products/sage-steam-wand-cleaner-x6",
+          "sha256": "bd67d3b11406e38b5cae4aac3f056bf9dae47800d1f34377a15ae3de4c43e6eb",
+          "fetched_at": 1791733869.9809763
+        },
+        {
+          "id": 56,
+          "url": "https://www.origincoffee.co.uk/pages/faqs",
+          "sha256": "9b7901d9da031d96d82982536cc7be1e04b9edaba0c0104c75e5768b5e853213",
+          "fetched_at": 1791733885.729244
+        },
+        {
+          "id": 59,
+          "url": "https://www.origincoffee.co.uk/pages/subscription-faq",
+          "sha256": "9ef1ed2b35dcffe77e802689391ff67334f2d378331f9b6fe3caeef0a2fd6aac",
+          "fetched_at": 1791733899.5667362
+        },
+        {
+          "id": 61,
+          "url": "https://www.origincoffee.co.uk/collections/coffee-books",
+          "sha256": "acd3dd5a7bc90a5f6cd0b57abad2273c9898f5808380db2d0c465720da1250df",
+          "fetched_at": 1791733914.771451
+        },
+        {
+          "id": 63,
+          "url": "https://www.origincoffee.co.uk/products/coffee-subscription-feature",
+          "sha256": "686d6aeda8e04398497f80cf869e812cfc18bd6e5d264c881bcd511aeaffa9e1",
+          "fetched_at": 1791733928.178659
+        },
+        {
+          "id": 64,
+          "url": "https://www.origincoffee.co.uk/products/fellow-espresso-series-1",
+          "sha256": "e7441c35ee00e08bfed4a92162723542d0e5bdfe721c917f0bbfbc807e2512b4",
+          "fetched_at": 1791733942.279336
+        },
+        {
+          "id": 67,
+          "url": "https://www.origincoffee.co.uk/collections/coffee",
+          "sha256": "3d2445290028786731a45bff7297c011a403c7dae171e9f522ebdd4cec27bbd8",
+          "fetched_at": 1791733959.5819738
+        },
+        {
+          "id": 68,
+          "url": "https://www.origincoffee.co.uk/collections/coffee-subscriptions",
+          "sha256": "577c33bb7b67d7d477b92c8f8bb59ca54375079192d16eca2cf95cb45fc68b6a",
+          "fetched_at": 1791733973.344954
+        },
+        {
+          "id": 71,
+          "url": "https://www.origincoffee.co.uk/products/resolute",
+          "sha256": "37742a44f5002b305438ff6473554d537f0b558384c18e491b243227cdeb6535",
+          "fetched_at": 1791733989.102907
+        },
+        {
+          "id": 73,
+          "url": "https://www.origincoffee.co.uk/products/losaltos",
+          "sha256": "8266d6c884fb1b9d8b1501cbeb2576b3203b5b525aa49b011da3c5566bf571b1",
+          "fetched_at": 1791734003.4250898
+        },
+        {
+          "id": 76,
+          "url": "https://www.origincoffee.co.uk/blogs/journal",
+          "sha256": "979ec779f1c8521a41c1755c39fb5a9019e5b68404dc396271e5c91e14fddfa8",
+          "fetched_at": 1791734017.1906157
+        },
+        {
+          "id": 78,
+          "url": "https://www.origincoffee.co.uk/blogs/journal/sail-ship-coffee",
+          "sha256": "3cdbef16ae1eeae9393aef7ed173e4fb868489e576589e89f32e4b72ce796d26",
+          "fetched_at": 1791734029.9749985
+        },
+        {
+          "id": 81,
+          "url": "https://www.origincoffee.co.uk/blogs/journal/producer-profile-sao-joao-mariano-das-almas",
+          "sha256": "eb3ed09bb1a5a4dbaadd6624c929cbd275f11adfcfc3035a2e5b1a1b7b481231",
+          "fetched_at": 1791734045.893737
+        },
+        {
+          "id": 83,
+          "url": "https://www.origincoffee.co.uk/blogs/journal/carlos-pola",
+          "sha256": "929cf2971a91068f891a49f6ee036ca0efaf89aa4556292b392f793119dafa80",
+          "fetched_at": 1791734059.629881
+        },
+        {
+          "id": 85,
+          "url": "https://www.origincoffee.co.uk/blogs/journal/origin-coffee-app",
+          "sha256": "9fc1ae82ea69a4f56ca49fcbbc53c1894d762c83df4c67379400fe0025286f13",
+          "fetched_at": 1791734071.023974
+        },
+        {
+          "id": 88,
+          "url": "https://www.origincoffee.co.uk/pages/impact",
+          "sha256": "258399e6fca1211f4116e7c2045c13c0ba9d215232fbb2e2b44bcfb3bd32682f",
+          "fetched_at": 1791734084.8572352
+        },
+        {
+          "id": 91,
+          "url": "https://www.origincoffee.co.uk/pages/origin-coffee-locations",
+          "sha256": "43eb57e2307636053d19ae1c032dc570557c50ee8058b1fdf871e7aaf7090ba5",
+          "fetched_at": 1791734098.3399994
+        },
+        {
+          "id": 94,
+          "url": "https://www.origincoffee.co.uk/pages/wholesale-coffee",
+          "sha256": "6790a6bd039234b822437c06ee60d9e94e11f296c924d98a5f179e29d120b181",
+          "fetched_at": 1791734118.4277751
+        },
+        {
+          "id": 96,
+          "url": "https://www.origincoffee.co.uk/pages/coffee-quiz",
+          "sha256": "947de87c14920b525f4fb519b1ebef6d079421cd81f2ea5f46079bcaf7225f79",
+          "fetched_at": 1791734130.0638907
+        }
+      ],
+      "outreach_qualified": false
+    },
+    {
+      "market": "US",
+      "campaign": "A",
+      "segment": "Dental",
+      "domain": "atxfamilydental.com",
+      "company": "Home - Atx family dental",
+      "lead_id": 5,
+      "isolated_database": "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\live-lead-acceptance\\20261011-211327\\outreach.db",
+      "current_pages": 22,
+      "crawl_status": "partial",
+      "crawl_issues": 22,
+      "remaining_urls": 0,
+      "contacts": [
+        {
+          "email": "info@atxfamilydental.com",
+          "source_url": "https://www.atxfamilydental.com/service/dental-crowns/",
+          "name": "",
+          "role": "",
+          "verification": "unverified",
+          "status": "new",
+          "publication_guard": true,
+          "same_company_domain": true
+        }
+      ],
+      "review_candidates": [],
+      "country_review": {
+        "quote": "1700 S. 1st Street Austin, Texas 78704",
+        "url": "https://www.atxfamilydental.com/",
+        "evidence_id": 98,
+        "sha256": "c1d8f220f3820dadc71c6dd49a10deaa46c5e81ddbf1647bc5af14410f3e8386",
+        "interpretation": "Researcher geographic interpretation of current official publication; not registered legal-entity or buyer validation"
+      },
+      "evidence": [
+        {
+          "id": 98,
+          "url": "https://www.atxfamilydental.com/",
+          "sha256": "c1d8f220f3820dadc71c6dd49a10deaa46c5e81ddbf1647bc5af14410f3e8386",
+          "fetched_at": 1791734149.67523
+        },
+        {
+          "id": 99,
+          "url": "https://www.atxfamilydental.com/contact/",
+          "sha256": "6bd3f5318132df2a0565c70f556d9bfb081ada3515dc32213c7b531a2288b642",
+          "fetched_at": 1791734156.2922518
+        },
+        {
+          "id": 101,
+          "url": "https://www.atxfamilydental.com/services/",
+          "sha256": "49fe6a4eb85f818bae22114287f0d00687dbd074a17062bf840fb4383f3fff1c",
+          "fetched_at": 1791734165.219393
+        },
+        {
+          "id": 103,
+          "url": "https://www.atxfamilydental.com/book-appointment/",
+          "sha256": "ec827d02d6bd64b7498f30ed4a5d4334a7b929b5f17ac90bebf2f8a57cfffd77",
+          "fetched_at": 1791734173.898959
+        },
+        {
+          "id": 104,
+          "url": "https://www.atxfamilydental.com/book-online/",
+          "sha256": "7620c23a82b4c9c2cdd7855d7930fa12071428ae4c1b24c1f60af54198c5291c",
+          "fetched_at": 1791734182.6138904
+        },
+        {
+          "id": 106,
+          "url": "https://www.atxfamilydental.com/service/routine-care/",
+          "sha256": "9d2c085289632c0a5b48f3b36be5a381eb8bfefc88b9914f672958df595726ad",
+          "fetched_at": 1791734191.0528965
+        },
+        {
+          "id": 108,
+          "url": "https://www.atxfamilydental.com/service/emergency-dentistry/",
+          "sha256": "54cbe8642c345a9d836453a3a18638037e7ff57028e504846cfbb91aecab421e",
+          "fetched_at": 1791734197.4987156
+        },
+        {
+          "id": 110,
+          "url": "https://www.atxfamilydental.com/service/invisalign/",
+          "sha256": "3aaf5604b1bd9b2885a3b39453c4702bdf4832a897baa33478e6d01962371360",
+          "fetched_at": 1791734203.8317518
+        },
+        {
+          "id": 112,
+          "url": "https://www.atxfamilydental.com/meet-us/",
+          "sha256": "16d0046be2210e48a4115356ffa158da4aa1b7b738d5e1fcc392de40f57accf3",
+          "fetched_at": 1791734210.3080409
+        },
+        {
+          "id": 113,
+          "url": "https://www.atxfamilydental.com/finance-insurance/",
+          "sha256": "1971d687b989c485bca12aee6c3b7e249ff0fd6fc829b5f47f918c5bd4a2d045",
+          "fetched_at": 1791734216.9348524
+        },
+        {
+          "id": 114,
+          "url": "https://www.atxfamilydental.com/privacy-policy/",
+          "sha256": "f1a9f455c17e3818a6e2e45bc7975f5712952bb6cada40495293bc5207edd975",
+          "fetched_at": 1791734223.4207113
+        },
+        {
+          "id": 116,
+          "url": "https://www.atxfamilydental.com/pediatric-patients/",
+          "sha256": "35ca1c47388edac7e3120118728522e54f42a10328548c649291ebbc6d3354d2",
+          "fetched_at": 1791734229.8777497
+        },
+        {
+          "id": 117,
+          "url": "https://www.atxfamilydental.com/wellness-plan/",
+          "sha256": "059fe88f655cac9c52e3e1ef4038eba80736bf1541f75fc32ea3f2e84bf2dc85",
+          "fetched_at": 1791734236.2999356
+        },
+        {
+          "id": 119,
+          "url": "https://www.atxfamilydental.com/dummy/",
+          "sha256": "c6ecdd7d572d77f4bb9dc7ab5ee1ec84c9b802cd4f7be0ac321c6155953fd634",
+          "fetched_at": 1791734242.6762762
+        },
+        {
+          "id": 120,
+          "url": "https://www.atxfamilydental.com/doctor/dr-amanda/",
+          "sha256": "f23df386d8892bd1e19697df31c2fea16e0251c7d0178f112694f23779a281ad",
+          "fetched_at": 1791734249.0159252
+        },
+        {
+          "id": 121,
+          "url": "https://www.atxfamilydental.com/doctor/dr-adam-gutwein-dmd/",
+          "sha256": "a4f6459f9d4ed885b3f666140b6a7e53326339d91c59bde320ea05545bbdc115",
+          "fetched_at": 1791734255.4277503
+        },
+        {
+          "id": 123,
+          "url": "https://www.atxfamilydental.com/doctor/dr-nadia-najafi/",
+          "sha256": "8b33dbfe2b45425ba59dd4e10ac53cd8c8eb686f1ba4ecc68580d6d267e04c73",
+          "fetched_at": 1791734261.756355
+        },
+        {
+          "id": 124,
+          "url": "https://www.atxfamilydental.com/service/dental-implants/",
+          "sha256": "9b203a89f6824b3c80f7a24b9c2832008b1b0adefa7fc6751ece23b307b9d064",
+          "fetched_at": 1791734268.1784377
+        },
+        {
+          "id": 126,
+          "url": "https://www.atxfamilydental.com/service/dental-veneers/",
+          "sha256": "7b6a0283ab746f80bd4d9f5d95471616a6bf8fad115d02defa3c0b1b3bcc33bd",
+          "fetched_at": 1791734274.6485093
+        },
+        {
+          "id": 127,
+          "url": "https://www.atxfamilydental.com/service/cosmetic-dentistry/",
+          "sha256": "19bc25984390c282b75ba358635502fa1a8cc2323499604508d7988a3221ed44",
+          "fetched_at": 1791734281.010962
+        },
+        {
+          "id": 128,
+          "url": "https://www.atxfamilydental.com/service/root-canals/",
+          "sha256": "dcb7649dc05ba53a37eeae101796481d1095d0410ee6ec235000fdddd0d8d843",
+          "fetched_at": 1791734287.43482
+        },
+        {
+          "id": 130,
+          "url": "https://www.atxfamilydental.com/service/dental-crowns/",
+          "sha256": "659839717ba14b716d99bc64ea4a973b3b4f3ad554d08a86093ac15c40cd91cb",
+          "fetched_at": 1791734294.1152384
+        }
+      ],
+      "outreach_qualified": false
+    },
+    {
+      "market": "US",
+      "campaign": "A",
+      "segment": "Roofing",
+      "domain": "unitedroofingcolorado.com",
+      "company": "United Roofing | Expert Denver, CO Roofing Contractor Since 2011",
+      "lead_id": 11,
+      "isolated_database": "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\live-lead-acceptance\\20261011-211327\\current-sources-final\\outreach.db",
+      "current_pages": 6,
+      "crawl_status": "partial",
+      "crawl_issues": 11,
+      "remaining_urls": 0,
+      "contacts": [
+        {
+          "email": "scott@unitedroofingcolorado.com",
+          "source_url": "https://unitedroofingcolorado.com/church-apartment-school-roofing-denver/",
+          "name": "",
+          "role": "",
+          "verification": "unverified",
+          "status": "new",
+          "publication_guard": true,
+          "same_company_domain": true
+        }
+      ],
+      "review_candidates": [],
+      "country_review": {
+        "quote": "Denver, CO",
+        "url": "https://unitedroofingcolorado.com/",
+        "evidence_id": 2,
+        "sha256": "3baab8da6706658b705e1649d29a604e740046a89c0aa5b1aa5d68f00b85ede9",
+        "interpretation": "Researcher geographic interpretation of current official publication; not registered legal-entity or buyer validation"
+      },
+      "evidence": [
+        {
+          "id": 2,
+          "url": "https://unitedroofingcolorado.com/",
+          "sha256": "3baab8da6706658b705e1649d29a604e740046a89c0aa5b1aa5d68f00b85ede9",
+          "fetched_at": 1791733974.0147395
+        },
+        {
+          "id": 4,
+          "url": "https://unitedroofingcolorado.com/about-us/",
+          "sha256": "b7effd566d94b010163b2d877c04f9e9391ce6e9afa8877e7b8be7788fcc725a",
+          "fetched_at": 1791733990.121777
+        },
+        {
+          "id": 6,
+          "url": "https://unitedroofingcolorado.com/contact/",
+          "sha256": "ee93bbbd26882fcb742570a874f0a29d4edea0c09229584913b4580aeee82210",
+          "fetched_at": 1791734002.4261906
+        },
+        {
+          "id": 9,
+          "url": "https://unitedroofingcolorado.com/residential-roofing/",
+          "sha256": "067796e559cb675eb4b9b55cbfcfb6bb46d91ebf269e35d06537cb2323defd5f",
+          "fetched_at": 1791734021.5642269
+        },
+        {
+          "id": 11,
+          "url": "https://unitedroofingcolorado.com/commercial-flat-roofing-denver/",
+          "sha256": "cb1f6c908edd932b2b018e22100ccd76d68dedb1ae79ec22a2bc2cfb70c85789",
+          "fetched_at": 1791734032.2712238
+        },
+        {
+          "id": 13,
+          "url": "https://unitedroofingcolorado.com/church-apartment-school-roofing-denver/",
+          "sha256": "2af92ba0460488cd3ec7da1c277c5884564e7831a3505b652e4281b74756cab8",
+          "fetched_at": 1791734044.4022312
+        }
+      ],
+      "outreach_qualified": false
+    },
+    {
+      "market": "US",
+      "campaign": "B",
+      "segment": "Skincare",
+      "domain": "unfilteredskincare.com",
+      "company": "Unfiltered Skincare | natural organic skincare | Bath, ME, USA",
+      "lead_id": 11,
+      "isolated_database": "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\live-lead-acceptance\\20261011-211327\\outreach.db",
+      "current_pages": 30,
+      "crawl_status": "partial",
+      "crawl_issues": 30,
+      "remaining_urls": 21,
+      "contacts": [
+        {
+          "email": "info@unfilteredskincare.com",
+          "source_url": "https://www.unfilteredskincare.com/wholesale",
+          "name": "",
+          "role": "",
+          "verification": "unverified",
+          "status": "new",
+          "publication_guard": true,
+          "same_company_domain": true
+        },
+        {
+          "email": "unfilteredbodyproducts@gmail.com",
+          "source_url": "https://www.unfilteredskincare.com/contact",
+          "name": "Brionne Beck",
+          "role": "Owner & Creator",
+          "verification": "unverified",
+          "status": "new",
+          "publication_guard": true,
+          "same_company_domain": false
+        }
+      ],
+      "review_candidates": [
+        {
+          "email": "unfilteredbodyproducts@gmail.com",
+          "name": "",
+          "role": "",
+          "source_url": "https://www.unfilteredskincare.com/product-page/pearla-s-winter-favorites-bundle",
+          "methods": [
+            "mailto",
+            "visible_text",
+            "visible_obfuscation"
+          ],
+          "review_required": true,
+          "reason": "Different email domain: company ownership and relevance are unconfirmed",
+          "lead_id": 11,
+          "evidence_sha256": "9b6cfc2d4ffcfd96e476b21f486deb96719d73d41a2a42ddaafe2af4965fd768"
+        }
+      ],
+      "country_review": {
+        "quote": "Bath, Maine",
+        "url": "https://www.unfilteredskincare.com/",
+        "evidence_id": 141,
+        "sha256": "e61f425c131c50c4924624081c4ddb4cdf7f3ec9410fdb3591d5701b3d2ad29d",
+        "interpretation": "Researcher geographic interpretation of current official publication; not registered legal-entity or buyer validation"
+      },
+      "evidence": [
+        {
+          "id": 141,
+          "url": "https://www.unfilteredskincare.com/",
+          "sha256": "e61f425c131c50c4924624081c4ddb4cdf7f3ec9410fdb3591d5701b3d2ad29d",
+          "fetched_at": 1791734465.1710575
+        },
+        {
+          "id": 143,
+          "url": "https://www.unfilteredskincare.com/about",
+          "sha256": "6e7e789dbd7456394eb95ac5919deda4d495eb74ea7f195610df2221fd398688",
+          "fetched_at": 1791734475.2624235
+        },
+        {
+          "id": 144,
+          "url": "https://www.unfilteredskincare.com/contact",
+          "sha256": "4c5a301b4b27b69ffac7c5aacd3e414b0e9410e0a1e1e62085d5f24d16d508e3",
+          "fetched_at": 1791734485.898234
+        },
+        {
+          "id": 146,
+          "url": "https://www.unfilteredskincare.com/natural-skincare-collections",
+          "sha256": "e410de9091cd007222ff76b8c7518bdeb9ae774aaed465eac080a33e1dd41da2",
+          "fetched_at": 1791734496.5502114
+        },
+        {
+          "id": 147,
+          "url": "https://www.unfilteredskincare.com/natural-body-products",
+          "sha256": "e91b09a72dab71438318a9deb6a0132083ab8188bfe53ca0541159b0c7cf674f",
+          "fetched_at": 1791734510.0860512
+        },
+        {
+          "id": 149,
+          "url": "https://www.unfilteredskincare.com/natural-facial-products",
+          "sha256": "824e191f33eda9223f03548440083c7979d834fc6a2d1d10589e5a1e788266e4",
+          "fetched_at": 1791734522.024764
+        },
+        {
+          "id": 150,
+          "url": "https://www.unfilteredskincare.com/baby-parent-products",
+          "sha256": "7fe840035065a21ffed335b28a30ae646968e46bc1426de35565ffe3fbafd64a",
+          "fetched_at": 1791734532.242958
+        },
+        {
+          "id": 152,
+          "url": "https://www.unfilteredskincare.com/product-page/facial-cleansing-oil",
+          "sha256": "1a775a538c90887be467225d870c65fafebe4f3135c03e42f8c17acda55891fa",
+          "fetched_at": 1791734544.6116974
+        },
+        {
+          "id": 154,
+          "url": "https://www.unfilteredskincare.com/product-page/gentle-facial-cleansing-bar",
+          "sha256": "2ad24142137ccd242a1f9931f28fdb517160f3f0416d252f2932ab1a099c3e4b",
+          "fetched_at": 1791734557.3310916
+        },
+        {
+          "id": 155,
+          "url": "https://www.unfilteredskincare.com/our-ingredients",
+          "sha256": "0a3f5044019a04a1f9965381e6430d7f8ace97102cdd75ee614dc2232f57d3b5",
+          "fetched_at": 1791734566.2751448
+        },
+        {
+          "id": 157,
+          "url": "https://www.unfilteredskincare.com/cart-page",
+          "sha256": "1939ccd53b159f3dd573143e67742266e19c3a3d1484d96618cc2b4e8e1a64db",
+          "fetched_at": 1791734574.8089864
+        },
+        {
+          "id": 158,
+          "url": "https://www.unfilteredskincare.com/skincare-sets-routines",
+          "sha256": "14adf9b66f50fd50769adae82c281be4c4a000acf0c1e6bbae6df9c1aaf4bce3",
+          "fetched_at": 1791734585.8366694
+        },
+        {
+          "id": 160,
+          "url": "https://www.unfilteredskincare.com/shipping-and-returns",
+          "sha256": "1e3f669a48806dc5e4b927988919b982c8f47aa37c6a81b9423ab6dc691c3f2e",
+          "fetched_at": 1791734593.8519008
+        },
+        {
+          "id": 161,
+          "url": "https://www.unfilteredskincare.com/gift-card",
+          "sha256": "0950a6c85a13e2f287da699ef81da43eabdead704002f2a33b4875382abe7c5d",
+          "fetched_at": 1791734604.126622
+        },
+        {
+          "id": 163,
+          "url": "https://www.unfilteredskincare.com/wholesale",
+          "sha256": "83fed42636f318e403143586c09cb2ef442fdb4c4b6c7d202a46dbad89d0e3da",
+          "fetched_at": 1791734612.1940875
+        },
+        {
+          "id": 165,
+          "url": "https://www.unfilteredskincare.com/product-page/maine-sea-scrub",
+          "sha256": "d242f8808413f0574390f03a6eb33ec6966d2d9736ba204350ce55729113ddc0",
+          "fetched_at": 1791734624.3392556
+        },
+        {
+          "id": 166,
+          "url": "https://www.unfilteredskincare.com/product-page/bright-eye-serum",
+          "sha256": "8cfa73de83bc09f5957fca3cc99ca320738abbf92b38ceb5b0dbb441262ec23d",
+          "fetched_at": 1791734634.3289237
+        },
+        {
+          "id": 168,
+          "url": "https://www.unfilteredskincare.com/product-page/face-cream",
+          "sha256": "dc3380fd0bc8f6a89dcce0f9f181f0b86bae03295f9bae82381e42579080f605",
+          "fetched_at": 1791734645.1175954
+        },
+        {
+          "id": 170,
+          "url": "https://www.unfilteredskincare.com/product-page/awaken-cleansing-grains",
+          "sha256": "a804806ede98acbe9e57fe0d68812703cefccdd2adb7ac41b8f161f6c38e74e2",
+          "fetched_at": 1791734658.2813447
+        },
+        {
+          "id": 171,
+          "url": "https://www.unfilteredskincare.com/product-page/vacationland-set",
+          "sha256": "9b8ee54b9d96e852a146c9e33293b995219cc5f59582ac5df94cf9c92c50f350",
+          "fetched_at": 1791734670.3114283
+        },
+        {
+          "id": 173,
+          "url": "https://www.unfilteredskincare.com/product-page/baby-set",
+          "sha256": "644d163edf0013ec1d846493713e6ace623453cceb21a37ca90b1ebc898f9b58",
+          "fetched_at": 1791734681.4376116
+        },
+        {
+          "id": 175,
+          "url": "https://www.unfilteredskincare.com/product-page/baby-me-set",
+          "sha256": "836d36a5c27342e940727f5a792dd55cf4f8d2b568a17c4a15b1769654fd8a97",
+          "fetched_at": 1791734692.6077526
+        },
+        {
+          "id": 177,
+          "url": "https://www.unfilteredskincare.com/product-page/mask-set",
+          "sha256": "527752c656af1819f78a4ac25bf4c55f0618c7da02b4ac84ad0ace695ff7c8bb",
+          "fetched_at": 1791734705.855479
+        },
+        {
+          "id": 178,
+          "url": "https://www.unfilteredskincare.com/product-page/maine-sea-toner-spritzer",
+          "sha256": "9b2adeab791dcddb7a35afb64dcd08f0ffcea99c196190461558fa5892ab2f13",
+          "fetched_at": 1791734716.2959924
+        },
+        {
+          "id": 180,
+          "url": "https://www.unfilteredskincare.com/product-page/diaper-powder",
+          "sha256": "7b9de88ae5a3ab912989159f0f83e76d3412b846a498e06caafd57e610879be1",
+          "fetched_at": 1791734727.4974272
+        },
+        {
+          "id": 182,
+          "url": "https://www.unfilteredskincare.com/product-page/body-refresh-set",
+          "sha256": "2eeeab7028c89ae38f010f8e5c4d199c876a9f4a4dd1b0f085bc9a9664bf7f1d",
+          "fetched_at": 1791734738.892113
+        },
+        {
+          "id": 183,
+          "url": "https://www.unfilteredskincare.com/product-page/botanical-mask",
+          "sha256": "5c7214905c44348e58e3128774b3693a6e28f546392ddc279692c78ed246167e",
+          "fetched_at": 1791734750.481263
+        },
+        {
+          "id": 185,
+          "url": "https://www.unfilteredskincare.com/product-page/mud-mask",
+          "sha256": "8bef65530bc2a5fa8c21cbb38fce1577eaa7abfbf92e5b434a7af2c9e0391791",
+          "fetched_at": 1791734762.7108307
+        },
+        {
+          "id": 187,
+          "url": "https://www.unfilteredskincare.com/product-page/lightweight-face-oil",
+          "sha256": "32b900106e7b34e279f074c24fdc8d3fe7edfd412e1ef80b577dcd866bfdb890",
+          "fetched_at": 1791734774.1011674
+        },
+        {
+          "id": 189,
+          "url": "https://www.unfilteredskincare.com/product-page/pearla-s-winter-favorites-bundle",
+          "sha256": "9b6cfc2d4ffcfd96e476b21f486deb96719d73d41a2a42ddaafe2af4965fd768",
+          "fetched_at": 1791734784.4998124
+        }
+      ],
+      "outreach_qualified": false
+    },
+    {
+      "market": "US",
+      "campaign": "B",
+      "segment": "Coffee",
+      "domain": "usroast.com",
+      "company": "US Roast Coffee - America's Specialty Coffee Roaster",
+      "lead_id": 15,
+      "isolated_database": "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\live-lead-acceptance\\20261011-211327\\current-sources-final\\outreach.db",
+      "current_pages": 30,
+      "crawl_status": "partial",
+      "crawl_issues": 30,
+      "remaining_urls": 295,
+      "contacts": [
+        {
+          "email": "orders@usroast.com",
+          "source_url": "https://usroast.com/policies/refund-policy",
+          "name": "",
+          "role": "",
+          "verification": "unverified",
+          "status": "new",
+          "publication_guard": true,
+          "same_company_domain": true
+        },
+        {
+          "email": "info@usroast.com",
+          "source_url": "https://usroast.com/pages/wholesale",
+          "name": "",
+          "role": "",
+          "verification": "unverified",
+          "status": "new",
+          "publication_guard": true,
+          "same_company_domain": true
+        }
+      ],
+      "review_candidates": [],
+      "country_review": {
+        "quote": "located in Mount Pleasant, Texas",
+        "url": "https://usroast.com/pages/about-us",
+        "evidence_id": 3,
+        "sha256": "369c1d4e0dcf19a1778385a10346e848975b2c3606a4f903b7f4540c53d4dcc2",
+        "interpretation": "Researcher geographic interpretation of current official publication; not registered legal-entity or buyer validation"
+      },
+      "evidence": [
+        {
+          "id": 1,
+          "url": "https://usroast.com/",
+          "sha256": "0875f0d2b1e81ac42cc64ec283c867afc17724958ae14ae810ca72bce2aa6b6c",
+          "fetched_at": 1791733972.7694032
+        },
+        {
+          "id": 3,
+          "url": "https://usroast.com/pages/about-us",
+          "sha256": "369c1d4e0dcf19a1778385a10346e848975b2c3606a4f903b7f4540c53d4dcc2",
+          "fetched_at": 1791733981.6385763
+        },
+        {
+          "id": 5,
+          "url": "https://usroast.com/pages/contact-us",
+          "sha256": "ae03de9be768dcdc5eba91d3af530232373a7394d0b7a28e4479849591b03d5c",
+          "fetched_at": 1791733992.368949
+        },
+        {
+          "id": 7,
+          "url": "https://usroast.com/pages/services-offered",
+          "sha256": "08a2cb7a31efddb0521d7b05484eecec73fb1126c136151b96d0bbd3991b44cf",
+          "fetched_at": 1791734004.011965
+        },
+        {
+          "id": 8,
+          "url": "https://usroast.com/blogs/news/us-roast-providing-high-quality-service",
+          "sha256": "c9845d4d94504e43b53c9cd433cf41d9be275bacf21254782d8a04f8e07d7df0",
+          "fetched_at": 1791734014.9872324
+        },
+        {
+          "id": 10,
+          "url": "https://usroast.com/policies/terms-of-service",
+          "sha256": "72154aec6c6d9b9bbcca41ffc3e6ba26af445d7fe81e53b8ddf348087d241cef",
+          "fetched_at": 1791734028.1082716
+        },
+        {
+          "id": 12,
+          "url": "https://usroast.com/pages/faqs",
+          "sha256": "d6734b20187a20f9f35989b7e653a12b3195fd4654b99e12659844c3d42aad1a",
+          "fetched_at": 1791734039.527725
+        },
+        {
+          "id": 14,
+          "url": "https://usroast.com/collections/all-retail",
+          "sha256": "ba28f389007d4a90bc703144138eb9df9e36f629cb813f94f975ebedfea5b043",
+          "fetched_at": 1791734053.328001
+        },
+        {
+          "id": 15,
+          "url": "https://usroast.com/products/1776-dark-roast-coffee?selling_plan=690788630811&variant=48025970893",
+          "sha256": "220adc2a57433254803de13eaececfd7574ba363b5d1741d8ba5eb4207c38596",
+          "fetched_at": 1791734063.234771
+        },
+        {
+          "id": 16,
+          "url": "https://usroast.com/products/liberty-blend?selling_plan=690788630811&variant=49700607501",
+          "sha256": "a7292f58f4a7dcdec807966a1fd7559836922735352644dccee274bcfb25e21c",
+          "fetched_at": 1791734071.8732655
+        },
+        {
+          "id": 17,
+          "url": "https://usroast.com/products/kenya?selling_plan=690788630811&variant=48026480269",
+          "sha256": "1860f5acd4e9139e8f7e54eab00b2a3d372f9c389e82c2d45279e1f8df59e49b",
+          "fetched_at": 1791734081.4178317
+        },
+        {
+          "id": 18,
+          "url": "https://usroast.com/products/5-star-dark-roast-coffee-blend?selling_plan=690788630811&variant=12282427539491",
+          "sha256": "3e96ea7e76e8789052d8ade001676a1262e4cbbcb53e6817b3e52877bbba8a12",
+          "fetched_at": 1791734090.1110716
+        },
+        {
+          "id": 19,
+          "url": "https://usroast.com/products/colombia-supremo?selling_plan=690788630811&variant=47989813325",
+          "sha256": "bd366d2a70fc617d37b38eab3bc5af7d7145b4c66ee57d9a9670245ce378a327",
+          "fetched_at": 1791734099.056195
+        },
+        {
+          "id": 20,
+          "url": "https://usroast.com/blogs/news",
+          "sha256": "e15743fdb109e08071701770b3d9ab7b3d1a4723b711548bf7320497afb92718",
+          "fetched_at": 1791734110.17217
+        },
+        {
+          "id": 21,
+          "url": "https://usroast.com/blogs/news/the-complete-guide-to-wholesale-coffee-why-partnering-with-us-roast-makes-all-the-difference",
+          "sha256": "b99c7a5aa30ae578c3f7fd6d0eaa63558de638113f1acc795333074ee091f574",
+          "fetched_at": 1791734120.3882608
+        },
+        {
+          "id": 22,
+          "url": "https://usroast.com/blogs/news/how-to-make-a-moka-pot",
+          "sha256": "ca912717665c97331747f13aefd7bfef495bef613f45c6aa1871bdf445886add",
+          "fetched_at": 1791734130.4230309
+        },
+        {
+          "id": 23,
+          "url": "https://usroast.com/blogs/news/what-beans-are-for-black-coffee",
+          "sha256": "b6ed30856c73bcb458d77dcc6e671107a90b0e96942f9a1d2a8ccf46538b4df8",
+          "fetched_at": 1791734140.3390427
+        },
+        {
+          "id": 24,
+          "url": "https://usroast.com/pages/eversys-cameo-espresso-machine",
+          "sha256": "64a7afe2424cde7c5a866b44991245786b592ec48daf937d98323d28fcad2a97",
+          "fetched_at": 1791734151.5627108
+        },
+        {
+          "id": 25,
+          "url": "https://usroast.com/pages/blogs",
+          "sha256": "a48200d5a3a5cc8ca29e18ad6d421e6c9f1a740511a74dc75dc616ededcc2a06",
+          "fetched_at": 1791734158.634185
+        },
+        {
+          "id": 26,
+          "url": "https://usroast.com/search",
+          "sha256": "c240824dd29b8269f846d0fe1c8f9b8d82c6a82cc93cff705a1ca964ea4f1566",
+          "fetched_at": 1791734166.0024173
+        },
+        {
+          "id": 27,
+          "url": "https://usroast.com/pages/privacy-policy",
+          "sha256": "f5c8355e3ba4d0681e94b232f44f2a7ebcd7f8179edd70b40db519e71cc51fa1",
+          "fetched_at": 1791734176.16967
+        },
+        {
+          "id": 28,
+          "url": "https://usroast.com/pages/terms-and-conditions",
+          "sha256": "faeedba0a7e66a6c433586fcf48ac2872e8793d3f498f5e8a3b760eb0527a3a6",
+          "fetched_at": 1791734186.6530962
+        },
+        {
+          "id": 29,
+          "url": "https://usroast.com/policies/refund-policy",
+          "sha256": "fb442ddb3c3fb9a1cb2aa98910827e47a814f4d290543671ca2163b62349094e",
+          "fetched_at": 1791734195.0765562
+        },
+        {
+          "id": 30,
+          "url": "https://usroast.com/pages/glossary",
+          "sha256": "bc6a53360f12eb808e22d01ee1b6932dd5197ea5e0a7da095648c10f594a9b35",
+          "fetched_at": 1791734203.6464975
+        },
+        {
+          "id": 31,
+          "url": "https://usroast.com/pages/food-safety",
+          "sha256": "ab566a0d2a9577cc3752be085bbab5036e183dfef044ff279c9b0ec5bb569118",
+          "fetched_at": 1791734210.6295812
+        },
+        {
+          "id": 32,
+          "url": "https://usroast.com/pages/wholesale",
+          "sha256": "a92be5f09f46fa0db27c75838bd6865e0c833c59ca3face6138b6062b28e31a9",
+          "fetched_at": 1791734220.3501887
+        },
+        {
+          "id": 33,
+          "url": "https://usroast.com/pages/private-label-coffee-program",
+          "sha256": "7520d603d4335e4c57d71fb05e42676f6fede30080ce787155cfafba1c2dbbff",
+          "fetched_at": 1791734229.9521081
+        },
+        {
+          "id": 34,
+          "url": "https://usroast.com/pages/coffee-map",
+          "sha256": "af827988b838fb401f54c98fc8aff34977c14de272dd11817d1f342bef5b5d4b",
+          "fetched_at": 1791734237.9101071
+        },
+        {
+          "id": 35,
+          "url": "https://usroast.com/pages/recommendations",
+          "sha256": "14ca4822eedbbefef48c8c61ab9b622b953f911e8d561ec76e883f2c2fafdead",
+          "fetched_at": 1791734244.954665
+        },
+        {
+          "id": 36,
+          "url": "https://usroast.com/pages/teas-and-ratios",
+          "sha256": "91ca20731355b86fcbec8664a16118a34ddde24f7ac36db1cc567822dbaf9086",
+          "fetched_at": 1791734253.8017905
+        }
+      ],
+      "outreach_qualified": false
+    }
+  ],
+  "counts": {
+    "market_campaign_segment_cells": 8,
+    "discovery_waves": 2,
+    "unique_indexed_company_candidates": 16,
+    "official_business_representatives": 8,
+    "current_official_pages": 205,
+    "company_domain_published_contacts": 9,
+    "reviewed_other_domain_contact": 1,
+    "representatives_with_published_contact": 7,
+    "outreach_qualified_by_this_check": 0
+  },
+  "platform_profiles": [
+    {
+      "url": "https://uk.linkedin.com/company/bristolfloraldesign",
+      "public_snapshot_state": "robots_denied",
+      "website_status": "search_unavailable",
+      "first_resolution_state": "official_match_unconfirmed",
+      "first_resolution_website": "",
+      "published_candidates": 0,
+      "current_saved_pages": 0,
+      "outreach_ready": false
+    },
+    {
+      "url": "https://uk.linkedin.com/company/fleurtations-florist-bristol",
+      "public_snapshot_state": "robots_denied",
+      "website_status": "ambiguous",
+      "first_resolution_state": "ambiguous_search_matches",
+      "first_resolution_website": "",
+      "published_candidates": 0,
+      "current_saved_pages": 0,
+      "outreach_ready": false
+    },
+    {
+      "url": "https://x.com/statescoffee",
+      "public_snapshot_state": "robots_denied",
+      "website_status": "website_found",
+      "first_resolution_state": "exact_brand_domain_candidate",
+      "first_resolution_website": "https://www.statescoffee.com/",
+      "published_candidates": 0,
+      "current_saved_pages": 0,
+      "outreach_ready": false
+    },
+    {
+      "url": "https://x.com/coffeebrandco",
+      "public_snapshot_state": "robots_denied",
+      "website_status": "website_found",
+      "first_resolution_state": "reciprocal_profile_link_candidate",
+      "first_resolution_website": "https://coffeebrandcoffee.com/",
+      "published_candidates": 0,
+      "current_saved_pages": 0,
+      "outreach_ready": false
+    },
+    {
+      "url": "https://www.instagram.com/brownbutterbake/",
+      "public_snapshot_state": "robots_denied",
+      "website_status": "website_not_found",
+      "first_resolution_state": "no_company_match",
+      "first_resolution_website": "",
+      "published_candidates": 0,
+      "current_saved_pages": 0,
+      "outreach_ready": false
+    },
+    {
+      "url": "https://www.facebook.com/dongaysfloristbristol/",
+      "public_snapshot_state": "robots_denied",
+      "website_status": "ambiguous",
+      "first_resolution_state": "ambiguous_search_matches",
+      "first_resolution_website": "",
+      "published_candidates": 0,
+      "current_saved_pages": 0,
+      "outreach_ready": false
+    },
+    {
+      "url": "https://www.facebook.com/WebbsFlowersBristol/",
+      "public_snapshot_state": "robots_denied",
+      "website_status": "website_found",
+      "first_resolution_state": "exact_brand_domain_candidate",
+      "first_resolution_website": "https://www.webbsflowers.co.uk/",
+      "published_candidates": 0,
+      "current_saved_pages": 0,
+      "outreach_ready": false
+    },
+    {
+      "url": "https://www.bbb.org/us/tx/lago-vista/profile/plumber/real-texas-plumbing-llc-0825-1000163531",
+      "public_snapshot_state": "unavailable",
+      "website_status": "website_found",
+      "first_resolution_state": "ambiguous_search_matches",
+      "first_resolution_website": "",
+      "published_candidates": 0,
+      "current_saved_pages": 1,
+      "outreach_ready": false
+    },
+    {
+      "url": "https://www.bbb.org/us/tx/houston/profile/plumber/texas-design-plumbing-llc-0915-90055994",
+      "public_snapshot_state": "unavailable",
+      "website_status": "website_found",
+      "first_resolution_state": "ambiguous_search_matches",
+      "first_resolution_website": "",
+      "published_candidates": 0,
+      "current_saved_pages": 1,
+      "outreach_ready": false
+    }
+  ],
+  "rejected_non_business_routes": [
+    {
+      "url": "https://www.peopleperhour.com/freelance-jobs/technology-programming/website-development/uk-applicant-only-website-development-4524254",
+      "reason": "Job/category route is not a specific business profile; the earlier diagnostic result is superseded"
+    },
+    {
+      "url": "https://www.peopleperhour.com/freelance-jobs/technology-programming/website-development",
+      "reason": "Job/category route is not a specific business profile; the earlier diagnostic result is superseded"
+    }
+  ],
+  "website_less_contact_path": {
+    "accepted_current_public_email": 0,
+    "real_website_not_found_examples": [
+      {
+        "url": "https://www.instagram.com/brownbutterbake/",
+        "public_snapshot_state": "robots_denied",
+        "website_status": "website_not_found",
+        "first_resolution_state": "no_company_match",
+        "first_resolution_website": "",
+        "published_candidates": 0,
+        "current_saved_pages": 0,
+        "outreach_ready": false
+      }
+    ],
+    "state": "not_accepted",
+    "reason": "No tested website-less business had a readable current published contact source plus reviewed identity/activity. Blocked or indexed-only emails remain held."
+  },
+  "real_business_continuation": {
+    "domain": "bristolfloraldesign.co.uk",
+    "before_pages": 18,
+    "after_pages": 38,
+    "old_evidence_preserved": true,
+    "status": "interrupted",
+    "error": "TimeoutError: "
+  },
+  "reviewed_owner_contact": {
+    "email": "unfilteredbodyproducts@gmail.com",
+    "owner_quote": "Brionne Beck | Owner & Creator unfilteredbodyproducts@gmail.com Bath, Maine",
+    "source_url": "https://www.unfilteredskincare.com/contact",
+    "evidence_sha256": "4c5a301b4b27b69ffac7c5aacd3e414b0e9410e0a1e1e62085d5f24d16d508e3",
+    "mailbox_verified": false,
+    "website_less": false,
+    "outreach_approved": false
+  },
+  "limits": [
+    "Two same-session search waves are a repeatability sample, not a long-term yield/SLA measurement.",
+    "Sixteen indexed candidates are not sixteen qualified buyers; eight representatives have reviewed current location/industry evidence.",
+    "Crawls preserve the 30-page, depth-3, always-Chromium production budgets; 360-second diagnostic limits caused reported interruptions. No whole-site completeness claim.",
+    "Nine valid platform profiles were inaccessible; five profile research passes found website candidates, with varying named-search resolution between passes. Private platform email access was not established.",
+    "PPH jobs can be useful manually, but a job/listing cannot establish a company with no website.",
+    "All retained inboxes need separate buyer/relevance/eligibility and fresh technical verification before outreach.",
+    "The florist continuation preserved evidence and added pages; remaining errors/frontier are still partial.",
+    "A real website-less contact path remains unaccepted. A search not finding a website never proves that none exists."
+  ],
+  "private_run_paths": [
+    "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\live-lead-acceptance\\20261011-211327\\report.json",
+    "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\live-lead-acceptance\\20261011-211327\\current-sources-final\\report.json",
+    "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\live-lead-acceptance\\20261011-211327\\current-sources\\report.json",
+    "C:\\Users\\divya\\Desktop\\cold email strategy and linkedin\\data\\live-lead-acceptance\\20261011-211327\\current-sources-final\\replacement-crawls.json"
+  ],
+  "source_hashes": {
+    "outreach\\__init__.py": "ab294c3bf5d7f6d1721dc713a055a57d710ace1e738efcf93235f106cc46043f",
+    "outreach\\aftercare.py": "6b6e76d55976bd8c5a512bf1bd2814041fa5d4f89a84e68a46fc4b0d276888ff",
+    "outreach\\app.py": "48e4c15e9c0f073acb9ffbffd5f87f7a581f1e8fe5ce9af6466e329951b171ea",
+    "outreach\\auth.py": "5ffc7139302a48e781bc9405a12654bcf66a4d4ab475d5da3c58b07088073262",
+    "outreach\\browser.py": "3d7e98374e877eff00f360458ceb9168b86b4714226e67054b3837fce828d014",
+    "outreach\\campaigns.py": "561190e7cf16ffc8caa0293b3427e49f5d22885cd72591bc59c5cb44e37e9ca0",
+    "outreach\\config.py": "e498fcf6baa3a90fb8a2e21ee7f9f9e6d7aae184d993dfd5096709990facab5e",
+    "outreach\\contact_recovery.py": "cb5d50130c9997e7c8374369dc5ebc183cc9d2dc791ca59a1fed3a4138f651f9",
+    "outreach\\db.py": "f1efaf682ba23927aa4d6705383d0fa35a074dd833c0cb834c441f4ebe707363",
+    "outreach\\deliverables.py": "9f3dca60b7475ad830dfac6ff82f7f1721e9f2acd673f21e0f2043fbfc4fb9e5",
+    "outreach\\discovery.py": "a1274325c55c67875ec81674e0b61e1d9f1a5823fa978113ade2a630e6f226b1",
+    "outreach\\finance.py": "78c1c554d62dbc3287d2f07e5b68d93c8f36f220eb89f4a53ec9c725fbefd770",
+    "outreach\\learning.py": "b31b50455d6d852697a92853c022a66f0e59a196ac83dee6887badb3cf9acc95",
+    "outreach\\mail.py": "59ef70dbe203cb3e613cb8bb694ed5a758bca1ea41cdb5db56672b0ef24fbe72",
+    "outreach\\offers.py": "5505eb0cb6621f8f4d1ce2155c531cf1f296f877bf9c532df03b838cc21240a0",
+    "outreach\\opportunities.py": "5034f95df0af0e0cd705705739ac2cd4256dbe4e195da45f7c0591def9112989",
+    "outreach\\performance.py": "ab5d54c584b3db9b562e717ef0ecca8f7815c93a090eeca65c58351094c538ff",
+    "outreach\\preferences.py": "3e074cf6b225b2c1a4b31ef46bebf9d3de41d0b5bac2192bb660a91af7a90452",
+    "outreach\\priorities.py": "a4293f6cd7a5d7770ca0474c8985a6884432cf5db1193528edf9ec68f1ebb380",
+    "outreach\\profiles.py": "440b13c58fd84f9808e81107a43140d6a4432a202317b953969099835a1030eb",
+    "outreach\\providers.py": "071ca72de9313fc934eba6061e6a4597dc107ea4ac8bd5c3db4e11aec5ed05e4",
+    "outreach\\research.py": "62199cc5dc6cdf100f8699250031b2ff46ead371e5aab608339092514f8b738d",
+    "outreach\\research_status.py": "94c8c1ff85f62e6c3ccf44b722c8bb2754ddf5ae7177aafbf83c533acc88166b",
+    "outreach\\sales.py": "f4e0ac0d8882c6fba3af66a46be89bf3a5eeadb7c515f7fa3a3d29d5d1ce969c",
+    "outreach\\sequence.py": "48f385e00652d6a03edcaa662a23bb482bad851204c1a844455ba595a0d11582",
+    "outreach\\web.py": "1f549299d92b5d185fd642d3d097c3f6be636a07297ae2971756f523346dc398",
+    "outreach\\worker.py": "153a2f7ce6836024f14caf88fa3f0252930f0ca99fc72ab659db4708e700cc0a",
+    "outreach\\workflow.py": "9de289ef572cd1f7f165d999ad28e52aed4f998b2437ce0267fb9be07db55cc7",
+    "outreach\\workflow_detail.py": "23ac4ffe0b99cda83f3453e229668af6cd79206d5fc3b72d33c85769c71f23aa"
+  },
+  "normal_database_fingerprint_scope": [
+    "leads",
+    "contacts",
+    "messages",
+    "jobs",
+    "events",
+    "crawls",
+    "evidence"
+  ],
+  "normal_background_worker_note": "The existing normal worker continues heartbeat housekeeping; no audit worker executes queued research/verification or sending. Operational fingerprints exclude heartbeat settings."
+}

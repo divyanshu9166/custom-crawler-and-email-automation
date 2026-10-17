@@ -1,0 +1,626 @@
+{
+  "checked_at": 1791693019.5647833,
+  "full_suite": {
+    "passed": 356,
+    "failures": 0,
+    "seconds": 102.24,
+    "junit": "data/second-workflow-tests.xml"
+  },
+  "initial_reproduction": {
+    "historical_artifact_creation": "failed to reject before fix",
+    "changed_source_approval": "failed to reject before fix",
+    "negative_cases_failed": 2
+  },
+  "new_cases": [
+    "test_artifact_cannot_use_pages_from_before_latest_failed_research",
+    "test_artifact_approval_rechecks_source_changed_since_draft",
+    "test_every_offer_branch_selects_one_service_and_prepares_relevant_source_proof[A-website_build-We are announcing a new service.-website_build-concept]",
+    "test_every_offer_branch_selects_one_service_and_prepares_relevant_source_proof[A-website_improvement-Book a consultation with our team.-website_improvement-audit]",
+    "test_every_offer_branch_selects_one_service_and_prepares_relevant_source_proof[A-chatbot-Frequently asked questions about booking.-inquiry_chatbot-faq_demo]",
+    "test_every_offer_branch_selects_one_service_and_prepares_relevant_source_proof[B-store_launch-Our online store is launching soon.-store_launch-concept]",
+    "test_every_offer_branch_selects_one_service_and_prepares_relevant_source_proof[B-store_improvement-Add to cart to purchase our products.-store_improvement-audit]",
+    "test_every_offer_branch_selects_one_service_and_prepares_relevant_source_proof[B-chatbot-Customer support answers questions about products.-shopping_chatbot-faq_demo]",
+    "test_every_offer_branch_selects_one_service_and_prepares_relevant_source_proof[B-whatsapp_marketing-Subscribe to our WhatsApp updates.-whatsapp_offer-whatsapp_flow]",
+    "test_every_offer_branch_selects_one_service_and_prepares_relevant_source_proof[B-whatsapp_automation-Chat with us on WhatsApp about your order.-whatsapp_offer-whatsapp_flow]",
+    "test_d2c_branch_rejects_unreviewed_or_mismatched_business_model[changes0-Primary goal]",
+    "test_d2c_branch_rejects_unreviewed_or_mismatched_business_model[changes1-selling stage]",
+    "test_d2c_branch_rejects_unreviewed_or_mismatched_business_model[changes2-selling stage]",
+    "test_d2c_branch_rejects_unreviewed_or_mismatched_business_model[changes3-store offer]",
+    "test_d2c_branch_rejects_unreviewed_or_mismatched_business_model[changes4-D2C source]",
+    "test_d2c_branch_rejects_unreviewed_or_mismatched_business_model[changes5-D2C source]",
+    "test_d2c_branch_rejects_unreviewed_or_mismatched_business_model[changes6-D2C source]",
+    "test_whatsapp_confirmed_and_unknown_routes_are_distinct_operator_records[unknown-unknown-needs_qualification]",
+    "test_whatsapp_confirmed_and_unknown_routes_are_distinct_operator_records[confirmed-unknown-needs_qualification]",
+    "test_whatsapp_confirmed_and_unknown_routes_are_distinct_operator_records[unknown-confirmed-needs_qualification]",
+    "test_whatsapp_confirmed_and_unknown_routes_are_distinct_operator_records[confirmed-confirmed-confirmed]",
+    "test_unsuitable_whatsapp_route_requires_another_offer[channel_fit_status]",
+    "test_unsuitable_whatsapp_route_requires_another_offer[customer_permission_status]",
+    "test_reselection_preserves_exactly_one_offer_and_invalidates_old_artifact_context",
+    "test_stale_d2c_source_invalidates_selection_even_with_fresh_other_findings",
+    "test_unqualified_live_like_capture_is_not_a_selected_offer",
+    "test_expired_source_cannot_create_a_value_artifact[audit]",
+    "test_expired_source_cannot_create_a_value_artifact[concept]",
+    "test_expired_source_cannot_create_a_value_artifact[faq_demo]",
+    "test_source_change_during_artifact_preparation_is_caught_before_commit",
+    "test_historical_artifact_without_source_snapshot_cannot_be_newly_approved",
+    "test_profile_customer_questions_can_propose_a_handoff_offer_without_a_website",
+    "test_all_sourced_b_alternatives_remain_available_before_choosing_one",
+    "test_offer_readout_and_d2c_validation_use_the_authenticated_api"
+  ],
+  "new_case_count": 34,
+  "second_diagram_nodes": 15,
+  "fictional_chromium": {
+    "fictional_isolated_fixture": true,
+    "nodes_checked": 15,
+    "campaign_a_secondary_offer": "chatbot",
+    "campaign_b_five_sourced_choices": true,
+    "campaign_b_selected_offer": "whatsapp_automation",
+    "unknown_and_confirmed_channel_routes": true,
+    "actual_form_submission_and_artifact_review": true,
+    "changed_context_invalidates_artifact": true,
+    "desktop_mobile": true,
+    "overflow": false,
+    "js_errors": 0,
+    "email_probes": 0,
+    "external_messages": 0,
+    "checked_at": 1791692885.5463626
+  },
+  "full_ui_smoke": "passed with zero JavaScript errors",
+  "normal_chromium": {
+    "checked_at": 1791692888.2228317,
+    "normal_candidates": 6,
+    "selected_offers": 0,
+    "reviewed_current_value_artifacts": 0,
+    "real_records_unchanged": true,
+    "private_configuration_unchanged": true,
+    "read_only_browser": true,
+    "desktop_mobile": true,
+    "js_errors": 0,
+    "overflow": false,
+    "source_picker_correct": true,
+    "d2c_unknowns_visible": true,
+    "external_actions_queued": 0
+  },
+  "normal_node_readout": [
+    {
+      "lead_id": 1,
+      "campaign": "B",
+      "selected_service": "",
+      "context": {},
+      "nodes": [
+        {
+          "id": "input",
+          "label": "Qualified prospect + current evidence",
+          "state": "needs_review"
+        },
+        {
+          "id": "goal",
+          "label": "Primary business goal",
+          "state": "needs_review"
+        },
+        {
+          "id": "campaign_a",
+          "label": "Campaign A \u00b7 inquiries and bookings",
+          "state": "other_branch"
+        },
+        {
+          "id": "campaign_b",
+          "label": "Campaign B \u00b7 D2C growth",
+          "state": "selected"
+        },
+        {
+          "id": "website_build",
+          "label": "Website / new service page",
+          "state": "not_selected"
+        },
+        {
+          "id": "website_improvement",
+          "label": "Website improvement / redesign",
+          "state": "not_selected"
+        },
+        {
+          "id": "inquiry_chatbot",
+          "label": "Inquiry / booking chatbot + human handoff",
+          "state": "not_selected"
+        },
+        {
+          "id": "store_launch",
+          "label": "Starting ecommerce \u00b7 store launch",
+          "state": "not_selected"
+        },
+        {
+          "id": "store_improvement",
+          "label": "Selling online \u00b7 shopping journey",
+          "state": "not_selected"
+        },
+        {
+          "id": "shopping_chatbot",
+          "label": "Shopping / support chatbot",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_fit",
+          "label": "WhatsApp customer fit and permission",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_offer",
+          "label": "WhatsApp marketing / automation",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_qualify",
+          "label": "Qualify channel and opt-in first",
+          "state": "not_selected"
+        },
+        {
+          "id": "primary_offer",
+          "label": "Choose ONE primary offer",
+          "state": "needs_review"
+        },
+        {
+          "id": "value_artifact",
+          "label": "Prepare and review relevant proof of value",
+          "state": "waiting"
+        }
+      ],
+      "recommended_artifacts": [],
+      "reviewed_current_artifact_ids": [],
+      "note": "Selected offers and reviewed artifacts do not establish a live client result. Unknown WhatsApp fit or permission permits qualification planning only."
+    },
+    {
+      "lead_id": 2,
+      "campaign": "B",
+      "selected_service": "",
+      "context": {},
+      "nodes": [
+        {
+          "id": "input",
+          "label": "Qualified prospect + current evidence",
+          "state": "needs_review"
+        },
+        {
+          "id": "goal",
+          "label": "Primary business goal",
+          "state": "needs_review"
+        },
+        {
+          "id": "campaign_a",
+          "label": "Campaign A \u00b7 inquiries and bookings",
+          "state": "other_branch"
+        },
+        {
+          "id": "campaign_b",
+          "label": "Campaign B \u00b7 D2C growth",
+          "state": "selected"
+        },
+        {
+          "id": "website_build",
+          "label": "Website / new service page",
+          "state": "not_selected"
+        },
+        {
+          "id": "website_improvement",
+          "label": "Website improvement / redesign",
+          "state": "not_selected"
+        },
+        {
+          "id": "inquiry_chatbot",
+          "label": "Inquiry / booking chatbot + human handoff",
+          "state": "not_selected"
+        },
+        {
+          "id": "store_launch",
+          "label": "Starting ecommerce \u00b7 store launch",
+          "state": "not_selected"
+        },
+        {
+          "id": "store_improvement",
+          "label": "Selling online \u00b7 shopping journey",
+          "state": "not_selected"
+        },
+        {
+          "id": "shopping_chatbot",
+          "label": "Shopping / support chatbot",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_fit",
+          "label": "WhatsApp customer fit and permission",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_offer",
+          "label": "WhatsApp marketing / automation",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_qualify",
+          "label": "Qualify channel and opt-in first",
+          "state": "not_selected"
+        },
+        {
+          "id": "primary_offer",
+          "label": "Choose ONE primary offer",
+          "state": "needs_review"
+        },
+        {
+          "id": "value_artifact",
+          "label": "Prepare and review relevant proof of value",
+          "state": "waiting"
+        }
+      ],
+      "recommended_artifacts": [],
+      "reviewed_current_artifact_ids": [],
+      "note": "Selected offers and reviewed artifacts do not establish a live client result. Unknown WhatsApp fit or permission permits qualification planning only."
+    },
+    {
+      "lead_id": 3,
+      "campaign": "A",
+      "selected_service": "",
+      "context": {},
+      "nodes": [
+        {
+          "id": "input",
+          "label": "Qualified prospect + current evidence",
+          "state": "needs_review"
+        },
+        {
+          "id": "goal",
+          "label": "Primary business goal",
+          "state": "needs_review"
+        },
+        {
+          "id": "campaign_a",
+          "label": "Campaign A \u00b7 inquiries and bookings",
+          "state": "selected"
+        },
+        {
+          "id": "campaign_b",
+          "label": "Campaign B \u00b7 D2C growth",
+          "state": "other_branch"
+        },
+        {
+          "id": "website_build",
+          "label": "Website / new service page",
+          "state": "not_selected"
+        },
+        {
+          "id": "website_improvement",
+          "label": "Website improvement / redesign",
+          "state": "not_selected"
+        },
+        {
+          "id": "inquiry_chatbot",
+          "label": "Inquiry / booking chatbot + human handoff",
+          "state": "not_selected"
+        },
+        {
+          "id": "store_launch",
+          "label": "Starting ecommerce \u00b7 store launch",
+          "state": "not_selected"
+        },
+        {
+          "id": "store_improvement",
+          "label": "Selling online \u00b7 shopping journey",
+          "state": "not_selected"
+        },
+        {
+          "id": "shopping_chatbot",
+          "label": "Shopping / support chatbot",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_fit",
+          "label": "WhatsApp customer fit and permission",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_offer",
+          "label": "WhatsApp marketing / automation",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_qualify",
+          "label": "Qualify channel and opt-in first",
+          "state": "not_selected"
+        },
+        {
+          "id": "primary_offer",
+          "label": "Choose ONE primary offer",
+          "state": "needs_review"
+        },
+        {
+          "id": "value_artifact",
+          "label": "Prepare and review relevant proof of value",
+          "state": "waiting"
+        }
+      ],
+      "recommended_artifacts": [],
+      "reviewed_current_artifact_ids": [],
+      "note": "Selected offers and reviewed artifacts do not establish a live client result. Unknown WhatsApp fit or permission permits qualification planning only."
+    },
+    {
+      "lead_id": 4,
+      "campaign": "A",
+      "selected_service": "",
+      "context": {},
+      "nodes": [
+        {
+          "id": "input",
+          "label": "Qualified prospect + current evidence",
+          "state": "needs_review"
+        },
+        {
+          "id": "goal",
+          "label": "Primary business goal",
+          "state": "needs_review"
+        },
+        {
+          "id": "campaign_a",
+          "label": "Campaign A \u00b7 inquiries and bookings",
+          "state": "selected"
+        },
+        {
+          "id": "campaign_b",
+          "label": "Campaign B \u00b7 D2C growth",
+          "state": "other_branch"
+        },
+        {
+          "id": "website_build",
+          "label": "Website / new service page",
+          "state": "not_selected"
+        },
+        {
+          "id": "website_improvement",
+          "label": "Website improvement / redesign",
+          "state": "not_selected"
+        },
+        {
+          "id": "inquiry_chatbot",
+          "label": "Inquiry / booking chatbot + human handoff",
+          "state": "not_selected"
+        },
+        {
+          "id": "store_launch",
+          "label": "Starting ecommerce \u00b7 store launch",
+          "state": "not_selected"
+        },
+        {
+          "id": "store_improvement",
+          "label": "Selling online \u00b7 shopping journey",
+          "state": "not_selected"
+        },
+        {
+          "id": "shopping_chatbot",
+          "label": "Shopping / support chatbot",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_fit",
+          "label": "WhatsApp customer fit and permission",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_offer",
+          "label": "WhatsApp marketing / automation",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_qualify",
+          "label": "Qualify channel and opt-in first",
+          "state": "not_selected"
+        },
+        {
+          "id": "primary_offer",
+          "label": "Choose ONE primary offer",
+          "state": "needs_review"
+        },
+        {
+          "id": "value_artifact",
+          "label": "Prepare and review relevant proof of value",
+          "state": "waiting"
+        }
+      ],
+      "recommended_artifacts": [],
+      "reviewed_current_artifact_ids": [],
+      "note": "Selected offers and reviewed artifacts do not establish a live client result. Unknown WhatsApp fit or permission permits qualification planning only."
+    },
+    {
+      "lead_id": 5,
+      "campaign": "B",
+      "selected_service": "",
+      "context": {},
+      "nodes": [
+        {
+          "id": "input",
+          "label": "Qualified prospect + current evidence",
+          "state": "needs_review"
+        },
+        {
+          "id": "goal",
+          "label": "Primary business goal",
+          "state": "needs_review"
+        },
+        {
+          "id": "campaign_a",
+          "label": "Campaign A \u00b7 inquiries and bookings",
+          "state": "other_branch"
+        },
+        {
+          "id": "campaign_b",
+          "label": "Campaign B \u00b7 D2C growth",
+          "state": "selected"
+        },
+        {
+          "id": "website_build",
+          "label": "Website / new service page",
+          "state": "not_selected"
+        },
+        {
+          "id": "website_improvement",
+          "label": "Website improvement / redesign",
+          "state": "not_selected"
+        },
+        {
+          "id": "inquiry_chatbot",
+          "label": "Inquiry / booking chatbot + human handoff",
+          "state": "not_selected"
+        },
+        {
+          "id": "store_launch",
+          "label": "Starting ecommerce \u00b7 store launch",
+          "state": "not_selected"
+        },
+        {
+          "id": "store_improvement",
+          "label": "Selling online \u00b7 shopping journey",
+          "state": "not_selected"
+        },
+        {
+          "id": "shopping_chatbot",
+          "label": "Shopping / support chatbot",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_fit",
+          "label": "WhatsApp customer fit and permission",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_offer",
+          "label": "WhatsApp marketing / automation",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_qualify",
+          "label": "Qualify channel and opt-in first",
+          "state": "not_selected"
+        },
+        {
+          "id": "primary_offer",
+          "label": "Choose ONE primary offer",
+          "state": "needs_review"
+        },
+        {
+          "id": "value_artifact",
+          "label": "Prepare and review relevant proof of value",
+          "state": "waiting"
+        }
+      ],
+      "recommended_artifacts": [],
+      "reviewed_current_artifact_ids": [],
+      "note": "Selected offers and reviewed artifacts do not establish a live client result. Unknown WhatsApp fit or permission permits qualification planning only."
+    },
+    {
+      "lead_id": 6,
+      "campaign": "B",
+      "selected_service": "",
+      "context": {},
+      "nodes": [
+        {
+          "id": "input",
+          "label": "Qualified prospect + current evidence",
+          "state": "needs_review"
+        },
+        {
+          "id": "goal",
+          "label": "Primary business goal",
+          "state": "needs_review"
+        },
+        {
+          "id": "campaign_a",
+          "label": "Campaign A \u00b7 inquiries and bookings",
+          "state": "other_branch"
+        },
+        {
+          "id": "campaign_b",
+          "label": "Campaign B \u00b7 D2C growth",
+          "state": "selected"
+        },
+        {
+          "id": "website_build",
+          "label": "Website / new service page",
+          "state": "not_selected"
+        },
+        {
+          "id": "website_improvement",
+          "label": "Website improvement / redesign",
+          "state": "not_selected"
+        },
+        {
+          "id": "inquiry_chatbot",
+          "label": "Inquiry / booking chatbot + human handoff",
+          "state": "not_selected"
+        },
+        {
+          "id": "store_launch",
+          "label": "Starting ecommerce \u00b7 store launch",
+          "state": "not_selected"
+        },
+        {
+          "id": "store_improvement",
+          "label": "Selling online \u00b7 shopping journey",
+          "state": "not_selected"
+        },
+        {
+          "id": "shopping_chatbot",
+          "label": "Shopping / support chatbot",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_fit",
+          "label": "WhatsApp customer fit and permission",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_offer",
+          "label": "WhatsApp marketing / automation",
+          "state": "not_selected"
+        },
+        {
+          "id": "whatsapp_qualify",
+          "label": "Qualify channel and opt-in first",
+          "state": "not_selected"
+        },
+        {
+          "id": "primary_offer",
+          "label": "Choose ONE primary offer",
+          "state": "needs_review"
+        },
+        {
+          "id": "value_artifact",
+          "label": "Prepare and review relevant proof of value",
+          "state": "waiting"
+        }
+      ],
+      "recommended_artifacts": [],
+      "reviewed_current_artifact_ids": [],
+      "note": "Selected offers and reviewed artifacts do not establish a live client result. Unknown WhatsApp fit or permission permits qualification planning only."
+    }
+  ],
+  "ruff": "passed",
+  "javascript_syntax": "passed",
+  "source_sha256": {
+    "outreach/offers.py": "6dbed5b72bc390a1ab6625bac1583cb40c6eb7adf3d0c51b6d7e266ecb626fd2",
+    "outreach/campaigns.py": "183758c4a057a40ed027582380eb254520d547bd855eff5b7f57cb83844a2a69",
+    "outreach/opportunities.py": "79f66f359da183a46df053dd18c5eb2b30bf0ea42d9cc0cb49e5f36325848af5",
+    "outreach/deliverables.py": "9f3dca60b7475ad830dfac6ff82f7f1721e9f2acd673f21e0f2043fbfc4fb9e5",
+    "outreach/research.py": "39df51f304ec03d094d440b6d949529d7e7230c327970d997b643a034f7761a5",
+    "outreach/app.py": "9331c14dd6db4c5670baf0764165a7b2f3a72ab7020be72a5cc7bda33bf1f22e",
+    "outreach/workflow_detail.py": "18e7faab2dd5acd797e5cc0ba9a1152be781f2681ffa5008a551c9aafc5d7271",
+    "outreach/static/app.js": "d1bba7e1b65a85d01a573b00d922e7eb301c5c9c886fe1fef51e61ab2eb7eb64",
+    "outreach/static/sales.js": "3f2da2c425795e6a4b51fb8e734bd187b9917d233d233411a1a795b6cd92135e",
+    "outreach/static/style.css": "67442ace87b614c899bf6769dd8cd06dc6ff0b0714a6e65f19f6c06ceadc8ea9",
+    "tests/test_second_workflow.py": "6154f8bc7cabd44d951a0ec7197c9d216ca13d80bb33ae13572417d6c1cc42da",
+    "scripts/verify_second_workflow_ui.py": "7b3c8679ee4c0fd852256216880e4905d786abc1f2eb27439308c4421866ff81"
+  },
+  "external_messages": 0,
+  "email_probes": 0,
+  "limits": [
+    "All six real prospects still require review",
+    "Confirmed WhatsApp states are operator records",
+    "FAQ and WhatsApp outputs are prototypes/plans",
+    "No live client deployment or measured conversion result verified"
+  ]
+}

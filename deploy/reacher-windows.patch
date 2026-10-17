@@ -1,0 +1,16 @@
+diff --git a/backend/src/worker/consume.rs b/backend/src/worker/consume.rs
+index c11d1f7..be330d4 100644
+--- a/backend/src/worker/consume.rs
++++ b/backend/src/worker/consume.rs
+@@ -27,8 +27,10 @@ pub async fn setup_rabbit_mq(
+ 	let options = ConnectionProperties::default()
+ 		// Use tokio executor and reactor.
+ 		.with_executor(tokio_executor_trait::Tokio::current())
+-		.with_reactor(tokio_reactor_trait::Tokio)
+ 		.with_connection_name(backend_name.into());
++	// Tokio's reactor trait implementation is Unix-only; native preview disables worker mode.
++	#[cfg(unix)]
++	let options = options.with_reactor(tokio_reactor_trait::Tokio);
+ 
+ 	let conn = Connection::connect(&config.url, options)
+ 		.await

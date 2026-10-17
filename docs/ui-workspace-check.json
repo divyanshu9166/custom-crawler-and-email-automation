@@ -1,0 +1,61 @@
+{
+  "checked_at": 1791645603.513145,
+  "status": "local_feature_verified",
+  "automated_suite": {
+    "passed": 224,
+    "failed": 0,
+    "warning_count": 1,
+    "seconds": 99.72,
+    "private_log": "data/audit-pytest-workflow-settings-final.log"
+  },
+  "actual_chromium_dashboard": {
+    "passed": true,
+    "javascript_errors": 0,
+    "private_log": "data/audit-ui-workflow-settings-release.log",
+    "profile_branch_checked": true,
+    "normal_sign_in_form_checked": true,
+    "historical_sources_excluded_from_qualification": true,
+    "committed_write_refresh_failure_checked": true,
+    "node_drag_zoom_and_scope_checked": true,
+    "mobile_layout_checked": true,
+    "fictional_mail_settings_saved": true,
+    "fictional_credentials_changed_and_new_login_checked": true
+  },
+  "normal_server_read_only_check": {
+    "checked_at": 1791645517.1571534,
+    "url": "http://localhost:8000/",
+    "nodes": 11,
+    "settings_visible": true,
+    "password_fields_blank": true,
+    "mobile_overflow": false,
+    "javascript_errors": 0,
+    "actual_credentials_or_mailbox_changed": false,
+    "sending_enabled": false
+  },
+  "source_hashes": {
+    "outreach/config.py": "8ca4cb4e6a18444fbac25509b852e5461e43e66e2e7c513a895bb5e69c91d712",
+    "outreach/preferences.py": "3e074cf6b225b2c1a4b31ef46bebf9d3de41d0b5bac2192bb660a91af7a90452",
+    "outreach/workflow.py": "ee86785ad286b0ffd81ad0584fcabe710c2592ea8d27f5f6f23baacdd33f3dd9",
+    "outreach/app.py": "e08df64efae983963a7e6bebff652c9ecf9376f8f1489cc0dab29ede251d0666",
+    "outreach/worker.py": "0b44041146ff8787ff038c0dc1db4e1b21a12c2b94c9dfab9e454ae6576eb8d8",
+    "outreach/static/index.html": "f08523fb97d173c62b2e685688de847bad90e554a7e5ebe8e03d6e19cb818ade",
+    "outreach/static/style.css": "3e5bca75ef145197ffa27b48678d08452e4be9d1ae16336fa68262f8dd9f14c0",
+    "outreach/static/app.js": "0002b77a3946a51380b14a891471768989d0f29348355c79d32ad451e4cbf6b4",
+    "outreach/static/workflow.js": "3f6cc9ea63df906082b57dca3df834c630eb16e3717dad75e75d190123e60061",
+    "outreach/static/settings.js": "0216975d54a9f7e60652e6d1ebf604a975eff46a22d7e37d7be10fd4ec852fb8",
+    "tests/test_workspace_settings.py": "104d45b12e03443df042c6ad0c10ae8dd355c6471e70b15f7bb21b4b46800463",
+    "tests/test_workflow_canvas.py": "1121136550bb992d1e8a2a2958fb93b75be125552916687de3c5f97849b460af",
+    "scripts/ui_smoke.py": "751ddd50e71f113769420b49a02adaf3ad0279809189948156e461b4127de3ba"
+  },
+  "lint_and_javascript_syntax": "passed",
+  "actual_mailbox_or_credentials_changed": false,
+  "execution_logic_editable_by_dragging_nodes": false,
+  "sending_enabled": false,
+  "broader_goal_complete": false,
+  "pending": [
+    "VPS/Linux Docker acceptance",
+    "Real Reacher/provider verification",
+    "Real mailbox and domain/HTTPS setup",
+    "Controlled live-delivery pilot acceptance"
+  ]
+}

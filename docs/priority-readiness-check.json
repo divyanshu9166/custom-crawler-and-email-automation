@@ -1,0 +1,137 @@
+{
+  "checked_at": 1791712454.7694256,
+  "scope": "Current review queue and shared qualification proof; not real lead yield or provider/client acceptance",
+  "tests_passed": 491,
+  "suite_seconds": 136.08,
+  "new_priority_cases": 10,
+  "reproduced_failing_before_fix": 10,
+  "junit_sha256": "70d819f57f241a71673ed749ac1907ef4cd777c709f7e5e1b2f36d9afc2bab64",
+  "benchmark": {
+    "checked_at": 1791712284.275144,
+    "scope": "Local synthetic queue latency; not crawler, whole-VPS or real mailbox verification proof",
+    "scenarios": [
+      {
+        "fixture_businesses": 500,
+        "reviewed": false,
+        "source_pages": 0,
+        "contact_records": 0,
+        "elapsed_seconds": 0.0273,
+        "read_only_records_preserved": true
+      },
+      {
+        "fixture_businesses": 500,
+        "reviewed": true,
+        "source_pages": 1500,
+        "contact_records": 500,
+        "elapsed_seconds": 0.1319,
+        "read_only_records_preserved": true
+      }
+    ],
+    "sending_enabled": false,
+    "worker_enabled": false,
+    "network_requests": 0,
+    "external_messages_sent": 0,
+    "normal_database_used": false
+  },
+  "normal_dashboard_check": {
+    "checked_at": 1791712407.2237537,
+    "normal_candidates": 11,
+    "normal_contacts": 9,
+    "normal_messages": 0,
+    "qualified_candidates": 0,
+    "all_35_nodes_inspected": [
+      "A",
+      "B",
+      "C",
+      "CP",
+      "CS",
+      "CR",
+      "CE",
+      "D",
+      "E",
+      "E1",
+      "E2",
+      "E3",
+      "F",
+      "G",
+      "Q",
+      "H",
+      "AA",
+      "BB",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z"
+    ],
+    "connections": 46,
+    "overview_stages": 11,
+    "per_prospect_maps": 11,
+    "real_records_unchanged": true,
+    "private_configuration_unchanged": true,
+    "sending_paused": true,
+    "contact_source_status": [
+      {
+        "contact_id": 1,
+        "source_eligible": true
+      },
+      {
+        "contact_id": 2,
+        "source_eligible": true
+      },
+      {
+        "contact_id": 3,
+        "source_eligible": true
+      },
+      {
+        "contact_id": 4,
+        "source_eligible": false
+      },
+      {
+        "contact_id": 5,
+        "source_eligible": true
+      },
+      {
+        "contact_id": 6,
+        "source_eligible": true
+      },
+      {
+        "contact_id": 7,
+        "source_eligible": true
+      },
+      {
+        "contact_id": 8,
+        "source_eligible": true
+      },
+      {
+        "contact_id": 9,
+        "source_eligible": true
+      }
+    ],
+    "verification_buttons_checked": true,
+    "read_only_browser": true,
+    "desktop_mobile": true,
+    "js_errors": 0,
+    "overflow": false
+  },
+  "external_messages_sent": 0,
+  "sending_enabled": false,
+  "source_hashes": {
+    "outreach/priorities.py": "a4293f6cd7a5d7770ca0474c8985a6884432cf5db1193528edf9ec68f1ebb380",
+    "outreach/offers.py": "5505eb0cb6621f8f4d1ce2155c531cf1f296f877bf9c532df03b838cc21240a0",
+    "tests/test_priority_readiness.py": "03cc372dc68739f3af6729b928a2105a8573950131ce668a490405ddd605d788",
+    "scripts/benchmark_priority_readiness.py": "a973aeb4c43f45ca31855e3f748d98d255cd113250423a0b0133c4c8c0effe1f"
+  }
+}

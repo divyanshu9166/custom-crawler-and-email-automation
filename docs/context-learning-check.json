@@ -1,0 +1,122 @@
+{
+  "checked_at": 1791654630.393602,
+  "status": "local_features_verified_full_acceptance_incomplete",
+  "automated_suite": {
+    "passed": 249,
+    "failed": 0,
+    "warning_count": 1,
+    "seconds": 83.26,
+    "private_log": "data/audit-context-learning-tests.log",
+    "private_junit": "data/audit-context-learning-tests.xml"
+  },
+  "full_chromium_smoke": {
+    "passed": true,
+    "javascript_errors": 0,
+    "private_log": "data/audit-context-learning-browser.log",
+    "learning_empty_nonzero_and_label_escaping": true,
+    "fictional_mail_credentials_and_login_changes": true,
+    "desktop_mobile_checked": true
+  },
+  "normal_learning_read_only": {
+    "checked_at": 1791654630.1025293,
+    "url": "http://localhost:8000/",
+    "view": "Learning",
+    "totals": {
+      "prospect_records": 2,
+      "qualified_for_outreach": 0,
+      "approved_records": 0,
+      "smtp_accepted_records": 0,
+      "smtp_accepted_messages": 0,
+      "human_email_reply_records": 0,
+      "opt_out_records": 0,
+      "bounced_records": 0,
+      "qualified_sales_records": 0,
+      "recorded_won_records": 0,
+      "completed_records": 0,
+      "rates": {
+        "human_email_reply_per_accepted_record": null,
+        "qualified_sales_per_accepted_record": null,
+        "recorded_won_per_accepted_record": null,
+        "recorded_won_per_qualified_sales_record": null
+      },
+      "sample_state": "no_accepted_sample",
+      "review_next": "No SMTP-accepted sample yet. Finish provider readiness and reviewed outreach before judging campaign performance."
+    },
+    "javascript_errors": 0,
+    "mobile_page_overflow": false,
+    "settings_or_credentials_changed": false,
+    "external_messages_sent": 0,
+    "sending_enabled": false
+  },
+  "current_saved_source_preview": {
+    "checked_at": 1791654324.5222907,
+    "actual_saved_sources": [
+      {
+        "lead_id": 1,
+        "prospect_kind": "website",
+        "current_evidence_pages": 30,
+        "proposed_services": [
+          "store_improvement",
+          "chatbot"
+        ],
+        "source_quotes_matched": true,
+        "review_required": true
+      },
+      {
+        "lead_id": 2,
+        "prospect_kind": "profile",
+        "current_evidence_pages": 0,
+        "proposed_services": [],
+        "source_quotes_matched": true,
+        "review_required": true
+      }
+    ],
+    "read_only": true,
+    "new_recipient_probes": 0,
+    "new_external_messages": 0,
+    "sending_enabled": false
+  },
+  "source_hashes": {
+    "outreach/opportunities.py": "50e545beea125cf618dc0e77dbfdaaff85b6bd09aeef55a7745a9b9fee76b70b",
+    "outreach/learning.py": "ad7339e35afd033c1a142686074bf624d21fcd2ac77367bc97956867f5f5040c",
+    "outreach/campaigns.py": "011862ace99b135e62ba6969379db1fceb48e4d14848c9e0132f3d309a848e2f",
+    "outreach/research.py": "982d91747bef9146c3987604468b029b9a66434e23922de351807b099ad71476",
+    "outreach/profiles.py": "06f5374b52d969a22ed59e9e1877dcf043fe3a28a6ec3787158a3719b5c5cf4b",
+    "outreach/sales.py": "a8ea84c268af135c9db10a0c0213241df601445ea8bc2929e118245b28561369",
+    "outreach/static/app.js": "679d3f0c6b0d2623f3b37d82fa4bb73a4eaa0e69a99c85936c7fe48325ab6725",
+    "outreach/static/sales.js": "d400dea2c43745b8985d373342b2a7310fafdccbb8e4448212e8e6f1a0a0b1bf",
+    "outreach/static/index.html": "8f197c94558a72353bf710739fab493854e658e17fe5004e765c63627ea231e3",
+    "outreach/static/style.css": "72fda9f7306f5941151322c5ccaa1ae388073451184c0eb1216c794c35aa54ff",
+    "scripts/preflight.py": "23cf7ec90b288365f2164ddf7a30cd778c1d9bfab9cc40d9f8a56f41f63c9f9d",
+    "scripts/start.ps1": "ce27403f00888a911e2f22674077d20b74fd250ef838d3efb121d49c36642922",
+    "scripts/ui_smoke.py": "2a841b10748b9f94c6ce38d7b2ce3ce3c8307aad4c54751fd1de88db82537944",
+    "scripts/verify_workflow_nodes.py": "c8162a988bcfe2cea232db5437890f813662c288c7db73bb6454e049f22ec465",
+    "tests/test_learning.py": "d07b467b7cf038ab892dfa08a3064e7651836bd07128bf35cfc8df95f2efbb76",
+    "tests/test_opportunities.py": "4491f693d85f9e36c5758d949835d990584d553712f5b038021ddbb1fa6c86c2",
+    "tests/test_deployment.py": "c2aeb0dd9abb2bf8bf6fae3aa09846c11ccd490297c01d6005f0fb32db7bfe46",
+    ".github/workflows/test.yml": "803aadc4a842f3ef60a3e3a737224cc0545abcbb897d7fda57455e7f2a041bd0"
+  },
+  "readme_local_links_exist": true,
+  "ci_yaml_parsed": true,
+  "ci_linux_builds_executed": false,
+  "ruff_all_javascript_and_powershell_syntax": "passed",
+  "pip_dependency_check": "passed",
+  "original_images_2_and_3_identical": true,
+  "all_nodes_mapped": 35,
+  "broader_goal_complete": false,
+  "goal_status": "active",
+  "real_credentials_or_mailbox_changed": false,
+  "pending": [
+    "Real self-hosted Reacher SMTP/provider acceptance",
+    "VPS/Linux Docker and stack resource acceptance",
+    "Sender/domain/HTTPS and real mailbox setup (deferred by user)",
+    "Independent recipient/buyer/ownership/eligibility and draft review",
+    "Representative current-version live research acceptance",
+    "Controlled live delivery pilot and client/outcome evidence"
+  ],
+  "feature_docs": [
+    "docs/README_WORKFLOW_CHECK.md",
+    "docs/SERVICE_PROPOSALS.md",
+    "docs/LEARNING.md"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "checked_at": 1791801875.3464456,
+  "company": "Bouquets For Days",
+  "website": "https://www.bouquetsfordays.co.uk/",
+  "reused_real_company_pages": 21,
+  "company_pages_recaptured": false,
+  "report": {
+    "lead_id": 1,
+    "queries": [
+      {
+        "query": "site:linkedin.com/in/ \"Bouquets For Days\" (founder OR owner OR marketing OR ecommerce OR director)",
+        "results": 0,
+        "engine_issues": [
+          [
+            "brave",
+            "too many requests"
+          ],
+          [
+            "duckduckgo",
+            "unexpected crash"
+          ],
+          [
+            "google",
+            "access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      },
+      {
+        "query": "site:x.com \"Bouquets For Days\" (founder OR owner OR marketing OR ecommerce)",
+        "results": 0,
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "duckduckgo",
+            "unexpected crash"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ]
+      }
+    ],
+    "captures": [],
+    "state": "held",
+    "note": "Public profile email candidates only; current employer, role, ownership and mailbox existence require review. No guessed addresses or SMTP probes.",
+    "finished_at": 1791801875.3375688
+  },
+  "published_profile_email_candidates": 0,
+  "main_operational_database_unchanged": true,
+  "contacts_created": 0,
+  "email_probes": 0,
+  "external_messages_sent": 0,
+  "developer_api_keys_used": false,
+  "scope": "One real saved business; fresh free index and robots-permitted public profiles, reusing actual earlier company evidence. Not authenticated VPS access or general coverage acceptance."
+}

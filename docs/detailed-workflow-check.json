@@ -1,0 +1,61 @@
+{
+  "checked_at": 1791657397.0040731,
+  "feature": "complete business-flow execution map",
+  "node_count": 35,
+  "edge_count": 46,
+  "overview_stage_count": 11,
+  "suite": {
+    "passed": 264,
+    "failed": 0,
+    "seconds": 81.92,
+    "warnings": 1,
+    "private_junit": "data\\audit-detailed-map-tests-release.xml",
+    "junit_sha256": "d3b67688ce4387c0376c3f121a088b1e11273971e39ff708da56ea029b7859ba"
+  },
+  "new_focused_tests": 11,
+  "browser_smoke": {
+    "passed": true,
+    "javascript_errors": 0,
+    "private_log": "data/audit-detailed-map-browser-release.log",
+    "scope": "Isolated fictional data; no actual messages or provider probes"
+  },
+  "normal_dashboard_read_only": {
+    "checked_at": 1791657333.6531737,
+    "ui_node_count": 35,
+    "edges": 46,
+    "javascript_errors": 0,
+    "desktop_mobile_checked": true,
+    "mobile_page_overflow": false,
+    "scope_filter_and_learning_navigation": true,
+    "counts_before_and_after": {
+      "messages": 0,
+      "approvals": 0,
+      "sent": 0,
+      "jobs": {
+        "done": 5,
+        "failed": 2
+      }
+    },
+    "real_credentials_changed": false,
+    "new_external_mail": 0,
+    "sending_enabled": false
+  },
+  "source_hashes": {
+    "outreach/workflow_detail.py": "3eb3e00c6d49852925600a99ede420be5e155e5755116f1e9c627e259c1df688",
+    "outreach/workflow.py": "3a4f1b9686ba4f655f5a19ea37c518763cacd3a825e01a097cd9193c960afca6",
+    "outreach/app.py": "befb7003b95f339a580ac6a4e843317cdfe974f8b4d2b7e8a95baf02056d4806",
+    "outreach/static/index.html": "3c4597879032611d9feed2fc0e0832575b9fe28069534288215a516bdc58e328",
+    "outreach/static/workflow.js": "e988bc997565b3dfef8f5569f706d02e8564aa8223d170f5b8b32e6e7cf24124",
+    "outreach/static/style.css": "be0e96e7153e84fb9c78aa2da0527de7f5d9702fddd234e46afbdc52df9173f4",
+    "tests/test_workflow_detail.py": "3ff4025d95ea4ad6d6f9b5618fd99876530a3852d2b5f1ea3e631959bec04f60",
+    "scripts/ui_smoke.py": "701bdf7eecd84c9643cca3f06655259a8efc159b9064bfd50a8a07363c375360",
+    "scripts/verify_workflow_nodes.py": "73bf5e0095e19381efd49cca9c528f7bdf229c738471a7f23503859ba3e4dfe3",
+    "docs/WORKFLOW.md": "36b6d218124da2d52c08e6182cf101624c3df79425c2fb41c763c61ac8467c62"
+  },
+  "execution_rules_changed_by_dragging": false,
+  "real_credentials_changed": false,
+  "real_mail_sent": 0,
+  "deployment_setup": "User will configure domain, VPS and mailbox; local development proceeds independently",
+  "broader_goal_complete": false,
+  "actual_client_outcome_claimed": false
+}

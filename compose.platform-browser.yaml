@@ -1,0 +1,11 @@
+# Opt-in headed Chromium in a private virtual display, with the same profile/image as setup.
+services:
+  app:
+    build:
+      context: .
+      dockerfile: deploy/platform-browser.Dockerfile
+    entrypoint: []
+    command: ["xvfb-run", "-a", "uvicorn", "outreach.app:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000", "--workers", "1", "--no-access-log"]
+    environment:
+      PLATFORM_BROWSER_ENABLED: "true"
+      PLATFORM_BROWSER_HEADLESS: "false"

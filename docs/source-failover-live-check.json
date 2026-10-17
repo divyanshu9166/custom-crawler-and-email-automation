@@ -1,0 +1,143 @@
+{
+  "checked_at": 1791796463.198648,
+  "main_operational_database_unchanged": true,
+  "guest_session_only": true,
+  "developer_api_keys_used": false,
+  "paid_sources_used": false,
+  "contacts_created": 0,
+  "email_probes": 0,
+  "external_messages_sent": 0,
+  "scope": "Known previously indexed companies; current local guest-browser and independent public sources. Not fresh prospect discovery, VPS/account acceptance, complete website audits or unrestricted access.",
+  "results": [
+    {
+      "source_url": "https://x.com/SonriaUK",
+      "market_hint": "UK",
+      "indexed_at": 1791660691.679602,
+      "profile_state": "operator_attention",
+      "profile_transport": "managed_browser_public_profile",
+      "resolution_state": "reciprocal_profile_link_candidate",
+      "website_candidate": "https://www.sonriadentalclinic.co.uk/",
+      "source_failover": {
+        "used": true,
+        "profile_state": "operator_attention",
+        "transport": "free_search_and_official_pages",
+        "platform_access_recovered": false
+      },
+      "search": {
+        "query": "\"Sonria Dental Clinic\" official website UK",
+        "queries": [
+          {
+            "query": "\"Sonria Dental Clinic\" official website UK",
+            "result_count": 8,
+            "engine_issues": [
+              [
+                "brave",
+                "too many requests"
+              ],
+              [
+                "google",
+                "access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ]
+          }
+        ],
+        "errors": [],
+        "completed": false,
+        "checked_at": 1791796382.355554,
+        "engine_issues": [
+          [
+            "brave",
+            "too many requests"
+          ],
+          [
+            "google",
+            "access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ],
+        "result_count": 8,
+        "note": "Bounded public search coverage; no result is not proof that no website exists."
+      },
+      "official_source": {
+        "url": "https://www.sonriadentalclinic.co.uk/",
+        "state": "captured",
+        "sha256": "b7b653abdd76f892adc893743b57b7b50bfa8c1c8e7e9a9e88f6c0b6647176df",
+        "published_email_candidates": 1,
+        "rendered": false
+      },
+      "seconds": 42.66
+    },
+    {
+      "source_url": "https://www.linkedin.com/company/fonte-coffee-roaster",
+      "market_hint": "US",
+      "indexed_at": 1791660264.9104176,
+      "profile_state": "browser_unavailable",
+      "profile_transport": "managed_browser_public_profile",
+      "resolution_state": "name_matched_website_candidate",
+      "website_candidate": "https://www.fontecoffee.com/",
+      "source_failover": {
+        "used": true,
+        "profile_state": "browser_unavailable",
+        "transport": "free_search_and_official_pages",
+        "platform_access_recovered": false
+      },
+      "search": {
+        "query": "\"Fonte Coffee Roaster\" official website US",
+        "queries": [
+          {
+            "query": "\"Fonte Coffee Roaster\" official website US",
+            "result_count": 10,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ]
+          }
+        ],
+        "errors": [],
+        "completed": false,
+        "checked_at": 1791796426.7587612,
+        "engine_issues": [
+          [
+            "brave",
+            "Suspended: too many requests"
+          ],
+          [
+            "google",
+            "Suspended: access denied"
+          ],
+          [
+            "qwant",
+            "CAPTCHA"
+          ]
+        ],
+        "result_count": 10,
+        "note": "Bounded public search coverage; no result is not proof that no website exists."
+      },
+      "official_source": {
+        "url": "https://www.fontecoffee.com/coffee/",
+        "state": "captured",
+        "sha256": "dba400d6864f44410e7e94ed0d1126925c78c4e2e4c80124b3e4c5aba8e76471",
+        "published_email_candidates": 0,
+        "rendered": false
+      },
+      "seconds": 48.52
+    }
+  ]
+}

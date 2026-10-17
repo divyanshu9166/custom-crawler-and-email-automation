@@ -1,0 +1,76 @@
+{
+  "checked_at": 1791716639.145174,
+  "scope": "One sourced company-domain technical verification in an isolated database clone; no normal-record mutation or outreach",
+  "real_recipients_submitted": 1,
+  "messages_sent": 0,
+  "company_domain": "skindays.com",
+  "published_email": "info@skindays.com",
+  "source_url": "https://www.skindays.com/pages/contact",
+  "source_sha256": "1e56bcff65038f012d2c643da6195528808f4f579171ef6c9aea352a51f263cc",
+  "source_fetched_at": 1791696815.5722861,
+  "normal_sending_enabled": false,
+  "verdict": "catch_all",
+  "verification_raw": {
+    "input": "info@skindays.com",
+    "is_reachable": "risky",
+    "misc": {
+      "is_disposable": false,
+      "is_role_account": true,
+      "is_b2c": false,
+      "gravatar_url": null,
+      "haveibeenpwned": null
+    },
+    "mx": {
+      "accepts_mail": true,
+      "records": [
+        "aspmx.l.google.com.",
+        "alt2.aspmx.l.google.com.",
+        "alt1.aspmx.l.google.com.",
+        "alt3.aspmx.l.google.com.",
+        "alt4.aspmx.l.google.com."
+      ]
+    },
+    "smtp": {
+      "can_connect_smtp": true,
+      "has_full_inbox": false,
+      "is_catch_all": true,
+      "is_deliverable": true,
+      "is_disabled": false
+    },
+    "syntax": {
+      "address": "info@skindays.com",
+      "domain": "skindays.com",
+      "is_valid_syntax": true,
+      "username": "info",
+      "normalized_email": "info@skindays.com",
+      "suggestion": null
+    },
+    "debug": {
+      "backend_name": "outreach-verifier",
+      "start_time": "2026-10-11T11:03:59.277589Z",
+      "end_time": "2026-10-11T11:04:00.851197200Z",
+      "duration": {
+        "secs": 1,
+        "nanos": 573608200
+      },
+      "smtp": {
+        "verif_method": {
+          "type": "Smtp",
+          "host": "aspmx.l.google.com.",
+          "verif_method": {
+            "from_email": "hello@localhost",
+            "hello_name": "localhost",
+            "proxy": null,
+            "smtp_port": 25,
+            "smtp_timeout": {
+              "secs": 45,
+              "nanos": 0
+            },
+            "retries": 1
+          }
+        }
+      }
+    }
+  },
+  "isolated_message_count": 0
+}

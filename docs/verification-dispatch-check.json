@@ -1,0 +1,30 @@
+{
+  "checked_at": 1791717658.6013942,
+  "scope": "Controlled HTTP verification adapter and isolated databases; no real addresses submitted, no outreach sent",
+  "reproduced_failures": 12,
+  "regression_cases_passed": 13,
+  "suite_cases_passed": 532,
+  "suite_seconds": 126.67,
+  "boundaries": [
+    "readiness",
+    "client_open",
+    "response"
+  ],
+  "changes": [
+    "publication revoked",
+    "contact suppressed",
+    "global suppression with legacy status drift",
+    "recipient edited"
+  ],
+  "dispatch_guard": "After API readiness and client startup, immediately before recipient POST",
+  "result_guard": "Current source, unchanged recipient and suppression checked in same database transaction as verdict/event write",
+  "changed_recipient": "Previous address verdict and errors are not saved to edited address",
+  "network_lock_held": false,
+  "external_messages_sent": 0,
+  "source_hashes": {
+    "outreach/research.py": "62199cc5dc6cdf100f8699250031b2ff46ead371e5aab608339092514f8b738d",
+    "outreach/providers.py": "071ca72de9313fc934eba6061e6a4597dc107ea4ac8bd5c3db4e11aec5ed05e4",
+    "tests/test_verification_dispatch.py": "e35fbe29f24cf6bb6d3613c4113c2b5d7de67551bc224b98c588f05e94c85a98"
+  },
+  "junit_sha256": "d88e488805ca15a209b96face9b60f84a7bfa0ca73ad643fa67c1f430ec87d29"
+}

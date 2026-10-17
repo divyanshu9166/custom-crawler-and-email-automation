@@ -1,0 +1,17 @@
+{
+  "website": "https://harvestskincare.co/pages/contact",
+  "elapsed_seconds": 25.54,
+  "status": "partial",
+  "pages": [
+    {
+      "url": "https://harvestskincare.co/pages/contact",
+      "sha256": "284ef478d10f8bec7b21e27855a29db2aecf52b5470169279adf3cc7bf8ccc6c",
+      "text_chars": 1764,
+      "rendered": true,
+      "automatic_contacts": 0,
+      "review_candidates": 1
+    }
+  ],
+  "callback_warning_observed": false,
+  "note": "Official-page research only. Different-domain published address retained as an unapproved candidate; no database import, ownership approval, recipient probe or email send."
+}

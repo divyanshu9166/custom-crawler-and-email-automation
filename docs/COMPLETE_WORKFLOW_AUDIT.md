@@ -1,0 +1,106 @@
+# Complete acquisition workflow verification
+
+**Email-writing correction (2026-10-11):** this earlier audit used controlled/template copy. It does not validate live AI writing or model quality. Operational writing now requires research-based AI with no template fallback; legacy drafts cannot be approved. See [the correction and current tests](AI_EMAIL_WRITING.md).
+
+**35/35 nodes and 46/46 connections verified against current source and executed tests. 575 tests passed; 18 complete-workflow cases include four connected journeys, plus 22 pilot regressions, 27 recovery regressions, 4 learning-freshness regressions, 17 publication regressions 10 priority regressions and 15 offer-source regressions.**
+
+These results verify application behavior under the tested conditions. They do not establish that the software has zero bugs or that external providers and clients have been accepted in production.
+
+## Corrections
+
+- Live search noise exposed generic-word relevance errors. Requested industry vocabulary is now required for supported niches; explicit conflicting market signals are excluded and empty relevant searches receive one bounded focused retry.
+- Job/category/search routes on PeoplePerHour and supported business directories no longer establish a website-less business profile. Exact current business identity and contact ownership still require review.
+- Current evidence and qualification counts now enforce latest-crawl and 30-day freshness together.
+- Profile/other-domain inbox evidence rejects expired or future-dated source captures before Reacher access.
+- Pending approved sequences recheck frozen sources, recipient, sender identity and all message copy before the canvas shows approval complete; changed context also appears in Hold.
+- Unsent approved artifacts need current source proof before the canvas shows reviewed completion; actual historical delivery remains a ledger fact.
+- Unsent approved proposals need unchanged confirmed client context before the canvas shows review complete.
+- Agreed-call stage requires a dated next action; its canvas completion also requires baseline or an explicit unknown-baseline measurement plan.
+- Expired or future-dated safe verification routes to Hold on the map as well as blocking verification readiness.
+- Client acceptance on the map requires delivery tasks to be closed, matching the completion API.
+- Dedicated privacy/security/automated inboxes are excluded from extraction/import and historical-contact verification.
+- Known marketplaces are rejected at discovery/import, research, ownership and qualification boundaries.
+- Restart recovery retains captured evidence and marks unfinished crawls interrupted instead of leaving them running.
+- Crawl checkpoints allow additional page batches without discarding current evidence or repeating captured pages; fresh contact-page links can reconstruct a legacy frontier.
+- Automatic contact/team research treats social/index hints as candidates and imports contacts only from newly captured official pages; same-company browser work stays serial.
+- Contact recovery reuses saved official contact pages and queued navigation when search fails, with a bounded homepage-navigation fallback and explicit partial/held diagnostics.
+- Verifier syntax preflight prevents real-recipient submission to an unrecognized API. Syntax/DNS fallback is explicitly unknown, never a safe mailbox verdict.
+- Company-domain inboxes require current official-page publication before verification/approval; mailto/structured extraction proof is bound to the saved source hash, and approval freezes the recipient contact page.
+- Review priorities now use the same current Campaign A/B offer guard as the workflow, including D2C commerce proof and US/UK scope. Future-dated research earns no source points; canonical country URLs retain valid review credit.
+- Offer suggestions exclude rejected marketplaces, foreign company pages and legal boilerplate; contextual contact routes and genuine FAQ content beat bare menu links, with stronger service-specific source selection and intact quote words. Unqualified legacy automatic suggestions are refreshed in the review form without changing saved history.
+- Learning counts current reviewed business offers through the workflow qualification guard, without erasing historical approvals, SMTP acceptance or frozen cohort attribution.
+- Verification rechecks recipient identity, current publication and global suppression immediately before provider dispatch and atomically before saving the response; changed recipients never inherit the previous address verdict.
+- Campaign A and B drafts require the current reviewed offer and source evidence, rechecked in the message-write transaction; stale A reviews can no longer overwrite review drafts.
+
+## Connected journeys
+
+Campaign A and Campaign B each run through both an official-website route and a website-less public-profile route: queued search → research → saved source/contact → explicit qualification/ownership → safe verification → four drafts → approval → actual loopback SMTP → actual loopback IMAP reply → stop/fulfillment → artifact → confirmed client need/call/baseline → proposal/review/delivery record → agreement/payment references → acceptance/inconclusive outcome. Public search/site captures and Reacher verdicts are controlled fixtures; they are not new live provider proof. The website routes execute the real robots/sitemap/HTTP crawler with fixture responses. Browser rendering, four-touch calendars, suppression, OOO, partial crawl and uncertain transport branches have separate passing tests.
+
+## Every node
+
+| Node | Process | Execution | Verified behavior and boundary |
+|---|---|---|---|
+| A | US/UK search queries or sourced CSV | automatic | Queries include US/UK context; CSV imports sourced website records. Profile-only records use discovery/profile form, not website-only CSV import. **Boundary:** Search/import live locally; discovery country is an unconfirmed hint. |
+| B | SearXNG or optional SerpApi | automatic | SearXNG JSON and optional SerpApi adapter; failed engines are retained as limitations. **Boundary:** Native SearXNG used live; engine blocks/CAPTCHAs observed. Optional paid SerpApi not live validated. |
+| C | Official company website · domain deduplication | automatic + review | Domains deduplicate; profile links/name/reciprocal links produce candidate matches, not verified owners. **Boundary:** A matched official website was researched; identity and buyer fit still need review. |
+| CP | Business profile · no known website | automatic | Specific business profile retained with empty website and internal identity key; no fake company domain. **Boundary:** Live LinkedIn record routed to an existing website; actual website-less acquisition not yet accepted. |
+| CS | Public snapshot and named-company website search | automatic | Robots-permitted profile capture and named-company lookup; matched website creates/reuses a deep-research record. **Boundary:** Live lookup matched IMAGE Skincare UK; LinkedIn capture robots-denied. No private-platform scraping. |
+| CR | Review profile identity, activity and search limits | review | Exact current activity/country quotes, ownership notes and search-limit acknowledgment required. Not-found does not mean confirmed absent. **Boundary:** Verified with fictional captured profiles; real profile identity acceptance pending. |
+| CE | Published profile email candidate · no automatic probe | automatic extraction + review | Captured published emails stay candidates; import/probe blocked until profile qualification and inbox ownership review. Candidates can be captured before CR; the later gates still apply. **Boundary:** No real profile email acquired/probed in current live record. |
+| D | Robots + sitemaps + HTTP + Chromium | automatic | Robots, sitemap/depth/page budgets, mediated HTTP and sandboxed JS rendering; report partial or failed coverage. **Boundary:** Real 30-page Chromium research completed with partial coverage; broader 50-domain audit contains partial/failing sites. |
+| E | Saved evidence · recent public signals · sourced contacts | automatic + review | Persist URL, text, hashes and contact identity; only current captures support new ideas. Explicit public signals propose relevant services without an AI key; optional AI can suggest more. Weak/negative cues stay needs-review; every exact quote and interpretation requires review. **Boundary:** Current real website pages yielded matching store/support proposals in a read-only preview; actual pain points, buyer relevance and recent announcements require interpretation/review. |
+| E1 | Company-domain contacts | automatic | Published same-domain addresses are imported and verification queued; buyer role and eligibility remain separate. **Boundary:** Two published website contacts captured; neither established fresh safe. |
+| E2 | Other-domain published candidates | automatic candidate capture | Other-domain addresses are held with current source URL/hash; no automatic provider probe. **Boundary:** One live website candidate retained; no automatic import. |
+| E3 | Review current official source and company ownership | review | Ownership notes plus current official extraction required; re-crawl/source changes invalidate proof; cross-company inbox attachment rejected. **Boundary:** Fictional reviewed contacts tested; current real candidate remains held. |
+| F | Reacher verification | automatic / broader provider acceptance pending | Strict response/address checks; unknown/risky/catch-all/disposable/invalid cannot pass. Current source, recipient and suppression checked before dispatch and before committing a result. **Boundary:** Native backend/API/auth passed. The earlier isolated recipient was catch-all/risky; a new officially published florist contact received a real safe/non-catch-all verdict. One verdict does not establish universal existence, broader accuracy or inbox delivery; no outreach sent. |
+| G | Review saved country quote, buyer and one opportunity | review | Save current exact quote, US/UK timezone, buyer-fit notes, one offer and optional sourced announcement/extra idea. **Boundary:** Actual current businesses not qualified by this audit; quote validity alone does not establish semantic truth. |
+| Q | Desktop/mobile screenshots · optional PageSpeed lab audit | automatic optional audit | Desktop/mobile screenshots and optional on-demand PageSpeed; no profile-only site audits and no invented scores. **Boundary:** Real screenshots exist. Keyless PageSpeed live requests returned HTTP 429; no successful live lab score established. |
+| H | Hold · inspect or research further | automatic hold + review | Hold is represented by lead/profile/contact/message states, not a single unified queue. Uncertain sends require reconciliation; blocked sources and unsafe verification cannot send. **Boundary:** Current verification/profile failures visible; human resolution or provider availability required. |
+| AA | Campaign A · website or inquiry/booking chatbot | automatic proposals + reviewed selection | Campaign A proposes build/improvement/chatbot from public inquiry/service/support cues; one final offer is reviewed. Profile-only improvement excluded. **Boundary:** Fixed cue ranking is not a prediction of client value, sales likelihood or conversion uplift. |
+| BB | Campaign B · ecommerce or suitable WhatsApp workflow | automatic proposals + reviewed selection | Campaign B proposes launch/improvement/chatbot/WhatsApp from source cues; channel-fit, permission/integration and one relevant offer still require review. **Boundary:** No live WhatsApp sending or client store integration is performed by this acquisition software. |
+| I | Source-backed personalized draft + 3 follow-ups | automatic drafting after review | Exactly four editable touches, one relevant offer, source references and distinct follow-up value; activated content cannot be overwritten. **Boundary:** Twenty historical company previews/80 messages reviewed as source/copy samples; recipient acceptance and campaign results pending. |
+| J | Review all messages and outreach eligibility | review gate | All four draft messages, sender identity, qualification, fresh safe proof, relevance/eligibility notes, opt-out and company conversation gate. **Boundary:** No real sequence approved. Current source findings and eligibility require operator judgment. |
+| K | Approve · local send window · mailbox quota | approval + automatic scheduling | Atomic approval; one conversation/company; local weekday/hour window, daily quota and minimum send gap. **Boundary:** Simulated calendars and isolated transport verified; deployed timezone/quota acceptance pending. |
+| L | SMTP send · durable Message-ID | automatic / mailbox setup pending | TLS authenticated SMTP, durable IDs/threading, explicit acceptance versus uncertain outcome and no automatic uncertain retry. **Boundary:** Real socket protocols passed on loopback fixtures; external mailbox delivery/inbox placement unverified. |
+| M | Independent IMAP monitoring | automatic / mailbox setup pending | Independent mailbox lane, bounded read-only IMAP, UID/identity idempotency and freshness; long crawling does not block it. **Boundary:** Local protocol fixtures verified; no real mailbox credentials configured. |
+| N | Next due follow-up · stop after touch 4 | automatic | Calendar day 1/4/9/15: gaps 3/5/6 days from actual acceptance, then local-window adjustment. Stop after touch 4; no overdue burst. **Boundary:** Loopback TLS test used both ordinary and delayed calendars; no real campaign sent. |
+| O | Stop sequence · human conversation | automatic stop + human conversation | Human reply cancels future touches, creates fulfillment task and shared company hold; manual social replies can be recorded. **Boundary:** Fixture replies verified; the software does not autonomously negotiate with the prospect. |
+| P | Global suppression | automatic | Opt-outs/permanent recipient failures suppress globally; unsubscribe GET is read-only and POST performs the stop. **Boundary:** Fixture events/protocol verified; production HTTPS unsubscribe endpoint still requires deployment. |
+| R | Classify actual reply and fulfill promised value | operator review + automatic task | Transport classifies reply/auto-reply/opt-out/DSN. Commercial intent and promised-value fulfillment are operator notes/tasks/stages, not a trained automatic sales classifier. **Boundary:** No actual external reply fulfillment claimed. |
+| S | Review audit / concept / FAQ / WhatsApp-flow artifact | assisted creation + review | Source-backed audit, annotated screenshot, homepage concept, interactive FAQ and WhatsApp planning outline; review/export and actual-delivery reference. **Boundary:** Actual Chromium inspected fictional exports. Concepts/FAQ/WhatsApp outlines are prototypes, not deployed client services. |
+| T | Confirm problem, buyer, budget, timing and success metric | operator-recorded | Confirmed problem, goal, buyer, timeline, budget and success metric required; a real conversation record gates advancement. **Boundary:** External buyer confirmation cannot be independently verified by these fixture tests. |
+| U | Record agreed call and dated next action | operator-recorded | Record agreed call timestamp and dated next action/tasks. This does not book a calendar or send an invitation. **Boundary:** No actual booking/calendar integration performed. |
+| V | Prepare and review scoped proposal | assisted creation + review | Qualified client need, scope, deliverables, exclusions, acceptance, timeline, terms and USD/GBP fee create reviewed downloadable proposal. **Boundary:** Proposal fixtures reviewed; human scope/commercial acceptance required. |
+| W | Record actual proposal delivery | operator-recorded | Delivery requires reviewed proposal and explicit actual-delivery reference; not automatic SMTP proposal delivery. **Boundary:** No real client proposal sent by this audit. |
+| X | Record agreement and initial payment references | operator-recorded | Won/delivery/completed require agreement and initial-payment references; no payment processor or signature collection. **Boundary:** References are operator assertions, not verified receipts or signed documents. |
+| Y | Manage delivery tasks and record client acceptance | operator-recorded task management | Delivery tasks and closure outcomes; completed stage requires client acceptance reference. No automatic client website/WhatsApp deployment. **Boundary:** Actual client delivery and acceptance remain external. |
+| Z | Record measured or inconclusive outcome and campaign learning | operator-recorded + automatic descriptive learning | Outcome notes can be inconclusive. Learning reports frozen campaign/service/country/industry groups, accepted-record-to-human-reply/qualified/recorded-won rates and next-review guidance. No denominator means unknown; repeats and auto-replies cannot inflate conversions. Recorded USD/GBP cost and receipt reports remain separate, with immutable correction history. Completed clients can have dated maintenance/expansion plans and permission-reviewed frozen case studies; external work/publication remains operator-recorded. **Boundary:** No automatic analytics attribution, A/B optimization, verified revenue or evidence of conversion uplift. Historical contexts missing an approval snapshot remain unknown. |
+
+## Important process details
+
+- Website CSV bypasses search (A → C). Search queries use B. Company records deduplicate on domain; profile records retain their own identity.
+- Profile capture may find email candidates before identity review; it never authorizes automatic candidate probing. Completed unsuccessful search means website not found, not proven absence.
+- Matching email domains do not prove publication. Unpublished manual/CSV contacts stay pending, explicit verification is blocked, and changed recipient-source pages invalidate frozen approval.
+- Qualification and technical verification run as separate branches. Approval and every send enforce their required gates.
+- H summarizes distributed holds. SMTP uncertainty can arise directly in L and must be reconciled; it cannot automatically retry through the follow-up loop.
+- A recorded historical sent artifact/proposal stays a historical delivery fact. An unsent approved record must still have current proof/context to show current readiness.
+- R–Y manage operator-confirmed client work. Calls, proposal delivery, agreements, payment references and client acceptance are records; this app does not independently perform or verify those external acts.
+- Four touches stop on human reply/opt-out/permanent failure; OOO/temporary/uncertain outcomes hold for review. Learning is descriptive and preserves inconclusive outcomes.
+
+## Live readiness
+
+Sending remains disabled. VPS/domain/mailbox setup was deferred by the user. This automated graph audit uses controlled provider inputs and loopback mail. The separate [real no-send pilot](NO_SEND_PILOT.md) records actual search/crawl captures and the earlier failed verification jobs. The earlier [native Reacher live check](native-reacher-check.json) established actual local backend/API/auth and one isolated catch-all/risky result. The [new live acquisition run](LIVE_ACQUISITION_CURRENT.md) adds a newly discovered published contact with a safe/non-catch-all provider verdict, one research-qualified candidate, four unapproved drafts and a local FAQ prototype. Individual mailbox existence, broader provider accuracy, delivery/inbox placement, platform coverage and deployed VPS acceptance remain unproven. Normal desktop/mobile dashboard verification preserves real operational records and private configuration.
+
+The Windows native backend helper has thirteen checksum/archive/provenance/environment/compatibility checks. Actual native build/startup status is documented separately in [NATIVE_REACHER.md](NATIVE_REACHER.md); helper tests alone never establish a running backend or safe mailbox verdict.
+
+Thirteen verification-dispatch checks cover publication, recipient edits and suppression during API readiness, client startup and response handling. Twelve reproduced failing timing cases now pass; the unchanged-context case retains normal verification. These use controlled HTTP responses, with no real addresses submitted.
+
+Five draft-source checks cover expired, future-dated, changed and superseded Campaign A evidence, plus current explicitly partial evidence. Four reproduced failing cases now pass; the valid partial route still permits unsent review drafts. The separate [new live acquisition check](LIVE_ACQUISITION_CURRENT.md) records one real candidate, one safe provider verdict, four unapproved drafts and a local FAQ prototype; it does not establish repeatable yield or outreach eligibility.
+
+## Reproduce and provenance
+
+`python -m pytest -q --junitxml=data/live-lead-final-tests.xml`
+
+`python scripts/verify_complete_workflow.py`
+
+[Machine-readable node/source/test mapping](complete-workflow-check.json) contains each passing test name, source line/hash and all 46 connections. Earlier audits are historical snapshots.

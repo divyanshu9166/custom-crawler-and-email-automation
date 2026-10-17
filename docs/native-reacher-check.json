@@ -1,0 +1,73 @@
+{
+  "checked_at": 1791716759.0041254,
+  "native_backend": {
+    "ready": true,
+    "url": "http://127.0.0.1:8081",
+    "pid": 18840,
+    "source_commit": "681791d3d9a854dfcaadb5eb13e5a2f3cb4eed67",
+    "binary_sha256": "f1e858cc81dbafc8af7a1b805da89dfe53a805bca7954d1d9d2dafc122e53d74",
+    "check": {
+      "startup": "reachable",
+      "syntax_rejection": "passed",
+      "header_auth": "passed",
+      "scope": "Startup/auth/syntax only; recipient probing and provider accuracy remain unverified."
+    },
+    "sending_enabled": false,
+    "settings_changed": false,
+    "real_recipients_submitted": 0
+  },
+  "build_provenance": {
+    "source_commit": "681791d3d9a854dfcaadb5eb13e5a2f3cb4eed67",
+    "binary_sha256": "f1e858cc81dbafc8af7a1b805da89dfe53a805bca7954d1d9d2dafc122e53d74",
+    "cargo_lock_sha256": "0b0ae69cd2d3445b32840129ec44d478d5edac23bf94c7be899b93cb420a743c",
+    "rust_toolchain": "1.99.0-x86_64-pc-windows-gnu",
+    "native_openssl_sdk_sha256": "6a081a811781c30aca51dbc036afd93092af91e3297901f02c17043795a10690",
+    "native_openssl_version": "3.6.1 (dynamic)",
+    "windows_patch_file": "backend/src/worker/consume.rs",
+    "windows_patch_source_sha256": "417f13b0d4a6a547050d1c21ce085f1de334450fd23f25f46b25a034537d9af5",
+    "scope": "Build provenance only; SMTP/provider accuracy remains unverified"
+  },
+  "normal_dashboard_readiness": {
+    "ready": true,
+    "path": "/v0/check_email",
+    "scope": "API/syntax check only; no real recipient submitted",
+    "http_status": 200,
+    "reason": "Reacher syntax API responded; SMTP deliverability remains unverified"
+  },
+  "native_helper_scope": "Actual upstream HTTP backend with the single exact Windows optional-worker reactor guard; native OpenSSL SDK differs from Linux vendored build",
+  "smtp_connectivity": {
+    "checked_at": 1791716120.8130913,
+    "domain": "skindays.com",
+    "scope": "DNS and TCP/SMTP greeting only; no MAIL FROM, RCPT TO or DATA commands",
+    "real_recipients_submitted": 0,
+    "messages_sent": 0,
+    "mailbox_exists": null,
+    "safe": false,
+    "mx_hosts": [
+      "aspmx.l.google.com",
+      "alt1.aspmx.l.google.com",
+      "alt2.aspmx.l.google.com",
+      "alt3.aspmx.l.google.com",
+      "alt4.aspmx.l.google.com"
+    ],
+    "tested_host": "aspmx.l.google.com",
+    "tcp_port_25_connected": true,
+    "smtp_greeting_code": "220"
+  },
+  "recipient_check": "docs/native-reacher-recipient-check.json",
+  "actual_recipient_verdict": "catch_all",
+  "normal_records_unchanged": true,
+  "private_configuration_unchanged": true,
+  "normal_leads": 11,
+  "normal_contacts": 9,
+  "normal_messages": 0,
+  "normal_qualified": 0,
+  "outreach_messages_sent": 0,
+  "real_recipients_submitted_in_isolated_check": 1,
+  "safe_mailbox_verdict_established": false,
+  "normal_ui_check": "data/complete-workflow-normal-check.json",
+  "full_suite_tests": 519,
+  "native_helper_cases": 13,
+  "focused_native_and_auth_cases": 19,
+  "boundary": "One SMTP result and local API/auth do not establish individual mailbox existence, unrestricted platform access, broader provider accuracy, production delivery or VPS resource acceptance."
+}

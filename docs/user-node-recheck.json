@@ -1,0 +1,38 @@
+{
+  "checked_at": 1791655221.7871842,
+  "diagram_nodes": 35,
+  "suite_passed": 253,
+  "suite_seconds": 82.47,
+  "junit_sha256": "099d21f754f24706590dbcec743e32a678e2f8bf744c42aff0013c58bb0782b7",
+  "private_junit": "data/audit-user-node-tests.xml",
+  "private_runtime_report": "data/user-node-runtime-check.json",
+  "private_preflight_report": "data/user-node-preflight.json",
+  "source_hashes": {
+    "scripts/preflight.py": "ec2c6919377979e7830d08fc1ac3f1d43836a6e50c113cf59c19a7b567fbadc9",
+    "scripts/reacher_smoke.py": "06804f022a48aa621d6a9adbd1072c614e662b447babbc5319ab7c595c8b453f",
+    "scripts/verify_workflow_nodes.py": "61d216aa06704b24989f5ecf41118e68ffe7cb764545e68443b4ff169ba9db14",
+    "tests/test_deployment.py": "c0c850b43faaf30148b4e3c77f07c8fb0187b0d3ba6b1a39d8980cac6da05dd8",
+    "docs/WORKFLOW.md": "960ac39e5f48b49e8937a61f4d2967c736b79f7265d9d49bb1ae113eeb227b40"
+  },
+  "reacher_backend_ready": false,
+  "reacher_backend_limitation": "Reacher syntax check returned HTTP 404",
+  "sending_enabled": false,
+  "normal_record_counts": {
+    "leads": 2,
+    "contacts": 2,
+    "messages": 0,
+    "approved_contacts": 0,
+    "safe_contacts": 0,
+    "sent_messages": 0,
+    "jobs": {
+      "done": 5,
+      "failed": 2
+    }
+  },
+  "ui_groups": 11,
+  "previous_chromium_smoke_not_rerun": "UI unchanged; prior context-learning smoke passed with zero JS errors",
+  "ruff": "outreach/tests/scripts passed; downloaded runtime dependencies excluded",
+  "no_valid_recipient_probes": true,
+  "no_external_mail": true,
+  "broader_goal_complete": false
+}

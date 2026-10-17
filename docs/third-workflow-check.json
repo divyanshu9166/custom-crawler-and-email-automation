@@ -1,0 +1,705 @@
+{
+  "checked_at": 1791694097.8594985,
+  "diagram_nodes": 23,
+  "suite_passed": 393,
+  "suite_seconds": 114.871,
+  "new_third_workflow_cases": 37,
+  "junit_sha256": "225338f0f505f21c706946c9772df36602f04b7fe64200ed8b51a74ba50a0e66",
+  "all_nodes_live_verified": false,
+  "normal_state": {
+    "checked_at": 1791693930.8567736,
+    "normal_candidates": 6,
+    "normal_contacts": 3,
+    "normal_messages": 0,
+    "qualified_candidates": 0,
+    "real_records_unchanged": true,
+    "private_configuration_unchanged": true,
+    "read_only_browser": true,
+    "desktop_mobile": true,
+    "js_errors": 0,
+    "overflow": false,
+    "baseline_field_visible": true,
+    "accepted_messages": 0,
+    "human_replies": 0,
+    "external_actions_queued": 0
+  },
+  "isolated_chromium": {
+    "isolated_fictional_data": true,
+    "sending_enabled": false,
+    "actual_chromium_forms": true,
+    "approval_revision_and_copy_edit": true,
+    "new_approval_snapshot": true,
+    "baseline_field_visible": true,
+    "desktop_mobile": true,
+    "overflow": false,
+    "js_errors": 0,
+    "messages_submitted": 0,
+    "provider_jobs": 0
+  },
+  "nodes": [
+    {
+      "id": 1,
+      "label": "Selected offer + evidence",
+      "mode": "review + automatic guards",
+      "local_test_status": "passed",
+      "behavior": "One current, quoted and country-reviewed A/B offer; stale evidence cannot approve.",
+      "live_or_manual_boundary": "Real companies still need identity and service-fit review.",
+      "code": {
+        "path": "outreach/offers.py",
+        "symbol": "selected_offer",
+        "line": 46,
+        "sha256": "59a591061fd6fdab30bdef3d64c4e337642e4f326eb6980c0c5a99f2aee93cd5"
+      },
+      "tests": [
+        {
+          "name": "test_every_offer_branch_selects_one_service_and_prepares_relevant_source_proof",
+          "path": "tests/test_second_workflow.py",
+          "line": 66
+        },
+        {
+          "name": "test_third_approval_rejects_changed_campaign_a_sources",
+          "path": "tests/test_third_workflow.py",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "label": "Identify relevant buyer",
+      "mode": "operator review",
+      "local_test_status": "passed",
+      "behavior": "Stored contact name/role and an explicit relevance note are reviewed at approval and frozen.",
+      "live_or_manual_boundary": "Public roles are clues; actual buying authority is confirmed by the operator/client.",
+      "code": {
+        "path": "outreach/campaigns.py",
+        "symbol": "approve",
+        "line": 221,
+        "sha256": "598eb9a1ab9f01f0adac99dcf36d6b7f3f31c7fa9a8999a826c1b17b270fcfe4"
+      },
+      "tests": [
+        {
+          "name": "test_third_unsent_revision_preserves_copy_history_and_requires_new_approval",
+          "path": "tests/test_third_workflow.py",
+          "line": 134
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "label": "Choose contact route",
+      "mode": "automatic email checks / manual social",
+      "local_test_status": "passed",
+      "behavior": "Different-domain/profile inboxes require ownership review; manual LinkedIn history blocks overlapping cold outreach.",
+      "live_or_manual_boundary": "No automated LinkedIn/X DM or guarantee of email availability. Reacher/provider accuracy needs later live acceptance.",
+      "code": {
+        "path": "outreach/research.py",
+        "symbol": "assert_contact_ownership",
+        "line": 53,
+        "sha256": "39df51f304ec03d094d440b6d949529d7e7230c327970d997b643a034f7761a5"
+      },
+      "tests": [
+        {
+          "name": "test_alias_contact_requires_source_and_ownership_then_remains_unverified",
+          "path": "tests/test_contact_candidates.py",
+          "line": 45
+        },
+        {
+          "name": "test_manual_linkedin_history_blocks_new_cold_email",
+          "path": "tests/test_sales.py",
+          "line": 36
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "label": "Check contact eligibility",
+      "mode": "operator review + automatic guards",
+      "local_test_status": "passed",
+      "behavior": "Approval requires recorded eligibility/relevance, current qualification, fresh safe verification, sender identity and no shared stop/history conflict.",
+      "live_or_manual_boundary": "The application records the operator eligibility review; it does not determine legal permission from an email address.",
+      "code": {
+        "path": "outreach/campaigns.py",
+        "symbol": "approve",
+        "line": 221,
+        "sha256": "598eb9a1ab9f01f0adac99dcf36d6b7f3f31c7fa9a8999a826c1b17b270fcfe4"
+      },
+      "tests": [
+        {
+          "name": "test_suppression_overrides_approved_queue",
+          "path": "tests/test_campaigns_mail.py",
+          "line": 134
+        },
+        {
+          "name": "test_approval_requires_safe_and_one_contact_per_company",
+          "path": "tests/test_campaigns_mail.py",
+          "line": 20
+        },
+        {
+          "name": "test_manual_reply_stops_active_sequence_and_cannot_release",
+          "path": "tests/test_sales.py",
+          "line": 47
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "label": "Draft personalized pitch",
+      "mode": "automatic draft + human wording review",
+      "local_test_status": "passed",
+      "behavior": "Source-backed observation, optional sourced trigger, one offer and a question; no fabricated completed asset or sales lift.",
+      "live_or_manual_boundary": "Human review decides accuracy, tone and relevance before any send.",
+      "code": {
+        "path": "outreach/campaigns.py",
+        "symbol": "draft_sequence",
+        "line": 163,
+        "sha256": "598eb9a1ab9f01f0adac99dcf36d6b7f3f31c7fa9a8999a826c1b17b270fcfe4"
+      },
+      "tests": [
+        {
+          "name": "test_sourced_trigger_and_extra_value_survive_into_drafts",
+          "path": "tests/test_requirements_audit.py",
+          "line": 49
+        },
+        {
+          "name": "test_unsourced_optional_claims_are_rejected",
+          "path": "tests/test_requirements_audit.py",
+          "line": 68
+        },
+        {
+          "name": "test_drafts_do_not_claim_completed_assets",
+          "path": "tests/test_campaigns_mail.py",
+          "line": 147
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "label": "Initial pilot review / revise / approve",
+      "mode": "operator gate",
+      "local_test_status": "passed",
+      "behavior": "All four drafts are reviewed; copy, recipient, identity and evidence snapshot freeze atomically. Unsent approval can return to draft review with history preserved.",
+      "live_or_manual_boundary": "Sent/sending/uncertain/failed or stopped conversations cannot reset through this control.",
+      "code": {
+        "path": "outreach/campaigns.py",
+        "symbol": "revise_unsent_sequence",
+        "line": 318,
+        "sha256": "598eb9a1ab9f01f0adac99dcf36d6b7f3f31c7fa9a8999a826c1b17b270fcfe4"
+      },
+      "tests": [
+        {
+          "name": "test_third_unsent_revision_preserves_copy_history_and_requires_new_approval",
+          "path": "tests/test_third_workflow.py",
+          "line": 134
+        },
+        {
+          "name": "test_third_revision_cannot_erase_submission_or_uncertainty",
+          "path": "tests/test_third_workflow.py",
+          "line": 154
+        },
+        {
+          "name": "test_third_send_holds_changed_approval_context",
+          "path": "tests/test_third_workflow.py",
+          "line": 33
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "label": "Send + log contact history",
+      "mode": "automatic after approval/readiness",
+      "local_test_status": "passed",
+      "behavior": "Trusted loopback TLS SMTP exercises actual protocol acceptance, durable Message-ID, local windows, quota/interval and inbox readiness.",
+      "live_or_manual_boundary": "This proves local protocol behavior, not your real mailbox, inbox placement, DNS or VPS deployment.",
+      "code": {
+        "path": "outreach/mail.py",
+        "symbol": "send_one",
+        "line": 95,
+        "sha256": "796f65d9457b57f3c7a765f4f0bb832dd176ade921c6c449f929e935b9473993"
+      },
+      "tests": [
+        {
+          "name": "test_real_tls_send_and_imap_optout_stop_sequence",
+          "path": "tests/test_mail_wire.py",
+          "line": 29
+        },
+        {
+          "name": "test_third_claim_rechecks_readiness_after_candidate_read",
+          "path": "tests/test_third_workflow.py",
+          "line": 57
+        },
+        {
+          "name": "test_real_smtp_failure_stages_and_duplicate_protection",
+          "path": "tests/test_mail_wire.py",
+          "line": 104
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "label": "Response / delivery status",
+      "mode": "automatic monitoring + operator intent review",
+      "local_test_status": "passed",
+      "behavior": "Positive 2.x notices stay separate from temporary/unknown delay and permanent bounce; IMAP reads bounded messages independently.",
+      "live_or_manual_boundary": "A reported delivery notice is a provider report, not independently verified inbox visibility. Reply interest is reviewed by a human.",
+      "code": {
+        "path": "outreach/mail.py",
+        "symbol": "record_inbound",
+        "line": 245,
+        "sha256": "796f65d9457b57f3c7a765f4f0bb832dd176ade921c6c449f929e935b9473993"
+      },
+      "tests": [
+        {
+          "name": "test_third_delivery_status_does_not_treat_positive_notice_as_delay",
+          "path": "tests/test_third_workflow.py",
+          "line": 105
+        },
+        {
+          "name": "test_imap_bounded_read_and_reply_stop",
+          "path": "tests/test_mail_providers.py",
+          "line": 34
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "label": "Suggested follow-ups Day 4 / 9 / 15",
+      "mode": "automatic schedule of reviewed copy",
+      "local_test_status": "passed",
+      "behavior": "Three follow-ups use 3/5/6-day gaps after actual previous acceptance, preserving minimum spacing when delayed.",
+      "live_or_manual_boundary": "Day 1/4/9/15 are nominal inclusive days. Local business windows, weekends and actual delays can shift sends.",
+      "code": {
+        "path": "outreach/mail.py",
+        "symbol": "mark_sent",
+        "line": 214,
+        "sha256": "796f65d9457b57f3c7a765f4f0bb832dd176ade921c6c449f929e935b9473993"
+      },
+      "tests": [
+        {
+          "name": "test_four_touch_tls_sequence_respects_actual_acceptance_and_stops",
+          "path": "tests/test_mail_wire.py",
+          "line": 58
+        },
+        {
+          "name": "test_default_followup_adds_new_value",
+          "path": "tests/test_requirements_audit.py",
+          "line": 78
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "label": "Any reply or stop signal?",
+      "mode": "automatic stop",
+      "local_test_status": "passed",
+      "behavior": "Any human reply cancels pending touches; automatic replies hold. Repeated IMAP records cannot duplicate fulfillment tasks.",
+      "live_or_manual_boundary": "An email already submitted cannot be recalled; SMTP uncertainty stays held for reconciliation.",
+      "code": {
+        "path": "outreach/mail.py",
+        "symbol": "record_inbound",
+        "line": 245,
+        "sha256": "796f65d9457b57f3c7a765f4f0bb832dd176ade921c6c449f929e935b9473993"
+      },
+      "tests": [
+        {
+          "name": "test_third_all_reply_branches_stop_followups_without_inventing_interest",
+          "path": "tests/test_third_workflow.py",
+          "line": 166
+        },
+        {
+          "name": "test_reply_cancels_followups_and_is_idempotent",
+          "path": "tests/test_campaigns_mail.py",
+          "line": 83
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "label": "Interested: stop + promised audit/demo/ideas",
+      "mode": "automatic stop/task + operator fulfillment",
+      "local_test_status": "passed",
+      "behavior": "A human reply creates a due review/fulfillment task; sourced artifacts can be prepared, inspected, approved and recorded as actually delivered.",
+      "live_or_manual_boundary": "Interest classification, asset selection and external delivery are operator actions; the task does not itself answer the prospect.",
+      "code": {
+        "path": "outreach/deliverables.py",
+        "symbol": "create",
+        "line": 52,
+        "sha256": "9f3dca60b7475ad830dfac6ff82f7f1721e9f2acd673f21e0f2043fbfc4fb9e5"
+      },
+      "tests": [
+        {
+          "name": "test_inbound_reply_creates_one_fulfillment_task_and_shared_hold",
+          "path": "tests/test_sales.py",
+          "line": 79
+        },
+        {
+          "name": "test_each_value_artifact_is_sourced_reviewable_and_deliverable",
+          "path": "tests/test_deliverables.py",
+          "line": 25
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "label": "Question: stop + answer in context",
+      "mode": "automatic stop/task + operator conversation",
+      "local_test_status": "passed",
+      "behavior": "Questions stop the cold sequence and enter the shared conversation ledger/task queue.",
+      "live_or_manual_boundary": "The operator reads and answers the actual question; no automatic interested label or invented answer.",
+      "code": {
+        "path": "outreach/sales.py",
+        "symbol": "record_activity",
+        "line": 39,
+        "sha256": "a56e98ac70e2371558962d1950fef7bfd74caa6dce05614246ee54ad34e87094"
+      },
+      "tests": [
+        {
+          "name": "test_third_all_reply_branches_stop_followups_without_inventing_interest",
+          "path": "tests/test_third_workflow.py",
+          "line": 166
+        },
+        {
+          "name": "test_manual_reply_stops_active_sequence_and_cannot_release",
+          "path": "tests/test_sales.py",
+          "line": 47
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "label": "Later / out of office: pause + next date",
+      "mode": "automatic hold / operator next date",
+      "local_test_status": "passed",
+      "behavior": "OOO holds/cancels queued steps. Reviewed resume requires a future date, fresh verification and unchanged approved sources/copy. Nurture requires a future date.",
+      "live_or_manual_boundary": "Human later replies remain stopped; record nurture and continue the existing conversation. No automatic date inference or cold restart.",
+      "code": {
+        "path": "outreach/campaigns.py",
+        "symbol": "resume_contact",
+        "line": 285,
+        "sha256": "598eb9a1ab9f01f0adac99dcf36d6b7f3f31c7fa9a8999a826c1b17b270fcfe4"
+      },
+      "tests": [
+        {
+          "name": "test_out_of_office_pauses",
+          "path": "tests/test_campaigns_mail.py",
+          "line": 99
+        },
+        {
+          "name": "test_resume_requires_fresh_result_and_cannot_override_optout",
+          "path": "tests/test_mail_providers.py",
+          "line": 85
+        },
+        {
+          "name": "test_third_resume_rejects_changed_source_before_scheduling",
+          "path": "tests/test_third_workflow.py",
+          "line": 111
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "label": "No / opt-out / hard bounce: stop + suppression/status",
+      "mode": "automatic + operator closure",
+      "local_test_status": "passed",
+      "behavior": "Explicit opt-out/permanent recipient failure suppresses globally; known non-acceptance cannot requeue a concurrent stopped message.",
+      "live_or_manual_boundary": "A plain negative human reply also stops the sequence; operator records lost/closure context. Conservative text recognition still needs response review.",
+      "code": {
+        "path": "outreach/mail.py",
+        "symbol": "record_inbound",
+        "line": 245,
+        "sha256": "796f65d9457b57f3c7a765f4f0bb832dd176ade921c6c449f929e935b9473993"
+      },
+      "tests": [
+        {
+          "name": "test_optout_global_suppression",
+          "path": "tests/test_campaigns_mail.py",
+          "line": 93
+        },
+        {
+          "name": "test_permanent_dsn_suppresses",
+          "path": "tests/test_campaigns_mail.py",
+          "line": 104
+        },
+        {
+          "name": "test_third_before_submission_failure_keeps_concurrent_stop_cancelled",
+          "path": "tests/test_third_workflow.py",
+          "line": 81
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "label": "None after final touch: close sequence",
+      "mode": "automatic",
+      "local_test_status": "passed",
+      "behavior": "Touch four closes the active cold sequence and no fifth message is queued.",
+      "live_or_manual_boundary": "Closure is after fourth SMTP acceptance, not a timed proof of no later reply; later replies are still processed.",
+      "code": {
+        "path": "outreach/mail.py",
+        "symbol": "mark_sent",
+        "line": 214,
+        "sha256": "796f65d9457b57f3c7a765f4f0bb832dd176ade921c6c449f929e935b9473993"
+      },
+      "tests": [
+        {
+          "name": "test_four_touch_tls_sequence_respects_actual_acceptance_and_stops",
+          "path": "tests/test_mail_wire.py",
+          "line": 58
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "label": "Qualify need / timing / buyer / budget",
+      "mode": "operator-confirmed records",
+      "local_test_status": "passed",
+      "behavior": "Actual conversation plus confirmed problem, goal, metric, decision maker, timeline and budget context guard qualified stages; optimistic versions reject stale saves.",
+      "live_or_manual_boundary": "Unknowns are recorded explicitly. No automatic budget/need invention or buyer-authority guarantee.",
+      "code": {
+        "path": "outreach/sales.py",
+        "symbol": "update_sales",
+        "line": 91,
+        "sha256": "a56e98ac70e2371558962d1950fef7bfd74caa6dce05614246ee54ad34e87094"
+      },
+      "tests": [
+        {
+          "name": "test_unconfirmed_client_need_cannot_advance_or_create_proposal",
+          "path": "tests/test_sales.py",
+          "line": 88
+        },
+        {
+          "name": "test_complete_operator_confirmed_sales_lifecycle",
+          "path": "tests/test_sales.py",
+          "line": 94
+        },
+        {
+          "name": "test_stale_sales_update_cannot_overwrite_new_client_context",
+          "path": "tests/test_sales.py",
+          "line": 126
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "label": "Discovery call: problem / baseline / metric",
+      "mode": "operator-confirmed record",
+      "local_test_status": "passed",
+      "behavior": "Call-booked needs an agreed call time and explicit baseline notes; unknown baseline requires a measurement plan. Baseline and agreed metric appear in proposals.",
+      "live_or_manual_boundary": "The app records calls and dates; it does not book the external calendar or measure business analytics automatically.",
+      "code": {
+        "path": "outreach/sales.py",
+        "symbol": "update_sales",
+        "line": 91,
+        "sha256": "a56e98ac70e2371558962d1950fef7bfd74caa6dce05614246ee54ad34e87094"
+      },
+      "tests": [
+        {
+          "name": "test_third_call_and_proposal_require_recorded_baseline_or_measurement_plan",
+          "path": "tests/test_third_workflow.py",
+          "line": 119
+        },
+        {
+          "name": "test_complete_operator_confirmed_sales_lifecycle",
+          "path": "tests/test_sales.py",
+          "line": 94
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "label": "Scoped proposal",
+      "mode": "automatic document + operator review/delivery",
+      "local_test_status": "passed",
+      "behavior": "Versioned draft includes deliverables, milestones, exclusions, acceptance, commercial terms and exact USD/GBP fee. Changed client qualification invalidates draft review.",
+      "live_or_manual_boundary": "External proposal delivery is separately recorded with an actual-delivery confirmation/reference. Existing delivered versions remain history.",
+      "code": {
+        "path": "outreach/sales.py",
+        "symbol": "proposal_action",
+        "line": 189,
+        "sha256": "a56e98ac70e2371558962d1950fef7bfd74caa6dce05614246ee54ad34e87094"
+      },
+      "tests": [
+        {
+          "name": "test_complete_operator_confirmed_sales_lifecycle",
+          "path": "tests/test_sales.py",
+          "line": 94
+        },
+        {
+          "name": "test_third_proposal_review_cannot_approve_changed_client_context",
+          "path": "tests/test_third_workflow.py",
+          "line": 183
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "label": "Agreement + initial payment",
+      "mode": "operator-confirmed records",
+      "local_test_status": "passed",
+      "behavior": "Won/delivery needs a delivered reviewed proposal and actual agreement/payment references. Confirmed cash/cost entries use exact separate currencies.",
+      "live_or_manual_boundary": "No signature verification, payment gateway or independently verified bank receipt. Contract fee is not counted as cash received.",
+      "code": {
+        "path": "outreach/sales.py",
+        "symbol": "update_sales",
+        "line": 91,
+        "sha256": "a56e98ac70e2371558962d1950fef7bfd74caa6dce05614246ee54ad34e87094"
+      },
+      "tests": [
+        {
+          "name": "test_won_requires_real_references_and_delivered_proposal",
+          "path": "tests/test_sales.py",
+          "line": 118
+        },
+        {
+          "name": "test_finance_requires_actual_confirmation_and_past_time",
+          "path": "tests/test_growth_finance_priority.py",
+          "line": 87
+        },
+        {
+          "name": "test_exact_currency_arithmetic_refunds_and_no_exchange_conversion",
+          "path": "tests/test_growth_finance_priority.py",
+          "line": 47
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "label": "Deliver project / measure outcome",
+      "mode": "operator work + automatic record gates",
+      "local_test_status": "passed",
+      "behavior": "Existing delivery tasks must close with outcomes; completion requires client acceptance and measured or inconclusive outcome notes.",
+      "live_or_manual_boundary": "These controls manage delivery records; they do not themselves build/deploy the sold client website/bot or establish causal conversion uplift.",
+      "code": {
+        "path": "outreach/sales.py",
+        "symbol": "update_sales",
+        "line": 91,
+        "sha256": "a56e98ac70e2371558962d1950fef7bfd74caa6dce05614246ee54ad34e87094"
+      },
+      "tests": [
+        {
+          "name": "test_third_completion_cannot_leave_delivery_work_open",
+          "path": "tests/test_third_workflow.py",
+          "line": 200
+        },
+        {
+          "name": "test_complete_operator_confirmed_sales_lifecycle",
+          "path": "tests/test_sales.py",
+          "line": 94
+        },
+        {
+          "name": "test_tasks_are_due_visible_and_close_with_outcome",
+          "path": "tests/test_sales.py",
+          "line": 134
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "label": "Expand: maintenance / improvements / case study",
+      "mode": "operator plan + automatic guards",
+      "local_test_status": "passed",
+      "behavior": "Completed accepted clients can have dated maintenance/expansion plans; reviewed case studies require explicit permission and preserve measured/inconclusive context.",
+      "live_or_manual_boundary": "Client agreement, actual follow-on work and publication remain operator actions.",
+      "code": {
+        "path": "outreach/aftercare.py",
+        "symbol": "update",
+        "line": 44,
+        "sha256": "6b6e76d55976bd8c5a512bf1bd2814041fa5d4f89a84e68a46fc4b0d276888ff"
+      },
+      "tests": [
+        {
+          "name": "test_aftercare_requires_actual_completed_acceptance_not_won_label",
+          "path": "tests/test_growth_finance_priority.py",
+          "line": 148
+        },
+        {
+          "name": "test_aftercare_order_permission_idempotency_and_optimistic_version",
+          "path": "tests/test_growth_finance_priority.py",
+          "line": 156
+        },
+        {
+          "name": "test_case_study_freezes_outcome_escapes_html_and_preserves_inconclusive",
+          "path": "tests/test_growth_finance_priority.py",
+          "line": 176
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "label": "Campaign review",
+      "mode": "automatic descriptive report + human interpretation",
+      "local_test_status": "passed",
+      "behavior": "Saved approval cohorts, accepted business records, human email replies and sales milestones are deduplicated. Automatic replies/DSNs do not inflate human replies.",
+      "live_or_manual_boundary": "No opens, guaranteed inbox placement, causal attribution or automatic experiment winner.",
+      "code": {
+        "path": "outreach/learning.py",
+        "symbol": "report",
+        "line": 51,
+        "sha256": "ad7339e35afd033c1a142686074bf624d21fcd2ac77367bc97956867f5f5040c"
+      },
+      "tests": [
+        {
+          "name": "test_funnel_counts_records_not_messages_and_excludes_automatic_replies",
+          "path": "tests/test_learning.py",
+          "line": 27
+        },
+        {
+          "name": "test_approval_snapshot_is_atomic_and_survives_later_business_label_changes",
+          "path": "tests/test_learning.py",
+          "line": 46
+        },
+        {
+          "name": "test_empty_learning_does_not_invent_rates_or_experiment_winners",
+          "path": "tests/test_learning.py",
+          "line": 19
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "label": "Improve targeting / research / offer; replies / calls / wins / cost",
+      "mode": "automatic reports + operator changes",
+      "local_test_status": "passed",
+      "behavior": "Learning provides next-review guidance, confirmed qualification/wins, recorded calls and currency-specific cost/receipt calculations with immutable correction history.",
+      "live_or_manual_boundary": "Targeting/copy changes require operator judgment. Missing costs/sample sizes stay unknown; client references are not audited revenue.",
+      "code": {
+        "path": "outreach/sales.py",
+        "symbol": "report",
+        "line": 211,
+        "sha256": "a56e98ac70e2371558962d1950fef7bfd74caa6dce05614246ee54ad34e87094"
+      },
+      "tests": [
+        {
+          "name": "test_finance_wins_and_void_correct_denominators_without_fee_as_income",
+          "path": "tests/test_growth_finance_priority.py",
+          "line": 217
+        },
+        {
+          "name": "test_finance_and_growth_reports_scoped_authenticated_no_automatic_side_effects",
+          "path": "tests/test_growth_finance_priority.py",
+          "line": 191
+        },
+        {
+          "name": "test_recorded_sales_funnel_retains_history_and_does_not_call_contract_value_revenue",
+          "path": "tests/test_learning.py",
+          "line": 82
+        }
+      ]
+    }
+  ],
+  "source_sha256": {
+    "outreach/sequence.py": "0cf282c76e684b39d5558404b68a58c37802362b64ea5103fc0b8687a5a162e6",
+    "outreach/campaigns.py": "598eb9a1ab9f01f0adac99dcf36d6b7f3f31c7fa9a8999a826c1b17b270fcfe4",
+    "outreach/mail.py": "796f65d9457b57f3c7a765f4f0bb832dd176ade921c6c449f929e935b9473993",
+    "outreach/offers.py": "59a591061fd6fdab30bdef3d64c4e337642e4f326eb6980c0c5a99f2aee93cd5",
+    "outreach/sales.py": "a56e98ac70e2371558962d1950fef7bfd74caa6dce05614246ee54ad34e87094",
+    "outreach/aftercare.py": "6b6e76d55976bd8c5a512bf1bd2814041fa5d4f89a84e68a46fc4b0d276888ff",
+    "outreach/app.py": "5e033610a553bead65a695706a440a585c390361b50cfd1cb75fed26d8562a58",
+    "outreach/static/app.js": "167ab2350a257ded0116a60df24daab8ef46875222ea7b9ac8312183b3894d6b",
+    "outreach/static/sales.js": "dccf9e9c4403fe532f7c68d1b655dde5991654f232b655d9f8d783e07ceb2fb3",
+    "tests/test_third_workflow.py": "937a34a9e3ca14320e6ad3b9dceee111ba141369ef321ec9532f709b507ee151",
+    "tests/test_sales.py": "fa9e255bbb6e0b726c10d4841bf3ff1be5903ae2cc65663a47eac87433eb6e57",
+    "scripts/ui_smoke.py": "36bbddaa0ce3941f60e91c2b3c794443c14d4ca6350206cf8d3a811166dba3a8",
+    "scripts/verify_third_workflow_ui.py": "d5f2c5c2432faed31d34a96907a1f12c59010e38b6a1246832001c22202d4dda",
+    "scripts/verify_third_workflow_nodes.py": "42d2a061007dbf2803d9687b4b719142332d52b8c325fe181db1597d86cdcc59"
+  }
+}

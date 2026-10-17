@@ -1,0 +1,52 @@
+{
+  "checked_at": 1791624111.852572,
+  "scope": {
+    "company_count": 2,
+    "max_pages": 30,
+    "max_depth": 3,
+    "render_mode": "always",
+    "company_concurrency": 2
+  },
+  "runtime_note": "Original two-company run used Playwright 1.58.0 before the subsequent 1.63.0 upgrade. It predates runtime_versions manifest fields.",
+  "companies": [
+    {
+      "company": "Nothing Nasty",
+      "website": "https://nothingnasty.co.uk/",
+      "status": "partial",
+      "pages": 30,
+      "unique_page_urls": 30,
+      "rendered_pages": 30,
+      "elapsed_seconds": 294.0,
+      "error": "",
+      "issue_counts": {
+        "mutating_or_post_request_requires_review": 532,
+        "robots": 118,
+        "javascript_error": 144,
+        "external_document_navigation": 5,
+        "resource_requests_pending_at_snapshot": 29,
+        "Resource exceeds configured size limit": 3
+      }
+    },
+    {
+      "company": "Goldstein Heather Architecture",
+      "website": "https://www.goldsteinheather.co.uk/",
+      "status": "partial",
+      "pages": 3,
+      "unique_page_urls": 3,
+      "rendered_pages": 3,
+      "elapsed_seconds": 246.13,
+      "error": "TargetClosedError",
+      "issue_counts": {
+        "network_did_not_settle_within_10s": 3,
+        "resource_requests_pending_at_snapshot": 3,
+        "unowned_route_target_unavailable": 1
+      }
+    }
+  ],
+  "observed_log_errors": [
+    "Task exception was never retrieved: Playwright interception-pattern update raised TargetClosedError"
+  ],
+  "acceptance": "Not accepted: one site stopped after three pages. Context recovery and dependency correction must be freshly checked.",
+  "email_probes": 0,
+  "emails_sent": 0
+}

@@ -1,0 +1,2251 @@
+{
+  "checked_at": 1791807202.3044345,
+  "official_pages": [
+    {
+      "lead_id": 3,
+      "company": "Contact Us - Dental Clinic London",
+      "source_url": "https://www.dentalclinic.london/contact-us",
+      "state": "captured",
+      "sha256": "a2c3205342551cd171027b7ce2647fb12e2ef652fb1d3ff12881c7c6a2eca92c",
+      "named_people": []
+    },
+    {
+      "lead_id": 5,
+      "company": "Tanuki Coffee Roasters",
+      "source_url": "https://tanukicoffeeroasters.com/pages/contact",
+      "state": "captured",
+      "sha256": "abf2574ad59a6a6367faf03813f845f58a40f84248c95f999c2596b1d5c72f9a",
+      "named_people": []
+    },
+    {
+      "lead_id": 5,
+      "company": "Tanuki Coffee Roasters",
+      "source_url": "https://tanukicoffeeroasters.com/pages/about",
+      "state": "captured",
+      "sha256": "6aee4ae7e77feaa52dc442aedaf16ba72e133e837a443a16162d0f1c7e43fd6c",
+      "named_people": [
+        {
+          "name": "Justin Inahara",
+          "role": "Owner",
+          "quote": "Hi I'm Justin Inahara, Owner of Tanuki Coffee Roasters. I started my coffee journey in 2012 in Oregon as a barista for a local cafe. After moving to Seattle I landed at Broadcast Coffee Roasters and ended up working production for the roaster. Slowly learning the craft of roasting, I purchased my first bag of green coffee in\u00a0Fall of\u00a02021 and have been building up since.",
+          "method": "official_named_role",
+          "source_url": "https://tanukicoffeeroasters.com/pages/about",
+          "professional_links": [],
+          "current_employer_verified": false,
+          "buyer_verified": false
+        }
+      ],
+      "recaptured_after_parser_fix_at": 1791806861.5533922
+    },
+    {
+      "lead_id": 9,
+      "company": "Roofing Contractors in Raleigh, North Carolina | SmartRoof",
+      "source_url": "https://smartroof.com/contact-us/",
+      "state": "captured",
+      "sha256": "92594ca4a54f7bbde99762004afcfdfdac55e72907a172d1e75dbf1b5ba59f15",
+      "named_people": []
+    },
+    {
+      "lead_id": 9,
+      "company": "Roofing Contractors in Raleigh, North Carolina | SmartRoof",
+      "source_url": "https://smartroof.com/contact-us/contact-confirmation/",
+      "state": "captured",
+      "sha256": "94c538deebd3f59359922d9d261a94579aafb770c6f77b1e83e2403e53c833b6",
+      "named_people": []
+    },
+    {
+      "lead_id": 10,
+      "company": "Skindays | Curated Indie Skincare, Haircare & Wellness UK",
+      "source_url": "https://www.skindays.com/pages/about-us",
+      "state": "captured",
+      "sha256": "e68fa0cad8666c3d0da6d08dc6dd1c5694500f04b4bee33211ec4763b36a3a13",
+      "named_people": []
+    },
+    {
+      "lead_id": 10,
+      "company": "Skindays | Curated Indie Skincare, Haircare & Wellness UK",
+      "source_url": "https://www.skindays.com/pages/contact",
+      "state": "captured",
+      "sha256": "24116d2f3547df560d0c2c3ebe0f48f571a8892c7ab5f4bb90b22382f4922f12",
+      "named_people": []
+    },
+    {
+      "lead_id": 11,
+      "company": "Order Coffee Online | Portland Coffee Roasters",
+      "source_url": "https://www.portlandcoffeeroasters.com/pages/about-us",
+      "state": "captured",
+      "sha256": "8e300bce4efc63d5870dceac403e7e8db6e7b50bcc5b89040d27e5c760b36623",
+      "named_people": [
+        {
+          "name": "Mark Stell",
+          "role": "Founder",
+          "quote": "Mark Stell, Founder and Managing Partner",
+          "method": "official_named_role",
+          "source_url": "https://www.portlandcoffeeroasters.com/pages/about-us",
+          "professional_links": [],
+          "current_employer_verified": false,
+          "buyer_verified": false
+        }
+      ],
+      "recaptured_after_parser_fix_at": 1791806864.1358488
+    },
+    {
+      "lead_id": 11,
+      "company": "Order Coffee Online | Portland Coffee Roasters",
+      "source_url": "https://www.portlandcoffeeroasters.com/pages/contact",
+      "state": "captured",
+      "sha256": "f03d201353b839ea3452a991d09733120787e98059c2329b4d32d615a1b48773",
+      "named_people": []
+    },
+    {
+      "lead_id": 12,
+      "company": "Bouquets For Days",
+      "source_url": "https://www.bouquetsfordays.co.uk/contact",
+      "state": "captured",
+      "sha256": "f33c139d394c8dccbebec5580ff5340cae841488053425eec263de7ac34aca8f",
+      "named_people": []
+    },
+    {
+      "lead_id": 12,
+      "company": "Bouquets For Days",
+      "source_url": "https://www.bouquetsfordays.co.uk/about",
+      "state": "captured",
+      "sha256": "94817181b6922e7e4855a76e649dd5c8a3b4af22767b4c7f6a970be3aad43e7a",
+      "named_people": [
+        {
+          "name": "Ellie Jones",
+          "role": "",
+          "quote": "Bouquets for Days is the work of independent Bristol florist Ellie Jones, established in 2020.",
+          "method": "official_named_relationship",
+          "source_url": "https://www.bouquetsfordays.co.uk/about",
+          "professional_links": [],
+          "current_employer_verified": false,
+          "buyer_verified": false
+        }
+      ]
+    }
+  ],
+  "official_company_sample_count": 6,
+  "current_official_page_count": 11,
+  "named_people_found": [
+    "Justin Inahara",
+    "Mark Stell",
+    "Ellie Jones"
+  ],
+  "company_professional_runs": [
+    {
+      "checked_at": 1791806761.2434332,
+      "company": "Bouquets For Days",
+      "website": "https://www.bouquetsfordays.co.uk/",
+      "reused_real_company_pages": 21,
+      "company_pages_recaptured": true,
+      "report": {
+        "lead_id": 1,
+        "queries": [
+          {
+            "query": "site:linkedin.com/in/ \"Ellie Jones\" \"Bouquets For Days\"",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 10,
+                "rejected_constraints": 10,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791806710.3801763,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791806713.5864663,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:x.com \"Ellie Jones\" \"Bouquets For Days\"",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791806717.024564,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791806720.2876036,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:linkedin.com/in/ \"Bouquets For Days\" (founder OR owner OR marketing OR ecommerce OR director)",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791806724.0371578,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791806725.1766057,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:x.com \"Bouquets For Days\" (founder OR owner OR marketing OR ecommerce)",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791806728.1521366,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791806729.1907432,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:linkedin.com/in/ \"Bouquets For Days\"",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 14,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791806734.4157286,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 14,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791806737.988144,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:x.com \"Bouquets For Days\"",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 14,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791806743.087351,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 14,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791806746.7366743,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "\"bouquetsfordays.co.uk\" LinkedIn founder",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791806749.721319,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791806750.7196145,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "\"Bouquets For Days\"",
+            "results": 7,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 7,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791806756.147424,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 7,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791806759.2238517,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          }
+        ],
+        "captures": [],
+        "other_public_profile_hints": [
+          {
+            "url": "https://www.instagram.com/bouquets.for.days",
+            "origin": "current_official_navigation",
+            "source_url": "https://www.bouquetsfordays.co.uk/contact",
+            "observed_at": 1791806700.1989374,
+            "email_publication_verified": false
+          },
+          {
+            "url": "https://www.instagram.com/bouquetsfordays",
+            "origin": "search_index",
+            "query": "\"Bouquets For Days\"",
+            "company_identity_verified": false,
+            "email_publication_verified": false
+          },
+          {
+            "url": "https://www.facebook.com/100063802969441",
+            "origin": "search_index",
+            "query": "\"Bouquets For Days\"",
+            "company_identity_verified": false,
+            "email_publication_verified": false
+          }
+        ],
+        "named_people": [
+          {
+            "name": "Ellie Jones",
+            "role": "",
+            "quote": "Bouquets for Days is the work of independent Bristol florist Ellie Jones, established in 2020.",
+            "method": "official_named_relationship",
+            "source_url": "https://www.bouquetsfordays.co.uk/about",
+            "professional_links": [],
+            "current_employer_verified": false,
+            "buyer_verified": false,
+            "company_sha256": "94817181b6922e7e4855a76e649dd5c8a3b4af22767b4c7f6a970be3aad43e7a",
+            "observed_at": 1791806695.4721837
+          }
+        ],
+        "state": "held",
+        "note": "Public profile email candidates only; current employer, role, ownership and mailbox existence require review. No guessed addresses or SMTP probes.",
+        "url_index": {
+          "state": "unavailable",
+          "rows": [],
+          "provider": "commoncrawl",
+          "error_type": "HTTPStatusError",
+          "retry_at": 1791806752.7081032,
+          "cached": false,
+          "http_status": 504
+        },
+        "official_link_refresh": [
+          {
+            "url": "https://www.bouquetsfordays.co.uk/about",
+            "state": "captured",
+            "observed_at": 1791806695.4721837,
+            "sha256": "94817181b6922e7e4855a76e649dd5c8a3b4af22767b4c7f6a970be3aad43e7a",
+            "professional_links": [],
+            "published_company_email_candidates": 0
+          },
+          {
+            "url": "https://www.bouquetsfordays.co.uk/contact",
+            "state": "captured",
+            "observed_at": 1791806700.1989374,
+            "sha256": "f33c139d394c8dccbebec5580ff5340cae841488053425eec263de7ac34aca8f",
+            "professional_links": [],
+            "published_company_email_candidates": 1
+          },
+          {
+            "url": "https://www.bouquetsfordays.co.uk/",
+            "state": "captured",
+            "observed_at": 1791806704.8851438,
+            "sha256": "b053d5daa4bdcf428db50a9e45bb959963b00452deff429cde92b6830b589d08",
+            "professional_links": [],
+            "published_company_email_candidates": 0
+          }
+        ],
+        "query_company_name": "Bouquets For Days",
+        "finished_at": 1791806761.2324452
+      },
+      "published_profile_email_candidates": 0,
+      "main_operational_database_unchanged": true,
+      "contacts_created": 0,
+      "email_probes": 0,
+      "external_messages_sent": 0,
+      "developer_api_keys_used": false,
+      "scope": "Isolated real free-index and current official-navigation research, copying real saved company evidence. No authenticated platform access, contact import or probe.",
+      "original_navigation_recapture_flag": false,
+      "company_navigation_recaptures": 3
+    },
+    {
+      "checked_at": 1791806939.9470696,
+      "company": "Order Coffee Online | Portland Coffee Roasters",
+      "website": "https://www.portlandcoffeeroasters.com/",
+      "reused_real_company_pages": 29,
+      "company_pages_recaptured": true,
+      "report": {
+        "lead_id": 1,
+        "queries": [
+          {
+            "query": "site:linkedin.com/in/ \"Mark Stell\" \"Portland Coffee Roasters\"",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 17,
+                "rejected_constraints": 17,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791806910.768878,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 7,
+                "rejected_constraints": 7,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791806913.675141,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:x.com \"Mark Stell\" \"Portland Coffee Roasters\"",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "CAPTCHA"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 14,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791806918.6017897,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 14,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "CAPTCHA"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791806921.5759213,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:linkedin.com/in/ \"Portland Coffee Roasters\" (founder OR owner OR marketing OR ecommerce OR director)",
+            "results": 4,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "Suspended: timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "CAPTCHA"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 7,
+                "rejected_constraints": 3,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791806935.881867,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 7,
+                "rejected_constraints": 3,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "Suspended: timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "CAPTCHA"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791806937.0814617,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          }
+        ],
+        "captures": [
+          {
+            "url": "https://www.linkedin.com/in/nadav-bashan-819804108",
+            "state": "robots_denied",
+            "published_email_candidates": 0
+          },
+          {
+            "url": "https://www.linkedin.com/in/dan-brazelton",
+            "state": "robots_denied",
+            "published_email_candidates": 0
+          }
+        ],
+        "other_public_profile_hints": [
+          {
+            "url": "https://www.facebook.com/portlandcoffeeroasters",
+            "origin": "current_official_navigation",
+            "source_url": "https://www.portlandcoffeeroasters.com/pages/about-us",
+            "observed_at": 1791806897.3177228,
+            "email_publication_verified": false
+          },
+          {
+            "url": "https://www.instagram.com/portlandcoffeeroasters",
+            "origin": "current_official_navigation",
+            "source_url": "https://www.portlandcoffeeroasters.com/pages/about-us",
+            "observed_at": 1791806897.3177228,
+            "email_publication_verified": false
+          },
+          {
+            "url": "https://www.linkedin.com/company/portlandcoffeeroasters",
+            "origin": "current_official_navigation",
+            "source_url": "https://www.portlandcoffeeroasters.com/pages/about-us",
+            "observed_at": 1791806897.3177228,
+            "email_publication_verified": false
+          }
+        ],
+        "named_people": [
+          {
+            "name": "Mark Stell",
+            "role": "Founder",
+            "quote": "Mark Stell, Founder and Managing Partner",
+            "method": "official_named_role",
+            "source_url": "https://www.portlandcoffeeroasters.com/pages/about-us",
+            "professional_links": [],
+            "current_employer_verified": false,
+            "buyer_verified": false,
+            "company_sha256": "ad158a24848f063a74d5b160087c4abd4d8f4dc60de9e6e6728880dc7aa708e9",
+            "observed_at": 1791806897.3177228
+          }
+        ],
+        "state": "held",
+        "note": "Public profile email candidates only; current employer, role, ownership and mailbox existence require review. No guessed addresses or SMTP probes.",
+        "url_index": {
+          "state": "available",
+          "rows": [],
+          "collection": "CC-MAIN-2026-39",
+          "records_examined": 2,
+          "bounded_first_page": true,
+          "provider": "commoncrawl",
+          "observed_at": 1791806894.6797934,
+          "cached": false
+        },
+        "official_link_refresh": [
+          {
+            "url": "https://www.portlandcoffeeroasters.com/pages/about-us",
+            "state": "captured",
+            "observed_at": 1791806897.3177228,
+            "sha256": "ad158a24848f063a74d5b160087c4abd4d8f4dc60de9e6e6728880dc7aa708e9",
+            "professional_links": [],
+            "published_company_email_candidates": 0
+          },
+          {
+            "url": "https://www.portlandcoffeeroasters.com/pages/contact",
+            "state": "captured",
+            "observed_at": 1791806901.9026942,
+            "sha256": "65285a111a74e8bf0636e65befcefba77249c155de0a33aa081c8271a392c4f4",
+            "professional_links": [],
+            "published_company_email_candidates": 0
+          },
+          {
+            "url": "https://www.portlandcoffeeroasters.com/",
+            "state": "captured",
+            "observed_at": 1791806906.5386205,
+            "sha256": "147f8b8eba3221223d48c07e487a4ff42a6cad39e895c6012a8efb6cfb0bc4cd",
+            "professional_links": [],
+            "published_company_email_candidates": 0
+          }
+        ],
+        "query_company_name": "Portland Coffee Roasters",
+        "finished_at": 1791806939.9394014
+      },
+      "published_profile_email_candidates": 0,
+      "main_operational_database_unchanged": true,
+      "contacts_created": 0,
+      "email_probes": 0,
+      "external_messages_sent": 0,
+      "developer_api_keys_used": false,
+      "scope": "Isolated real free-index and current official-navigation research, copying real saved company evidence. No authenticated platform access, contact import or probe.",
+      "original_navigation_recapture_flag": false,
+      "company_navigation_recaptures": 3
+    },
+    {
+      "checked_at": 1791807159.2346888,
+      "company": "Tanuki Coffee Roasters",
+      "website": "https://tanukicoffeeroasters.com/",
+      "reused_real_company_pages": 19,
+      "company_pages_recaptured": true,
+      "company_navigation_recaptures": 3,
+      "copied_company_evidence_preserved": true,
+      "report": {
+        "lead_id": 1,
+        "queries": [
+          {
+            "query": "site:linkedin.com/in/ \"Justin Inahara\" \"Tanuki Coffee Roasters\"",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "Suspended: timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791807063.7149026,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "Suspended: timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791807065.1227891,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:x.com \"Justin Inahara\" \"Tanuki Coffee Roasters\"",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "Suspended: timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "Suspended: timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791807069.2091908,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791807081.4824436,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:linkedin.com/in/ \"Tanuki Coffee Roasters\" (founder OR owner OR marketing OR ecommerce OR director)",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "Suspended: timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "Suspended: timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "Suspended: timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791807084.427563,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 4,
+                "rejected_constraints": 4,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "Suspended: timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791807085.4709916,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:x.com \"Tanuki Coffee Roasters\" (founder OR owner OR marketing OR ecommerce)",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "too many requests"
+              ],
+              [
+                "duckduckgo",
+                "Suspended: timeout"
+              ],
+              [
+                "google",
+                "access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791807099.7718177,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "Suspended: timeout"
+                  ],
+                  [
+                    "google",
+                    "access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791807100.7692723,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:linkedin.com/in/ \"Tanuki Coffee Roasters\"",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "Suspended: timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 7,
+                "rejected_constraints": 7,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "Suspended: timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791807106.2256005,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 7,
+                "rejected_constraints": 7,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791807118.5216632,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "site:x.com \"Tanuki Coffee Roasters\"",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "Suspended: timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 14,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "Suspended: timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791807123.7572997,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 14,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791807136.0314548,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "\"tanukicoffeeroasters.com\" LinkedIn founder",
+            "results": 0,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "Suspended: timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "Suspended: timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "Suspended: timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791807139.0663297,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 0,
+                "rejected_constraints": 0,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "Suspended: timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791807139.9731057,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          },
+          {
+            "query": "\"Tanuki Coffee Roasters\"",
+            "results": 7,
+            "engine_issues": [
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ],
+              [
+                "brave",
+                "Suspended: too many requests"
+              ],
+              [
+                "duckduckgo",
+                "Suspended: timeout"
+              ],
+              [
+                "google",
+                "Suspended: access denied"
+              ],
+              [
+                "qwant",
+                "Suspended: access denied"
+              ]
+            ],
+            "providers": [
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 7,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:default",
+                "observed_at": 1791807154.264371,
+                "cached": false
+              },
+              {
+                "state": "available",
+                "raw_results": 14,
+                "rejected_constraints": 7,
+                "engine_issues": [
+                  [
+                    "brave",
+                    "Suspended: too many requests"
+                  ],
+                  [
+                    "duckduckgo",
+                    "Suspended: timeout"
+                  ],
+                  [
+                    "google",
+                    "Suspended: access denied"
+                  ],
+                  [
+                    "qwant",
+                    "Suspended: access denied"
+                  ]
+                ],
+                "provider": "searxng:yahoo,mojeek",
+                "observed_at": 1791807157.2136464,
+                "cached": false
+              }
+            ],
+            "rejected_company_mismatch": 0
+          }
+        ],
+        "captures": [],
+        "other_public_profile_hints": [
+          {
+            "url": "https://www.instagram.com/tanukicoffeeroasters",
+            "origin": "current_official_navigation",
+            "source_url": "https://tanukicoffeeroasters.com/pages/about",
+            "observed_at": 1791807040.2467275,
+            "email_publication_verified": false
+          }
+        ],
+        "named_people": [
+          {
+            "name": "Justin Inahara",
+            "role": "Owner",
+            "quote": "Hi I'm Justin Inahara, Owner of Tanuki Coffee Roasters. I started my coffee journey in 2012 in Oregon as a barista for a local cafe. After moving to Seattle I landed at Broadcast Coffee Roasters and ended up working production for the roaster. Slowly learning the craft of roasting, I purchased my first bag of green coffee in\u00a0Fall of\u00a02021 and have been building up since.",
+            "method": "official_named_role",
+            "source_url": "https://tanukicoffeeroasters.com/pages/about",
+            "professional_links": [],
+            "current_employer_verified": false,
+            "buyer_verified": false,
+            "company_sha256": "0e3fa079e9b59b8e13e5726cf916cae7eceaaed9ef85c1a10d9da79ecce19f5b",
+            "observed_at": 1791807040.2467275
+          }
+        ],
+        "state": "held",
+        "note": "Public profile email candidates only; current employer, role, ownership and mailbox existence require review. No guessed addresses or SMTP probes.",
+        "url_index": {
+          "state": "available",
+          "rows": [],
+          "collection": "CC-MAIN-2026-39",
+          "reason": "Domain not present in this index",
+          "provider": "commoncrawl",
+          "observed_at": 1791807037.6635432,
+          "cached": false
+        },
+        "official_link_refresh": [
+          {
+            "url": "https://tanukicoffeeroasters.com/pages/about",
+            "state": "captured",
+            "observed_at": 1791807040.2467275,
+            "sha256": "0e3fa079e9b59b8e13e5726cf916cae7eceaaed9ef85c1a10d9da79ecce19f5b",
+            "professional_links": [],
+            "published_company_email_candidates": 0
+          },
+          {
+            "url": "https://tanukicoffeeroasters.com/pages/contact",
+            "state": "captured",
+            "observed_at": 1791807044.8193166,
+            "sha256": "6be97e58fd8780a84f670519c161ea737fd06955b65de1d26cc55466935ae926",
+            "professional_links": [],
+            "published_company_email_candidates": 0
+          },
+          {
+            "url": "https://tanukicoffeeroasters.com/",
+            "state": "captured",
+            "observed_at": 1791807049.4315276,
+            "sha256": "8e19875bbe3b2385e297fc33630f094ae03051dde8d7d9eaf60f2b28dd5c2e4e",
+            "professional_links": [],
+            "published_company_email_candidates": 0
+          }
+        ],
+        "query_company_name": "Tanuki Coffee Roasters",
+        "finished_at": 1791807159.2234275
+      },
+      "published_profile_email_candidates": 0,
+      "main_operational_database_unchanged": true,
+      "contacts_created": 0,
+      "email_probes": 0,
+      "external_messages_sent": 0,
+      "developer_api_keys_used": false,
+      "scope": "Isolated real free-index and current official-navigation research, copying real saved company evidence. No authenticated platform access, contact import or probe.",
+      "original_navigation_recapture_flag": true
+    }
+  ],
+  "direct_access_controls": {
+    "checked_at": 1791807042.5911252,
+    "source": "Explicit public profile URLs observed in web research; mixed relevance controls, not six qualified client buyers.",
+    "results": [
+      {
+        "url": "https://x.com/BallinFil",
+        "state": "robots_denied",
+        "observed_at": 1791807040.3639848,
+        "text_chars": 0,
+        "capture_method": "public_professional_http"
+      },
+      {
+        "url": "https://x.com/troypetrunoff",
+        "state": "robots_denied",
+        "observed_at": 1791807040.8005521,
+        "text_chars": 0,
+        "capture_method": "public_professional_http"
+      },
+      {
+        "url": "https://x.com/ssbmGooms",
+        "state": "robots_denied",
+        "observed_at": 1791807041.1027355,
+        "text_chars": 0,
+        "capture_method": "public_professional_http"
+      },
+      {
+        "url": "https://www.linkedin.com/in/kara-webs-403722422",
+        "state": "robots_denied",
+        "observed_at": 1791807041.413171,
+        "text_chars": 0,
+        "capture_method": "public_professional_http"
+      },
+      {
+        "url": "https://www.linkedin.com/in/ollie-aplin",
+        "state": "robots_denied",
+        "observed_at": 1791807041.7840827,
+        "text_chars": 0,
+        "capture_method": "public_professional_http"
+      },
+      {
+        "url": "https://www.linkedin.com/in/1katiearnold",
+        "state": "robots_denied",
+        "observed_at": 1791807042.2135499,
+        "text_chars": 0,
+        "capture_method": "public_professional_http"
+      }
+    ],
+    "email_probes": 0,
+    "external_sends": 0
+  },
+  "email_probes": 0,
+  "external_messages_sent": 0,
+  "completion_proven": false,
+  "scope": "Sourced-person extraction and lookup improve discovery, while direct LinkedIn/X controls remain robots-denied. Fixture email parsing is not live profile email acquisition."
+}

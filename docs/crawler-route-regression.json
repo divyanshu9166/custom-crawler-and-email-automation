@@ -1,0 +1,188 @@
+{
+  "website": "https://nothingnasty.co.uk/products/gift-card-10-20-30-40-50",
+  "elapsed_seconds": 29.1,
+  "note": "Research only. No contact verification, database imports, or email sends performed.",
+  "report": {
+    "status": "partial",
+    "errors": [
+      {
+        "url": "https://nothingnasty.co.uk/products/gift-card-10-20-30-40-50",
+        "stage": "render",
+        "issues": [
+          {
+            "url": "https://nothingnasty.co.uk/.well-known/shopify/monorail/unstable/produce_batch",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/.well-known/shopify/monorail/unstable/produce_batch",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/checkouts/internal/preloads.js?locale=en-GB",
+            "reason": "robots"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/cdn/wpm/b7ec887c8w14f9f074p854094e1m1370c602l.js",
+            "reason": "robots"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/cdn/wpm/b7ec887c8w14f9f074p854094e1m1370c602l.js",
+            "reason": "robots"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/.well-known/shopify/monorail/unstable/produce_batch",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://monorail-edge.shopifysvc.com/v1/produce",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/products/gift-card-10-20-30-40-50",
+            "reason": "javascript_error"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/.well-known/shopify/monorail/unstable/produce_batch",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/.well-known/shopify/monorail/unstable/produce_batch",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/.well-known/shopify/monorail/unstable/produce_batch",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/.well-known/shopify/monorail/unstable/produce_batch",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://shopify.jsdeliver.cloud/url-check",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/api/collect",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://shop.app/pay/hop?analytics_trace_id=85ac4a42-42fc-49df-b74a-c7ebdb8125d0&target_origin=https%3A%2F%2Fnothingnasty.co.uk&client_handle=nothing-nasty-skincare.myshopify.com",
+            "reason": "external_document_navigation"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/products/gift-card-10-20-30-40-50",
+            "reason": "javascript_error"
+          },
+          {
+            "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/cart.js",
+            "reason": "robots"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/products/gift-card-10-20-30-40-50",
+            "reason": "javascript_error"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/api/collect",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/shopify_pay/accelerated_checkout",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/products/gift-card-10-20-30-40-50",
+            "reason": "javascript_error"
+          },
+          {
+            "url": "https://c.ba.contentsquare.net/pageview?ex=&dt=2518&pvt=n&la=en-GB&uc=0&url=https%3A%2F%2Fnothingnasty.co.uk%2Fproducts%2Fgift-card-10-20-30-40-50&dr=&dw=1440&dh=30326&ww=1440&wh=900&sw=1440&sh=900&uu=258c4215-4bc7-a8ad-ca08-bb56ad6cc005&sn=1&hd=1791619709&v=15.263.3-stable&pid=780252&pn=1&ct=0",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/api/collect",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://otlp-http-production.shopifysvc.com/v1/metrics",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://cdn.shopify.com/videos/c/o/v/0dc1e8073c3b48d1b5f633068b79ba60.mov",
+            "reason": "Resource exceeds configured size limit"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/api/collect",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://tracking.aws.judge.me/widgets/track_bulk_events?_events_count=1",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/api/collect",
+            "reason": "mutating_or_post_request_requires_review"
+          },
+          {
+            "url": "https://nothingnasty.co.uk/products/gift-card-10-20-30-40-50",
+            "reason": "resource_requests_pending_at_snapshot",
+            "count": 31
+          }
+        ]
+      }
+    ],
+    "skipped": [],
+    "sitemaps": [
+      {
+        "url": "https://nothingnasty.co.uk/sitemap.xml",
+        "urls": 7
+      },
+      {
+        "url": "https://nothingnasty.co.uk/sitemap_agentic_discovery.xml",
+        "urls": 1
+      },
+      {
+        "url": "https://nothingnasty.co.uk/sitemap_products_1.xml?from=6947055468700&to=15917543096703",
+        "urls": 11
+      },
+      {
+        "url": "https://nothingnasty.co.uk/sitemap_pages_1.xml?from=84348436636&to=706892431743",
+        "urls": 16
+      },
+      {
+        "url": "https://nothingnasty.co.uk/sitemap_collections_1.xml?from=274267111580&to=705943863679",
+        "urls": 11
+      },
+      {
+        "url": "https://nothingnasty.co.uk/sitemap_blogs_1.xml",
+        "urls": 1
+      }
+    ],
+    "attempted": 1,
+    "remaining": 35,
+    "depth_limited_urls": 0,
+    "scope": {
+      "domain": "nothingnasty.co.uk",
+      "max_pages": 1,
+      "max_depth": 3,
+      "render_mode": "always"
+    },
+    "budget_reached": true,
+    "finished_at": 1791619716.7029073
+  },
+  "pages": [
+    {
+      "url": "https://nothingnasty.co.uk/products/gift-card-10-20-30-40-50",
+      "sha256": "eebb1fdd881d322910b490b0ee411a9458943f0aa1ac4a8ed0fcc2d57bb3e2d2",
+      "text_chars": 6550,
+      "rendered": true
+    }
+  ],
+  "callback_warning_observed": false
+}
