@@ -1,3 +1,18 @@
+# Pipeline loading and empty-state correction — 17 October 2026
+
+A controlled Chromium test reproduced a blank Pipeline despite a saved lead when the
+source-status endpoint returned HTTP 503. A second test reproduced the misleading
+"No companies yet" text when an existing company was merely excluded by the search filter.
+The dashboard now renders core status/leads independently of optional source diagnostics,
+reports each failed diagnostic in its own panel, and distinguishes an empty database from
+zero filter matches. Ten desktop/mobile and runtime-control cases passed in 19.04 seconds,
+with one existing Starlette/httpx warning. Ruff and app.js syntax checks passed.
+
+These are local UI reproductions, not a diagnosis of the user's current VPS database.
+VPS lead/job counts are requested read-only before concluding that records are missing or
+that the same optional-endpoint failure caused the reported blank Pipeline. No data was
+migrated, deleted or sent during this correction.
+
 # Selected NVIDIA writer adapter — 17 October 2026
 
 For `nvidia/nemotron-3-ultra-550b-a55b` at the NVIDIA hosted endpoint, requests now explicitly

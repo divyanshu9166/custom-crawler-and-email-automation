@@ -14,7 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 @pytest.mark.parametrize('mobile', [False, True])
-def test_dashboard_shows_saved_provider_outcomes_and_post_trigger_sources(settings, db, prepared, mobile):
+@pytest.mark.parametrize('failed_source', [None, 'source-status', 'source-coverage'])
+def test_dashboard_shows_saved_provider_outcomes_and_post_trigger_sources(settings, db, prepared, mobile, failed_source):
     settings.worker_enabled = settings.sending_enabled = False
     settings.platform_browser_enabled = True
     lid = prepared['lead_id']
@@ -42,6 +43,9 @@ def test_dashboard_shows_saved_provider_outcomes_and_post_trigger_sources(settin
                 external.append(url)
                 request.abort()
                 return
+            if failed_source and url == settings.public_url+'/api/'+failed_source:
+                request.fulfill(status=503, json={'detail': 'Fictional diagnostics failure'})
+                return
             headers = {k: v for k, v in request.request.headers.items() if k in {'content-type', 'origin'}}
             response = client.request(request.request.method, url.removeprefix(settings.public_url),
                                       content=request.request.post_data_buffer, headers=headers)
@@ -52,9 +56,19 @@ def test_dashboard_shows_saved_provider_outcomes_and_post_trigger_sources(settin
         page.on('pageerror', lambda error: errors.append(str(error)))
         try:
             page.goto(settings.public_url+'/')
+            page.get_by_role('button', name='Pipeline', exact=True).click()
+            expect(page.locator(f'[data-lead="{lid}"]')).to_contain_text('Bright Demo')
+            page.locator('#filter').fill('NO MATCHING BUSINESS')
+            expect(page.locator('#leads')).to_contain_text('No companies match this filter')
+            page.locator('#filter').fill('')
             page.get_by_role('button', name='Find prospects', exact=True).first.click()
-            expect(page.locator('#provider-source-status')).to_contain_text('managed_browser:x.com')
-            expect(page.locator('#provider-source-status')).to_contain_text('captured')
+            if failed_source == 'source-status':
+                expect(page.locator('#provider-source-status')).to_contain_text('Fictional diagnostics failure')
+            else:
+                expect(page.locator('#provider-source-status')).to_contain_text('managed_browser:x.com')
+                expect(page.locator('#provider-source-status')).to_contain_text('captured')
+            if failed_source == 'source-coverage':
+                expect(page.locator('#discovery-source-coverage')).to_contain_text('Fictional diagnostics failure')
             page.get_by_role('button', name='Pipeline', exact=True).click()
             page.locator(f'[data-lead="{lid}"]').click()
             page.locator('#social-posts summary').click()
@@ -67,7 +81,7 @@ def test_dashboard_shows_saved_provider_outcomes_and_post_trigger_sources(settin
             expect(page.locator('#runtime-settings-form [name=sending_enabled]')).not_to_be_checked()
             output = ROOT/'data'/'social-upgrade-ui'
             output.mkdir(parents=True, exist_ok=True)
-            page.screenshot(path=str(output/('mobile.png' if mobile else 'desktop.png')), full_page=True)
+            page.screenshot(path=str(output/(('mobile' if mobile else 'desktop')+'-'+(failed_source or 'healthy')+'.png')), full_page=True)
             assert not errors and not external
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
             assert db.one('SELECT count(*) n FROM contacts')['n'] == 1

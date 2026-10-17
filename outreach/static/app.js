@@ -59,9 +59,8 @@ function renderSourceCoverage(coverage){
 }
 async function refresh(){
   const selectedAtStart=currentId;
-  const [status, leads, coverage, sourceStatus]=await Promise.all([api("/api/status"),api("/api/leads"),api('/api/source-coverage'),api('/api/source-status')]);allLeads=leads;
-  renderSourceCoverage(coverage);
-  renderSourceStatus(sourceStatus);
+  const diagnostics=Promise.allSettled([api('/api/source-coverage'),api('/api/source-status')]);
+  const [status, leads]=await Promise.all([api("/api/status"),api("/api/leads")]);allLeads=leads;
   $("#platform-browser-mode").hidden=!status.platform_browser_enabled;
   $("#fxembed-mode").hidden=!status.fxembed_profiles_enabled;
   $("#fxembed-mode").textContent="X bio research uses the free FxEmbed community source. Returned emails are candidates; current publication, inbox ownership and buyer relevance need review.";
@@ -73,8 +72,13 @@ async function refresh(){
   const sent=status.messages.find(x=>x.state==="sent")?.n||0;
   $("#metrics").innerHTML=[["Companies",status.counts.leads],["Contacts",status.counts.contacts],["Accepted by SMTP",sent],["Suppressed",status.counts.suppression]].map(([label,n])=>`<div class="metric"><span>${label}</span><strong>${n}</strong></div>`).join("");
   renderLeads();if(currentId&&currentId===selectedAtStart)await loadLead(currentId);
+  const [coverage,sourceStatus]=await diagnostics;
+  if(coverage.status==='fulfilled')renderSourceCoverage(coverage.value);
+  else $('#discovery-source-coverage').textContent='Source coverage unavailable: '+coverage.reason.message;
+  if(sourceStatus.status==='fulfilled')renderSourceStatus(sourceStatus.value);
+  else $('#provider-source-status').textContent='Source diagnostics unavailable: '+sourceStatus.reason.message;
 }
-function renderLeads(){const query=$("#filter").value.toLowerCase();$("#leads").innerHTML=[...allLeads].sort((a,b)=>$("#lead-sort").value==="newest"?b.id-a.id:$("#lead-sort").value==="company"?a.company.localeCompare(b.company):0).filter(l=>(l.company+" "+l.domain+" "+l.status).toLowerCase().includes(query)).map(l=>`<button class="lead ${l.id===currentId?"current":""}" data-lead="${l.id}"><strong>${esc(l.company)}</strong><small>${esc(l.lead_kind==='profile'?l.profile_url:l.domain)}</small><span class="badge">${esc(l.campaign)} · ${esc(l.status)}</span> <small>${l.contact_count} contacts</small><small>Review priority ${Number(l.priority?.score||0)}/100 - ${esc((l.priority?.lane||"research_review").replaceAll("_"," "))}</small></button>`).join("")||'<p>No companies yet.</p>';document.querySelectorAll("[data-lead]").forEach(b=>b.onclick=()=>loadLead(Number(b.dataset.lead)).catch(e=>notice(e.message,true)));}
+function renderLeads(){const query=$("#filter").value.toLowerCase();$("#leads").innerHTML=[...allLeads].sort((a,b)=>$("#lead-sort").value==="newest"?b.id-a.id:$("#lead-sort").value==="company"?a.company.localeCompare(b.company):0).filter(l=>(l.company+" "+l.domain+" "+l.status).toLowerCase().includes(query)).map(l=>`<button class="lead ${l.id===currentId?"current":""}" data-lead="${l.id}"><strong>${esc(l.company)}</strong><small>${esc(l.lead_kind==='profile'?l.profile_url:l.domain)}</small><span class="badge">${esc(l.campaign)} · ${esc(l.status)}</span> <small>${l.contact_count} contacts</small><small>Review priority ${Number(l.priority?.score||0)}/100 - ${esc((l.priority?.lane||"research_review").replaceAll("_"," "))}</small></button>`).join("")||(allLeads.length?'<p>No companies match this filter. Clear the filter to show saved companies.</p>':'<p>No companies yet. Add a business or queue a search in Find prospects.</p>');document.querySelectorAll("[data-lead]").forEach(b=>b.onclick=()=>loadLead(Number(b.dataset.lead)).catch(e=>notice(e.message,true)));}
 const options = (values, selected) => values.map(v=>`<option value="${esc(v)}" ${v===selected?"selected":""}>${esc(v.replaceAll("_"," "))}</option>`).join("");
 async function loadLead(id){
   currentId=id;const request=++detailRequest;renderLeads();const data=await api(`/api/leads/${id}`);if(request!==detailRequest||currentId!==id)return;const l=data.lead;
