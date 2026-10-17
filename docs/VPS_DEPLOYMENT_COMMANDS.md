@@ -78,6 +78,15 @@ overwrite `.env`. In nano, save with Ctrl+O, Enter, and exit with Ctrl+X.
 View/set the dashboard credentials privately in that editor. Do not paste the
 configuration or credentials into chat or GitHub.
 
+`ADMIN_PASSWORD` must contain at least 16 characters and `API_TOKEN` at least
+32 characters. Initialization already supplies valid random values. If replacing
+the password, retain the minimum length; use a single-quoted `.env` value when
+it contains `$` so Compose does not interpolate it. Keep the generated API token.
+A short/empty credential prevents application startup and can appear as a
+Cloudflare 502. After editing `.env`, recreate app with `docker compose up`;
+editing the file or using `docker compose restart` alone does not refresh its
+container environment. Never delete the data volume to reset a login.
+
 For the initial SSH-tunnel preview, set these existing entries:
 
 ```dotenv

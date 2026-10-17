@@ -132,6 +132,15 @@ and cloudflared output. The connector must remain running with allowed outbound
 connectivity. Do not change firewall rules, drop caches, restart Docker or alter
 n8n merely to troubleshoot the dashboard link.
 
+A login message such as `Unexpected token '<'` in an older frontend means it
+tried to parse an HTML response as JSON; it does not establish that the password
+was rejected. Check origin health and `docker compose logs --tail=40 app`.
+An app startup error mentioning `ADMIN_PASSWORD (16+) / API_TOKEN (32+)` means
+one or both loaded credential requirements are unmet. Correct the private `.env`
+and recreate app; keep the same tunnel running. The current frontend reports
+unavailable/non-JSON responses clearly and redirects only after a JSON
+`signed_in: true` confirmation. It never automatically retries credentials.
+
 ## 6. Stable production address
 
 Use a named/managed Cloudflare Tunnel and an active domain on Cloudflare for a
