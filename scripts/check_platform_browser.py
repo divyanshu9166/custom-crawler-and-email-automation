@@ -1,6 +1,7 @@
 """Bounded company-reader diagnostic. Prints structural metadata, never account data."""
 import argparse
 import asyncio
+import base64
 import json
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -21,7 +22,7 @@ DOM_STRUCTURE = r"""expected => {
   const label=e=>(e.innerText||'').replace(/\s+/g,' ').trim().replace(/https?:\/\/\S+/gi,'[url]').replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi,'[email]').slice(0,120);
   const headings=all('main h1,main h2,main [role="heading"]').filter(e=>visible(e)&&!e.closest('article,[role="feed"],[role="listbox"]')).slice(0,8).map(e=>({tag:e.tagName,label:label(e),classes:String(e.className||'').slice(0,120)}));
   const companyRoot=expectedURL.pathname.replace(/\/about\/?$/,'').replace(/\/$/,'');
-  const navigation=all('main a[href]').filter(a=>{try{const v=new URL(a.href);return visible(a)&&v.origin===u.origin&&(v.pathname===companyRoot||v.pathname.startsWith(companyRoot+'/'));}catch{return false;}}).slice(0,12).map(a=>({label:label(a),path:new URL(a.href).pathname}));
+  const navigation=all('main a[href]').filter(a=>{try{const v=new URL(a.href);return visible(a)&&v.origin===u.origin&&(v.pathname===companyRoot||v.pathname.startsWith(companyRoot+'/'));}catch{return false;}}).slice(0,12).map(a=>({label:['about','overview','home','posts','jobs','people','insights','life','products','services','show all'].includes(label(a).toLowerCase())?label(a):'',path:new URL(a.href).pathname}));
   const fieldNames=new Set(['website','industry','phone','email','headquarters','company size','founded','specialties']);
   const fieldMarkers=all('main h2,main h3,main dt,main span,main p').slice(0,2000).filter(e=>visible(e)&&!e.closest('article,[role="feed"],[role="listbox"]')&&fieldNames.has((e.innerText||'').trim().toLowerCase())).slice(0,16).map(e=>({label:label(e),tag:e.tagName,classes:String(e.className||'').slice(0,120),parent_tag:e.parentElement?.tagName,parent_classes:String(e.parentElement?.className||'').slice(0,120),next_tag:e.nextElementSibling?.tagName||null}));
   const labels=all('main dl dt,main dt').filter(visible).map(e=>e.innerText.replace(/\s+/g,' ').trim().slice(0,80)).slice(0,20);
@@ -44,7 +45,7 @@ def held_result(value):
             ('reason', 'http_status', 'retry_at') if key in value}}
 
 
-async def check(settings, url, *, attempts=10):
+async def check(settings, url, *, attempts=10, reader_override=None):
     if settings.worker_enabled or settings.sending_enabled:
         return {'state': 'controls_not_off', 'action': 'Turn Worker and Sending OFF in dashboard Settings first.'}
     if not settings.platform_browser_enabled:
@@ -73,7 +74,8 @@ async def check(settings, url, *, attempts=10):
                     if denied in {401, 403, 429, 999}:
                         record_hold(settings, platform, 'http_' + str(denied), session.last_access_issue)
                     return {'state': 'http_error', 'http_status': denied}
-                reader = (Path(platform_browser.__file__).parent / 'static/platform-reader.js').read_text(encoding='utf-8')
+                reader = reader_override if reader_override is not None else (
+                    Path(platform_browser.__file__).parent / 'static/platform-reader.js').read_text(encoding='utf-8')
                 for attempt in range(attempts):
                     result = await page.evaluate(reader)
                     if result.get('state') != 'fields_not_ready':
@@ -81,6 +83,8 @@ async def check(settings, url, *, attempts=10):
                     if attempt + 1 < attempts:
                         await asyncio.sleep(1)
                 output = {'state': result.get('state'), 'target': target,
+                          'reason': result.get('reason'),
+                          'reader_source': 'supplied' if reader_override is not None else 'installed',
                           'failed_request_hosts': failed_hosts}
                 if result.get('state') == 'login_or_challenge':
                     record_hold(settings, platform, 'login_or_challenge')
@@ -89,6 +93,7 @@ async def check(settings, url, *, attempts=10):
                     output['structure'] = await page.evaluate(DOM_STRUCTURE, target)
                 if result.get('state') == 'captured':
                     output.update(title=result.get('title', '')[:200],
+                                  reader_layout=result.get('layout'),
                                   text_characters=len(result.get('text', '')),
                                   link_count=len(result.get('links', [])),
                                   mailto_count=len(result.get('mailto', [])))
@@ -107,10 +112,19 @@ async def check(settings, url, *, attempts=10):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--url', default='https://www.linkedin.com/company/linkedin/about/')
+    parser.add_argument('--reader-base64', help='Test the trusted repository reader before rebuilding the image')
     args = parser.parse_args()
+    reader = None
+    if args.reader_base64:
+        if len(args.reader_base64) > 100_000:
+            parser.error('Reader is too large')
+        try:
+            reader = base64.b64decode(args.reader_base64, validate=True).decode('utf-8')
+        except (ValueError, UnicodeError):
+            parser.error('Reader must be valid base64 UTF-8')
     settings = Settings()
     Preferences(settings)
-    result = asyncio.run(check(settings, args.url))
+    result = asyncio.run(check(settings, args.url, reader_override=reader))
     print(json.dumps(result, indent=2))
     return 0 if result.get('state') == 'captured' else 2
 

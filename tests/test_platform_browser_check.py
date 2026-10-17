@@ -1,4 +1,6 @@
+import base64
 import json
+import sys
 from types import SimpleNamespace
 
 import pytest
@@ -102,10 +104,35 @@ async def test_company_diagnostic_failed_requests_only_report_bounded_host_count
     assert 'PRIVATE-FIXTURE' not in json.dumps(result) and '/private' not in json.dumps(result)
 
 
+def test_cli_decodes_supplied_repository_reader_for_current_container(settings, monkeypatch, capsys):
+    reader = '() => ({state:"fields_not_ready"})'
+    observed = []
+    async def capture(configured, url, *, reader_override=None):
+        observed.append(reader_override)
+        return {'state': 'fields_not_ready', 'reader_source': 'supplied'}
+    monkeypatch.setattr(diagnostic, 'Settings', lambda: settings)
+    monkeypatch.setattr(diagnostic, 'check', capture)
+    monkeypatch.setattr(sys, 'argv', ['check', '--reader-base64', base64.b64encode(reader.encode()).decode()])
+    assert diagnostic.main() == 2
+    assert observed == [reader] and json.loads(capsys.readouterr().out)['reader_source'] == 'supplied'
+
+
+@pytest.mark.parametrize('encoded', ['not_base64!', 'a' * 100_001], ids=['invalid', 'oversized'])
+def test_cli_rejects_invalid_or_unbounded_reader_before_launch(monkeypatch, encoded):
+    monkeypatch.setattr(sys, 'argv', ['check', '--reader-base64', encoded])
+    def forbidden():
+        raise AssertionError('Invalid input must fail before configuration or browser access')
+    monkeypatch.setattr(diagnostic, 'Settings', forbidden)
+    with pytest.raises(SystemExit) as error:
+        diagnostic.main()
+    assert error.value.code == 2
+
+
 async def test_structure_reader_reports_visible_company_fields_and_ignores_private_shell():
     url = 'https://www.linkedin.com/company/fictional/about/'
     html = '''<h1 hidden>PRIVATE HIDDEN HEADING</h1><nav><dl><dt>PRIVATE NAV LABEL</dt></dl></nav>
     <main><h1>Fictional Studio</h1><h2>Overview</h2><a href="/company/fictional/about/?token=PRIVATE-QUERY">About</a>
+    <a href="/company/fictional/about/">PRIVATE FOLLOWER NAME follows this page</a>
     <article><h2>PRIVATE FEED HEADING</h2></article>
     <dl><dt>Industry</dt><dd>Fictional consulting</dd></dl>
     <div role="dialog"><dl><dt>PRIVATE DIALOG LABEL</dt></dl></div></main>'''
@@ -125,7 +152,10 @@ async def test_structure_reader_reports_visible_company_fields_and_ignores_priva
                 {'tag': 'H1', 'label': 'Fictional Studio', 'classes': ''},
                 {'tag': 'H2', 'label': 'Overview', 'classes': ''},
             ]
-            assert result['company_navigation'] == [{'label': 'About', 'path': '/company/fictional/about/'}]
+            assert result['company_navigation'] == [
+                {'label': 'About', 'path': '/company/fictional/about/'},
+                {'label': '', 'path': '/company/fictional/about/'},
+            ]
             assert 'PRIVATE' not in json.dumps(result)
             await page.goto('https://www.linkedin.com/login')
             assert await page.evaluate(diagnostic.DOM_STRUCTURE, url) == {'expected_route': False}

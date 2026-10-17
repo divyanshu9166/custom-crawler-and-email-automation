@@ -62,10 +62,24 @@ configuration checks. See [the complete pending VPS checklist](VPS_DEPLOYMENT_CH
 
 ## Reader diagnostics
 
+The company reader now supports the h2/Overview and p/div label-value rows
+observed on the VPS on 17 October 2026, alongside the existing h1/dl format.
+It scopes modern rows between Overview and the next visible peer heading,
+requires a preceding company heading and at least two recognised fields with
+Website or Industry, and rejects conflicting duplicate fields. Hashed CSS class
+names are not selectors. Account/follower context, posts, later Locations/career
+sections, hidden elements and contact dialogs are excluded. This compatibility
+change needs a fresh real-page check; fixtures alone do not establish live capture.
+The focused regression run passed 81 cases; an additional real-Chromium fixture
+verified modern-layout website/email extraction through the existing snapshot
+source filters. Ruff and reader syntax checks passed. No authenticated VPS
+capture or sending is claimed by these local checks.
+
 ### Diagnosing an empty company reader
 
-`fields_not_ready` means the reader did not find its expected visible heading,
-matching About link or Website/Industry definition list. It is neither a
+`fields_not_ready` means the reader did not find a supported, unambiguous visible
+company layout. The legacy path requires its heading/About link/definition list;
+the modern path requires its heading/Overview and label-value rows. It is neither a
 successful capture nor a proven LinkedIn denial. Keep Worker and Sending OFF
 and inspect only structural metadata with the bounded diagnostic:
 
@@ -84,6 +98,19 @@ without interpreting an arbitrary heading as a company identity. It does not pri
 account navigation, page bodies, cookie values or hidden framework data. A
 non-captured result exits with status 2 and remains unverified. Authentication
 challenges and HTTP denials stop inspection and preserve normal platform holds.
+
+To test the trusted repository's updated reader with the existing container,
+without changing the running app or rebuilding first:
+
+```sh
+git pull --ff-only
+sudo docker compose -f compose.yaml -f compose.platform-browser.yaml exec -T app xvfb-run -a python - --reader-base64 "$(base64 -w0 outreach/static/platform-reader.js)" < scripts/check_platform_browser.py
+```
+
+The report identifies `reader_source: supplied` and, on capture, the reader
+layout. Only use the repository reader you reviewed for this option: it executes
+the supplied DOM reader in your browser session. A successful preview does not
+update the app image; build and start app with both Compose files to deploy it.
 
 If Chromium instead reports a profile in use on a former setup-container host,
 stop the app and verify that no container using its profile volume is running.
