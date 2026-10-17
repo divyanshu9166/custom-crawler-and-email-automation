@@ -122,7 +122,13 @@ Building images can consume substantially more resources than normal runtime;
 schedule builds outside important n8n runs. If the host lacks build headroom,
 build on a compatible larger machine/CI and transfer the verified images.
 
-On your own computer, open a separate terminal and replace both placeholders:
+For Cloudflare HTTPS access instead of a desktop SSH tunnel, follow
+[CLOUDFLARE_SETUP.md](CLOUDFLARE_SETUP.md). It includes installation, a temporary
+domain-free link, keeping the connector alive and changing `PUBLIC_URL`.
+Choose one browser origin/access method at a time.
+
+For the SSH option, on your own computer open a separate terminal and replace
+both placeholders:
 
 ```sh
 ssh -N -L 18000:127.0.0.1:8000 YOUR_SSH_USER@YOUR_VPS_IP

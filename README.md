@@ -6,6 +6,8 @@ A cold email system for US/UK prospects. Campaign A covers website development/i
 and [the full deployment/acceptance checklist](docs/VPS_DEPLOYMENT_CHECKLIST.md).
 Start with workers and sending disabled; inspect shared-host resource headroom
 before enabling automatic research.
+For HTTPS dashboard access without a desktop SSH tunnel, use
+[the Cloudflare setup guide](docs/CLOUDFLARE_SETUP.md).
 
 **Pre-VPS platform updates:** managed LinkedIn/X search now supports bounded
 scroll/Next snapshots, deduplicated partial results and visible search coverage.
