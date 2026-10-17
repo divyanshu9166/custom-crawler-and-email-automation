@@ -1,16 +1,24 @@
 name: Tests
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
       - run: pip install -r requirements.lock && pip install -e '.[test]'
       - run: ruff check outreach tests scripts
       - run: python -m playwright install --with-deps chromium
+      - name: Allow sandboxed Playwright Chromium on the CI runner
+        run: |
+          sudo install -m 0644 deploy/ci/playwright-chromium.apparmor /etc/apparmor.d/outreach-ci-playwright
+          sudo apparmor_parser -r /etc/apparmor.d/outreach-ci-playwright
       - run: pytest -q --junitxml=data/ci-workflow-tests.xml
       - run: python scripts/verify_workflow_nodes.py --junit data/ci-workflow-tests.xml
       - run: node --check outreach/static/app.js && node --check outreach/static/sales.js && node --check outreach/static/workflow.js && node --check outreach/static/settings.js && node --check outreach/static/login.js
@@ -19,9 +27,11 @@ jobs:
       - run: docker compose --profile verify --profile search --profile n8n config --quiet
       - run: docker build -t outreach-test .
   reacher-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - run: docker build -f deploy/reacher.Dockerfile -t reacher-test .
       - run: docker run -d --name reacher-smoke -p 127.0.0.1:18080:8080 -e RCH__HEADER_SECRET=ci-only-fixture-secret reacher-test
       - run: python3 scripts/reacher_smoke.py --url http://127.0.0.1:18080 --secret ci-only-fixture-secret

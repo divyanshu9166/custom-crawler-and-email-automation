@@ -1,0 +1,10 @@
+# GitHub-hosted Ubuntu 24.04 CI only. Installed explicitly by test.yml.
+# Allow user namespaces for downloaded Playwright Chromium executables while
+# retaining chromium_sandbox=True and the host's global AppArmor restriction.
+# Reference: Chromium docs/security/apparmor-userns-restrictions.md, option 2.
+abi <abi/4.0>,
+include <tunables/global>
+
+profile outreach-ci-playwright /home/runner/.cache/ms-playwright/**/chrome{,-headless-shell} flags=(unconfined) {
+  userns,
+}
