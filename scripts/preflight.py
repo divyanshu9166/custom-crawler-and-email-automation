@@ -17,6 +17,7 @@ s = Settings()
 workspace = Preferences(s)
 checks = {"python_configuration": "ok", "docker_available": bool(shutil.which("docker")),
           "managed_workspace_settings_loaded": workspace.path.exists(),
+          "worker_enabled": s.worker_enabled,
           "sending_enabled": s.sending_enabled, "sending_gaps": s.sending_gaps(),
           "search_provider": s.search_provider, "reacher_configured": bool(s.reacher_secret),
           "ai_configured": bool(s.openai_api_key and s.openai_model),

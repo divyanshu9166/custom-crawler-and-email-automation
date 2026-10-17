@@ -132,15 +132,17 @@ async def monitor_resources(admission, stop, interval=5):
 async def mail_loop(db, settings, stop):
     def mail_call(fn):
         with settings._mailbox_lock:
-            return fn(db, settings)
+            if settings.worker_enabled and not stop.is_set():
+                return fn(db, settings)
     last_poll = 0
     while not stop.is_set():
         try:
-            db.set("worker_heartbeat", time.time())
-            if time.time() - last_poll >= 30:
-                await asyncio.to_thread(mail_call, poll_inbox)
-                last_poll = time.time()
-            await asyncio.to_thread(mail_call, send_one)
+            if settings.worker_enabled:
+                db.set("worker_heartbeat", time.time())
+                if time.time() - last_poll >= 30:
+                    await asyncio.to_thread(mail_call, poll_inbox)
+                    last_poll = time.time()
+                await asyncio.to_thread(mail_call, send_one)
         except Exception as exc:
             log.error("Worker cycle failed: %s", type(exc).__name__)
             db.event("worker_error", {"error": type(exc).__name__})
@@ -155,13 +157,13 @@ async def job_loop(db, settings, stop, kinds, schedules=False, admission=None):
         job = None
         admitted = False
         try:
-            if schedules:
+            if schedules and settings.worker_enabled:
                 for schedule in db.all("SELECT * FROM schedules WHERE enabled=1 AND next_run<=?", (time.time(),)):
                     db.enqueue("discover", {"query": schedule["query"], "campaign": schedule["campaign"],
                                            "country_hint": schedule["country_hint"], "limit": schedule["result_limit"]})
                     db.execute("UPDATE schedules SET next_run=? WHERE id=?",
                                (time.time() + schedule["interval_hours"] * 3600, schedule["id"]))
-            admitted = not admission or admission.acquire()
+            admitted = settings.worker_enabled and (not admission or admission.acquire())
             job = db.claim(kinds) if admitted else None
             if job:
                 # Stop gracefully without waiting for an entire deep crawl. Interrupted jobs resume on startup.
@@ -200,7 +202,8 @@ async def run(db, settings, stop):
     if db.get("demo") == "true":
         # A demo database remains offline even if live credentials are later configured.
         while not stop.is_set():
-            db.set("worker_heartbeat", time.time())
+            if settings.worker_enabled:
+                db.set("worker_heartbeat", time.time())
             try:
                 await asyncio.wait_for(stop.wait(), timeout=2)
             except asyncio.TimeoutError:

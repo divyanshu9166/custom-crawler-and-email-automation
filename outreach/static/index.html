@@ -16,7 +16,7 @@
 
   <header><div class="brand"><span class="brand-mark">ow</span><div><span class="eyebrow">YOUR ACQUISITION WORKSPACE</span><h1>Outreach Workbench<span class="dot">.</span></h1></div></div>
 
-    <div class="actions"><span id="mode" class="badge">Loading</span><button id="pause">Pause sending</button><button id="resume" class="primary">Resume sending</button><button id="logout">Sign out</button></div>
+    <div class="actions"><button id="worker-control" title="Manage automation in Settings">Worker: loading</button><span id="mode" class="badge">Loading</span><button id="pause">Pause sending</button><button id="resume" class="primary">Resume sending</button><button id="logout">Sign out</button></div>
 
   </header>
 
@@ -119,6 +119,8 @@
       <div class="page-heading"><div><span class="eyebrow">WORKSPACE PREFERENCES</span><h2>Make it your workspace.</h2><p>Manage your business identity, email connection and sign-in.</p></div><span class="badge">Private configuration</span></div>
 
       <div class="settings-layout"><div>
+
+      <form id="runtime-settings-form" class="panel"><span class="eyebrow">AUTOMATION CONTROLS</span><h3>Worker &amp; sending</h3><p>Control automation here. Changes are saved and apply without a server restart.</p><label class="check"><input name="worker_enabled" type="checkbox">Worker enabled</label><p class="small">Runs discovery, research, verification and inbox monitoring. Turning it off lets current work finish; queued jobs wait.</p><label class="check"><input name="sending_enabled" type="checkbox">Sending enabled</label><p class="small">Allows approved emails to send after you choose Resume sending. Turning sending off keeps research and inbox monitoring available while the worker is on.</p><p id="runtime-summary" role="status"></p><p>Saving these controls pauses sending. Resume separately when ready. A message already submitted cannot be recalled.</p><button class="primary" type="submit">Save automation controls</button><p id="runtime-settings-result" role="status"></p></form>
 
       <form id="mail-settings-form" class="panel"><div class="settings-section"><span class="eyebrow">01 · BUSINESS</span><h3>Sender identity</h3><p>This identity appears in your outreach emails.</p><div class="columns"><label>Your name<input name="sender_name" maxlength="150" autocomplete="name"></label><label>Business name<input name="sender_company" maxlength="200" autocomplete="organization"></label><label>Business email<input name="sender_email" type="email" autocomplete="email"></label><label>Business website<input name="sender_website" type="url" placeholder="https://your-business.com"></label></div><label>Business postal address<textarea name="postal_address" maxlength="1000" autocomplete="street-address"></textarea></label></div>
 

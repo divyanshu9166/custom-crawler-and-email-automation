@@ -105,7 +105,9 @@ curl -fsS --max-time 5 http://127.0.0.1:8000/health
 ```
 
 Keep `PUBLIC_URL` equal to the active HTTPS tunnel URL, `SENDING_ENABLED=false`
-and `WORKER_ENABLED=false` during this login repair. Refresh the browser with
+and `WORKER_ENABLED=false` during this login repair. If runtime controls were
+previously saved in the dashboard, use Settings to turn both OFF as well; saved
+controls override `.env`. Refresh the browser with
 Ctrl+F5 after the app is healthy. If sign-in details were previously changed in
 Settings, the saved username/password override `.env`; use those saved details.
 
@@ -199,13 +201,11 @@ cohosting automatic research; app ceilings are adjustable with `APP_CPU_LIMIT`
 and `APP_MEMORY_LIMIT`. Reacher/SearXNG limits live in `compose.yaml`.
 Do not blindly add a local LLM or an additional n8n instance.
 
-Edit `.env` privately, change `WORKER_ENABLED=false` to `WORKER_ENABLED=true`,
-and keep `SENDING_ENABLED=false`, concurrency 1 and browser rendering enabled:
+In the dashboard, open **Settings > Worker & sending**, enable Worker, leave
+Sending disabled and save. This applies without restarting app and persists
+across restarts. Keep concurrency 1 and browser rendering enabled. Then inspect:
 
 ```sh
-nano .env
-sudo docker compose --profile verify --profile search config --quiet
-sudo docker compose --profile verify --profile search up -d --no-build app reacher searxng
 sudo docker compose exec app python scripts/preflight.py
 sudo docker stats --no-stream
 ```
@@ -265,8 +265,9 @@ back up `.env`, managed settings, source-cache/access-store and any browser stat
 privately; a database-only backup is incomplete. See section 6 of the full
 checklist for consistent browser-state backup and restore requirements.
 
-Before an update, finish the current crawl, back up, set `WORKER_ENABLED=false`
-in `.env`, recreate app, and check that n8n is outside its busy window. Then:
+Before an update, turn Worker and Sending OFF in **Settings > Worker & sending**,
+save, let current work finish, back up, and check that n8n is outside its busy
+window. Dashboard controls override the initial `.env` flags. Then:
 
 ```sh
 git status --short

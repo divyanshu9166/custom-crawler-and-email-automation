@@ -22,6 +22,7 @@ async function act(fn, message="Saved") {
 function view(name){document.querySelectorAll(".view").forEach(el=>el.hidden=el.id!==name);document.querySelectorAll("nav button").forEach(el=>el.classList.toggle("selected",el.dataset.view===name));if(name==="operations")operations();if(name==="discovery")schedules();if(name==="workflow")window.WorkbenchFlow.refresh();if(name==="settings")window.WorkbenchSettings.load();if(name==="learning")loadLearning();}
 document.querySelectorAll("nav button").forEach(button=>button.onclick=()=>view(button.dataset.view));
 $("#start-discovery").onclick=()=>view("discovery");
+$("#worker-control").onclick=()=>{view("settings");$("#runtime-settings-form").scrollIntoView({block:"start"});};
 $("#pause").onclick=()=>act(()=>api("/api/pause","POST"),"Sending paused. An already submitted message cannot be recalled.");
 $("#resume").onclick=()=>act(()=>api("/api/resume","POST"),"Sending resumed; only approved eligible sequences can send.");
 $("#logout").onclick=async()=>{try{await api('/api/logout','POST');location.replace('/');}catch(e){notice(e.message,true);}};
@@ -65,7 +66,9 @@ async function refresh(){
   $("#fxembed-mode").textContent="X bio research uses the free FxEmbed community source. Returned emails are candidates; current publication, inbox ownership and buyer relevance need review.";
   $("#platform-browser-mode").textContent="VPS browser discovery is enabled. "+(status.platform_browser_public_fallback?"Free public search and independent company pages remain available when the platform is held or its website link is missing. ":"Public-source failover is disabled. ")+(Object.keys(status.platform_browser_holds||{}).length?"Operator attention needed: "+JSON.stringify(status.platform_browser_holds):"Sources, business identity and contact ownership still require review.");
   $("#mode").textContent=status.demo?"Offline demo · fictional prospects":!status.sending_enabled?"Preview · sending disabled":status.paused?"Sending paused":"Sending enabled";
-  $("#resume").disabled=!!status.demo;
+  $("#worker-control").textContent=`Worker: ${status.worker_enabled?'ON':'OFF'}`;
+  $("#resume").disabled=!!status.demo||!status.worker_enabled||!status.sending_enabled;
+  $("#resume").title=status.demo?'Offline demo':(!status.worker_enabled||!status.sending_enabled)?'Enable worker and sending in Settings first':'Resume approved eligible sequences';
   const sent=status.messages.find(x=>x.state==="sent")?.n||0;
   $("#metrics").innerHTML=[["Companies",status.counts.leads],["Contacts",status.counts.contacts],["Accepted by SMTP",sent],["Suppressed",status.counts.suppression]].map(([label,n])=>`<div class="metric"><span>${label}</span><strong>${n}</strong></div>`).join("");
   renderLeads();if(currentId&&currentId===selectedAtStart)await loadLead(currentId);

@@ -14,6 +14,7 @@ MAIL_FIELDS = {"sender_name", "sender_company", "sender_email", "sender_website"
                "daily_send_limit", "min_send_interval_seconds", "send_hour_start", "send_hour_end", "domain_auth_confirmed"}
 AUTH_FIELDS = {"admin_user", "admin_password_hash", "session_version"}
 WRITER_FIELDS = {'draft_api_url', 'draft_api_key', 'draft_model', 'draft_timeout_seconds'}
+RUNTIME_FIELDS = {'worker_enabled', 'sending_enabled'}
 
 
 def password_matches(settings, password):
@@ -40,7 +41,7 @@ class Preferences:
         self.saved = {}
         if self.path.exists():
             self.saved = json.loads(self.path.read_text(encoding="utf-8"))
-            if not isinstance(self.saved, dict) or set(self.saved) - MAIL_FIELDS - AUTH_FIELDS - WRITER_FIELDS:
+            if not isinstance(self.saved, dict) or set(self.saved) - MAIL_FIELDS - AUTH_FIELDS - WRITER_FIELDS - RUNTIME_FIELDS:
                 raise RuntimeError("Invalid managed workspace settings")
             checked = Settings.model_validate({**settings.model_dump(), **self.saved})
             for key in self.saved:
@@ -53,6 +54,7 @@ class Preferences:
                     'draft_api_key_configured': bool(self.settings.draft_api_key),
                     "imap_password_configured": bool(self.settings.imap_password), "admin_user": self.settings.admin_user,
                     "public_url": self.settings.public_url, "sending_enabled": self.settings.sending_enabled,
+                    "worker_enabled": self.settings.worker_enabled,
                     "sending_gaps": self.settings.sending_gaps()}
 
     def persist(self, patch):
@@ -124,6 +126,18 @@ class Preferences:
             self.persist({key: getattr(checked, key) for key in patch})
             db.event('workspace_writer_settings_changed', {'fields': sorted(patch), 'sending_paused': True})
             return self.public()
+
+    def update_runtime(self, db, patch):
+        with self.lock:
+            if not patch or set(patch) - RUNTIME_FIELDS or any(type(value) is not bool for value in patch.values()):
+                raise ValueError("Choose worker and sending on/off controls")
+            if db.get('demo') == 'true' and any(patch.values()):
+                raise ValueError("Offline demo cannot enable automation or sending")
+            # Changing an enable flag never resumes previously approved messages.
+            db.set('paused', 'true')
+            self.persist(patch)
+            db.event('workspace_runtime_settings_changed', {**patch, 'sending_paused': True})
+            return {**self.public(), 'paused': True, 'demo': db.get('demo') == 'true'}
 
     def update_credentials(self, db, username, password, current_password):
         with self.lock:

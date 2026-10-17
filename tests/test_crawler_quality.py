@@ -535,6 +535,7 @@ async def test_catalog_does_not_starve_announcement_research(settings, monkeypat
 
 async def test_worker_monitors_inbox_during_long_research_and_recovers_shutdown(db, settings, monkeypatch):
     from outreach import worker
+    settings.worker_enabled = True
     lid = add_lead(db, "Bright", "https://bright-demo.com", "A", "https://bright-demo.com")
     jid = db.enqueue("research", {"lead_id": lid})
     started, stop = asyncio.Event(), asyncio.Event()

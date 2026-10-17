@@ -41,6 +41,11 @@ class CredentialsInput(Input):
     current_password: str = Field(max_length=1000)
 
 
+class RuntimeSettingsInput(Input):
+    worker_enabled: bool | None = Field(default=None, strict=True)
+    sending_enabled: bool | None = Field(default=None, strict=True)
+
+
 class MailSettingsInput(Input):
     sender_name: str | None = Field(default=None, max_length=150)
     sender_company: str | None = Field(default=None, max_length=200)
@@ -356,16 +361,19 @@ def create_app(settings=None):
 
     @asynccontextmanager
     async def lifespan(app):
-        stop, task, lock = asyncio.Event(), None, None
-        if settings.worker_enabled:
-            lock = WorkerLock(settings.data_dir / "worker.lock")
-            task = asyncio.create_task(run(db, settings, stop))
-        yield
-        stop.set()
-        if task:
-            await task
-        if lock:
-            lock.close()
+        # Keep one idle supervisor available so dashboard controls take effect
+        # without recreating the container. Disabled lanes do no provider work.
+        stop = asyncio.Event()
+        lock = WorkerLock(settings.data_dir / "worker.lock")
+        task = asyncio.create_task(run(db, settings, stop))
+        try:
+            yield
+        finally:
+            stop.set()
+            try:
+                await task
+            finally:
+                lock.close()
 
     app = FastAPI(title="Outreach Workbench", version="0.1.0", lifespan=lifespan,
                   docs_url=None, redoc_url=None, openapi_url=None)
@@ -472,7 +480,8 @@ def create_app(settings=None):
 
     @app.get("/api/settings", dependencies=[Depends(auth)])
     def workspace_settings():
-        return preferences.public()
+        return {**preferences.public(), 'demo': db.get('demo') == 'true',
+                'paused': db.get('paused', 'true') != 'false'}
 
     @app.put("/api/settings/mail", dependencies=[Depends(auth)])
     def mail_settings(value: MailSettingsInput):
@@ -481,6 +490,10 @@ def create_app(settings=None):
     @app.put('/api/settings/writer', dependencies=[Depends(auth)])
     def writer_settings(value: WriterSettingsInput):
         return preferences.update_writer(db, value.model_dump(exclude_none=True))
+
+    @app.put('/api/settings/runtime', dependencies=[Depends(auth)])
+    def runtime_settings(value: RuntimeSettingsInput):
+        return preferences.update_runtime(db, value.model_dump(exclude_none=True))
 
     @app.put("/api/settings/credentials", dependencies=[Depends(auth)])
     def credentials(value: CredentialsInput, request: Request):
@@ -520,7 +533,8 @@ def create_app(settings=None):
     def status():
         from .platform_access import access_status
         access=access_status(settings)
-        return {"demo": db.get("demo") == "true", "sending_enabled": settings.sending_enabled, "paused": db.get("paused", "true") != "false",
+        return {"demo": db.get("demo") == "true", "sending_enabled": settings.sending_enabled,
+                "worker_enabled": settings.worker_enabled, "paused": db.get("paused", "true") != "false",
                 "sending_gaps": settings.sending_gaps(), "worker_heartbeat": db.get("worker_heartbeat"),
                 "imap_error": db.get("imap_error"), "imap_caught_up": db.get("imap_caught_up") == "true",
                 "imap_last_success": db.get("imap_last_success"), "search_provider": settings.search_provider,
@@ -539,18 +553,22 @@ def create_app(settings=None):
 
     @app.post("/api/pause", dependencies=[Depends(auth)])
     def pause():
-        db.set("paused", "true")
-        db.event("paused", {})
+        with preferences.lock:
+            db.set("paused", "true")
+            db.event("paused", {})
         return {"paused": True}
 
     @app.post("/api/resume", dependencies=[Depends(auth)])
     def resume():
-        if db.get("demo") == "true":
-            raise ValueError("Offline demo cannot send; use a separate live database")
-        if not settings.sending_enabled or settings.sending_gaps():
-            raise ValueError("Configure sending and set SENDING_ENABLED=true before resuming")
-        db.set("paused", "false")
-        db.event("resumed", {})
+        with preferences.lock:
+            if db.get("demo") == "true":
+                raise ValueError("Offline demo cannot send; use a separate live database")
+            if not settings.worker_enabled:
+                raise ValueError("Enable the worker in Settings before resuming sending")
+            if not settings.sending_enabled or settings.sending_gaps():
+                raise ValueError("Complete email settings and enable sending in Settings before resuming")
+            db.set("paused", "false")
+            db.event("resumed", {})
         return {"paused": False}
 
     @app.get("/api/leads", dependencies=[Depends(auth)])

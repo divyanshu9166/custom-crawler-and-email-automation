@@ -1,5 +1,33 @@
 # Workflow map and workspace settings
 
+## Automation controls - 17 October 2026
+
+Open **Settings > Worker & sending** to switch the worker and sending on/off.
+Save automation controls applies immediately and persists across app/container
+restarts, overriding the corresponding initial `.env` values. The header shows
+Worker ON/OFF and opens these settings. No container restart is needed to toggle
+either flag once this release is deployed.
+
+Worker OFF stops new discovery schedules, job claims and mailbox cycles. Current
+research/mailbox work finishes; pending jobs remain queued for the next enable.
+Worker ON runs research, verification and inbox monitoring independently of the
+sending flag. Sending OFF prevents outgoing submissions and retains inbox
+monitoring while the worker is on. An already submitted message cannot be recalled.
+
+Saving either control pauses sending. To send later, enable both controls, save,
+then choose **Resume sending**. Existing sender configuration, message approval,
+suppression, fresh verification/inbox checks, quotas and send windows still apply.
+Resume rejects a disabled worker; the offline demo cannot enable either control.
+Only authenticated same-origin browser requests or authenticated API requests can
+save controls. No live prospect messages are needed to test these switches.
+
+Verification: 1,124 full-suite tests passed locally, plus a focused mailbox/UI
+check after the last change. Real Chromium checked desktop/mobile control saves,
+reload persistence and failed-save feedback. The complete dashboard smoke test
+also passed, including header navigation and demo controls remaining disabled
+after a mailbox-settings save. Provider calls were controlled or offline; no
+live sending or authenticated VPS deployment is established by these checks.
+
 ## AI email writer — 11 October 2026
 
 Settings now includes API base URL, model, private API key and request timeout. Blank key preserves a saved key; explicit removal clears it. Saving pauses sending and calls no provider. Pipeline labels old template drafts and blocks their approval; the workflow map shows the hold. The actual writer requires current reviewed sources and has no template fallback. Read [the verification and live-model boundary](AI_EMAIL_WRITING.md).
@@ -36,13 +64,13 @@ Drag nodes or the background, use zoom and Fit view, or reset the layout. Arrow 
 
 Settings contains business/sender identity, SMTP with STARTTLS or implicit TLS, IMAP TLS, sending limits and the prospect-local send window. The domain-authentication checkbox records your confirmation; the application does not provision or independently check DNS authentication here.
 
-Saving persists changes and pauses sending. It does not validate the provider connection or turn on `SENDING_ENABLED`. Configuration readiness is not deliverability evidence. A live mailbox operation or in-flight send prevents a conflicting save until it finishes. Inbox catch-up must happen again after settings change. The worker can use saved mailbox settings for subsequent normal polling; saving is not an outbound mail test.
+Saving email settings persists changes and pauses sending. It does not validate the provider connection or enable sending; use the separate automation controls for that. Configuration readiness is not deliverability evidence. A live mailbox operation or in-flight send prevents a conflicting save until it finishes. Inbox catch-up must happen again after settings change. The worker can use saved mailbox settings for subsequent normal polling; saving is not an outbound mail test.
 
 Password fields stay blank after loading/saving. Blank means keep the saved password; the explicit removal checkbox clears it. Responses and validation failures do not return mailbox passwords. Do not enter production credentials into the fictional offline demo.
 
 ## Sign-in settings
 
-Under Change sign-in details, enter the username, current password and a matching new password of at least sixteen characters. Saving requires the current password, stores a salted PBKDF2 hash and invalidates existing browser sessions. Sign in again with the new credentials. API Bearer tokens are independent and are not rotated by this form.
+Under Change sign-in details, enter the username, current password and a matching nonempty new password. One-character passwords are accepted. Saving requires the current password, stores a salted PBKDF2 hash and invalidates existing browser sessions. Sign in again with the new credentials. API Bearer tokens are independent and are not rotated by this form.
 
 Initial credentials come from `.env`. Saved values override their matching `.env` fields on subsequent application startups. Changing the old `.env` password does not override a managed password hash.
 

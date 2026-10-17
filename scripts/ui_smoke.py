@@ -11,6 +11,7 @@ import time
 import urllib.request
 from pathlib import Path
 
+import psutil
 from playwright.sync_api import sync_playwright, expect
 from demo import seed
 from outreach.db import DB
@@ -647,7 +648,10 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             assert not errors, errors
             accepted_before_settings = fixture_db.all("SELECT id,sent_at FROM messages WHERE state='sent'")
             # Save fictional mailbox details without any network connection or sending.
-            page.get_by_role('button',name='Settings',exact=True).click()
+            page.get_by_role('button',name='Worker: OFF',exact=True).click()
+            expect(page.locator('#runtime-settings-form input[name="worker_enabled"]')).to_be_disabled()
+            expect(page.locator('#runtime-settings-form input[name="sending_enabled"]')).to_be_disabled()
+            expect(page.locator('#runtime-summary')).to_contain_text('Offline demo')
             expect(page.locator('#mail-settings-form input[name="smtp_port"]')).to_have_value('587')
             page.locator('#mail-settings-form input[name="sender_name"]').fill('Alex Fixture')
             page.locator('#mail-settings-form input[name="sender_company"]').fill('Fictional UI Studio')
@@ -658,6 +662,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.locator('#mail-settings-form input[name="imap_password"]').fill('fictional-imap-private-password')
             page.get_by_role('button',name='Save email settings',exact=True).click()
             expect(page.locator('#mail-settings-result')).to_contain_text('Email settings saved')
+            expect(page.locator('#runtime-summary')).to_contain_text('Offline demo')
             expect(page.locator('#mail-settings-form input[name="smtp_password"]')).to_have_value('')
             assert fixture_db.get('paused')=='true'
             assert fixture_db.all("SELECT id,sent_at FROM messages WHERE state='sent'") == accepted_before_settings
@@ -681,5 +686,23 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             browser.close()
         print("Browser smoke passed: auth, source-backed research, template-demo hold and missing AI writer configuration, demo isolation, shared activity, sales qualification, tasks, proposal creation/review, artifact creation/review/export, offline HTML rendering and FAQ interaction, sourced inbox candidate/ownership review, mobile layout, unsafe approval rejection, committed-action/refresh-failure feedback historical-source exclusion from new review and profile-only qualification/contact workflow and writer configuration hold, connected node drag/zoom/status map, private mailbox-settings save and credential-change/re-login, campaign learning empty/nonzero rates and escaped cohort labels, priority ordering, financial entry/void arithmetic, permission-reviewed case study lifecycle and post-client plans; zero JS errors.")
     finally:
+        # Windows venv launchers can outlive terminate()/wait() as a child
+        # interpreter. Release its worker/database handles before temp cleanup.
+        try:
+            children = psutil.Process(process.pid).children(recursive=True)
+        except psutil.NoSuchProcess:
+            children = []
         process.terminate()
         process.wait(timeout=15)
+        for child in children:
+            try:
+                child.terminate()
+            except psutil.NoSuchProcess:
+                pass
+        _, alive = psutil.wait_procs(children, timeout=15)
+        for child in alive:
+            try:
+                child.kill()
+            except psutil.NoSuchProcess:
+                pass
+        psutil.wait_procs(alive, timeout=5)
