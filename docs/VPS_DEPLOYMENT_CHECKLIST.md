@@ -1,8 +1,13 @@
 # VPS deployment and acceptance checklist
 
-Updated 13 October 2026. These are pending server/operator acceptance tasks, not
+Updated 17 October 2026. These are pending server/operator acceptance tasks, not
 completed local deployment claims. The domain, VPS and mailbox remain user-owned.
 Keep sending disabled throughout installation and source research verification.
+
+For GitHub clone/setup commands on the 4 GB host with an existing n8n installation,
+start with [VPS_DEPLOYMENT_COMMANDS.md](VPS_DEPLOYMENT_COMMANDS.md). It stages
+startup with workers disabled until available memory and active n8n consumption
+are inspected, and does not start a second n8n instance.
 
 ## 1. Prepare and upload
 

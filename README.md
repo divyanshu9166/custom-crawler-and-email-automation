@@ -2,6 +2,11 @@
 
 A cold email system for US/UK prospects. Campaign A covers website development/improvement and inquiry/booking chatbots. Campaign B covers new/existing D2C stores, shopping/support chatbots and permission-based WhatsApp opportunities. Crawler quality takes priority; host size controls concurrency and throughput.
 
+**VPS setup:** [copy/paste commands for an existing n8n host](docs/VPS_DEPLOYMENT_COMMANDS.md)
+and [the full deployment/acceptance checklist](docs/VPS_DEPLOYMENT_CHECKLIST.md).
+Start with workers and sending disabled; inspect shared-host resource headroom
+before enabling automatic research.
+
 **Pre-VPS platform updates:** managed LinkedIn/X search now supports bounded
 scroll/Next snapshots, deduplicated partial results and visible search coverage.
 FxEmbed bio caches, rate-limit holds and pacing survive app restarts without
