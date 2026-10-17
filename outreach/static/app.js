@@ -2,6 +2,7 @@
 let currentId = null;
 let detailRequest = 0;
 let allLeads = [];
+let pipelineRefreshInFlight = false;
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 const stamp = value => value ? new Date(Number(value) * 1000).toLocaleString() : "—";
@@ -19,7 +20,7 @@ async function act(fn, message="Saved") {
   try{await refresh();}catch(error){notice(`${message} Dashboard refresh failed: ${error.message}`,true);return;}
   notice(message);
 }
-function view(name){document.querySelectorAll(".view").forEach(el=>el.hidden=el.id!==name);document.querySelectorAll("nav button").forEach(el=>el.classList.toggle("selected",el.dataset.view===name));if(name==="operations")operations();if(name==="discovery")schedules();if(name==="workflow")window.WorkbenchFlow.refresh();if(name==="settings")window.WorkbenchSettings.load();if(name==="learning")loadLearning();}
+function view(name){document.querySelectorAll(".view").forEach(el=>el.hidden=el.id!==name);document.querySelectorAll("nav button").forEach(el=>el.classList.toggle("selected",el.dataset.view===name));if(name==="pipeline")refreshPipeline();if(name==="operations")operations();if(name==="discovery")schedules();if(name==="workflow")window.WorkbenchFlow.refresh();if(name==="settings")window.WorkbenchSettings.load();if(name==="learning")loadLearning();}
 document.querySelectorAll("nav button").forEach(button=>button.onclick=()=>view(button.dataset.view));
 $("#start-discovery").onclick=()=>view("discovery");
 $("#worker-control").onclick=()=>{view("settings");$("#runtime-settings-form").scrollIntoView({block:"start"});};
@@ -57,9 +58,9 @@ function renderSourceCoverage(coverage){
   const rows=coverage?.rows||[];
   $("#discovery-source-coverage").innerHTML=rows.length?`<div class="source-coverage-scroll"><table><thead><tr><th>Source</th><th>Signals</th><th>Captured</th><th>Unavailable / stale</th><th>Website candidates</th><th>Recovered via independent sources</th><th>Published email candidates</th></tr></thead><tbody>${rows.map(r=>`<tr><th>${esc(r.source)}</th><td>${Number(r.signals)}</td><td>${Number(r.captured)}</td><td>${Number(r.unavailable)}</td><td>${Number(r.website_candidates)}</td><td>${Number(r.failover_candidates)}</td><td>${Number(r.published_email_candidates)}</td></tr>`).join('')}</tbody></table></div><p class="small">${esc(coverage.scope)}. ${esc(coverage.note)}</p>`:'<p>No platform capture observations recorded yet. Search-run failures remain visible in Workflow → Recent search runs.</p>';
 }
-async function refresh(){
+async function refresh({reloadDetail=true,includeDiagnostics=true}={}){
   const selectedAtStart=currentId;
-  const diagnostics=Promise.allSettled([api('/api/source-coverage'),api('/api/source-status')]);
+  const diagnostics=includeDiagnostics?Promise.allSettled([api('/api/source-coverage'),api('/api/source-status')]):null;
   const [status, leads]=await Promise.all([api("/api/status"),api("/api/leads")]);allLeads=leads;
   $("#platform-browser-mode").hidden=!status.platform_browser_enabled;
   $("#fxembed-mode").hidden=!status.fxembed_profiles_enabled;
@@ -71,12 +72,20 @@ async function refresh(){
   $("#resume").title=status.demo?'Offline demo':(!status.worker_enabled||!status.sending_enabled)?'Enable worker and sending in Settings first':'Resume approved eligible sequences';
   const sent=status.messages.find(x=>x.state==="sent")?.n||0;
   $("#metrics").innerHTML=[["Companies",status.counts.leads],["Contacts",status.counts.contacts],["Accepted by SMTP",sent],["Suppressed",status.counts.suppression]].map(([label,n])=>`<div class="metric"><span>${label}</span><strong>${n}</strong></div>`).join("");
-  renderLeads();if(currentId&&currentId===selectedAtStart)await loadLead(currentId);
+  renderLeads();if(reloadDetail&&currentId&&currentId===selectedAtStart)await loadLead(currentId);
+  if(!diagnostics)return;
   const [coverage,sourceStatus]=await diagnostics;
   if(coverage.status==='fulfilled')renderSourceCoverage(coverage.value);
   else $('#discovery-source-coverage').textContent='Source coverage unavailable: '+coverage.reason.message;
   if(sourceStatus.status==='fulfilled')renderSourceStatus(sourceStatus.value);
   else $('#provider-source-status').textContent='Source diagnostics unavailable: '+sourceStatus.reason.message;
+}
+async function refreshPipeline(){
+  if(pipelineRefreshInFlight)return;
+  pipelineRefreshInFlight=true;
+  try{await refresh({reloadDetail:false,includeDiagnostics:false});}
+  catch(error){notice('Pipeline update failed; displayed data may be outdated: '+error.message,true);}
+  finally{pipelineRefreshInFlight=false;}
 }
 function renderLeads(){const query=$("#filter").value.toLowerCase();$("#leads").innerHTML=[...allLeads].sort((a,b)=>$("#lead-sort").value==="newest"?b.id-a.id:$("#lead-sort").value==="company"?a.company.localeCompare(b.company):0).filter(l=>(l.company+" "+l.domain+" "+l.status).toLowerCase().includes(query)).map(l=>`<button class="lead ${l.id===currentId?"current":""}" data-lead="${l.id}"><strong>${esc(l.company)}</strong><small>${esc(l.lead_kind==='profile'?l.profile_url:l.domain)}</small><span class="badge">${esc(l.campaign)} · ${esc(l.status)}</span> <small>${l.contact_count} contacts</small><small>Review priority ${Number(l.priority?.score||0)}/100 - ${esc((l.priority?.lane||"research_review").replaceAll("_"," "))}</small></button>`).join("")||(allLeads.length?'<p>No companies match this filter. Clear the filter to show saved companies.</p>':'<p>No companies yet. Add a business or queue a search in Find prospects.</p>');document.querySelectorAll("[data-lead]").forEach(b=>b.onclick=()=>loadLead(Number(b.dataset.lead)).catch(e=>notice(e.message,true)));}
 const options = (values, selected) => values.map(v=>`<option value="${esc(v)}" ${v===selected?"selected":""}>${esc(v.replaceAll("_"," "))}</option>`).join("");
@@ -224,3 +233,4 @@ async function operations(){try{const [status,jobs,events,salesReport]=await Pro
 window.WorkbenchFlow.init({api,esc,notice,view,openLead:id=>{view('pipeline');loadLead(id).catch(e=>notice(e.message,true));}});
 window.WorkbenchSettings.init({api,esc,notice,refresh});
 refresh().catch(e=>notice(e.message,true));
+setInterval(()=>{if(!document.hidden&&!$('#pipeline').hidden)refreshPipeline();},15000);

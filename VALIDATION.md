@@ -1,3 +1,18 @@
+# Search submission and background Pipeline refresh — 17 October 2026
+
+The user's VPS initially reported zero leads and no jobs; the subsequent Operations view
+also showed no jobs. Enabling Worker does not create a discovery query. Controlled desktop
+and mobile tests verify that opening Find prospects creates no job, and submitting Start
+research creates a pending discover job visible under Operations.
+
+Pipeline now refreshes counts and the company list on entry and every 15 seconds while
+visible. Background reads skip source diagnostics and selected-lead detail rendering, keep
+the search filter and unsaved review edits intact, and avoid overlapping background refreshes.
+Twelve UI/runtime-control cases passed in 23.05 seconds with one existing Starlette/httpx
+warning. Real Chromium fixtures use a controlled clock and an isolated API/database; no live
+discovery, recipient probe or outreach was initiated. Live VPS search execution and yield
+remain dependent on the first actual submitted query and its job result.
+
 # Pipeline loading and empty-state correction — 17 October 2026
 
 A controlled Chromium test reproduced a blank Pipeline despite a saved lead when the
