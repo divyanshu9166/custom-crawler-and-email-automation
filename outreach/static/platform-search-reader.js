@@ -5,8 +5,8 @@
   if(Array.from(document.querySelectorAll('input[type="password"]')).some(visible)||/captcha|verify you are human|security check|sign in|authwall|just a moment/i.test(title)||/\/(?:login|checkpoint|authwall|challenge|i\/flow\/login)(?:\/|$)/i.test(u.pathname))return {state:'login_or_challenge',rows:[]};
   let scopes=[];
   if((u.hostname==='linkedin.com'||u.hostname.endsWith('.linkedin.com'))&&u.pathname.replace(/\/$/,'')==='/search/results/companies'){
-    const root=document.querySelector('.search-results-container');
-    if(visible(root))scopes=Array.from(root.querySelectorAll('.reusable-search__result-container,.entity-result')).filter(visible);
+    const root=document.querySelector('main .search-results-container,main [data-testid="search-results"],main [role="list"]');
+    if(visible(root))scopes=Array.from(root.querySelectorAll('.reusable-search__result-container,.entity-result,[data-testid="company-search-card"],[role="listitem"]')).filter(visible);
   }else if(['x.com','www.x.com','twitter.com','www.twitter.com'].includes(u.hostname)&&u.pathname==='/search'){
     scopes=Array.from(document.querySelectorAll('main [data-testid="UserCell"]')).filter(visible);
   }else return {state:'unsupported_route',rows:[]};

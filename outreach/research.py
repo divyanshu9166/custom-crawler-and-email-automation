@@ -305,6 +305,10 @@ async def research_lead(db, settings, lead_id, continuation=False, protect_revie
                    ("review" if saved else "research_failed",
                     f"Research {crawler.report['status']}; {len(saved)} pages preserved. Inspect report and retry before making completeness claims.",
                     time.time(), lead_id))
+        from .source_status import record
+        record(db, 'website', 'website_crawl', lead['website'],
+               {'state': 'interrupted' if isinstance(exc, asyncio.CancelledError) else 'failed',
+                'error_type': type(exc).__name__}, lead_id=lead_id, elapsed=time.time()-started_at)
         raise
     for page in pages:
         if page["url"] not in saved:
@@ -316,6 +320,11 @@ async def research_lead(db, settings, lead_id, continuation=False, protect_revie
                    ("No current source pages saved; historical captures are preserved but cannot support new findings.", time.time(), lead_id))
         raise ValueError("No current source pages available from this research attempt")
     report = crawler.report
+    from .source_status import record
+    record(db, 'website', 'website_crawl', lead['website'],
+           {'state': 'captured' if evidence else 'unavailable', 'section_errors': report.get('errors', [])},
+           lead_id=lead_id, elapsed=time.time()-started_at,
+           contacts=len({email for page in pages for email in page.get('emails', [])}))
     from .crawl_state import current_errors
     issues = len(current_errors(report))
     notes = (f"Website research: {report['status']}; {len(evidence)} saved pages, "
@@ -384,6 +393,11 @@ async def discover_leads(db, settings, query, campaign, country_hint, limit):
             except ValueError:
                 pass
         db.event("prospect_signal", {**signal, **context, "lead_id": match["id"] if match else None, "query": query, "observed_at": time.time()})
+        from .source_status import record
+        snap = signal.get('public_snapshot', {})
+        provider = 'managed_browser:' + signal.get('platform', '') if snap.get('capture_method', '').startswith('managed_browser') else 'website'
+        record(db, provider, 'company_profile', signal.get('source_url', ''), snap,
+               lead_id=match['id'] if match else None, contacts=len(snap.get('published_emails', [])))
     try:
         rows, report = await prospect_candidates(settings, query, country_hint, limit,
                         on_candidate=import_candidate, on_signal=save_signal,

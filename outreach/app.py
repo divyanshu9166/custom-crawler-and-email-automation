@@ -46,6 +46,15 @@ class RuntimeSettingsInput(Input):
     sending_enabled: bool | None = Field(default=None, strict=True)
 
 
+class ResearchSettingsInput(Input):
+    linkedin_people_search_enabled: bool | None = Field(default=None, strict=True)
+    linkedin_profile_experience_enabled: bool | None = Field(default=None, strict=True)
+    linkedin_contact_info_enabled: bool | None = Field(default=None, strict=True)
+    social_posts_enabled: bool | None = Field(default=None, strict=True)
+    social_posts_max_profiles: int | None = Field(default=None, ge=1, le=4, strict=True)
+    social_posts_max_posts: int | None = Field(default=None, ge=1, le=10, strict=True)
+
+
 class MailSettingsInput(Input):
     sender_name: str | None = Field(default=None, max_length=150)
     sender_company: str | None = Field(default=None, max_length=200)
@@ -495,6 +504,15 @@ def create_app(settings=None):
     def runtime_settings(value: RuntimeSettingsInput):
         return preferences.update_runtime(db, value.model_dump(exclude_none=True))
 
+    @app.put('/api/settings/research', dependencies=[Depends(auth)])
+    def research_settings(value: ResearchSettingsInput):
+        return preferences.update_research(db, value.model_dump(exclude_none=True))
+
+    @app.get('/api/source-status', dependencies=[Depends(auth)])
+    def provider_status(lead_id: int | None = Query(default=None, ge=1)):
+        from .source_status import snapshot
+        return snapshot(db, settings, lead_id)
+
     @app.put("/api/settings/credentials", dependencies=[Depends(auth)])
     def credentials(value: CredentialsInput, request: Request):
         key = "credentials:" + (request.client.host if request.client else "unknown")
@@ -644,7 +662,10 @@ def create_app(settings=None):
             page["current_for_review"] = (not crawl or page["fetched_at"] >= crawl["created_at"]) and time.time()-30*86400 <= page['fetched_at'] <= time.time()+60
             from .profiles import source_allowed
             page['business_for_review']=source_allowed(row,page['url'])
+            from .social_research import is_social_evidence
+            page['social_for_review'] = is_social_evidence(db, lead_id, page)
         from . import offers
+        from .social_research import latest as latest_social_captures
         from .opportunities import proposals as offer_proposals
         from .email_writer import assert_ai_origin, configuration as writer_configuration
         contacts = db.all("SELECT * FROM contacts WHERE lead_id=?", (lead_id,))
@@ -671,6 +692,7 @@ def create_app(settings=None):
         return {"lead": row, "evidence": evidence, "crawl": crawl,
                 'professional_captures':professional_captures,
                 'professional_report':json.loads(professional_report['detail']) if professional_report else None,
+                'social_captures': latest_social_captures(db, lead_id),
                 "contacts": contacts,
                 "email_writer": writer_configuration(settings),
                 "review_candidates": contact_candidates(db, lead_id),
@@ -794,6 +816,14 @@ def create_app(settings=None):
         from .contact_recovery import eligible_lead
         eligible_lead(db, lead_id)
         return {'job_id': db.enqueue('contact_research', {'lead_id': lead_id})}
+
+    @app.post('/api/leads/{lead_id}/social-research', dependencies=[Depends(auth)])
+    def social_research_job(lead_id: int):
+        from .social_research import eligible_lead
+        eligible_lead(db, lead_id)
+        if not settings.platform_browser_enabled or not settings.social_posts_enabled:
+            raise ValueError('Enable VPS browser and social post research first')
+        return {'job_id': db.enqueue('social_research', {'lead_id': lead_id})}
 
     @app.post('/api/leads/{lead_id}/professional-research',dependencies=[Depends(auth)])
     def professional_research(lead_id:int,value:ProfessionalResearchInput):

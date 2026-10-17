@@ -1,7 +1,7 @@
 /* Bounded normal search UI interaction; no API calls or access-control recovery. */
 ({allowNext}) => {
   const u=new URL(location.href),visible=e=>!!e&&!e.closest('dialog,[role="dialog"],[hidden],[aria-hidden="true"]')&&e.getClientRects().length>0&&getComputedStyle(e).visibility!=='hidden'&&getComputedStyle(e).display!=='none';
-  const linkedin=(u.hostname==='linkedin.com'||u.hostname.endsWith('.linkedin.com'))&&u.pathname.replace(/\/$/,'')==='/search/results/companies';
+  const linkedin=(u.hostname==='linkedin.com'||u.hostname.endsWith('.linkedin.com'))&&/^\/search\/results\/(companies|people)$/.test(u.pathname.replace(/\/$/,''));
   const x=['x.com','www.x.com','twitter.com','www.twitter.com'].includes(u.hostname)&&u.pathname==='/search';
   if(!linkedin&&!x)return {action:'unsupported_route'};
   if([...document.querySelectorAll('input[type="password"]')].some(visible)||/captcha|security check|sign in|authwall|just a moment/i.test(document.title))return {action:'login_or_challenge'};

@@ -44,6 +44,15 @@ if s.browser_enabled or s.platform_browser_enabled:
 checks["crawler"] = {"render_mode": s.crawl_render_mode, "pages": s.crawl_max_pages,
                      "depth": s.crawl_max_depth, "concurrency": s.crawl_concurrency,
                      "resource_concurrency": s.browser_resource_concurrency}
+checks['social_research'] = {
+    'linkedin_people_search': s.linkedin_people_search_enabled,
+    'linkedin_experience': s.linkedin_profile_experience_enabled,
+    'linkedin_contact_info_opt_in': s.linkedin_contact_info_enabled,
+    'author_posts': s.social_posts_enabled,
+    'profiles_per_prospect': s.social_posts_max_profiles,
+    'posts_per_profile': s.social_posts_max_posts,
+    'note': 'Configuration only. Saved provider outcomes are in dashboard Source access and extraction.',
+}
 if args.network:
     for name, url in [("search", s.searxng_url + "/search?q=example&format=json")]:
         try:

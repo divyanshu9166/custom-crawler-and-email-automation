@@ -63,6 +63,12 @@ class Settings(BaseSettings):
     auto_professional_research: bool = True
     professional_max_profiles: int = Field(6,ge=1,le=20)
     professional_max_queries: int = Field(10,ge=1,le=20)
+    linkedin_people_search_enabled: bool = True
+    linkedin_profile_experience_enabled: bool = True
+    linkedin_contact_info_enabled: bool = False
+    social_posts_enabled: bool = True
+    social_posts_max_profiles: int = Field(2, ge=1, le=4)
+    social_posts_max_posts: int = Field(3, ge=1, le=10)
     fxembed_profiles_enabled: bool = False
     serpapi_key: str = ""
     pagespeed_api_key: str = ""

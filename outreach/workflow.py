@@ -71,7 +71,7 @@ def snapshot(db, settings, lead_id=None):
     websites = [lead for lead in leads if lead["lead_kind"] == "website"]
     profiles = [lead for lead in leads if lead["lead_kind"] == "profile"]
     for key, group in [("website", websites), ("profile", profiles)]:
-        pending_job = job_state({"research", "screenshot", "performance", 'contact_research','professional_research'}, {lead["id"] for lead in group})
+        pending_job = job_state({"research", "screenshot", "performance", 'contact_research','professional_research','social_research'}, {lead["id"] for lead in group})
         failed = any(lead["status"] in {"research_failed", "profile_unavailable"} for lead in group)
         working = any(lead["status"] == "researching" for lead in group)
         new = any(lead["status"] == "new" for lead in group)

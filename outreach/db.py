@@ -105,6 +105,7 @@ CREATE TABLE IF NOT EXISTS client_plans (
 CREATE INDEX IF NOT EXISTS finance_company ON financial_entries(lead_id,happened_at);
 CREATE INDEX IF NOT EXISTS plans_due ON client_plans(state,due_at);
 CREATE INDEX IF NOT EXISTS evidence_current ON evidence(lead_id,fetched_at);
+CREATE INDEX IF NOT EXISTS events_kind_recent ON events(kind,id);
 CREATE INDEX IF NOT EXISTS crawls_company ON crawls(lead_id,id);
 CREATE INDEX IF NOT EXISTS contacts_company ON contacts(lead_id);
 CREATE INDEX IF NOT EXISTS events_contact_kind ON events(contact_id,kind,created_at);
@@ -188,9 +189,9 @@ class DB:
                                (time.time(),)).fetchall()
             # Research and screenshots of one lead must not execute simultaneously across lanes.
             busy = {json.loads(r[0]).get("lead_id") for r in con.execute(
-                "SELECT payload FROM jobs WHERE state='running' AND kind IN ('research','screenshot','performance','contact_research','professional_research')")}
+                "SELECT payload FROM jobs WHERE state='running' AND kind IN ('research','screenshot','performance','contact_research','professional_research','social_research')")}
             row = next((r for r in rows if (not kinds or r["kind"] in kinds)
-                        and (r["kind"] not in {"research", "screenshot", "performance", 'contact_research','professional_research'}
+                        and (r["kind"] not in {"research", "screenshot", "performance", 'contact_research','professional_research','social_research'}
                              or json.loads(r["payload"]).get("lead_id") not in busy)), None)
             if not row:
                 return None

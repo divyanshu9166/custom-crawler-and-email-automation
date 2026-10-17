@@ -98,7 +98,7 @@ class BrowserSession:
             return
         if route.request.is_navigation_request() and route.request.frame==route.request.frame.page.main_frame:
             path=parts.path
-            allowed=(host.endswith('linkedin.com') and (re.fullmatch(r'/company/[^/]+(?:/about)?/?',path) or re.fullmatch(r'/in/[A-Za-z0-9_-]{2,100}/?',path) or re.fullmatch(r'/search/results/companies/?',path) or re.match(r'^/(?:login|authwall|checkpoint)(?:/|$)',path))
+            allowed=((host=='linkedin.com' or host.endswith('.linkedin.com')) and (re.fullmatch(r'/company/[A-Za-z0-9_-]+(?:/about|/posts)?/?',path) or re.fullmatch(r'/in/[A-Za-z0-9_-]{2,100}(?:/details/experience|/overlay/contact-info)?/?',path) or re.fullmatch(r'/search/results/(?:companies|people)/?',path) or re.match(r'^/(?:login|authwall|checkpoint)(?:/|$)',path))
                      or host in {'x.com','www.x.com','twitter.com','www.twitter.com'} and (path=='/search' or path.startswith('/i/flow/login') or re.fullmatch(r'/[A-Za-z0-9_]{1,15}/?',path) and path.strip('/').lower() not in {'messages','notifications','settings','compose','home','i'}))
             if not allowed:
                 await route.abort()
@@ -181,7 +181,7 @@ async def _snapshot_locked(settings,platform,target,base,professional=False):
         reader=(Path(__file__).parent/'static'/reader_name).read_text(encoding='utf-8')
         result={'state':'fields_not_ready'}
         for _ in range(10):
-            result=await page.evaluate(reader)
+            result=await page.evaluate(reader, {'includeExperience': settings.linkedin_profile_experience_enabled}) if professional and platform=='linkedin.com' else await page.evaluate(reader)
             if result['state']!='fields_not_ready':
                 break
             await asyncio.sleep(1)
@@ -193,6 +193,9 @@ async def _snapshot_locked(settings,platform,target,base,professional=False):
         resolver=professional_target if professional else profile_target
         if resolver(result['url'])[1].rstrip('/')!=target.rstrip('/'):
             return {**base,'state':'redirect_identity_mismatch'}
+        if professional and platform=='linkedin.com':
+            from .social_browser import enrich_professional
+            result = await enrich_professional(settings, session, target, result)
         from .discovery import official_root
         websites=[]
         for link in result['links']:
@@ -239,7 +242,13 @@ async def browser_discover(settings,platform,query,limit=10):
         async with settings._platform_browser_lock:
             if hold(settings,platform):
                 return SearchRows([],[[platform,'operator_attention']])
-            return await _discover_locked(settings,platform,target,limit)
+            rows = await _discover_locked(settings,platform,target,limit)
+            if platform == 'x.com' and not rows and settings.social_posts_enabled and not hold(settings, platform):
+                post_target = 'https://x.com/search?' + urlencode({'q': query, 'f': 'live'})
+                alternate = await _discover_locked(settings, platform, post_target, limit, post_search=True)
+                return SearchRows(list(alternate), rows.engine_issues + alternate.engine_issues,
+                                  rows.provider_reports + alternate.provider_reports)
+            return rows
     except LoginTransitionError:
         record_hold(settings,platform,'login_or_challenge')
         return SearchRows([],[[platform,'login_or_challenge']])
@@ -248,7 +257,7 @@ async def browser_discover(settings,platform,query,limit=10):
         return SearchRows([],[[platform,'browser_unavailable:'+type(exc).__name__]])
 
 
-async def _discover_locked(settings,platform,target,limit):
+async def _discover_locked(settings,platform,target,limit,people=False,post_search=False):
     from .providers import SearchRows
     limit=max(1,min(200,int(limit)))
     found,issues={},[]
@@ -262,7 +271,9 @@ async def _discover_locked(settings,platform,target,limit):
             if denied in {401,403,429,999}:
                 record_hold(settings,platform,'http_'+str(denied),getattr(session,'last_access_issue',{}))
             return SearchRows([],[[platform,'http_'+str(denied)]])
-        reader=(Path(__file__).parent/'static/platform-search-reader.js').read_text(encoding='utf-8')
+        reader_name = 'people-search-reader.js' if people else 'post-search-reader.js' if post_search else 'platform-search-reader.js'
+        reader=(Path(__file__).parent/'static'/reader_name).read_text(encoding='utf-8')
+        coverage['operation'] = 'people_search' if people else 'post_author_search' if post_search else 'company_profile_search'
         advance=(Path(__file__).parent/'static/platform-search-advance.js').read_text(encoding='utf-8')
         await page.bring_to_front()
         last_response=None
@@ -306,10 +317,14 @@ async def _discover_locked(settings,platform,target,limit):
                     previous=len(found)
                     for row in result['rows'][:2000]:
                         try:
-                            route_platform,profile=profile_target(row['url'])
+                            if people:
+                                from .professionals import professional_target
+                                route_platform,profile=professional_target(row['url'])
+                            else:
+                                route_platform,profile=profile_target(row['url'])
                             if route_platform!=platform or not row['title']:
                                 raise ValueError('Unsupported search row')
-                            source=profile.removesuffix('/about/') if platform=='linkedin.com' else profile
+                            source=profile.removesuffix('/about/') if platform=='linkedin.com' and not people else profile
                             if source in found:
                                 coverage['duplicate_rows']+=1
                             elif len(found)<limit:
@@ -371,6 +386,6 @@ def search_identity_matches(target,current):
         wanted,actual=parse_qs(expected.query),parse_qs(observed.query)
         return (allowed and observed.path.rstrip('/')==expected.path.rstrip('/')
                 and actual.get(key)==wanted.get(key) and bool(wanted.get(key))
-                and (key!='q' or actual.get('f')==['user']))
+                and (key!='q' or wanted.get('f') in (['user'], ['live']) and actual.get('f')==wanted.get('f')))
     except ValueError:
         return False

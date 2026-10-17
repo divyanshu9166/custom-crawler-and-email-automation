@@ -38,6 +38,21 @@ def canonical_profile(url):
     return urlunsplit((parts.scheme, parts.netloc, parts.path.rstrip("/"), query, ""))
 
 
+def business_profile_links(links):
+    """Retain observed profile routes for later research, without claiming ownership."""
+    found = []
+    for link in links[:1000]:
+        try:
+            value = canonical_profile(link)
+            if value not in found:
+                found.append(value)
+        except ValueError:
+            pass
+        if len(found) >= 20:
+            break
+    return found
+
+
 def source_allowed(lead, url, db=None, email=None):
     from .web import domain_of
     if lead.get("lead_kind") == "profile":

@@ -2,6 +2,11 @@
 
 This opt-in mode runs the existing discovery/research jobs through a dedicated persistent Chromium profile on the VPS. It navigates normal LinkedIn company search/About pages and X public-profile search/header pages, reads visible business fields, and sends linked official websites directly into the existing crawler. No browser extension, CSV export/import, LinkedIn/X developer API key, paid scraper or publication API is required for this mode.
 
+The [17 October research upgrade](SOCIAL_RESEARCH_UPGRADE.md) adds buyer-role people
+search, visible personal Experience, optional account-visible Contact Info, company/X
+post research and X post-author search fallback. Dashboard controls and saved provider
+diagnostics accompany these paths. Configuration is not proof of live account access.
+
 This is a browser UI transport, not unrestricted access. The websites make their normal frontend requests. There is no spoofed fingerprint, proxy rotation, hidden API-data extraction, cookie cloning, login automation, CAPTCHA solving, private messaging or account action. Login/challenges, access denial and 429 responses hold that platform for operator attention. Normal profile-page access and account/site rules still apply. Unpublished emails are not available through this mechanism.
 
 ## Configure on the VPS
@@ -122,13 +127,13 @@ successful page-field extraction or authenticated access.
 
 ## Data and qualification
 
-LinkedIn `/in/` professional roots are supported through the separate [professional-source workflow](PROFESSIONAL_CONTACTS.md), associated with an existing company. They remain rejected by the business/company-profile importer. Its scoped reader excludes protected contact-info overlays and requires independent current-company/person review before recipient import.
+LinkedIn `/in/` professional roots are supported through the separate [professional-source workflow](PROFESSIONAL_CONTACTS.md), associated with an existing company. They remain rejected by the business/company-profile importer. The scoped reader supports visible About/Experience and an optional Contact Info dialog only when explicitly enabled in dashboard research settings. Account-visible sections are labeled separately. Independent current-company/person review is still required before recipient import.
 
-LinkedIn reads company heading, current About navigation and public Overview/definition fields such as website, industry, headquarters, phone and published business email. It ignores account navigation, member-profile routes, employee lists and private messages. X reads its scoped public profile header/bio; timeline content and private routes are not read. An opaque short-link label remains a website candidate until current company research corroborates it.
+The LinkedIn company reader captures its heading and Overview/definition fields such as website, industry, headquarters, phone and published business email. Member profiles use the separate professional reader. The X profile reader captures its scoped header/bio; separate post readers capture author-matched post text and permalinks. Account navigation, employee lists and private messages are excluded. An opaque short-link label remains a website candidate until current company research corroborates it.
 
 Source records use `managed_browser_public_profile` and `visible_business_fields` with capture time and text hash. Business identity, geography, buyer relevance and mailbox existence remain unverified. Public profile emails are candidate evidence; the adapter does not create verified contacts or send/probe email. Existing source/ownership/country/offer review and Reacher gates remain required. With failover disabled, a missing website field is `website_link_not_observed`; with failover enabled, independent search reports its actual match/coverage outcome. Neither observation confirms website absence; a profile-only prospect cannot pass website-absence review from a missing field alone.
 
-Search results are read only from rendered LinkedIn company-result cards or X UserCell cards, with bounded readiness waits and deduplication. Account shortcuts and timeline/post links are excluded. Results remain unqualified candidates, including possible non-business X accounts. Their current source evidence and independent website research must establish target fit. Search country hints are not verified geography. Public-profile capture only occurs on explicitly supported routes; redirects into private/account/employee routes and off-platform documents are blocked.
+Search results use rendered LinkedIn company/people cards or X UserCell cards, with bounded readiness waits and deduplication. A separate X latest-post reader supplies author hints when user-card search is empty and no access hold exists. Post text/permalinks are captured separately from profile headers; account shortcuts, quoted-only content and protected-account markers are excluded. Results remain unqualified candidates. Current source evidence and independent company research must establish target fit; search hints are not verified geography. Only explicitly supported research routes are allowed. Messaging, private account actions and off-platform documents remain blocked.
 
 ## Verification boundaries
 

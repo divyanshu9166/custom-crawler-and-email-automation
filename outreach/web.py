@@ -593,7 +593,9 @@ class PublicWeb:
                                                     render_seconds=page.get('render_seconds', 0),
                                                     document_reused=page.get('document_reused', False))
                     from .professionals import sourced_profile_links
+                    from .profiles import business_profile_links
                     self.report['pages'][-1].update(sha256=page['sha256'],professional_links=sourced_profile_links(page),
+                                                 business_profile_links=business_profile_links(page.get('links', [])),
                                                  named_people=page.get('named_people', []),
                                                  http_publication_retained=page.get('http_publication_retained', False),
                                                  http_navigation_retained=page.get('http_navigation_retained', False),

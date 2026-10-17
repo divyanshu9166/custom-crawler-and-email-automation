@@ -116,3 +116,18 @@ Latest completed reports for the original 50 candidate domains are 46 partial / 
 The latest README/original-workflow comparison is in `docs/README_WORKFLOW_CHECK.md`: 249 tests passed in 83.26 seconds and full Chromium checks passed. Free current-source service proposals now cover explicit inquiry/shopping/support/launch/WhatsApp cues, with review rather than invented pain. Learning now reports approval-frozen campaign/service/country/industry groups, accepted/human-reply/qualification/recorded-win rates and review guidance. Preflight loads managed Settings; source setup and deployment acceptance remain distinct.
 
 Businesses without a known website now have a distinct research/contact-review branch. Automatic discovery and direct profile imports record website-search scope, current public profile evidence and held published-email candidates. A website match routes to the normal crawler. Otherwise current business identity/activity, country, inquiry/order observation and search limits must be reviewed before a website/store-launch pitch. Indexed-only and inaccessible evidence cannot create a verified recipient. See `docs/PROFILE_PROSPECTS.md` and its dated check.
+
+## Agent Reach comparison improvements — 17 October 2026
+
+Implemented in the existing VPS browser/pipeline: company/buyer keyword people search,
+visible personal Experience, optional account-visible Contact Info, author-matched LinkedIn
+company and X posts, X latest-post author-search fallback, semantic search-card alternatives,
+saved source/operation timing and contact diagnostics, dashboard research controls and
+post evidence in the reviewed announcement-to-AI-writing path. Existing source, country,
+ownership, verifier, approval and sending gates remain separate. Settings and captures use
+the existing local VPS volume. See `docs/SOCIAL_RESEARCH_UPGRADE.md` for controls, data scope
+and exact two-file Compose deployment commands.
+
+The previously supplied VPS output proved the installed company About reader on one page.
+The additional paths in this upgrade require fresh VPS/session acceptance after deployment;
+local browser fixtures do not establish platform-wide availability or greater real email yield.

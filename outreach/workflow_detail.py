@@ -206,10 +206,10 @@ def build(db, settings, lead_id):
     elif any(lead['status']=='new' for lead in websites):
         nodes['D']['state'] = 'ready'
     count('E',sum(bool(evidence[lead['id']]) for lead in leads),len(leads),'Only fresh pages captured in the latest research attempt support new review. Public signals propose services; pain-point interpretation and recent-announcement meaning require review.')
-    contact_phase = phase({'contact_research','professional_research'}, {lead['id'] for lead in websites})
+    contact_phase = phase({'contact_research','professional_research','social_research'}, {lead['id'] for lead in leads})
     if contact_phase:
         nodes['E']['state'] = contact_phase
-        nodes['E']['details'].append('Public company/contact and professional-source research is '+contact_phase+'. Indexed emails stay held until corroborated by captured source evidence and current employer review.')
+        nodes['E']['details'].append('Company/contact, professional-profile or social-post research is '+contact_phase+'. Indexed emails stay held until corroborated by captured source evidence and current employer review.')
     nodes['E']['metric'] = f'{sum(evidence.values())} current source pages'
     same_domain = len(contacts)-len(external)
     published_same_domain = 0

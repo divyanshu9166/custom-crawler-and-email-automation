@@ -1,3 +1,33 @@
+# LinkedIn/X research upgrade verification — 17 October 2026
+
+The corrected full regression suite passed **1180 tests in 325.96 seconds**, with zero
+failures and one existing Starlette/httpx warning. A separately added protected-X-account
+rejection regression also passed. The focused desktop/mobile and privacy run passed 28
+cases. All 35 workflow-node mappings were verified against the passing full-suite report.
+Ruff and syntax checks for every dashboard/reader JavaScript file passed.
+
+Real Chromium fixtures exercised managed people cards, semantic search layouts, Experience,
+opt-in account-visible Contact Info, exact profile identity, hidden/dialog exclusion, durable
+denial holds, author/permalink matching, quote-only/repost/protected-account rejection,
+X latest-post author hints, timeout capture preservation and saved-source hash changes.
+Pipeline tests verified local post storage without automatic contact/probe creation, reviewed
+announcement evidence reaching AI-writing provenance, authenticated settings/queue APIs,
+preflight control guards, and same-prospect job serialization.
+
+Full dashboard JavaScript was checked against an isolated real API on desktop and mobile:
+saved provider outcomes and posts rendered, post sources appeared in announcement review
+but not the primary business finding selector, settings persisted and sending stayed OFF.
+Screenshots are local at `data/social-upgrade-ui/desktop.png` and `mobile.png`. No live social
+account, provider email probe or outreach was used by these checks. Test data is fictional.
+
+The user's earlier VPS output proved the installed company About reader on one LinkedIn
+page. It does not validate these new account-specific people/section/post paths. Docker/VPS
+runtime acceptance, representative live yield and mailbox delivery remain separate. No
+unrestricted access, invisible email recovery or Agent Reach performance superiority is
+claimed. See [features and deployment](docs/SOCIAL_RESEARCH_UPGRADE.md).
+
+Earlier dated verification snapshots follow with their original scopes.
+
 # Live US/UK acquisition recheck - 11 October 2026
 
 **575 tests passed in 130.31 seconds**, with one existing Starlette/httpx warning. Thirty-eight new intent/market/profile-route regressions cover bugs exposed by actual searches. Two current-code discovery waves reused 16 candidate companies across eight segment cells. Eight researched business representatives retain 205 current official pages, nine published company-domain inboxes and one separately reviewed owner Gmail; no qualification, recipient probe or outreach occurred in this check. Partial capture/continuation and restricted platforms were tested live. A genuine website-less email remains unaccepted. See [the scoped live proof](docs/LIVE_LEAD_ACCEPTANCE.md). Previous sections below retain their historical scopes.

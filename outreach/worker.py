@@ -67,6 +67,9 @@ async def execute_job(db, settings, job):
         elif job['kind']=='professional_research':
             from .professionals import research_professionals
             await research_professionals(db,settings,**payload)
+        elif job['kind']=='social_research':
+            from .social_research import research_known_posts
+            await research_known_posts(db, settings, payload['lead_id'])
         else:
             raise ValueError("Unknown job kind")
         current_job = db.one('SELECT * FROM jobs WHERE id=?', (job['id'],))
@@ -216,7 +219,7 @@ async def run(db, settings, stop):
     tasks = [asyncio.create_task(mail_loop(db, settings, stop)),
              asyncio.create_task(monitor_resources(admission, stop)),
              asyncio.create_task(job_loop(db, settings, stop, {"discover", "verify"}, schedules=True))]
-    tasks.extend(asyncio.create_task(job_loop(db, settings, stop, {"research", "screenshot", "performance", 'contact_research','professional_research'}, admission=admission))
+    tasks.extend(asyncio.create_task(job_loop(db, settings, stop, {"research", "screenshot", "performance", 'contact_research','professional_research','social_research'}, admission=admission))
                  for _ in range(settings.crawl_concurrency))
     try:
         await asyncio.gather(*tasks)

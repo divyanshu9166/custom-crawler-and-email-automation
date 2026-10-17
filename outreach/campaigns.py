@@ -68,7 +68,8 @@ def review_lead(db, lead_id, review):
     source = crawl_url(review["country_source"])
     if not source_allowed(lead, source):
         raise ValueError("Country evidence must be on the official company website")
-    available = [p for p in fresh_evidence(db,lead_id) if source_allowed(lead,p['url'])]
+    from .social_research import is_social_evidence
+    available = [p for p in fresh_evidence(db,lead_id) if source_allowed(lead,p['url']) or is_social_evidence(db, lead_id, p)]
     by_id = {e["id"]: e for e in available}
     country_evidence = next((e for e in available if crawl_url(e["url"]) == source), None)
     country_quote = review.get("country_quote", "").strip()
@@ -81,7 +82,7 @@ def review_lead(db, lead_id, review):
     if review["service"].startswith("whatsapp_") and len(review.get("channel_fit_notes", "").strip()) < 20:
         raise ValueError("Record WhatsApp channel fit, what is observed and what still needs qualification")
     evidence = by_id.get(review["evidence_id"])
-    if not evidence or review["quote"] not in evidence["text"] or len(review["quote"]) < 8:
+    if not evidence or not source_allowed(lead, evidence['url']) or review["quote"] not in evidence["text"] or len(review["quote"]) < 8:
         raise ValueError("Quote must match saved evidence for this lead")
     for field in ["observation", "suggestion", "fit_notes"]:
         if len(review[field].strip()) < 12:

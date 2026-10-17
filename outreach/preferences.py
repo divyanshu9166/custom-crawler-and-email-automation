@@ -15,6 +15,9 @@ MAIL_FIELDS = {"sender_name", "sender_company", "sender_email", "sender_website"
 AUTH_FIELDS = {"admin_user", "admin_password_hash", "session_version"}
 WRITER_FIELDS = {'draft_api_url', 'draft_api_key', 'draft_model', 'draft_timeout_seconds'}
 RUNTIME_FIELDS = {'worker_enabled', 'sending_enabled'}
+RESEARCH_FIELDS = {'linkedin_people_search_enabled', 'linkedin_profile_experience_enabled',
+                   'linkedin_contact_info_enabled', 'social_posts_enabled', 'social_posts_max_profiles',
+                   'social_posts_max_posts'}
 
 
 def password_matches(settings, password):
@@ -41,7 +44,7 @@ class Preferences:
         self.saved = {}
         if self.path.exists():
             self.saved = json.loads(self.path.read_text(encoding="utf-8"))
-            if not isinstance(self.saved, dict) or set(self.saved) - MAIL_FIELDS - AUTH_FIELDS - WRITER_FIELDS - RUNTIME_FIELDS:
+            if not isinstance(self.saved, dict) or set(self.saved) - MAIL_FIELDS - AUTH_FIELDS - WRITER_FIELDS - RUNTIME_FIELDS - RESEARCH_FIELDS:
                 raise RuntimeError("Invalid managed workspace settings")
             checked = Settings.model_validate({**settings.model_dump(), **self.saved})
             for key in self.saved:
@@ -49,7 +52,7 @@ class Preferences:
 
     def public(self):
         with self.lock:
-            values = {k: getattr(self.settings, k) for k in (MAIL_FIELDS | WRITER_FIELDS) - {"smtp_password", "imap_password", 'draft_api_key'}}
+            values = {k: getattr(self.settings, k) for k in (MAIL_FIELDS | WRITER_FIELDS | RESEARCH_FIELDS) - {"smtp_password", "imap_password", 'draft_api_key'}}
             return {**values, "smtp_password_configured": bool(self.settings.smtp_password),
                     'draft_api_key_configured': bool(self.settings.draft_api_key),
                     "imap_password_configured": bool(self.settings.imap_password), "admin_user": self.settings.admin_user,
@@ -125,6 +128,19 @@ class Preferences:
             db.set('paused', 'true')
             self.persist({key: getattr(checked, key) for key in patch})
             db.event('workspace_writer_settings_changed', {'fields': sorted(patch), 'sending_paused': True})
+            return self.public()
+
+    def update_research(self, db, patch):
+        with self.lock:
+            if not patch or set(patch) - RESEARCH_FIELDS:
+                raise ValueError('Choose supported research controls')
+            for key, value in patch.items():
+                if key.endswith('_enabled') and type(value) is not bool:
+                    raise ValueError('Research switches must be true or false')
+            checked = Settings.model_validate({**self.settings.model_dump(), **patch})
+            db.set('paused', 'true')
+            self.persist({key: getattr(checked, key) for key in patch})
+            db.event('workspace_research_settings_changed', {'fields': sorted(patch), 'sending_paused': True})
             return self.public()
 
     def update_runtime(self, db, patch):

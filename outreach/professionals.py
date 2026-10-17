@@ -234,6 +234,17 @@ async def research_professionals(db, settings, lead_id, profile_url=""):
                     )
                 except ValueError:
                     pass
+            from .profiles import canonical_profile
+            for link in page.get('business_profile_links', page.get('links', []))[:500]:
+                try:
+                    business = canonical_profile(link)
+                    if business not in {h['url'] for h in report['other_public_profile_hints']}:
+                        report['other_public_profile_hints'].append({'url': business, 'origin': 'captured_official_navigation',
+                            'source_url': saved['url'], 'company_sha256': saved['sha256'], 'company_evidence_id': saved['id']})
+                except ValueError:
+                    pass
+                if len(report['other_public_profile_hints']) >= 20:
+                    break
         # Refresh a bounded set of observed official routes when older reports
         # lack outgoing profile links. No guessed profile handles or paths.
         if settings.professional_refresh_official_links and len(targets) < settings.professional_max_profiles:
@@ -292,6 +303,24 @@ async def research_professionals(db, settings, lead_id, profile_url=""):
         name = company_title(lead["company"]).replace('"', " ").strip()
         report['query_company_name'] = name
         report['named_people'] = list(people.values())[:20]
+        if settings.platform_browser_enabled and settings.linkedin_people_search_enabled and len(targets) < settings.professional_max_profiles:
+            from .social_browser import browser_people_discover
+            from .source_status import record
+            query = f'"{name}" (founder OR owner OR director OR marketing OR ecommerce)'
+            started = time.monotonic()
+            rows = await browser_people_discover(settings, query, settings.professional_max_profiles)
+            report['queries'].append({'query': query, 'source': 'managed_browser:linkedin.com', 'results': len(rows),
+                'engine_issues': getattr(rows, 'engine_issues', []), 'providers': getattr(rows, 'provider_reports', [])})
+            record(db, 'managed_browser:linkedin.com', 'people_search', query,
+                   {'state': 'captured' if rows else 'unavailable', 'reason': 'Search cards are unverified buyer hints'},
+                   lead_id=lead_id, elapsed=time.monotonic()-started)
+            for row in rows:
+                try:
+                    _, target = professional_target(row['url'])
+                    targets.setdefault(target, {'origin': 'managed_people_search', 'query': query,
+                        'snippet': row.get('snippet', '')[:1200], 'identity_verified': False, 'buyer_verified': False})
+                except (ValueError, KeyError):
+                    pass
         person_queries = []
         for person in list(people)[:3]:
             person_queries.extend([f'site:linkedin.com/in/ "{person}" "{name}"',
@@ -304,6 +333,8 @@ async def research_professionals(db, settings, lead_id, profile_url=""):
             f'"{lead["domain"]}" LinkedIn founder',
             f'"{name}"',
         ]
+        if settings.platform_browser_enabled and not settings.platform_browser_public_fallback:
+            queries = []
         for query in list(dict.fromkeys(queries))[:settings.professional_max_queries]:
             if len(targets) >= settings.professional_max_profiles:
                 break
@@ -346,10 +377,11 @@ async def research_professionals(db, settings, lead_id, profile_url=""):
             await asyncio.sleep(settings.discovery_query_delay_seconds)
     for target in list(targets)[: settings.professional_max_profiles]:
         eligible_lead(db, lead_id)
+        started = time.monotonic()
         snap = await profile_snapshot(settings, target)
         eligible_lead(db, lead_id)
         state = snap.get("state", "unavailable")
-        text = snap.get("text", "")[:12000] if state == "captured" else ""
+        text = snap.get("text", "")[:40000] if state == "captured" else ""
         # Exact capture identity is mandatory even for adapter replacements.
         if state == "captured":
             try:
@@ -369,7 +401,9 @@ async def research_professionals(db, settings, lead_id, profile_url=""):
             "sha256": hashlib.sha256(text.encode()).hexdigest(),
             "published_emails": public_addresses(text),
             "capture_method": snap.get("capture_method", "public_professional_http"),
-            "scope": "public_professional_fields",
+            "scope": snap.get('scope', 'public_professional_fields'),
+            "sections": snap.get('sections', {}),
+            "section_errors": snap.get('section_errors', []),
             "identity_verified": False,
             "employer_verified": False,
             "source_hint": targets[target],
@@ -389,6 +423,10 @@ async def research_professionals(db, settings, lead_id, profile_url=""):
             {"url": target, "state": state, "published_email_candidates": len(value["published_emails"]),
              "access_issue": value['access_issue']}
         )
+        from .source_status import record
+        record(db, 'managed_browser:' + professional_target(target)[0] if settings.platform_browser_enabled else 'website',
+               'professional_profile', target, {**snap, 'state': state}, lead_id=lead_id,
+               elapsed=time.monotonic()-started, contacts=len(value['published_emails']))
         if settings.fxembed_profiles_enabled and professional_target(target)[0] == 'x.com' and state != 'captured':
             from .fxembed import profile_hint
             hint = await profile_hint(settings, target)
@@ -396,6 +434,12 @@ async def research_professionals(db, settings, lead_id, profile_url=""):
             # Keep the original denial and the community response separately.
             # These hints cannot enter first-party source review or verify/send.
             report['community_profile_hints'].append(hint)
+            record(db, 'fxembed_profiles', 'profile_hint', target, hint, lead_id=lead_id,
+                   contacts=len(hint.get('published_email_candidates', [])))
+    if settings.social_posts_enabled and settings.platform_browser_enabled:
+        from .social_research import research_posts
+        report['social_research'] = await research_posts(db, settings, lead_id,
+            report['other_public_profile_hints'] + [{'url': u, **h} for u, h in targets.items() if '/company/' in u or professional_target(u)[0] == 'x.com'])
     report.update(
         state="captured" if any(c["state"] == "captured" for c in report["captures"]) else "held",
         official_person_email_candidates=[{**publication, 'name': person['name'], 'role': person.get('role', ''),
