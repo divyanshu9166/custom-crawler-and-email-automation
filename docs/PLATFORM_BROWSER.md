@@ -60,6 +60,36 @@ Preflight now reports managed mode, display/profile presence and browser install
 even if website rendering is disabled. It never reports authentication from these
 configuration checks. See [the complete pending VPS checklist](VPS_DEPLOYMENT_CHECKLIST.md).
 
+## Reader diagnostics
+
+### Diagnosing an empty company reader
+
+`fields_not_ready` means the reader did not find its expected visible heading,
+matching About link or Website/Industry definition list. It is neither a
+successful capture nor a proven LinkedIn denial. Keep Worker and Sending OFF
+and inspect only structural metadata with the bounded diagnostic:
+
+```sh
+git pull --ff-only
+sudo docker compose -f compose.yaml -f compose.platform-browser.yaml exec -T app xvfb-run -a python - < scripts/check_platform_browser.py
+```
+
+The host supplies the script on stdin, so this diagnostic also works before
+rebuilding an older app image. It uses the installed reader and browser module,
+the persistent profile and a temporary private virtual display. Output includes
+visible heading/definition-list counts and field labels. It does not print
+account navigation, page bodies, cookie values or hidden framework data. A
+non-captured result exits with status 2 and remains unverified. Authentication
+challenges and HTTP denials stop inspection and preserve normal platform holds.
+
+If Chromium instead reports a profile in use on a former setup-container host,
+stop the app and verify that no container using its profile volume is running.
+Only then recover the three Chromium SingletonLock/SingletonCookie/SingletonSocket
+entries while holding the application's session lock. Preserve the profile,
+cookies and `session.lock` file. Never automatically delete these entries while
+a live browser may own the profile. A recovered launch is a separate check from
+successful page-field extraction or authenticated access.
+
 ## Data and qualification
 
 LinkedIn `/in/` professional roots are supported through the separate [professional-source workflow](PROFESSIONAL_CONTACTS.md), associated with an existing company. They remain rejected by the business/company-profile importer. Its scoped reader excludes protected contact-info overlays and requires independent current-company/person review before recipient import.
