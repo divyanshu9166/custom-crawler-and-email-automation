@@ -53,6 +53,33 @@ missing contacts, weak business fit and insufficient context remain explicit exc
 
 ## NVIDIA HTTP 404
 
+### Connection-test feedback update — 18 October 2026
+
+The earlier UI disabled Test AI connection without changing its label, and placed its
+result below the buttons, which could be off-screen. It now shows an elapsed-time label,
+scrolls the status into view above the controls, blocks testing unsaved writer edits and
+prevents concurrent save/test actions. The endpoint tests a frozen saved configuration.
+The selected model is retained; no Nemotron/DeepSeek substitution happens automatically.
+
+Connection checks use at most 60 seconds per provider operation, a 65-second server
+deadline and a 75-second browser deadline. These limits do not change the full drafting
+timeout. A browser timeout does not prove that the saved key is invalid, and a synthetic
+request already submitted may still finish. The latest safe verdict is saved in the local
+SQLite settings table and shown after a page reload. Saving writer settings invalidates
+that verdict; an older test cannot overwrite a newer check or configuration.
+
+HTTP 200 with a valid chat envelope establishes connection/key/model acceptance at that
+moment even when the tiny 128-token synthetic test is truncated or contains only reasoning.
+Such results are labelled output-incomplete, not a missing-key failure or successful draft
+generation. Timeout and HTTP rejection remain distinct. Neither provider text nor reasoning
+nor arbitrary finish-reason metadata is echoed. Actual credentials remain in the private
+workspace-settings file, not in the diagnostic verdict. A running preparation shows an old
+failure explicitly as **Previous attempt**, including its reason.
+
+The user's selected `deepseek-ai/deepseek-v4.1-flash` model is listed in NVIDIA's
+[model API reference](https://docs.api.nvidia.com/nim/reference/nvidia-deepseek-v4_1-flash-infer).
+This does not establish the user's account access, actual endpoint response or model latency.
+
 The documented hosted route is `POST https://integrate.api.nvidia.com/v1/chat/completions`.
 See [NVIDIA's LLM API reference](https://docs.api.nvidia.com/nim/reference/llm-apis).
 

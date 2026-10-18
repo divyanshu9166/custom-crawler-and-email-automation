@@ -125,6 +125,7 @@ class Preferences:
             checked = Settings.model_validate({**self.settings.model_dump(), **patch})
             from .email_writer import completion_url
             completion_url(checked.draft_api_url)
+            db.set('writer_last_check', 'null')
             db.set('paused', 'true')
             self.persist({key: getattr(checked, key) for key in patch})
             db.event('workspace_writer_settings_changed', {'fields': sorted(patch), 'sending_paused': True})

@@ -51,7 +51,7 @@ def completion_url(base):
     return base + '/chat/completions'
 
 
-def chat(settings, instructions, packet, *, before_request=None, max_tokens=3000):
+def chat(settings, instructions, packet, *, before_request=None, max_tokens=3000, diagnostic=False):
     """Shared bounded provider call; no body/key echo and no alternate-model fallback."""
     if not configuration(settings)['configured']:
         raise ValueError(configuration(settings)['note'])
@@ -77,9 +77,20 @@ def chat(settings, instructions, packet, *, before_request=None, max_tokens=3000
                 or not data['choices'] or not isinstance(data['choices'][0], dict)):
             raise ValueError('AI writing returned invalid response data; existing drafts preserved')
         choice = data['choices'][0]
+        if diagnostic:
+            message = choice.get('message')
+            if not isinstance(message, dict):
+                raise ValueError('AI provider returned invalid chat data; key/model acceptance is not established')
+            finish = choice.get('finish_reason')
+            finish = finish if isinstance(finish, str) and finish in {'stop', 'length', 'content_filter', 'tool_calls', 'function_call'} else 'unknown'
+            return {'finish_reason': finish,
+                    'has_final_text': isinstance(message.get('content'), str) and bool(message['content'].strip()),
+                    'has_reasoning': bool(message.get('reasoning_content') or message.get('reasoning'))}
         if choice.get('finish_reason') != 'stop':
             raise ValueError('AI writing output incomplete or refused; no drafts saved')
         return choice['message']['content']
+    except httpx.TimeoutException:
+        raise ValueError('AI provider response timed out; key validity is not established. Check provider load and VPS connectivity; existing drafts preserved.') from None
     except httpx.HTTPError:
         raise ValueError('AI writing endpoint unavailable; existing drafts preserved, no template fallback') from None
     except (KeyError, IndexError, TypeError, json.JSONDecodeError):
@@ -88,11 +99,14 @@ def chat(settings, instructions, packet, *, before_request=None, max_tokens=3000
 
 def test_connection(settings):
     """Explicit synthetic call: no prospect information and no messages saved."""
-    answer = chat(settings, 'Reply with OK only.', 'Connection test. No prospect data.', max_tokens=128)
-    if not isinstance(answer, str) or not answer.strip():
-        raise ValueError('AI connection returned no final text; check model/output settings')
-    return {'ready': True, 'model': settings.draft_model.strip(),
-            'note': 'Synthetic chat request passed. Prospect research and email quality still need review.'}
+    bounded = settings.model_copy(update={'draft_timeout_seconds': min(60, settings.draft_timeout_seconds)})
+    answer = chat(bounded, 'Reply with OK only.', 'Connection test. No prospect data.', max_tokens=128, diagnostic=True)
+    ready = answer['finish_reason'] == 'stop' and answer['has_final_text']
+    incomplete = ('The small test reached its output-token limit.' if answer['finish_reason'] == 'length'
+                  else 'The response contained no complete final text.')
+    return {'ready': ready, 'connection_ok': True, 'model': settings.draft_model.strip(), **answer,
+            'note': 'Synthetic chat request passed. Prospect research and email quality still need review.' if ready else
+                    'Provider accepted the configured key/model and returned HTTP 200. '+incomplete+' Check output/reasoning settings; this is not evidence of an unsaved key. Draft generation remains unverified.'}
 
 
 def validate_endpoint(base):

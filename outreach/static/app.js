@@ -9,9 +9,9 @@ const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({"&":"&amp
 const stamp = value => value ? new Date(Number(value) * 1000).toLocaleString() : "—";
 const link = url => /^https?:\/\//i.test(url || "") ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(url)}</a>` : esc(url);
 function notice(text, bad=false){$("#notice").textContent=text;$("#notice").className=bad?"error":"";}
-async function api(path, method="GET", payload){
-  const response=await fetch(path,{method,headers:payload?{"Content-Type":"application/json"}:{},body:payload?JSON.stringify(payload):undefined});
-  let result;try{result=await response.json();}catch{throw new Error("Unexpected server response");}
+async function api(path, method="GET", payload, options={}){
+  const response=await fetch(path,{method,headers:payload?{"Content-Type":"application/json"}:{},body:payload?JSON.stringify(payload):undefined,signal:options.signal});
+  let result;try{result=await response.json();}catch{throw new Error(`Unexpected server response (HTTP ${response.status}). Check the app/tunnel connection.`);}
   if(!response.ok)throw new Error(typeof result.detail==="string"?result.detail:JSON.stringify(result.detail));
   return result;
 }
@@ -95,7 +95,7 @@ const options = (values, selected) => values.map(v=>`<option value="${esc(v)}" $
 function preparationHTML(data,finding){
   const p=data.preparation||{},j=p.job,r=p.result;
   const busy=j&&['pending','running'].includes(j.state);
-  return `<section class="panel" aria-label="Email preparation"><h3>Prepare → review emails</h3>${data.messages?.length?'<a href="#email-sequence">Review email drafts ↓</a>':''}<p>${busy?'Preparation '+esc(j.state)+'. Worker must be ON; nothing will be sent.':j?.state==='failed'?esc(j.error||'Preparation failed; inspect Operations.'):r?esc(r.reason):'Prepare country evidence, business fit, one useful offer and four individual AI emails from saved research. Review exceptions only when evidence is missing.'}</p>${r?`<p class="small">Result: ${esc(r.state.replaceAll('_',' '))} · AI prepared; final recipient and message review required.</p>`:''}${finding.qualification_method==='research_ai'?`<details><summary>AI preparation evidence</summary><p>${esc(finding.country_quote)}</p><p>Observed: ${esc(finding.observation)}</p><p>Proposed: ${esc(finding.suggestion)}</p><blockquote>${esc(finding.quote)}</blockquote><p>No buyer authority, permission or conversion gain is established by AI preparation.</p></details>`:''}</section>`;
+  return `<section class="panel" aria-label="Email preparation"><h3>Prepare → review emails</h3>${data.messages?.length?'<a href="#email-sequence">Review email drafts ↓</a>':''}<p>${busy?'Preparation '+esc(j.state)+'. Worker must be ON; nothing will be sent.':j?.state==='failed'?esc(j.error||'Preparation failed; inspect Operations.'):r?esc(r.reason):'Prepare country evidence, business fit, one useful offer and four individual AI emails from saved research. Review exceptions only when evidence is missing.'}</p>${r?`<p class="small">${busy?'Previous attempt':'Result'}: ${esc(r.state.replaceAll('_',' '))}${busy?' · '+esc(r.reason):r.state==='drafts_ready'?' · Final recipient and message review required.':''}</p>`:''}${finding.qualification_method==='research_ai'?`<details><summary>AI preparation evidence</summary><p>${esc(finding.country_quote)}</p><p>Observed: ${esc(finding.observation)}</p><p>Proposed: ${esc(finding.suggestion)}</p><blockquote>${esc(finding.quote)}</blockquote><p>No buyer authority, permission or conversion gain is established by AI preparation.</p></details>`:''}</section>`;
 }
 async function pollPreparation(id){
   if(currentId!==id||document.hidden||$('#pipeline').hidden)return;

@@ -43,8 +43,8 @@ must be supported by a named business location in country_quote; otherwise hold.
 
 
 def latest(db, lead_id):
-    event = db.one("SELECT detail FROM events WHERE kind='preparation' AND json_extract(detail,'$.lead_id')=? ORDER BY id DESC LIMIT 1", (lead_id,))
-    job = db.one("SELECT state,error FROM jobs WHERE kind='prepare' AND json_extract(payload,'$.lead_id')=? ORDER BY id DESC LIMIT 1", (lead_id,))
+    event = db.one("SELECT detail,created_at FROM events WHERE kind='preparation' AND json_extract(detail,'$.lead_id')=? ORDER BY id DESC LIMIT 1", (lead_id,))
+    job = db.one("SELECT id,state,error,created_at,started_at FROM jobs WHERE kind='prepare' AND json_extract(payload,'$.lead_id')=? ORDER BY id DESC LIMIT 1", (lead_id,))
     return {'result': json.loads(event['detail']) if event else None, 'job': job}
 
 

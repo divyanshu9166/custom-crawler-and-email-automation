@@ -491,6 +491,7 @@ def create_app(settings=None):
     @app.get("/api/settings", dependencies=[Depends(auth)])
     def workspace_settings():
         return {**preferences.public(), 'demo': db.get('demo') == 'true',
+                'writer_last_check': json.loads(db.get('writer_last_check', 'null')),
                 'paused': db.get('paused', 'true') != 'false'}
 
     @app.put("/api/settings/mail", dependencies=[Depends(auth)])
@@ -502,11 +503,34 @@ def create_app(settings=None):
         return preferences.update_writer(db, value.model_dump(exclude_none=True))
 
     @app.post('/api/providers/writer/test', dependencies=[Depends(auth)])
-    def test_writer():
+    async def test_writer():
         from .email_writer import test_connection
         if db.get('demo') == 'true':
             raise ValueError('Offline demo cannot call the AI provider')
-        return test_connection(settings)
+        frozen = settings.model_copy()
+        started = time.time()
+        marker = secrets.token_hex(8)
+        def save(value):
+            # A newer test or writer-settings save supersedes this check.
+            with db.connect() as con:
+                con.execute('BEGIN IMMEDIATE')
+                row = con.execute("SELECT value FROM settings WHERE key='writer_last_check'").fetchone()
+                current = json.loads(row[0]) if row else None
+                if current and current.get('check_id') == marker:
+                    con.execute("UPDATE settings SET value=? WHERE key='writer_last_check'", (json.dumps(value),))
+                    return True
+                return False
+        base = {'check_id': marker, 'model': frozen.draft_model.strip(), 'started_at': started}
+        db.set('writer_last_check', json.dumps({**base, 'state': 'running', 'note': 'Synthetic AI connection test is running.'}))
+        try:
+            result = await asyncio.wait_for(asyncio.to_thread(test_connection, frozen), timeout=65)
+            if not save({**base, **result, 'state': 'ready' if result['ready'] else 'output_incomplete', 'elapsed_seconds': round(time.time()-started, 1)}):
+                raise ValueError('Writer settings or a newer test superseded this check; test the current saved configuration')
+            return result
+        except (ValueError, asyncio.TimeoutError) as exc:
+            message = str(exc) if isinstance(exc, ValueError) else 'AI test exceeded 65 seconds. No connection verdict; key validity is unknown. Check provider latency and VPS connectivity.'
+            save({**base, 'state': 'failed', 'note': message, 'elapsed_seconds': round(time.time()-started, 1)})
+            raise ValueError(message) from None
 
     @app.post('/api/leads/{lead_id}/prepare', dependencies=[Depends(auth)])
     def prepare_emails(lead_id: int):

@@ -1,3 +1,25 @@
+# AI connection-test feedback and diagnostic verdicts — 18 October 2026
+
+The focused writer, preparation, real Chromium desktop/mobile, settings and runtime suite
+passed **109 tests in 44.74 seconds**, with one existing Starlette/httpx warning. The final
+unsaved-edit guard and deterministic countdown/timeout fixtures passed **17 feedback tests
+in 9.55 seconds**. Ruff and JavaScript syntax/diff checks passed. This is focused validation;
+the preceding 1251-test full-suite result below predates this diagnostic refinement.
+
+The screenshot showed a disabled test button and a saved-key indicator, not an actual
+provider response. Inspection found an unchanged waiting-button label, an off-screen result
+area and no browser-wide deadline. Tests cover immediate visible progress, an elapsed
+counter, success/error/timeout recovery, no duplicate request, late-response preservation,
+saved-key roundtrip without exposure, private verdict persistence/invalidation and stale-test
+rejection after writer configuration changes. HTTP 200 truncated/empty-final responses now
+report connection acceptance separately from generation readiness. Read timeout, 401, 404
+and 429 remain distinct failures. Provider text, reasoning and untrusted finish reasons
+cannot echo secrets. A running preparation labels its prior error as Previous attempt.
+
+No live NVIDIA key/request or VPS state was inspected. The selected DeepSeek model is
+documented by NVIDIA, but account access, latency and actual drafting remain unverified.
+See [the feedback behavior and deployment commands](docs/AUTO_PREPARATION.md).
+
 # Automatic preparation and AI connection diagnostics — 18 October 2026
 
 Full suite: **1251 passed in 377.03 seconds**, with one existing Starlette/httpx

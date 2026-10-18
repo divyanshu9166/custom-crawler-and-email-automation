@@ -31,6 +31,7 @@ def test_one_click_preparation_shows_drafts_or_preserves_unsaved_edits(settings,
               'quote': 'Request a quote for office cleaning.', 'observation': 'The homepage invites office-cleaning quote requests.',
               'suggestion': 'Explore outlining cleaning schedule options next to this invitation; assess usefulness before changing it.'}
     monkeypatch.setattr(preparation, '_assessment', lambda *a: {'ready': True, 'review': review})
+    db.event('preparation', {'lead_id': lid, 'state': 'needs_attention', 'reason': 'Fictional earlier provider failure'})
     monkeypatch.setattr(email_writer, 'test_connection', lambda s: {'ready': True, 'note': 'Synthetic chat request passed.'})
     client = TestClient(create_app(settings), base_url=settings.public_url)
     client.headers['Authorization'] = 'Bearer '+settings.api_token
@@ -62,6 +63,8 @@ def test_one_click_preparation_shows_drafts_or_preserves_unsaved_edits(settings,
             page.get_by_role('button', name='Prepare emails', exact=True).click()
             expect(page.locator('#notice')).to_contain_text('Preparation queued')
             expect(page.locator('#prepare-emails')).to_be_disabled()
+            expect(page.get_by_role('region', name='Email preparation')).to_contain_text('Previous attempt: needs attention')
+            expect(page.get_by_role('region', name='Email preparation')).to_contain_text('Fictional earlier provider failure')
             if editing:
                 page.get_by_text('02 · Advanced: edit qualification & offer manually', exact=True).click()
                 page.locator('#review-form [name=fit_notes]').fill('Keep this unsaved operator edit.')
@@ -85,6 +88,8 @@ def test_one_click_preparation_shows_drafts_or_preserves_unsaved_edits(settings,
             expect(page.locator('[name=draft_api_url]')).to_have_value('https://integrate.api.nvidia.com/v1')
             expect(page.locator('[name=draft_model]')).to_have_value('nvidia/nemotron-3-ultra-550b-a55b')
             assert settings.draft_model == 'fictional-model'  # filling a preset does not save or call it
+            page.get_by_role('button', name='Save AI writer settings', exact=True).click()
+            expect(page.locator('#writer-settings-result')).to_contain_text('AI writer settings saved')
             page.get_by_role('button', name='Test AI connection', exact=True).click()
             expect(page.locator('#writer-test-result')).to_contain_text('Synthetic chat request passed')
             assert ('POST', '/api/providers/writer/test') in calls
