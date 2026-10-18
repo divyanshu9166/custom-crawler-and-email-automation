@@ -26,6 +26,17 @@ missing questions. Writer prompt v3 now explicitly rejects those assumptions; lo
 require questions in touches 0-2 and reject the observed unsupported checklist assertion.
 These checks are deliberately narrow, not a general semantic entailment guarantee.
 
+The deployed v3 writer endpoint subsequently returned HTTP 200 and saved all four drafts.
+Assistant review still found residual unsupported compliance/local-offer assumptions and
+removed them through the normal message-edit endpoints, with a `draft_copy_review` event.
+Final database inspection: four `draft` messages, zero scheduled messages, zero sent messages,
+and sending disabled. The revised copy proposes reviewing the existing quote journey without
+asserting missing tools, specific form mechanics, lost conversions or completed work.
+This proves the deployed writer/storage/edit path for this prospect. It does not establish
+unattended qualification reliability: the latest automatic assessment job remained failed
+on its exact opportunity quote. Existing valid qualification was used for the separate writer
+test; no failed job was marked successful or sending/recipient approval bypassed.
+
 # AI connection-test feedback and diagnostic verdicts — 18 October 2026
 
 The focused writer, preparation, real Chromium desktop/mobile, settings and runtime suite
