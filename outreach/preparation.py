@@ -265,7 +265,7 @@ def prepare(db, settings, lead_id, *, cancelled=lambda: False):
         # review_lead performs its own transaction and source-hash checks as well.
         review_lead(db, lead_id, review, expected_lead=lead, expected_contacts=contacts_before, review_method='research_ai')
         create_drafts(db, settings, contact['id'], cancelled=cancelled, preserve_existing=True)
-        record('drafts_ready', 'AI preparation complete. Review the recipient, source-backed offer and all four emails.',
+        record('drafts_ready', 'AI preparation complete. Review the recipient, source-backed offer and email.',
                contact_id=contact['id'], service=review['service'], source_ids=[p['id'] for p in pages])
     except ValueError as exc:
         # All propagated ValueErrors here come from controlled local validation, never provider bodies.

@@ -16,7 +16,7 @@ from outreach.research import add_lead, add_contact
 @pytest.mark.parametrize('mobile', [False, True])
 @pytest.mark.parametrize('editing', [False, True])
 def test_one_click_preparation_shows_drafts_or_preserves_unsaved_edits(settings, db, monkeypatch, mobile, editing):
-    settings.worker_enabled = settings.sending_enabled = False
+    settings.worker_enabled = settings.sending_enabled = settings.followups_enabled = False
     settings.draft_api_key, settings.draft_model = 'fictional-key', 'fictional-model'
     text = 'Bright Demo Ltd provides commercial cleaning across the UK. Request a quote for office cleaning. Business contact hello@bright-demo.com.'
     lid = add_lead(db, 'Bright Demo Ltd', 'https://bright-demo.com', 'A', 'https://bright-demo.com')
@@ -60,12 +60,13 @@ def test_one_click_preparation_shows_drafts_or_preserves_unsaved_edits(settings,
             page.get_by_role('button', name='Pipeline', exact=True).click()
             page.locator(f'[data-lead="{lid}"]').click()
             expect(page.locator('#review-form')).not_to_be_visible()
-            page.get_by_role('button', name='Prepare emails', exact=True).click()
+            page.get_by_role('button', name='Create email', exact=True).click()
             expect(page.locator('#notice')).to_contain_text('Preparation queued')
             expect(page.locator('#prepare-emails')).to_be_disabled()
             expect(page.get_by_role('region', name='Email preparation')).to_contain_text('Previous attempt: needs attention')
             expect(page.get_by_role('region', name='Email preparation')).to_contain_text('Fictional earlier provider failure')
             if editing:
+                page.locator('#advanced-research > summary').click()
                 page.get_by_text('02 · Advanced: edit qualification & offer manually', exact=True).click()
                 page.locator('#review-form [name=fit_notes]').fill('Keep this unsaved operator edit.')
             preparation.prepare(db, settings, lid)
@@ -75,10 +76,10 @@ def test_one_click_preparation_shows_drafts_or_preserves_unsaved_edits(settings,
                 expect(page.locator('#review-form [name=fit_notes]')).to_have_value('Keep this unsaved operator edit.')
                 expect(page.locator('#notice')).to_contain_text('Your edits are preserved')
             else:
-                expect(page.get_by_role('region', name='Email preparation')).to_contain_text('AI preparation complete')
-                expect(page.locator('[data-edit]')).to_have_count(4)
+                expect(page.get_by_role('region', name='Email preparation')).to_contain_text('Your email is ready to review')
+                expect(page.locator('[data-edit]')).to_have_count(1)
                 expect(page.locator('[data-edit]').first.locator('[name=body]')).not_to_have_value('')
-                page.get_by_role('link', name='Review email drafts').click()
+                page.get_by_role('link', name='Review email').click()
                 output = Path(__file__).resolve().parents[1] / 'data' / 'preparation-ui'
                 output.mkdir(parents=True, exist_ok=True)
                 page.screenshot(path=str(output / ('mobile.png' if mobile else 'desktop.png')))
@@ -94,6 +95,7 @@ def test_one_click_preparation_shows_drafts_or_preserves_unsaved_edits(settings,
             expect(page.locator('#writer-test-result')).to_contain_text('Synthetic chat request passed')
             assert ('POST', '/api/providers/writer/test') in calls
             page.get_by_role('button', name='Pipeline', exact=True).click()
+            page.locator('.list-tools > summary').click()
             page.get_by_role('button', name='Prepare pending emails', exact=True).click()
             expect(page.locator('#notice')).to_contain_text('0 preparation jobs queued; 1 prospects need attention')
             page.get_by_text('Latest batch result', exact=True).click()

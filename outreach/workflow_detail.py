@@ -29,12 +29,12 @@ STAGES = [
     ('H', 'Hold & further research', 'Automatic hold + review', 'prospect'),
     ('AA', 'Campaign A: inquiries & bookings', 'Proposals + review', 'prospect'),
     ('BB', 'Campaign B: ecommerce & WhatsApp', 'Proposals + review', 'prospect'),
-    ('I', 'Personalized pitch + 3 follow-ups', 'Drafting + review', 'prospect'),
+    ('I', 'Personalized email', 'Drafting + review', 'prospect'),
     ('J', 'Review messages & eligibility', 'Human review', 'prospect'),
     ('K', 'Approve, window & quota', 'Approval + scheduling', 'prospect'),
     ('L', 'SMTP submission & Message-ID', 'Automatic', 'settings'),
     ('M', 'Independent IMAP monitoring', 'Automatic', 'operations'),
-    ('N', 'Next follow-up; stop at touch 4', 'Automatic', 'prospect'),
+    ('N', 'Follow-up policy', 'Automatic', 'prospect'),
     ('O', 'Reply stops cold sequence', 'Automatic + conversation', 'prospect'),
     ('P', 'Global suppression', 'Automatic', 'prospect'),
     ('R', 'Review reply & promised value', 'Operator review', 'prospect'),
@@ -262,6 +262,8 @@ def build(db, settings, lead_id):
     put('N','queued' if followups else 'complete' if finished_sequences else 'waiting',f'{len(followups)} due-dated follow-ups; {len(finished_sequences)} finished sequences','Days 1/4/9/15 use actual accepted submissions and minimum spacing. Touch 4 ends the cold sequence; replies/opt-outs/holds override scheduling.')
     if followups and base['sending_paused']:
         nodes['N']['state'] = 'paused'
+    if not settings.followups_enabled:
+        put('N', 'complete', 'Automatic follow-ups off', 'Only the initial email can be sent. Existing follow-up history is preserved; further outreach requires a separate product decision.')
     reply_leads = {next(c['lead_id'] for c in contacts if c['id']==e['contact_id']) for e in events if e['kind']=='reply' and e['contact_id'] in cids}
     reply_leads.update(a['lead_id'] for a in activities if a['kind']=='reply')
     put('O','complete' if reply_leads else 'waiting',f'{len(reply_leads)} recorded conversations','A recorded human reply stops future cold touches. Continue the real conversation; do not automatically restart cold email.')

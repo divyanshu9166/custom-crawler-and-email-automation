@@ -1,3 +1,27 @@
+# Focused workspace and one initial email — 18 October 2026
+
+The complete local suite passed **1,300 tests in 447.85 seconds**, with one existing
+Starlette/httpx deprecation warning. The focused browser and single-email acceptance
+suite passed **40 tests in 58.41 seconds**. Ruff and JavaScript syntax checks passed.
+Chromium exercised both 1440px desktop and 390px mobile layouts using isolated fictional
+records: one editor, collapsed advanced tools, source expansion, draft edits, archived
+follow-ups, readable navigation and no horizontal overflow or JavaScript errors. The standalone legacy advanced-tool browser smoke also passed with zero JavaScript errors,
+including source history, settings, sign-in, sales records and workflow-map interactions. These
+are local UI checks, not a claim of testing the authenticated VPS browser interactively.
+
+New workspace defaults request exactly one source-supported initial email. Tests cover
+the provider contract and final-output budget, approval snapshots, SMTP-stub acceptance
+without scheduling a follow-up, disabled legacy follow-up dispatch, expired verifier
+status, and transactional archiving that retains the edited initial message and complete
+follow-up history. Approved, scheduled, submitted and uncertain history cannot be reset
+through the archive action. Historical four-touch fixtures explicitly enable the legacy
+flag; the new production default and sending behavior have separate tests.
+
+The interface makes a saved initial draft visible even if an older preparation job failed.
+It does not mark that failed job successful, relax source validation or guarantee semantic
+accuracy. The operator still reviews the proposed approach and final email. Nothing in
+these local checks enabled sending or contacted a real recipient.
+
 # Live VPS provider diagnosis and preparation source selection — 18 October 2026
 
 Direct SSH inspection confirmed the managed writer key was present and loaded, with

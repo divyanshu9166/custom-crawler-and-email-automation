@@ -1,5 +1,7 @@
 # Outreach Workbench
 
+**Current workspace (18 October 2026):** Pipeline opens directly to a prospect summary and one initial email. Research tools, manual qualification and sales history are under **Research details & advanced tools**. New drafting produces one personalized email; automatic follow-ups are OFF. Existing unapproved follow-ups can be archived without changing the initial email or its edits. See [the focused workspace](docs/FOCUSED_WORKSPACE.md).
+
 A cold email system for US/UK prospects. Campaign A covers website development/improvement and inquiry/booking chatbots. Campaign B covers new/existing D2C stores, shopping/support chatbots and permission-based WhatsApp opportunities. Crawler quality takes priority; host size controls concurrency and throughput.
 
 **Research → draft review:** [automatic qualification and AI email preparation](docs/AUTO_PREPARATION.md)

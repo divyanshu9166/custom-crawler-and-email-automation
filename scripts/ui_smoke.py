@@ -105,6 +105,12 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             browser = p.chromium.launch()
             context = browser.new_context(viewport={"width": 1440, "height": 1000})
             page = context.new_page()
+            # This legacy source-tool smoke deliberately exercises advanced panels.
+            # test_workspace_ui.py verifies the focused, collapsed default instead.
+            page.add_init_script("""document.addEventListener('DOMContentLoaded',()=>{
+              const open=()=>document.querySelectorAll('#advanced-research,.discovery-advanced,.settings-group,.saved-sources,.list-tools').forEach(el=>{el.open=true;});
+              new MutationObserver(open).observe(document.body,{childList:true,subtree:true});open();
+            });""")
             errors = []
             page.on("pageerror", lambda error: errors.append(str(error)))
             page.goto(base)
@@ -118,7 +124,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.get_by_role("button", name="Pipeline", exact=True).click()
             page.locator("[data-lead='1']").click()
             page.get_by_role("heading", name="Example Studio · DEMO").wait_for()
-            expect(page.locator('#detail')).to_contain_text('Legacy template drafts')
+            expect(page.locator('#detail')).to_contain_text('legacy template draft')
             expect(page.get_by_text("Platform research · linkedin.com · name matched website candidate", exact=True)).to_be_visible()
             page.get_by_text('Public X post · x.com · reciprocal profile link candidate', exact=True).click()
             expect(page.locator('#detail')).to_contain_text("This does not capture the author's profile")
@@ -127,7 +133,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.locator("#review-form input[name='industry']").fill("Fictional creative services")
             page.get_by_role("button", name="Save qualification", exact=True).click()
             expect(page.locator("#notice")).to_contain_text("Company qualified")
-            expect(page.get_by_role("button", name="Write research-based emails", exact=True)).to_be_disabled()
+            expect(page.locator('[data-draft]').first).to_be_disabled()
             expect(page.locator('#detail')).to_contain_text('No template fallback')
             assert page.locator('[data-approve]').count() == 0
             page.locator('#professional-sources > summary').click()
@@ -186,10 +192,8 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'),'Professional sources mobile overflow'
             page.screenshot(path=str(output/'professional-profile-fixture-mobile.png'),full_page=True)
             page.set_viewport_size({'width':1440,'height':1000})
-            page.get_by_role("button", name="Pause sending").click()
-            expect(page.locator("#notice")).to_contain_text("paused")
             page.screenshot(path=str(output / "pipeline-desktop.png"), full_page=True)
-            page.get_by_role("button", name="Find prospects", exact=True).click()
+            page.locator('nav [data-view="discovery"]').click()
             coverage=page.locator('#discovery-source-coverage')
             expect(coverage).to_contain_text('linkedin.com')
             expect(coverage).to_contain_text('x.com')
@@ -210,13 +214,13 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
                 route.fulfill(response=response,json=data)
             page.route('**/api/status',managed_status)
             page.reload()
-            page.get_by_role("button", name="Find prospects", exact=True).click()
+            page.locator('nav [data-view="discovery"]').click()
             expect(page.locator('#platform-browser-mode')).to_contain_text('Operator attention needed')
             expect(page.locator('#fxembed-mode')).to_contain_text('free FxEmbed community source')
             expect(page.locator('#platform-browser-mode')).to_contain_text('login_or_challenge')
             page.unroute('**/api/status',managed_status)
             page.reload()
-            page.get_by_role("button", name="Find prospects", exact=True).click()
+            page.locator('nav [data-view="discovery"]').click()
             reference = page.locator('#browser-reference-form')
             reference.locator('[name="company"]').fill('Browser Demo · FICTIONAL')
             reference.locator('[name="source_url"]').fill('https://linkedin.com/company/fictional-browser-demo/about/')
@@ -233,7 +237,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             summary.click()
             expect(page.locator('#detail')).to_contain_text('The server did not fetch this profile')
             page.screenshot(path=str(output/'browser-reference-fixture.png'), full_page=True)
-            page.get_by_role('button', name='Find prospects', exact=True).click()
+            page.locator('nav [data-view="discovery"]').click()
             export = Path(tmp)/'connector-export.json'
             ref = {'company':'Connector Demo · FICTIONAL','source_url':'https://linkedin.com/company/fictional-connector/about',
                    'website':'https://connector-demo.com/contact','observed_at':time.time(),
@@ -370,7 +374,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.locator("#contact-form textarea[name='ownership_notes']").fill("FICTIONAL UI FIXTURE: the demo's saved page explicitly publishes its business inbox. No real recipient.")
             page.locator("#contact-form button").click()
             expect(page.locator("#notice")).to_contain_text("Contact saved")
-            expect(page.get_by_role("heading", name="business-demo@other-demo.com", exact=True)).to_be_visible()
+            expect(page.locator(".recipient-bar strong").filter(has_text="business-demo@other-demo.com")).to_be_visible()
             assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), "Ownership-review mobile overflow"
             assert not errors, errors
             page.screenshot(path=str(output / "contact-review-mobile.png"), full_page=True)
@@ -410,7 +414,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), "Source-history mobile overflow"
             assert not errors
             # Exercise the distinct profile-only branch using fictional saved evidence.
-            page.get_by_role("button", name="Find prospects", exact=True).click()
+            page.locator('nav [data-view="discovery"]').click()
             page.locator("#profile-lead-form input[name='company']").fill("FICTIONAL Profile Studio")
             profile_url = "https://www.facebook.com/fictional-ui-profile-studio"
             page.locator("#profile-lead-form input[name='profile_url']").fill(profile_url)
@@ -430,7 +434,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             fixture_db.execute("UPDATE leads SET status='review',website_status='website_not_found',findings=? WHERE id=?",
                                (json.dumps([{"evidence_id": profile_eid, "quote": "Call us for a consultation.", "service": "website_build"}]), profile_lead))
             page.get_by_role("button", name="Pipeline", exact=True).click()
-            page.get_by_role("button", name="Refresh", exact=True).click()
+            page.get_by_role("button", name="Refresh prospects", exact=True).click()
             page.locator(f"[data-lead='{profile_lead}']").click()
             expect(page.locator("#detail")).to_contain_text("Profile prospect")
             expect(page.locator("#screenshot")).to_be_disabled()
@@ -456,13 +460,13 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.locator("#contact-form textarea[name='ownership_notes']").fill("FICTIONAL: this business profile explicitly publishes its own business contact email.")
             page.locator("#contact-form button").click()
             expect(page.locator("#notice")).to_contain_text("Contact saved")
-            expect(page.get_by_role("button", name="Write research-based emails", exact=True)).to_be_disabled()
+            expect(page.locator('[data-draft]').first).to_be_disabled()
             expect(page.locator('#detail')).to_contain_text('No template fallback')
             page.screenshot(path=str(output / "profile-prospect-mobile.png"), full_page=True)
             assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), "Profile prospect mobile overflow"
             assert not errors
             # The connected map reads persisted state; dragging only changes layout.
-            page.get_by_role("button", name="Workflow", exact=True).click()
+            page.get_by_role("button", name="Workflow map", exact=True).click()
             expect(page.locator('.flow-node')).to_have_count(17)
             expect(page.locator('#flow-research-steps button')).to_have_count(7)
             expect(page.locator('#flow-research-note')).to_contain_text('require review')
@@ -649,7 +653,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             assert not errors, errors
             accepted_before_settings = fixture_db.all("SELECT id,sent_at FROM messages WHERE state='sent'")
             # Save fictional mailbox details without any network connection or sending.
-            page.get_by_role('button',name='Worker: OFF',exact=True).click()
+            page.get_by_role('button',name='Research: OFF',exact=True).click()
             expect(page.locator('#runtime-settings-form input[name="worker_enabled"]')).to_be_disabled()
             expect(page.locator('#runtime-settings-form input[name="sending_enabled"]')).to_be_disabled()
             expect(page.locator('#runtime-summary')).to_contain_text('Offline demo')
@@ -682,7 +686,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.locator('[name="username"]').fill('fixture-admin')
             page.locator('[name="password"]').fill(changed_password)
             page.get_by_role('button',name='Sign in',exact=True).click()
-            expect(page.locator('.flow-node')).to_have_count(17)
+            expect(page.locator('#pipeline')).to_be_visible()
             assert not errors
             browser.close()
         print("Browser smoke passed: auth, source-backed research, template-demo hold and missing AI writer configuration, demo isolation, shared activity, sales qualification, tasks, proposal creation/review, artifact creation/review/export, offline HTML rendering and FAQ interaction, sourced inbox candidate/ownership review, mobile layout, unsafe approval rejection, committed-action/refresh-failure feedback historical-source exclusion from new review and profile-only qualification/contact workflow and writer configuration hold, connected node drag/zoom/status map, private mailbox-settings save and credential-change/re-login, campaign learning empty/nonzero rates and escaped cohort labels, priority ordering, financial entry/void arithmetic, permission-reviewed case study lifecycle and post-client plans; zero JS errors.")

@@ -1,8 +1,7 @@
 # Research → prepare → review emails
 
 The qualification form remains available as an advanced editor. Routine website prospects
-can now use **Prepare emails**, or the default-enabled **Automatically prepare qualification
-and AI drafts after research** control under Settings → Research & email preparation.
+can now use **Create email**, or the default-enabled **Automatically prepare one email after research** control under Settings → Research & email preparation.
 The worker waits for queued/running website/contact/professional/social research before
 automatically scheduling preparation. It uses the existing configured AI writer; it does
 not require a separate research-AI key. Worker must be ON; Sending can remain OFF.
@@ -33,11 +32,11 @@ not require a separate research-AI key. Worker must be ON; Sending can remain OF
    The writer can correct one locally rejected sequence, using the same strict checks.
    The first email must include the supplied business name verbatim. Neither correction
    path retries provider/network errors or enables template/model fallbacks.
-   Touches 0-2 must end with a question. Captured service lists do not establish form
+   The initial email must end with a question. Captured service lists do not establish form
    checkbox mechanics, abandonment or user hesitation. The writer rejects the observed
    unsupported checklist assertion, but final factual/offer review remains necessary.
-6. Show **Review email drafts** with an evidence summary. Recipient relevance, current
-   source/offer accuracy, all four messages and outreach eligibility still require final
+6. Show **Review email** with an evidence summary. Recipient relevance, current
+   source/offer accuracy, the initial email and outreach eligibility still require final
    operator approval. Reacher freshness, sender/mailbox configuration and existing send gates
    remain independently enforced. Preparation never enables/resumes sending or approves copy.
 
@@ -49,7 +48,7 @@ missing contacts, weak business fit and insufficient context remain explicit exc
 
 ## Existing prospects and bulk work
 
-- Pipeline → **Prepare emails** handles the selected prospect.
+- Pipeline → **Create email** handles the selected prospect.
 - **Prepare pending emails** queues up to 100 review/qualified prospects per page; use
   **Prepare next batch** to advance. Existing queued jobs deduplicate and existing messages
   are skipped. Per-prospect reasons explain missing evidence/history exceptions.

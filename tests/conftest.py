@@ -23,7 +23,7 @@ def fictional_email_writer(monkeypatch):
         if before_request:
             before_request()
         source = next(e for e in evidence if e['id'] == finding['evidence_id'])
-        return {'messages': draft_sequence(lead['company'], lead['service'], finding, source['url'], contact['name']),
+        return {'messages': draft_sequence(lead['company'], lead['service'], finding, source['url'], contact['name'])[:4 if settings.followups_enabled else 1],
                 'provenance': {'method': 'research_ai', 'model': 'fictional-test-writer',
                                'source_ids': [e['id'] for e in evidence], 'review_required': True}}
     monkeypatch.setattr(email_writer, 'generate_sequence', generate)
@@ -31,9 +31,11 @@ def fictional_email_writer(monkeypatch):
 
 @pytest.fixture
 def settings(tmp_path):
+    # Legacy pilots remain explicitly covered; production defaults and dispatch are
+    # exercised with followups_enabled=False in test_single_email.py.
     return Settings(_env_file=None, data_dir=tmp_path, admin_password="test-admin-password-123",
                     api_token="test-token-" + "a" * 40, public_url="https://outreach.example.com",
-                    worker_enabled=False, sending_enabled=True, auto_contact_research=False,auto_professional_research=False,
+                    worker_enabled=False, sending_enabled=True, followups_enabled=True, auto_contact_research=False,auto_professional_research=False,
                     commoncrawl_hints_enabled=False, professional_refresh_official_links=False, search_fallback_engines="", sender_name="Test Sender",
                     sender_company="Example Studio", sender_email="team@sender.example.com",
                     postal_address="123 Example Street, Test City", domain_auth_confirmed=True,

@@ -1,7 +1,7 @@
 # Research-based email writing — correction, 11 October 2026
 
 **18 October update:** current website prospects can now prepare source-validated
-qualification and four AI drafts automatically, with bulk queueing and final message review.
+qualification and one initial AI email automatically, with bulk queueing and final message review.
 The manual qualification editor is optional for routine supported cases. Unsupported evidence,
 ownership and profile-only cases stay explicit exceptions. NVIDIA URL normalization, a preset
 and synthetic connection check help diagnose HTTP 404. See [automatic preparation and VPS
@@ -14,9 +14,9 @@ The earlier operational writer interpolated reviewed observations into fixed ema
 
 `campaigns.create_drafts` calls `email_writer.generate_sequence`. After current business/source qualification and recipient publication checks, a configured chat-completions model receives the reviewed business, selected single offer, observation, useful suggestion, optional sourced trigger/follow-up, geography and D2C source evidence. Website/profile status and research notes retain coverage uncertainty. Source pages are data, never instructions. Additional page context does not establish pain points or customer behaviour.
 
-The model individually composes the initial email and three distinct follow-ups. Recipient email is not an input field; matching email addresses and the known recipient name are removed from the serialized research packet. The verified greeting is added locally; sender identity and opt-out footer remain deterministic. This limited redaction is not a guarantee that every page contains no other personal information; use an endpoint permitted to process the intended research data.
+The model individually composes one initial email. Automatic follow-ups are disabled by default. Recipient email is not an input field; matching email addresses and the known recipient name are removed from the serialized research packet. The verified greeting is added locally; sender identity and opt-out footer remain deterministic. This limited redaction is not a guarantee that every page contains no other personal information; use an endpoint permitted to process the intended research data.
 
-Every touch must carry source-support metadata with an exact quote from a supplied current source. The local validator checks all four unique steps, source IDs and quotes, basic copy/header limits, duplicate bodies, placeholders, incomplete/refused output and several obvious unsupported promises/completed-work claims. These structural checks cannot prove every claim's meaning or tone. **The operator must read all four emails and their sources before approval.**
+Every touch must carry source-support metadata with an exact quote from a supplied current source. The local validator requires exactly one message at step 0 and checks source IDs and quotes, basic copy/header limits, duplicate bodies, placeholders, incomplete/refused output and several obvious unsupported promises/completed-work claims. These structural checks cannot prove every claim's meaning or tone. **The operator must read the email and its sources before approval.**
 
 Missing configuration, an unavailable/rate-limited provider, invalid output or a changed source/contact/qualification/draft/configuration causes an error and preserves existing drafts. There is **no template fallback**. Source and copy comparisons are repeated before dispatch and inside the final write transaction. Messages and their AI provenance are saved together: model, prompt version, input digest, source IDs, supporting quotes and saved message IDs. Draft creation neither schedules nor sends mail.
 
@@ -46,7 +46,7 @@ Keep Sending OFF while generating and reviewing the first real research-based dr
 
 The [official hosted inference reference](https://docs.api.nvidia.com/nim/reference/nvidia-nemotron-3-ultra-550b-a55b-infer)
 documents `reasoning_effort: "none"`. For this exact hosted model only, the writer supplies
-that field so its 3,000-token budget is used for the final four-message JSON rather than
+that field so its 1,200-token final-output budget is used for the final email JSON rather than
 the provider's default high-effort reasoning. Other models/providers retain their existing
 request parameters. Structured content, source quotes and unchanged research are still
 validated before saving. Contract tests use a mock provider; real account availability,

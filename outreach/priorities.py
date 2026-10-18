@@ -15,6 +15,7 @@ def ranked(db, settings, lead_id=None):
             (SELECT json_extract(e.detail,'$.state') FROM events e WHERE e.kind='preparation' AND json_extract(e.detail,'$.lead_id')=l.id ORDER BY e.id DESC LIMIT 1) preparation_state,
             (SELECT j.state FROM jobs j WHERE j.kind='prepare' AND json_extract(j.payload,'$.lead_id')=l.id ORDER BY j.id DESC LIMIT 1) preparation_job,
             (SELECT count(*) FROM contacts c WHERE c.lead_id=l.id) contact_count,
+            (SELECT m.state FROM messages m JOIN contacts c ON c.id=m.contact_id WHERE c.lead_id=l.id AND m.step=0 ORDER BY m.id DESC LIMIT 1) initial_email_state,
             EXISTS(SELECT 1 FROM evidence e WHERE e.lead_id=l.id AND e.fetched_at BETWEEN ? AND ?
               AND e.fetched_at>=COALESCE((SELECT created_at FROM crawls WHERE lead_id=l.id ORDER BY id DESC LIMIT 1),0)) current_evidence
             FROM leads l""" + (' WHERE l.id=?' if lead_id else '') + ' ORDER BY l.id DESC' + ('' if lead_id else ' LIMIT 500'),

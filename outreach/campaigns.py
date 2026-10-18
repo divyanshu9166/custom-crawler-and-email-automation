@@ -231,6 +231,8 @@ def create_drafts(db, settings, contact_id, *, cancelled=lambda: False, preserve
     if source_ids != {e['id'] for e in sources}:
         raise ValueError('Reviewed writing sources are not current; qualify again')
     previous_messages = db.all('SELECT * FROM messages WHERE contact_id=? ORDER BY step', (contact_id,))
+    if not settings.followups_enabled and any(m['step'] > 0 for m in previous_messages):
+        raise ValueError('Archive previous follow-up drafts before regenerating the initial email')
     if preserve_existing and previous_messages:
         raise ValueError('New messages appeared during automatic preparation; existing copy preserved')
     writer_configuration = (settings.draft_api_url, settings.draft_api_key, settings.draft_model, settings.draft_timeout_seconds)
@@ -280,7 +282,7 @@ def create_drafts(db, settings, contact_id, *, cancelled=lambda: False, preserve
                          json.dumps(draft["evidence_ids"]), f"<{uuid.uuid4().hex}@{domain}>"))
         message_ids = [r[0] for r in con.execute('SELECT id FROM messages WHERE contact_id=? ORDER BY step', (contact_id,))]
         con.execute("INSERT INTO events(kind,detail,contact_id,created_at) VALUES('drafts_created',?,?,?)",
-                    (json.dumps({**generated['provenance'], 'steps': 4, 'message_ids': message_ids}), contact_id, time.time()))
+                    (json.dumps({**generated['provenance'], 'steps': len(drafts), 'message_ids': message_ids}), contact_id, time.time()))
 
 
 def approve(db, settings, contact_id, basis, contact_relevance):
@@ -310,8 +312,9 @@ def approve(db, settings, contact_id, basis, contact_relevance):
     if not all([settings.sender_name, settings.sender_company, settings.sender_email, settings.postal_address]):
         raise ValueError("Configure real sender identity and postal address before approval")
     messages = db.all("SELECT * FROM messages WHERE contact_id=? ORDER BY step", (contact_id,))
-    if len(messages) != 4 or any(m["state"] != "draft" for m in messages):
-        raise ValueError("Review all four draft messages before approving")
+    expected_steps = list(range(4 if settings.followups_enabled else 1))
+    if [m['step'] for m in messages] != expected_steps or any(m["state"] != "draft" for m in messages):
+        raise ValueError("Review the initial email before approving; archive legacy follow-ups first in single-email mode")
     from .email_writer import assert_ai_origin
     assert_ai_origin(db, contact_id)
     if any(re.search(r"\[(?:your|first|company|specific)[^\]]*\]|\{\{", m["body"], re.I) for m in messages):
@@ -382,6 +385,32 @@ def resume_contact(db, settings, contact_id, note, next_at):
     db.event("contact_resumed", {"reason": note, "next_at": next_at}, contact_id)
 
 
+def archive_followups(db, contact_id):
+    """Retain edited initial copy and preserve unapproved follow-ups in the audit log."""
+    with db.connect() as con:
+        con.execute('BEGIN IMMEDIATE')
+        contact = con.execute('SELECT * FROM contacts WHERE id=?', (contact_id,)).fetchone()
+        if not contact or contact['status'] != 'new' or contact['reviewed_at']:
+            raise ValueError('Only an unapproved contact can switch to one initial email')
+        messages = [dict(m) for m in con.execute('SELECT * FROM messages WHERE contact_id=? ORDER BY step', (contact_id,))]
+        if not messages or messages[0]['step'] != 0 or any(m['state'] != 'draft' or m['sent_at'] or m['due_at'] for m in messages):
+            raise ValueError('Submitted, approved or scheduled messages cannot be archived here')
+        archived = [m for m in messages if m['step'] > 0]
+        if not archived:
+            return {'archived': 0, 'retained_message_id': messages[0]['id']}
+        row = con.execute("SELECT detail FROM events WHERE kind='drafts_created' AND contact_id=? ORDER BY id DESC LIMIT 1", (contact_id,)).fetchone()
+        origin = json.loads(row[0]) if row else {}
+        con.execute('INSERT INTO events(kind,contact_id,detail,created_at) VALUES(?,?,?,?)',
+                    ('followup_drafts_archived', contact_id, json.dumps({'messages': archived, 'retained_message_id': messages[0]['id']}), time.time()))
+        con.execute('DELETE FROM messages WHERE contact_id=? AND step>0', (contact_id,))
+        if origin.get('method') == 'research_ai' and origin.get('message_ids') == [m['id'] for m in messages]:
+            origin.update(steps=1, message_ids=[messages[0]['id']], support=origin.get('support', [])[:1],
+                          migration='retained_initial_email; followups preserved in archive event')
+            con.execute('INSERT INTO events(kind,contact_id,detail,created_at) VALUES(?,?,?,?)',
+                        ('drafts_created', contact_id, json.dumps(origin), time.time()))
+    return {'archived': len(archived), 'retained_message_id': messages[0]['id']}
+
+
 def revise_unsent_sequence(db, contact_id, note):
     """Revoke an unsubmitted pilot approval so evidence/copy can be reviewed again."""
     if len(note.strip()) < 20:
@@ -395,7 +424,7 @@ def revise_unsent_sequence(db, contact_id, note):
         if con.execute('SELECT 1 FROM suppression WHERE email=?', (contact['email'],)).fetchone():
             raise ValueError('Suppressed contacts stay stopped')
         messages = [dict(m) for m in con.execute('SELECT * FROM messages WHERE contact_id=? ORDER BY step', (contact_id,))]
-        if len(messages) != 4 or any(m['sent_at'] or m['state'] not in {'draft', 'queued', 'cancelled'} for m in messages):
+        if [m['step'] for m in messages] not in ([0], [0, 1, 2, 3]) or any(m['sent_at'] or m['state'] not in {'draft', 'queued', 'cancelled'} for m in messages):
             raise ValueError('Submitted, uncertain or failed messages require delivery/conversation review; they cannot reset')
         con.execute('INSERT INTO events(kind,contact_id,detail,created_at) VALUES(?,?,?,?)',
                     ('sequence_returned_to_review', contact_id, json.dumps({'reason': note, 'previous_messages': messages}), time.time()))

@@ -206,6 +206,7 @@ async def test_workflow_shows_saved_bounded_search_counts_even_without_engine_er
                         headers={'content-type':response.headers.get('content-type','text/plain')})
                 await page.route('**/*',route)
                 await page.goto(settings.public_url)
+                await page.get_by_role('button', name='Workflow map', exact=True).click()
                 await page.get_by_text('Recent search runs and limitations',exact=True).click()
                 await page.locator('#flow-research-runs').get_by_text('LinkedIn search',exact=False).wait_for()
                 text=await page.locator('#flow-research-runs').inner_text()

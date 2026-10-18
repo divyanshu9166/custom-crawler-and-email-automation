@@ -107,6 +107,8 @@ def send_one(db, settings, now=None, sender=smtp_send):
     if count >= settings.daily_send_limit:
         return "daily_limit"
     for row in due_candidates(db, now):
+        if row['step'] > 0 and not settings.followups_enabled:
+            continue
         if not eligible_now(settings, row["timezone"], now):
             continue
         if row["verification"] != "safe":
@@ -200,7 +202,7 @@ def send_one(db, settings, now=None, sender=smtp_send):
             db.execute("UPDATE contacts SET status='hold' WHERE id=? AND status='active'", (contact["id"],))
             db.event("send_uncertain", {"message": row["id"], "error": type(exc).__name__}, contact["id"])
             return "uncertain"
-        mark_sent(db, row, now)
+        mark_sent(db, row, now, followups_enabled=settings.followups_enabled)
         return "sent"
     return "idle"
 
@@ -215,12 +217,12 @@ def record_nonacceptance(db, row, error, permanent=False):
                     ('failed' if permanent else 'cancelled' if stopped else 'queued', error, row['id']))
 
 
-def mark_sent(db, row, now):
+def mark_sent(db, row, now, *, followups_enabled=False):
     # 0, 3, 8, 14 days from the first actual send; delayed steps retain minimum spacing.
     gaps = [3, 5, 6]
     with db.connect() as con:
         con.execute("UPDATE messages SET state='sent',sent_at=?,error='' WHERE id=?", (now, row["id"]))
-        if row["step"] < 3:
+        if followups_enabled and row["step"] < 3:
             con.execute("UPDATE messages SET due_at=? WHERE contact_id=? AND step=? AND state='queued'",
                         (now + gaps[row["step"]] * 86400, row["contact_id"], row["step"] + 1))
         else:

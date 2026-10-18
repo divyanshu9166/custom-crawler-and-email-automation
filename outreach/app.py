@@ -478,9 +478,9 @@ def create_app(settings=None):
     @app.get("/static/{name}")
     def static(name: str, request: Request, creds: HTTPBasicCredentials | None = Depends(basic),
                token: HTTPAuthorizationCredentials | None = Depends(bearer)):
-        if name not in {"app.js", "sales.js", "growth.js", "workflow.js", "settings.js", "style.css", "login.js"}:
+        if name not in {"app.js", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js", "style.css", "login.js"}:
             raise HTTPException(404)
-        if name in {"app.js", "sales.js", "growth.js", "workflow.js", "settings.js"}:
+        if name in {"app.js", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js"}:
             auth(request, creds, token)
         return FileResponse(Path(__file__).parent / "static" / name)
 
@@ -727,6 +727,8 @@ def create_app(settings=None):
         from .email_writer import assert_ai_origin, configuration as writer_configuration
         contacts = db.all("SELECT * FROM contacts WHERE lead_id=?", (lead_id,))
         for contact in contacts:
+            contact['verification_fresh'] = bool(contact['verification'] == 'safe' and contact['verified_at']
+                and 0 <= time.time()-contact['verified_at'] <= settings.verification_max_age_hours*3600)
             origin = db.one("SELECT detail FROM events WHERE kind='drafts_created' AND contact_id=? ORDER BY id DESC LIMIT 1", (contact['id'],))
             contact['draft_origin'] = json.loads(origin['detail']) if origin else {}
             try:
@@ -969,6 +971,11 @@ def create_app(settings=None):
         create_drafts(db, settings, contact_id)
         return {"status": "drafted"}
 
+    @app.post('/api/contacts/{contact_id}/single-email', dependencies=[Depends(auth)])
+    def single_email(contact_id: int):
+        from .campaigns import archive_followups
+        return archive_followups(db, contact_id)
+
     @app.put("/api/messages/{message_id}", dependencies=[Depends(auth)])
     def edit_message(message_id: int, value: DraftInput):
         row = db.one("SELECT * FROM messages WHERE id=?", (message_id,))
@@ -1011,7 +1018,7 @@ def create_app(settings=None):
         if not row or row["state"] != "uncertain":
             raise ValueError("Only uncertain sends can be reconciled")
         if value.outcome == "sent":
-            mark_sent(db, row, time.time())
+            mark_sent(db, row, time.time(), followups_enabled=settings.followups_enabled)
         else:
             db.execute("UPDATE messages SET state='draft',due_at=NULL WHERE contact_id=? AND state IN ('uncertain','queued')", (row["contact_id"],))
         # Never automatically resume after reconciliation: preserve replies/opt-outs received meanwhile.

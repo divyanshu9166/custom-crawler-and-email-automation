@@ -1,5 +1,7 @@
 # Outreach automation implementation plan
 
+Current product flow: Find prospects → read the research summary → review one personalized initial email. Automatic follow-ups are disabled by default. Manual qualification, source reports, verification details and sales tools remain available under advanced sections. Existing unapproved follow-ups are archived with their original copy; the initial email and user edits are preserved.
+
 ## Scope
 US/UK cold email acquisition for (A) website development/improvement and inquiry/booking chatbots, and (B) new/existing D2C stores, shopping/support chatbots and permission-based WhatsApp workflows. One relevant offer per prospect. Research public evidence; do not invent conversion losses or private metrics.
 
@@ -56,7 +58,7 @@ not complete them. Detailed commands, evidence and rollback steps are in
 - [ ] After actual access recovery, clear only the relevant durable hold. Verify session persistence across restart, fresh company/professional field captures and blocked/challenge handling. Do not count a profile directory or successful login as a working lead extractor.
 - [ ] Verify checkpoint/authwall redirects that time out stop the platform with a durable login hold; verify browser/profile-lock startup errors remain visible as source failures. Test both company search and professional roots after a cold restart, keeping sending paused.
 - [ ] Run a bounded, recorded US/UK Campaign A/B sample across website, profile-first and X sources. Inspect identities, current country/role evidence, official links, sourced emails, partial coverage and deduplication; retain unsupported contacts on hold.
-- [ ] Configure the AI email writer and review factual personalization, one offer and all four touches against current source evidence. Test failed/missing writer configuration without template fallback.
+- [ ] Configure the AI email writer and review factual personalization, one offer and the initial email against current source evidence. Test failed/missing writer configuration without template fallback.
 - [ ] When supplied, configure SMTP/IMAP and sender DNS/authentication. Use the user's controlled test mailbox for separate authorized delivery/reply/opt-out acceptance; no prospect mail during sourcing acceptance.
 - [ ] Benchmark resource consumption/restart recovery and durable jobs/holds. Lower concurrency or increase capacity based on measurement; do not remove crawler capabilities solely for 4 GB RAM.
 - [ ] Create encrypted off-host backups of consistent DB, evidence/screenshots, managed settings, `.env` and stopped browser state; rehearse paused restore and inspect uncertain sends before any future resume.

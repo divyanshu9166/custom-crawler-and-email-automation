@@ -51,8 +51,8 @@ def capture(con, settings, lead, contact):
                 raise ValueError('Review current optional trigger/follow-up source evidence again')
             ids.add(page['id'])
     messages = reader.all('SELECT * FROM messages WHERE contact_id=? ORDER BY step', (contact['id'],))
-    if len(messages) != 4 or [m['step'] for m in messages] != [0, 1, 2, 3]:
-        raise ValueError('Review all four sequence messages again')
+    if [m['step'] for m in messages] != list(range(4 if settings.followups_enabled else 1)):
+        raise ValueError('Review the initial email; legacy follow-ups must be archived in single-email mode')
     return {
         'lead': {k: lead[k] for k in ('id', 'company', 'campaign', 'country', 'country_source', 'timezone',
                                     'business_type', 'service', 'findings', 'fit_notes')},

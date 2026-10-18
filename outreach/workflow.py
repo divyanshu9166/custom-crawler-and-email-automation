@@ -143,7 +143,7 @@ def snapshot(db, settings, lead_id=None):
     preparation_state = job_state({'prepare'})
     if preparation_state in {'running', 'queued', 'failed'} and not messages:
         nodes['drafts'].update(state=preparation_state,
-                               description='AI prepares source-backed qualification and four unsent drafts. Final recipient/message review remains manual.')
+                               description='AI prepares source-backed qualification and an unsent initial email. Final recipient/message review remains manual.')
         if preparation_state in {'running', 'queued'}:
             nodes['qualify']['state'] = preparation_state
     preparation_events = db.all("SELECT detail FROM events WHERE kind='preparation' ORDER BY id")
@@ -162,7 +162,7 @@ def snapshot(db, settings, lead_id=None):
         sequence = [m for m in messages if m['contact_id'] == contact['id']]
         if (contact['status'] == 'new' and contact['id'] in safe_ids and contact['id'] in ai_contacts
                 and contact['lead_id'] in qualified_ids
-                and len(sequence) == 4 and {m['step'] for m in sequence} == {0, 1, 2, 3}
+                and {m['step'] for m in sequence} == set(range(4 if settings.followups_enabled else 1))
                 and all(m['state'] == 'draft' for m in sequence)):
             review_candidates.append(contact['id'])
     context_holds = set()

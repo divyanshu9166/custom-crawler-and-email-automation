@@ -181,7 +181,7 @@ def test_invalid_ai_output_rejected(problem, db, prepared):
     else:
         first['body'] = first['body'].replace(lead['company'], 'Your business')
     with pytest.raises(ValueError):
-        email_writer.validate_output(value, lead, contact, sources)
+        email_writer.validate_output(value, lead, contact, sources, message_count=4)
 
 
 @pytest.mark.parametrize('outcome', ['corrected', 'still_invalid', 'network_error', 'context_changed'])

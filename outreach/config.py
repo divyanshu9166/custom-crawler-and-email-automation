@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     public_url: str = "http://localhost:8000"
     worker_enabled: bool = True
     sending_enabled: bool = False
+    # Existing deployments may explicitly retain their previously approved pilot.
+    # New workspaces create and send only the initial email.
+    followups_enabled: bool = False
     sender_name: str = ""
     sender_company: str = ""
     sender_email: str = ""
