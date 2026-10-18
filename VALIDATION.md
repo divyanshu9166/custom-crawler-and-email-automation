@@ -1,3 +1,19 @@
+# Source-first writer correction after live audit review — 19 October 2026
+
+The deployed audit-context path returned valid single-email JSON from Nemotron, but manual
+review found the output repeated an unsupported London trial claim from an older qualification
+summary. That exploratory output was **not saved**. The original edited initial email remained
+unchanged. This distinguishes a provider/JSON success from factual-copy acceptance.
+
+The writer packet now excludes free-form observation, business-fit/research notes and trigger
+narratives. It supplies actual public-page text, exact selected quotes, the selected service,
+a clearly labelled proposed next step and typed audit data. Proposed testing must investigate
+whether an issue exists, not presume where an established problem occurs. A regression fixture
+injects fabricated trial, loss, chatbot and announcement summaries and asserts none reaches
+the packet. The final writer/preparation/diagnostics/Chromium workspace suite passed
+**132 tests in 40.37 seconds**, with the existing Starlette/httpx warning; Ruff passed. This reduces the demonstrated summary-laundering path; it is not a guarantee that
+a model cannot hallucinate from other inputs. Final factual review remains required.
+
 # Audit inputs and honest problem evidence — 19 October 2026
 
 The live inspection found PageSpeed HTTP 429 with no successful score, partial screenshot

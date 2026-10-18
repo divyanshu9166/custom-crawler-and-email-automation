@@ -61,7 +61,8 @@ def test_real_writer_uses_reviewed_research_and_saves_unactivated_ai_provenance(
         assert packet['model'] == 'fictional-research-model'
         context = json.loads(packet['messages'][1]['content'])
         assert context['business']['company'] == lead['company']
-        assert context['reviewed_finding']['observation'] == finding['observation']
+        assert 'observation' not in context['reviewed_finding']
+        assert context['reviewed_finding']['quote'] == finding['quote']
         assert context['sources'][0]['sha256'] == sources[0]['sha256']
         assert contact['email'] not in request.content.decode()
         assert 'Alex' not in request.content.decode()

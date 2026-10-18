@@ -24,6 +24,7 @@ not a representative market-coverage acceptance sample.
 ## Corrected integration
 
 - Preparation waits for pending/running screenshot and PageSpeed jobs as well as source research.
+- Writer input excludes unverified narrative summaries; exact source quotes and a clearly labelled proposed action remain.
 - Assessment and writing receive a separate, bounded audit context. Lab numbers are not inserted
   into public HTML quotes. Current same-page reports only; seven-day expiry and latest-crawl
   scope apply. A newer failed audit supersedes an older success.

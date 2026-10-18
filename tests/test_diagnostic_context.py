@@ -173,3 +173,18 @@ def test_archive_retains_only_initial_audit_references_in_active_provenance(db, 
     archive_followups(db, prepared['contact_id'])
     saved = json.loads(db.one("SELECT detail FROM events WHERE kind='drafts_created' ORDER BY id DESC LIMIT 1")['detail'])
     assert saved['diagnostic_refs'] == [['initial']]
+
+
+def test_writer_does_not_launder_unverified_review_summaries_into_source_context(db, prepared):
+    lead = db.one('SELECT * FROM leads WHERE id=?', (prepared['lead_id'],))
+    finding = json.loads(lead['findings'])[0]
+    lead.update(fit_notes='UNVERIFIED_TRIAL: the London page offers a three-month trial.',
+                research_notes='UNVERIFIED_LOSS: quote abandonments increased by 40%.')
+    finding['observation'] = 'UNVERIFIED_OBSERVATION: the chatbot breaks on mobile.'
+    finding['trigger'] = {'evidence_id': prepared['evidence_id'], 'quote': finding['quote'], 'description':'UNVERIFIED_TRIGGER: a new product launched yesterday.'}
+    pages = db.all('SELECT * FROM evidence')
+    packet = email_writer.research_packet(lead, finding, pages)
+    text = json.dumps(packet)
+    assert 'UNVERIFIED_' not in text
+    assert packet['reviewed_finding']['quote'] == finding['quote']
+    assert packet['reviewed_finding']['suggestion_status'].startswith('Proposed')
