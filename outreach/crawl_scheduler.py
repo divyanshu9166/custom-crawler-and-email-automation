@@ -96,6 +96,8 @@ def schedule_final_audits(db, settings, payload):
         return
     if settings.browser_enabled and settings.auto_visual_audit:
         db.enqueue('screenshot', {'lead_id': lead['id']})
+    if settings.auto_performance_audit and settings.pagespeed_api_key:
+        db.enqueue('performance', {'lead_id': lead['id']})
     if settings.auto_professional_research:
         db.enqueue('professional_research',{'lead_id':lead['id']})
     if settings.auto_contact_research:

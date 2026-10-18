@@ -120,6 +120,7 @@ class Settings(BaseSettings):
     _platform_browser_holds: dict = PrivateAttr(default_factory=dict)
     _platform_browser_persisted_holds: set = PrivateAttr(default_factory=set)
     auto_visual_audit: bool = True
+    auto_performance_audit: bool = True
 
     @property
     def database(self):

@@ -352,6 +352,8 @@ async def research_lead(db, settings, lead_id, continuation=False, protect_revie
                (json.dumps(findings), notes, time.time(), lead_id))
     if settings.browser_enabled and settings.auto_visual_audit:
         db.enqueue("screenshot", {"lead_id": lead_id})
+    if settings.auto_performance_audit and settings.pagespeed_api_key:
+        db.enqueue('performance', {'lead_id': lead_id})
     if settings.auto_contact_research and not continuation:
         db.enqueue('contact_research', {'lead_id': lead_id})
     if settings.auto_professional_research and not continuation:

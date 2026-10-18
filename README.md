@@ -1,3 +1,7 @@
+**Research evidence audit (19 October):** structured audit results now reach assessment and
+the writer; no generic contact invitation or partial capture is treated as a proven pain point.
+PageSpeed still depends on provider quota/key. [Live findings and remaining gaps](docs/PAIN_POINT_AUDIT.md).
+
 # Outreach Workbench
 
 **Current workspace (18 October 2026):** Pipeline opens directly to a prospect summary and one initial email. Research tools, manual qualification and sales history are under **Research details & advanced tools**. New drafting produces one personalized email; automatic follow-ups are OFF. Existing unapproved follow-ups can be archived without changing the initial email or its edits. See [the focused workspace](docs/FOCUSED_WORKSPACE.md).

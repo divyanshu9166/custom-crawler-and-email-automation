@@ -2,7 +2,7 @@
 
 The qualification form remains available as an advanced editor. Routine website prospects
 can now use **Create email**, or the default-enabled **Automatically prepare one email after research** control under Settings → Research & email preparation.
-The worker waits for queued/running website/contact/professional/social research before
+The worker waits for queued/running website/contact/professional/social research and screenshot/PageSpeed jobs before
 automatically scheduling preparation. It uses the existing configured AI writer; it does
 not require a separate research-AI key. Worker must be ON; Sending can remain OFF.
 

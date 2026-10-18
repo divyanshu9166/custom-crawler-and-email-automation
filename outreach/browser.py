@@ -370,7 +370,7 @@ async def screenshot(db, settings, lead_id):
     finally:
         await renderer.close()
     files = {label: path.name for label, path in paths.items() if path.exists()}
-    db.event("screenshot", {"lead_id": lead_id, "files": files, "visual": result["visual"],
+    db.event("screenshot", {"lead_id": lead_id, "url": url, "files": files, "visual": result["visual"],
                             "issues": result["issues"], "complete": not result["issues"]})
     db.execute("UPDATE leads SET research_notes=research_notes || ? WHERE id=?",
                ("\nScreenshots: " + json.dumps(files) + "; render issues: " + str(len(result["issues"])), lead_id))

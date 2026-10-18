@@ -1,3 +1,9 @@
+**19 October audit-input correction:** assessment and email writing now receive scoped
+PageSpeed and render diagnostics separately from HTML source quotes. Failed/partial reports
+cannot establish business pain. Valid measured observations need a report reference and test
+qualification; audit changes/expiry invalidate approval. Existing edited drafts are preserved.
+See [the live evidence audit](PAIN_POINT_AUDIT.md).
+
 # Research-based email writing — correction, 11 October 2026
 
 **18 October update:** current website prospects can now prepare source-validated

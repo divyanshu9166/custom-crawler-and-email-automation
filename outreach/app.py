@@ -734,8 +734,10 @@ def create_app(settings=None):
             try:
                 assert_ai_origin(db, contact['id'])
                 contact['ai_drafts'] = True
-            except ValueError:
+                contact['ai_draft_issue'] = ''
+            except ValueError as exc:
                 contact['ai_drafts'] = False
+                contact['ai_draft_issue'] = str(exc)
             try:
                 assert_contact_ownership(db, contact, row)
                 contact.update(source_eligible=True, source_issue='')
@@ -749,7 +751,9 @@ def create_app(settings=None):
             except ValueError:
                 artifact['current_for_review'] = False
         from .preparation import latest as preparation_status
+        from .diagnostics import snapshot as audit_snapshot
         return {"lead": row, "evidence": evidence, "crawl": crawl,
+                "diagnostics": audit_snapshot(db, row),
                 'preparation': preparation_status(db, lead_id),
                 'professional_captures':professional_captures,
                 'professional_report':json.loads(professional_report['detail']) if professional_report else None,

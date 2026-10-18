@@ -230,6 +230,11 @@ def create_drafts(db, settings, contact_id, *, cancelled=lambda: False, preserve
     sources = [e for e in available if e['id'] in source_ids]
     if source_ids != {e['id'] for e in sources}:
         raise ValueError('Reviewed writing sources are not current; qualify again')
+    from .diagnostics import snapshot as audit_snapshot
+    from .preparation import source_busy
+    if source_busy(db, lead['id']):
+        raise ValueError('Research or audits are still running; wait before writing the email')
+    audit_context = audit_snapshot(db, lead)
     previous_messages = db.all('SELECT * FROM messages WHERE contact_id=? ORDER BY step', (contact_id,))
     if not settings.followups_enabled and any(m['step'] > 0 for m in previous_messages):
         raise ValueError('Archive previous follow-up drafts before regenerating the initial email')
@@ -247,7 +252,8 @@ def create_drafts(db, settings, contact_id, *, cancelled=lambda: False, preserve
         if (current.one('SELECT * FROM contacts WHERE id=?', (contact_id,)) != contact
                 or current.one('SELECT * FROM leads WHERE id=?', (lead['id'],)) != lead
                 or current.all('SELECT * FROM messages WHERE contact_id=? ORDER BY step', (contact_id,)) != previous_messages
-                or [e for e in fresh_evidence(current, lead['id']) if e['id'] in source_ids] != sources):
+                or [e for e in fresh_evidence(current, lead['id']) if e['id'] in source_ids] != sources
+                or audit_snapshot(current, lead) != audit_context or source_busy(current, lead['id'])):
             raise ValueError('Contact, research or drafts changed during AI writing; result discarded')
         assert_contact_ownership(current, contact, lead)
         if not selected_offer(current, lead):
@@ -261,7 +267,7 @@ def create_drafts(db, settings, contact_id, *, cancelled=lambda: False, preserve
                 assert_outreach_open(check, lead['id'])
 
     generated = email_writer.generate_sequence(settings, lead, contact, finding, sources,
-                                               before_request=lambda: assert_unchanged(db))
+                                               before_request=lambda: assert_unchanged(db), audit_context=audit_context)
     drafts = generated['messages']
     domain = settings.sender_email.split("@")[-1] if "@" in settings.sender_email else "outreach.invalid"
     with db.connect() as con:
@@ -406,6 +412,8 @@ def archive_followups(db, contact_id):
         if origin.get('method') == 'research_ai' and origin.get('message_ids') == [m['id'] for m in messages]:
             origin.update(steps=1, message_ids=[messages[0]['id']], support=origin.get('support', [])[:1],
                           migration='retained_initial_email; followups preserved in archive event')
+            if 'diagnostic_refs' in origin:
+                origin['diagnostic_refs'] = origin['diagnostic_refs'][:1]
             con.execute('INSERT INTO events(kind,contact_id,detail,created_at) VALUES(?,?,?,?)',
                         ('drafts_created', contact_id, json.dumps(origin), time.time()))
     return {'archived': len(archived), 'retained_message_id': messages[0]['id']}

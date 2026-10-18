@@ -35,6 +35,7 @@ async def execute_job(db, settings, job):
             if settings.crawl_auto_continue:
                 research_settings.crawl_max_pages = min(settings.crawl_max_pages, settings.crawl_auto_max_pages)
                 research_settings.auto_visual_audit = False
+                research_settings.auto_performance_audit = False
                 research_settings.auto_contact_research = False
                 research_settings.auto_professional_research=False
             if payload.get('continuation'):

@@ -1,3 +1,28 @@
+# Audit inputs and honest problem evidence — 19 October 2026
+
+The live inspection found PageSpeed HTTP 429 with no successful score, partial screenshot
+renders, zero saved social posts and an unknown mailbox verifier result. The existing Spotless
+email proposes an experiment; these records do not verify an actual client pain point.
+See [the research-to-email audit](docs/PAIN_POINT_AUDIT.md) for exact coverage and limits.
+
+The broad local regression run passed **1,323 tests in 472.85 seconds**, with one existing
+Starlette/httpx deprecation warning. The latest writer/API/Chromium workspace run passed
+**75 tests in 30.61 seconds**, including the subsequent score-unit and stale-audit error
+feedback checks. The dedicated audit-context file separately passed **25 tests in 7.17
+seconds**. These counts overlap; they are not additive. Ruff, JavaScript syntax and diff
+checks passed. Desktop/mobile Chromium screenshots were inspected for the added audit basis.
+
+Coverage includes waiting for audit jobs, configured-key automatic PageSpeed scheduling
+and deduplication, partial/unscoped/stale/older-crawl rejection, no borrowing scores from an
+older success after a newer failure, real assessment/writer payload contracts with mock
+transport, mandatory scoped numeric/reference qualification, incorrect-unit rejection,
+audit changes during generation preserving old copy, and changed-audit approval rejection.
+Public HTML quotes and lab/render observations remain separate inputs and provenance.
+
+These checks prove code/data-flow behavior. They do not grant provider quota, establish
+semantic entailment, perform a complete interactive quote/chatbot journey or prove lost
+sales. No real email or recipient verification probe was sent during these checks.
+
 # Focused workspace and one initial email — 18 October 2026
 
 The complete local suite passed **1,300 tests in 447.85 seconds**, with one existing
