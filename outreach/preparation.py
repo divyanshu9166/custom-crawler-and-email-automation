@@ -101,7 +101,16 @@ def _pages(db, lead):
         path = urlsplit(p['url']).path
         return (0 if path in {'', '/'} else 1 if re.search(r'about|contact|service|product|shop|collection', path, re.I) else 2,
                 len(path), p['id'])
-    return sorted(pages, key=rank)[:12]
+    ordered = sorted(pages, key=rank)
+    selected = ordered[:12]
+    # Keep an identity source when the page budget would otherwise hide it from
+    # the model and the corporate-name validator. Only use text actually sent.
+    company = lead['company'].casefold()
+    if company and not any(company in p['text'][:8000].casefold() for p in selected):
+        identity = next((p for p in ordered[12:] if company in p['text'][:8000].casefold()), None)
+        if identity:
+            selected[-1] = identity
+    return selected
 
 
 def _assessment(settings, lead, pages, before_request, target_query=''):

@@ -49,6 +49,38 @@ def mock_assessment(monkeypatch, value):
     monkeypatch.setattr(preparation, '_assessment', lambda *a: copy.deepcopy(value))
 
 
+@pytest.mark.parametrize('identity_source', ['current', 'stale', 'unrelated', 'outside_context'])
+def test_page_budget_retains_only_current_visible_official_identity_source(db, settings, prospect, monkeypatch, identity_source):
+    lid, _, eid = prospect
+    db.execute("UPDATE evidence SET text=replace(text,'Bright Demo Ltd','Bright Demo') WHERE id=?", (eid,))
+    for i in range(14):
+        text = 'Commercial cleaning services across the UK.'
+        db.execute('INSERT INTO evidence(lead_id,url,title,text,sha256,fetched_at) VALUES(?,?,?,?,?,?)',
+                   (lid, f'https://bright-demo.com/services/cleaning-{i:02}/', 'Cleaning services', text,
+                    hashlib.sha256(text.encode()).hexdigest(), time.time()))
+    text = ('x' * 8100 if identity_source == 'outside_context' else '') + 'Bright Demo Ltd serves businesses across the UK.'
+    url = 'https://unrelated.example/identity/' if identity_source == 'unrelated' else 'https://bright-demo.com/locations/london/'
+    identity_id = db.execute('INSERT INTO evidence(lead_id,url,title,text,sha256,fetched_at) VALUES(?,?,?,?,?,?)',
+                            (lid, url, 'Business address', text, hashlib.sha256(text.encode()).hexdigest(),
+                             time.time() - (31 * 86400 if identity_source == 'stale' else 0)))
+    lead = db.one('SELECT * FROM leads WHERE id=?', (lid,))
+    selected = preparation._pages(db, lead)
+    assert len(selected) == 12 and selected[0]['id'] == eid
+    assert (identity_id in {p['id'] for p in selected}) is (identity_source == 'current')
+    if identity_source == 'current':
+        packets = []
+        def assess(settings, instructions, packet, **kwargs):
+            packets.append(json.loads(packet))
+            return json.dumps(assessment(eid))
+        monkeypatch.setattr(email_writer, 'chat', assess)
+        result = preparation._assessment(settings, lead, selected, lambda: None)
+        assert any('Bright Demo Ltd' in p['text'] for p in packets[0]['sources'])
+        preparation._validate_review(lead, result, selected)
+        preparation.prepare(db, settings, lid)
+        assert preparation.latest(db, lid)['result']['state'] == 'drafts_ready'
+        assert all(m['state'] == 'draft' and m['due_at'] is None and not m['sent_at'] for m in db.all('SELECT * FROM messages'))
+
+
 def test_prepare_runs_real_writer_contract_and_leaves_all_messages_unsent(db, settings, prospect, monkeypatch):
     lid, cid, eid = prospect
     requests = []
