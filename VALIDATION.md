@@ -5,7 +5,8 @@ Starlette/httpx deprecation warning. The focused browser and single-email accept
 suite passed **40 tests in 58.41 seconds**. Ruff and JavaScript syntax checks passed.
 Chromium exercised both 1440px desktop and 390px mobile layouts using isolated fictional
 records: one editor, collapsed advanced tools, source expansion, draft edits, archived
-follow-ups, readable navigation and no horizontal overflow or JavaScript errors. The standalone legacy advanced-tool browser smoke also passed with zero JavaScript errors,
+follow-ups, readable navigation and no horizontal overflow or JavaScript errors. The standalone
+legacy advanced-tool browser smoke also passed with zero JavaScript errors,
 including source history, settings, sign-in, sales records and workflow-map interactions. These
 are local UI checks, not a claim of testing the authenticated VPS browser interactively.
 
@@ -21,6 +22,26 @@ The interface makes a saved initial draft visible even if an older preparation j
 It does not mark that failed job successful, relax source validation or guarantee semantic
 accuracy. The operator still reviews the proposed approach and final email. Nothing in
 these local checks enabled sending or contacted a real recipient.
+
+## VPS deployment verification
+
+Application commit `83ff746` was pushed and deployed with both production/browser Compose
+files. The app returned healthy; authenticated root and new workspace JavaScript returned
+HTTP 200. Loaded writer configuration reports one message, Nemotron selected and automatic
+follow-ups disabled. Sending remained OFF before and after deployment. n8n and its PostgreSQL
+container retained their existing uptime; only the outreach app was recreated.
+
+After confirming the private SQLite backup existed, the normal archive endpoint retained
+Spotless's initial message with its exact ID, subject and edited body unchanged. Three unsent
+follow-ups were preserved in the archive audit event. AI-origin validation passed for the
+retained message. Database checks found one remaining draft, zero scheduled messages and
+zero sent messages.
+
+An additional in-memory live Nemotron request using the prospect's current reviewed sources
+passed single-email and exact source-support validation in **10.18 seconds** with prompt
+`research-email-v4-single`. It did not save a second draft, replace edited copy, approve
+outreach or send mail. This proves the deployed single-output provider path; structural
+validation does not prove every semantic claim or client requirement.
 
 # Live VPS provider diagnosis and preparation source selection — 18 October 2026
 
