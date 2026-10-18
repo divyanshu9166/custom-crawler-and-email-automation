@@ -1,3 +1,19 @@
+# Final audit-reference feedback check — 19 October 2026
+
+A live response cited an unavailable audit observation and was rejected after its bounded
+correction; no copy was saved. The correction feedback now supplies the exact allowed audit
+reference list and explicitly requires [] when no valid observation exists. The final focused
+writer/preparation/diagnostics/Chromium suite passed **134 tests in 41.67 seconds** with the
+existing Starlette/httpx warning. Ruff and diff checks passed.
+
+The exact candidate writer module was then executed in an isolated Python process in the VPS
+app container against the existing settings and public research. Nemotron returned one valid
+email on its first request in **4.61 seconds**. Reading that output found a proposed usability
+experiment and sourced public business context; it did not assert a measured website defect,
+London trial offer or lost conversions. The existing database copy was asserted unchanged;
+no additional draft, approval or recipient message was saved. This is one live sample, not
+proof of reliable identification of an actual business pain point.
+
 The source-first VPS retest returned one message in 1.97 seconds without the earlier London
 trial assertion. It still used an internal “reviewed finding” phrase; that exploratory copy
 was not saved. Automatic output now rejects internal research labels and gives the model its

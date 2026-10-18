@@ -31,7 +31,9 @@ Do not include greetings, recipient names, addresses, signatures, links, markup 
 the application adds the verified recipient greeting locally. Do not copy a fixed email template.
 When audit_context contains relevant observations, mention ONE precise measured observation
 with its lab-test/capture qualifier, then propose the matching assessment/change. Include its ref
-in diagnostic_refs. For website/store improvement, choose a supplied observation when available.
+in diagnostic_refs. Only use exact refs from audit_context.observations. Never cite report event
+IDs or construct a reference yourself. When observations is empty, diagnostic_refs MUST be [].
+For website/store improvement, choose a supplied observation when available.
 Never turn a lab score into lost sales or describe a failed request as a client defect.
 If observations are empty, there is no verified technical problem: propose a relevant opportunity
 without implying a problem was found. Actual business pain remains unconfirmed.
@@ -64,7 +66,9 @@ audit_context or other internal workflow labels. Keep uncertainty natural: propo
 WHETHER something could help, rather than adding defensive boilerplate about nonexistent proof.
 When audit_context contains relevant observations, mention ONE precise measured observation
 with its lab-test/capture qualifier, then propose the matching assessment/change. Include its ref
-in diagnostic_refs. For website/store improvement, choose a supplied observation when available.
+in diagnostic_refs. Only use exact refs from audit_context.observations. Never cite report event
+IDs or construct a reference yourself. When observations is empty, diagnostic_refs MUST be [].
+For website/store improvement, choose a supplied observation when available.
 Never turn a lab score into lost sales or describe a failed request as a client defect.
 If observations are empty, there is no verified technical problem: propose a relevant opportunity
 without implying a problem was found. Actual business pain remains unconfirmed.
@@ -286,6 +290,8 @@ def generate_sequence(settings, lead, contact, finding, evidence, *, before_requ
                 raise
             packet['validation_feedback'] = {
                 'error': str(exc),
+                'allowed_diagnostic_refs': [o['ref'] for o in (audit_context or {}).get('observations', [])],
+                'diagnostic_reference_rule': 'If this allowed list is empty, return diagnostic_refs: [] for every message. Failed/partial/stale reports are not citable observations.',
                 'action': f'Return exactly {message_count} corrected message(s). Include business.company verbatim in the first '
                           'subject or body. Use exact contiguous support quotes from supplied sources. '
                           'Do not invent facts, promises, completed work or placeholders.'}

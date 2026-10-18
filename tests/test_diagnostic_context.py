@@ -199,3 +199,27 @@ def test_internal_research_labels_cannot_reach_the_email(db, prepared):
         'support':[{'evidence_id':prepared['evidence_id'],'quote':'Contact us for a consultation.'}]}]}
     with pytest.raises(ValueError, match='internal research labels'):
         email_writer.validate_output(value,lead,contact,pages)
+
+
+def test_bounded_writer_correction_explicitly_supplies_allowed_empty_audit_refs(db, settings, prepared, monkeypatch):
+    settings.followups_enabled = False
+    settings.draft_model, settings.draft_api_key = 'fictional-audit-model', 'fictional-fixture-key'
+    cid, lid = prepared['contact_id'], prepared['lead_id']
+    archive_followups(db, cid)
+    performance(db, lid, status='failed', strategies={}, errors=[{'reason':'HTTP 429'}])
+    calls = []
+    def respond(request):
+        packet = json.loads(json.loads(request.content)['messages'][1]['content'])
+        calls.append(packet)
+        refs = ['performance:999:mobile'] if len(calls)==1 else []
+        if len(calls)==2:
+            assert packet['validation_feedback']['allowed_diagnostic_refs'] == []
+            assert 'diagnostic_refs: []' in packet['validation_feedback']['diagnostic_reference_rule']
+        return httpx.Response(200,json={'choices':[{'finish_reason':'stop','message':{'content':json.dumps({'messages':[
+            {'step':0,'subject':'Bright Demo consultation journey','body':'I noticed Bright Demo invites visitors to contact you for a consultation. Would exploring a clearer outline of that first conversation be useful?',
+             'diagnostic_refs':refs,'support':[{'evidence_id':prepared['evidence_id'],'quote':'Contact us for a consultation.'}]}]})}}]})
+    monkeypatch.setattr(email_writer,'generate_sequence',REAL_GENERATE)
+    monkeypatch.setattr(email_writer.httpx,'Client',lambda **kw:REAL_CLIENT(transport=httpx.MockTransport(respond),**kw))
+    create_drafts(db,settings,cid)
+    assert len(calls)==2 and len(db.all('SELECT * FROM messages'))==1
+    assert db.one('SELECT state,due_at,sent_at FROM messages')=={'state':'draft','due_at':None,'sent_at':None}
