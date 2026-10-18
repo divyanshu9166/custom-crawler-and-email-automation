@@ -33,6 +33,9 @@ not require a separate research-AI key. Worker must be ON; Sending can remain OF
    The writer can correct one locally rejected sequence, using the same strict checks.
    The first email must include the supplied business name verbatim. Neither correction
    path retries provider/network errors or enables template/model fallbacks.
+   Touches 0-2 must end with a question. Captured service lists do not establish form
+   checkbox mechanics, abandonment or user hesitation. The writer rejects the observed
+   unsupported checklist assertion, but final factual/offer review remains necessary.
 6. Show **Review email drafts** with an evidence summary. Recipient relevance, current
    source/offer accuracy, all four messages and outreach eligibility still require final
    operator approval. Reacher freshness, sender/mailbox configuration and existing send gates

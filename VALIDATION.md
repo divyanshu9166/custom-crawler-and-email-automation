@@ -15,9 +15,16 @@ Unsupported AI quotes and feature-absence claims remain rejected. Assessment get
 one correction request before any qualification write; network failures are not retried.
 
 The focused preparation, writer, feedback and Chromium preparation-UI suite passed
-**111 tests in 39.82 seconds**, with one existing Starlette/httpx warning, including the
-subsequent writer correction and preservation tests. Ruff and diff
+**113 tests in 39.20 seconds**, with one existing Starlette/httpx warning, including the
+subsequent writer correction, preservation, question and invented-checklist tests. Ruff and diff
 checks passed. This is focused validation, not a new full-suite or live delivery verdict.
+
+Live assessment remained variable: a later attempt still failed its exact opportunity quote.
+Separately, the writer endpoint generated four saved drafts from the preceding successfully
+validated qualification. Reading those drafts exposed unsupported form-checklist claims and
+missing questions. Writer prompt v3 now explicitly rejects those assumptions; local checks
+require questions in touches 0-2 and reject the observed unsupported checklist assertion.
+These checks are deliberately narrow, not a general semantic entailment guarantee.
 
 # AI connection-test feedback and diagnostic verdicts — 18 October 2026
 

@@ -146,7 +146,8 @@ def test_provider_failures_preserve_existing_drafts(db, settings, prepared, monk
 
 @pytest.mark.parametrize('problem', ['missing_touch', 'duplicate_step', 'bool_step', 'duplicate_copy',
                                     'invented_quote', 'foreign_source', 'header', 'fake_reply',
-                                    'placeholder', 'promise', 'completed_asset', 'company_omitted'])
+                                    'placeholder', 'promise', 'completed_asset', 'company_omitted',
+                                    'missing_question', 'invented_checklist'])
 def test_invalid_ai_output_rejected(problem, db, prepared):
     lead, contact, _, sources = inputs(db, prepared)
     value = output(lead, sources)
@@ -173,6 +174,10 @@ def test_invalid_ai_output_rejected(problem, db, prepared):
         first['body'] += ' This will double your sales.'
     elif problem == 'completed_asset':
         first['body'] += ' I have prepared an audit for you.'
+    elif problem == 'missing_question':
+        first['body'] = first['body'].rstrip('?') + '.'
+    elif problem == 'invented_checklist':
+        first['body'] = lead['company']+' uses a long checklist in your current quote form. Could we review it?'
     else:
         first['body'] = first['body'].replace(lead['company'], 'Your business')
     with pytest.raises(ValueError):
