@@ -20,7 +20,7 @@ from outreach.research import add_lead
 
 
 root = Path(__file__).resolve().parents[1]
-output = root / "docs" / "screenshots"
+output = Path(os.environ.get('OUTREACH_UI_OUTPUT', root / "docs" / "screenshots"))
 output.mkdir(parents=True, exist_ok=True)
 with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
     seed(Path(tmp))
@@ -123,7 +123,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.get_by_text('Public X post · x.com · reciprocal profile link candidate', exact=True).click()
             expect(page.locator('#detail')).to_contain_text("This does not capture the author's profile")
             expect(page.locator('#detail')).to_contain_text('FICTIONAL PUBLIC POST UI FIXTURE')
-            page.get_by_text("02 · Qualify company & select one offer", exact=True).click()
+            page.get_by_text("02 · Advanced: edit qualification & offer manually", exact=True).click()
             page.locator("#review-form input[name='industry']").fill("Fictional creative services")
             page.get_by_role("button", name="Save qualification", exact=True).click()
             expect(page.locator("#notice")).to_contain_text("Company qualified")
@@ -401,7 +401,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.get_by_role("button", name="Pipeline", exact=True).click()
             page.locator(f"[data-lead='{history_lead}']").click()
             expect(page.get_by_text(f"#{old_id} · Old fictional source · Historical capture", exact=True)).to_be_visible()
-            page.get_by_text("02 · Qualify company & select one offer", exact=True).click()
+            page.get_by_text("02 · Advanced: edit qualification & offer manually", exact=True).click()
             assert page.locator("#review-form select[name='evidence_id'] option").evaluate_all("items=>items.map(x=>x.value)") == [str(fresh_id)]
             assert page.locator("#review-form select[name='country_source'] option").evaluate_all("items=>items.map(x=>x.value)") == ["https://history-demo.example.com/current"]
             for key in ["trigger_evidence_id", "followup_evidence_id"]:
@@ -435,6 +435,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             expect(page.locator("#detail")).to_contain_text("Profile prospect")
             expect(page.locator("#screenshot")).to_be_disabled()
             expect(page.locator("#performance")).to_be_disabled()
+            page.get_by_text("02 · Advanced: edit qualification & offer manually", exact=True).click()
             review_form = page.locator("#review-form")
             review_form.locator("textarea[name='country_quote']").fill("UK consulting services")
             review_form.locator("textarea[name='profile_ownership_notes']").fill("FICTIONAL: business name, location and services match this specific profile.")
@@ -499,7 +500,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             expect(page.locator('.flow-path')).to_have_count(46)
             page.locator('#flow-stage').select_option('G')
             expect(page.locator('#flow-node-title')).to_contain_text('G · Country')
-            expect(page.locator('#flow-node-info')).to_contain_text('Human review')
+            expect(page.locator('#flow-node-info')).to_contain_text('AI preparation + exception/final review')
             expect(page.locator('[data-node="BB"] .node-state')).to_contain_text('Other branch')
             assert page.evaluate('document.documentElement.scrollWidth<=innerWidth'), 'Detailed map mobile overflow'
             canvas = page.locator('#flow-viewport').bounding_box()

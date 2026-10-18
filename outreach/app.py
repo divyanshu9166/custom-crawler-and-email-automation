@@ -47,6 +47,7 @@ class RuntimeSettingsInput(Input):
 
 
 class ResearchSettingsInput(Input):
+    auto_prepare_enabled: bool | None = Field(default=None, strict=True)
     linkedin_people_search_enabled: bool | None = Field(default=None, strict=True)
     linkedin_profile_experience_enabled: bool | None = Field(default=None, strict=True)
     linkedin_contact_info_enabled: bool | None = Field(default=None, strict=True)
@@ -500,6 +501,38 @@ def create_app(settings=None):
     def writer_settings(value: WriterSettingsInput):
         return preferences.update_writer(db, value.model_dump(exclude_none=True))
 
+    @app.post('/api/providers/writer/test', dependencies=[Depends(auth)])
+    def test_writer():
+        from .email_writer import test_connection
+        if db.get('demo') == 'true':
+            raise ValueError('Offline demo cannot call the AI provider')
+        return test_connection(settings)
+
+    @app.post('/api/leads/{lead_id}/prepare', dependencies=[Depends(auth)])
+    def prepare_emails(lead_id: int):
+        from .preparation import queue
+        return {'job_id': queue(db, settings, lead_id)}
+
+    @app.get('/api/leads/{lead_id}/preparation', dependencies=[Depends(auth)])
+    def preparation_progress(lead_id: int):
+        from .preparation import latest
+        if not db.one('SELECT id FROM leads WHERE id=?', (lead_id,)):
+            raise HTTPException(404)
+        return latest(db, lead_id)
+
+    @app.post('/api/preparation/batch', dependencies=[Depends(auth)])
+    def prepare_batch(after_id: int = Query(default=0, ge=0)):
+        from .preparation import queue
+        queued, skipped = [], []
+        leads = db.all("SELECT id FROM leads WHERE status IN ('review','qualified') AND id>? ORDER BY id LIMIT 100", (after_id,))
+        for lead in leads:
+            try:
+                queued.append({'lead_id': lead['id'], 'job_id': queue(db, settings, lead['id'])})
+            except ValueError as exc:
+                skipped.append({'lead_id': lead['id'], 'reason': str(exc)})
+        return {'queued': queued, 'skipped': skipped, 'limit': 100,
+                'next_after_id': leads[-1]['id'] if len(leads) == 100 else 0, 'sending_changed': False}
+
     @app.put('/api/settings/runtime', dependencies=[Depends(auth)])
     def runtime_settings(value: RuntimeSettingsInput):
         return preferences.update_runtime(db, value.model_dump(exclude_none=True))
@@ -689,7 +722,9 @@ def create_app(settings=None):
                 artifact['current_for_review'] = True
             except ValueError:
                 artifact['current_for_review'] = False
+        from .preparation import latest as preparation_status
         return {"lead": row, "evidence": evidence, "crawl": crawl,
+                'preparation': preparation_status(db, lead_id),
                 'professional_captures':professional_captures,
                 'professional_report':json.loads(professional_report['detail']) if professional_report else None,
                 'social_captures': latest_social_captures(db, lead_id),

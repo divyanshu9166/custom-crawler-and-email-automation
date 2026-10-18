@@ -61,6 +61,7 @@ class Settings(BaseSettings):
     auto_contact_research: bool = True
     contact_research_max_pages: int = Field(6, ge=1, le=30)
     auto_professional_research: bool = True
+    auto_prepare_enabled: bool = True
     professional_max_profiles: int = Field(6,ge=1,le=20)
     professional_max_queries: int = Field(10,ge=1,le=20)
     linkedin_people_search_enabled: bool = True

@@ -1,8 +1,8 @@
 # Every-node acquisition workflow audit
 
-**Email-writing boundary:** these tests use controlled AI/provider fixtures; they do not establish live model quality or mailbox delivery. Operational writing requires research-based AI with no template fallback. Legacy drafts cannot be approved. See [the writing correction](AI_EMAIL_WRITING.md) and [the current research upgrade](SOCIAL_RESEARCH_UPGRADE.md).
+**Email-writing boundary:** tests use controlled AI/provider fixtures; they do not establish live model quality or mailbox delivery. AI preparation is optional and source validated; final recipient/message approval stays manual. No template fallback. See [automatic preparation](AUTO_PREPARATION.md).
 
-Latest recheck: **35 / 35 nodes mapped to actual source and passing executed tests**. Full suite: **1213 passed**.
+Latest recheck: **35 / 35 nodes mapped to actual source and passing executed tests**. Full suite: **1251 passed**.
 
 The implementation is present for every node, with deliberate human gates. This does **not** mean all nodes are fully automatic or verified against real providers/clients. The dashboard supports eleven overview stages and all thirty-five detailed nodes with source/ownership, branch, hold and operator-recorded statuses.
 
@@ -45,12 +45,12 @@ Re-ran the complete suite for the user-supplied diagram. A provider-readiness de
 | E2 | Other-domain published candidates | automatic candidate capture | Other-domain addresses are held with current source URL/hash; no automatic provider probe. **Boundary:** One live website candidate retained; no automatic import. |
 | E3 | Review current official source and company ownership | review | Ownership notes plus current official extraction required; re-crawl/source changes invalidate proof; cross-company inbox attachment rejected. **Boundary:** Fictional reviewed contacts tested; current real candidate remains held. |
 | F | Reacher verification | automatic / broader provider acceptance pending | Strict response/address checks; unknown/risky/catch-all/disposable/invalid cannot pass. Current source, recipient and suppression checked before dispatch and before committing a result. **Boundary:** Native backend/API/auth passed. The earlier isolated recipient was catch-all/risky; a new officially published florist contact received a real safe/non-catch-all verdict. One verdict does not establish universal existence, broader accuracy or inbox delivery; no outreach sent. |
-| G | Review saved country quote, buyer and one opportunity | review | Save current exact quote, US/UK timezone, buyer-fit notes, one offer and optional sourced announcement/extra idea. **Boundary:** Actual current businesses not qualified by this audit; quote validity alone does not establish semantic truth. |
+| G | Review saved country quote, buyer and one opportunity | AI preparation + exception/final review | AI preparation validates current source quotes, US/UK country/timezone and one offer; manual editing remains available. Unsupported inputs stay held; buyer/recipient judgment and final messages still require operator review. **Boundary:** Actual current businesses not qualified by this audit; quote validity alone does not establish semantic truth. |
 | Q | Desktop/mobile screenshots · optional PageSpeed lab audit | automatic optional audit | Desktop/mobile screenshots and optional on-demand PageSpeed; no profile-only site audits and no invented scores. **Boundary:** Real screenshots exist. Keyless PageSpeed live requests returned HTTP 429; no successful live lab score established. |
 | H | Hold · inspect or research further | automatic hold + review | Hold is represented by lead/profile/contact/message states, not a single unified queue. Uncertain sends require reconciliation; blocked sources and unsafe verification cannot send. **Boundary:** Current verification/profile failures visible; human resolution or provider availability required. |
 | AA | Campaign A · website or inquiry/booking chatbot | automatic proposals + reviewed selection | Campaign A proposes build/improvement/chatbot from public inquiry/service/support cues; one final offer is reviewed. Profile-only improvement excluded. **Boundary:** Fixed cue ranking is not a prediction of client value, sales likelihood or conversion uplift. |
 | BB | Campaign B · ecommerce or suitable WhatsApp workflow | automatic proposals + reviewed selection | Campaign B proposes launch/improvement/chatbot/WhatsApp from source cues; channel-fit, permission/integration and one relevant offer still require review. **Boundary:** No live WhatsApp sending or client store integration is performed by this acquisition software. |
-| I | Source-backed personalized draft + 3 follow-ups | AI writing after source review | Exactly four editable touches, one relevant offer, source references and distinct follow-up value; activated content cannot be overwritten. **Boundary:** Historical templates are offline samples only. The current AI writer requires its own configured endpoint and model-quality acceptance; no live AI/provider or recipient acceptance claimed. |
+| I | Source-backed personalized draft + 3 follow-ups | AI preparation and writing; final message review | Exactly four editable touches, one relevant offer, source references and distinct follow-up value; activated content cannot be overwritten. **Boundary:** Historical templates are offline samples only. The current AI writer requires its own configured endpoint and model-quality acceptance; no live AI/provider or recipient acceptance claimed. |
 | J | Review all messages and outreach eligibility | review gate | All four draft messages, sender identity, qualification, fresh safe proof, relevance/eligibility notes, opt-out and company conversation gate. **Boundary:** No real sequence approved. Current source findings and eligibility require operator judgment. |
 | K | Approve · local send window · mailbox quota | approval + automatic scheduling | Atomic approval; one conversation/company; local weekday/hour window, daily quota and minimum send gap. **Boundary:** Simulated calendars and isolated transport verified; deployed timezone/quota acceptance pending. |
 | L | SMTP send · durable Message-ID | automatic / mailbox setup pending | TLS authenticated SMTP, durable IDs/threading, explicit acceptance versus uncertain outcome and no automatic uncertain retry. **Boundary:** Real socket protocols passed on loopback fixtures; external mailbox delivery/inbox placement unverified. |
@@ -72,7 +72,7 @@ Re-ran the complete suite for the user-supplied diagram. A provider-readiness de
 
 ### A — US/UK search queries or sourced CSV
 
-Source: [outreach/app.py:602 — import_csv](../outreach/app.py), [outreach/discovery.py:494 — prospect_candidates](../outreach/discovery.py)
+Source: [outreach/app.py:635 — import_csv](../outreach/app.py), [outreach/discovery.py:494 — prospect_candidates](../outreach/discovery.py)
 
 - [test_api_import_detail_and_export](../tests/test_api.py) — 1 executed passing case(s), function line 23.
 - [test_market_selection_scopes_search_and_locale](../tests/test_platform_discovery.py) — 2 executed passing case(s), function line 152.
@@ -170,8 +170,10 @@ Source: [outreach/research.py:419 — verify_contact](../outreach/research.py), 
 
 ### G — Review saved country quote, buyer and one opportunity
 
-Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/priorities.py:9 — ranked](../outreach/priorities.py)
+Source: [outreach/preparation.py:192 — prepare](../outreach/preparation.py), [outreach/preparation.py:123 — _validate_review](../outreach/preparation.py), [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/priorities.py:9 — ranked](../outreach/priorities.py)
 
+- [test_prepare_runs_real_writer_contract_and_leaves_all_messages_unsent](../tests/test_preparation.py) — 1 executed passing case(s), function line 52.
+- [test_unsupported_assessments_stay_held_without_drafts](../tests/test_preparation.py) — 12 executed passing case(s), function line 85.
 - [test_priority_read_only_explainable_recrawl_and_suppression_reduce_readiness](../tests/test_growth_finance_priority.py) — 1 executed passing case(s), function line 97.
 - [test_active_sequences_are_not_ranked_as_new_outreach_work](../tests/test_growth_finance_priority.py) — 1 executed passing case(s), function line 141.
 - [test_country_evidence_must_match_saved_source](../tests/test_requirements_audit.py) — 2 executed passing case(s), function line 24.
@@ -188,7 +190,7 @@ Source: [outreach/browser.py:349 — screenshot](../outreach/browser.py), [outre
 
 ### H — Hold · inspect or research further
 
-Source: [outreach/mail.py:95 — send_one](../outreach/mail.py), [outreach/mail.py:249 — record_inbound](../outreach/mail.py), [outreach/campaigns.py:337 — resume_contact](../outreach/campaigns.py), [outreach/profiles.py:90 — assert_profile_review](../outreach/profiles.py)
+Source: [outreach/mail.py:95 — send_one](../outreach/mail.py), [outreach/mail.py:249 — record_inbound](../outreach/mail.py), [outreach/campaigns.py:352 — resume_contact](../outreach/campaigns.py), [outreach/profiles.py:90 — assert_profile_review](../outreach/profiles.py)
 
 - [test_uncertain_send_is_never_automatically_retried](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 54.
 - [test_resume_requires_fresh_result_and_cannot_override_optout](../tests/test_mail_providers.py) — 1 executed passing case(s), function line 85.
@@ -197,7 +199,7 @@ Source: [outreach/mail.py:95 — send_one](../outreach/mail.py), [outreach/mail.
 
 ### AA — Campaign A · website or inquiry/booking chatbot
 
-Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/campaigns.py:167 — draft_sequence](../outreach/campaigns.py), [outreach/opportunities.py:28 — proposals](../outreach/opportunities.py)
+Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/campaigns.py:176 — draft_sequence](../outreach/campaigns.py), [outreach/opportunities.py:28 — proposals](../outreach/opportunities.py)
 
 - [test_profile_to_reviewed_contact_and_four_drafts_retains_approval_gate](../tests/test_profile_prospects.py) — 2 executed passing case(s), function line 46.
 - [test_drafts_do_not_claim_completed_assets](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 147.
@@ -206,7 +208,7 @@ Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [o
 
 ### BB — Campaign B · ecommerce or suitable WhatsApp workflow
 
-Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/campaigns.py:167 — draft_sequence](../outreach/campaigns.py), [outreach/opportunities.py:28 — proposals](../outreach/opportunities.py)
+Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [outreach/campaigns.py:176 — draft_sequence](../outreach/campaigns.py), [outreach/opportunities.py:28 — proposals](../outreach/opportunities.py)
 
 - [test_campaign_b_rejects_non_d2c_website_offer](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 29.
 - [test_whatsapp_requires_recorded_channel_fit](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 35.
@@ -216,7 +218,7 @@ Source: [outreach/campaigns.py:46 — review_lead](../outreach/campaigns.py), [o
 
 ### I — Source-backed personalized draft + 3 follow-ups
 
-Source: [outreach/campaigns.py:192 — create_drafts](../outreach/campaigns.py), [outreach/email_writer.py:105 — generate_sequence](../outreach/email_writer.py), [outreach/email_writer.py:58 — validate_output](../outreach/email_writer.py)
+Source: [outreach/preparation.py:192 — prepare](../outreach/preparation.py), [outreach/campaigns.py:201 — create_drafts](../outreach/campaigns.py), [outreach/email_writer.py:162 — generate_sequence](../outreach/email_writer.py), [outreach/email_writer.py:115 — validate_output](../outreach/email_writer.py)
 
 - [test_sourced_trigger_and_extra_value_survive_into_drafts](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 49.
 - [test_default_followup_adds_new_value](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 78.
@@ -224,7 +226,7 @@ Source: [outreach/campaigns.py:192 — create_drafts](../outreach/campaigns.py),
 
 ### J — Review all messages and outreach eligibility
 
-Source: [outreach/campaigns.py:271 — approve](../outreach/campaigns.py), [outreach/app.py:914 — edit_message](../outreach/app.py)
+Source: [outreach/campaigns.py:286 — approve](../outreach/campaigns.py), [outreach/app.py:949 — edit_message](../outreach/app.py)
 
 - [test_approval_requires_safe_and_one_contact_per_company](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 20.
 - [test_approve_and_edit_freeze](../tests/test_api.py) — 1 executed passing case(s), function line 64.
@@ -232,7 +234,7 @@ Source: [outreach/campaigns.py:271 — approve](../outreach/campaigns.py), [outr
 
 ### K — Approve · local send window · mailbox quota
 
-Source: [outreach/campaigns.py:271 — approve](../outreach/campaigns.py), [outreach/mail.py:95 — send_one](../outreach/mail.py), [outreach/mail.py:24 — eligible_now](../outreach/mail.py)
+Source: [outreach/campaigns.py:286 — approve](../outreach/campaigns.py), [outreach/mail.py:95 — send_one](../outreach/mail.py), [outreach/mail.py:24 — eligible_now](../outreach/mail.py)
 
 - [test_two_concurrent_approvals_cannot_activate_twice](../tests/test_requirements_audit.py) — 1 executed passing case(s), function line 189.
 - [test_send_windows_weekend_and_dst](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 128.
@@ -249,7 +251,7 @@ Source: [outreach/mail.py:50 — smtp_send](../outreach/mail.py), [outreach/mail
 
 ### M — Independent IMAP monitoring
 
-Source: [outreach/worker.py:135 — mail_loop](../outreach/worker.py), [outreach/mail.py:312 — poll_inbox](../outreach/mail.py)
+Source: [outreach/worker.py:148 — mail_loop](../outreach/worker.py), [outreach/mail.py:312 — poll_inbox](../outreach/mail.py)
 
 - [test_worker_monitors_inbox_during_long_research_and_recovers_shutdown](../tests/test_crawler_quality.py) — 1 executed passing case(s), function line 536.
 - [test_imap_bounded_read_and_reply_stop](../tests/test_mail_providers.py) — 1 executed passing case(s), function line 34.
@@ -272,7 +274,7 @@ Source: [outreach/mail.py:249 — record_inbound](../outreach/mail.py), [outreac
 
 ### P — Global suppression
 
-Source: [outreach/db.py:212 — suppress](../outreach/db.py), [outreach/mail.py:249 — record_inbound](../outreach/mail.py), [outreach/app.py:993 — unsubscribe](../outreach/app.py)
+Source: [outreach/db.py:212 — suppress](../outreach/db.py), [outreach/mail.py:249 — record_inbound](../outreach/mail.py), [outreach/app.py:1028 — unsubscribe](../outreach/app.py)
 
 - [test_optout_global_suppression](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 93.
 - [test_permanent_dsn_suppresses](../tests/test_campaigns_mail.py) — 1 executed passing case(s), function line 104.
@@ -354,15 +356,7 @@ Source: [outreach/sales.py:91 — update_sales](../outreach/sales.py), [outreach
 
 ## Latest VPS evidence — 18 October 2026
 
-The user's Operations output contains three retained prospect records, rendered LinkedIn
-company captures and a published official-website business email. The discovery job timed
-out after retaining those records; research continued with partial crawls, separate network
-errors and an unavailable verifier. The current changes correct discovery quota stopping and
-explicit LinkedIn website redirect extraction. The final duplicate-result quota adjustment
-is checked by the focused regression run recorded in VALIDATION.md, after the full suite above.
-These are local source checks, not proof that this update has been built on the VPS. Reacher
-container status is requested; the earlier local HTTP 404 below is not a diagnosis of that VPS.
-See [the current findings and boundaries](LIVE_VPS_DISCOVERY_FIXES.md).
+The user reports saved official-site and rendered LinkedIn company evidence, partial website crawls and a writer HTTP 404. Automatic preparation, endpoint normalization and a synthetic connection-test UI are now covered by controlled tests; this does not establish a successful deployed NVIDIA request. See AUTO_PREPARATION.md and VALIDATION.md. Earlier local checks below are historical and are not a diagnosis of the VPS.
 
 ## Earlier local acceptance baseline
 

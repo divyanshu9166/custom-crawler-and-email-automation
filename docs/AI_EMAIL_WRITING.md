@@ -1,5 +1,13 @@
 # Research-based email writing — correction, 11 October 2026
 
+**18 October update:** current website prospects can now prepare source-validated
+qualification and four AI drafts automatically, with bulk queueing and final message review.
+The manual qualification editor is optional for routine supported cases. Unsupported evidence,
+ownership and profile-only cases stay explicit exceptions. NVIDIA URL normalization, a preset
+and synthetic connection check help diagnose HTTP 404. See [automatic preparation and VPS
+update steps](AUTO_PREPARATION.md). Earlier manual-first descriptions below are the original
+writer baseline; no template fallback or automatic outreach approval has been introduced.
+
 The earlier operational writer interpolated reviewed observations into fixed email wording. That did not meet the requested individually researched email-writing behaviour. Historical copy previews and workflow tests did not establish live AI writing or natural model quality.
 
 ## Operational behaviour now

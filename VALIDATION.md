@@ -1,3 +1,32 @@
+# Automatic preparation and AI connection diagnostics — 18 October 2026
+
+Full suite: **1251 passed in 377.03 seconds**, with one existing Starlette/httpx
+deprecation warning. After the final U.S. country-punctuation correction and bulk-result
+panel change, **41 preparation/core/UI cases passed in 25.92 seconds**, including the added
+research-completion scheduling regression and two explicit US location/timezone cases.
+The broader focused writer/settings/social/runtime UI run passed **97 cases in 46.89 seconds**
+before those final adjustments. Ruff, JavaScript syntax checks and diff checks passed.
+The standalone Chromium smoke check passed after its expected advanced-editor label and
+node execution-mode assertions were updated. It reported zero JavaScript errors and verified
+desktop/mobile layout, source/approval holds, settings/auth, workflow map and existing sales
+flows. All data/providers were fictional and no real recipient probe or outreach occurred.
+
+Website prospects can now prepare exact country evidence, source-backed business/offer
+context and four unsent AI drafts via one action or after source research finishes. Bulk
+pages queue up to 100 prospects, expose per-prospect exceptions and advance using a cursor.
+Preparation serializes with the same lead's research, preserves existing messages and
+concurrent edits, and discards changed source/contact/configuration or cancelled work.
+Automatic qualification is labelled `research_ai`; it is not human approval or confirmed
+buyer authority. Unknown/profile-only/unsupported cases remain explicit exceptions.
+
+NVIDIA base/root/full chat endpoint forms are normalized without duplicate suffixes. The
+dashboard offers a selected-model preset and a synthetic chat connection test. Provider
+HTTP 404/401/429 remains a distinct configuration/access/quota issue, with no template or
+alternate-model fallback and no provider-body/key echo. No live NVIDIA key or account access
+was tested here; current VPS build and successful provider/model writing remain deployment
+acceptance checks. Reacher/source restrictions and final recipient/eligibility/message review
+are unchanged independent requirements. See [features and deployment steps](docs/AUTO_PREPARATION.md).
+
 # VPS discovery quota and company-link fixes — 18 October 2026
 
 The full suite passed **1213 tests in 365.84 seconds**, with one existing

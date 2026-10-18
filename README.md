@@ -2,6 +2,11 @@
 
 A cold email system for US/UK prospects. Campaign A covers website development/improvement and inquiry/booking chatbots. Campaign B covers new/existing D2C stores, shopping/support chatbots and permission-based WhatsApp opportunities. Crawler quality takes priority; host size controls concurrency and throughput.
 
+**Research → draft review:** [automatic qualification and AI email preparation](docs/AUTO_PREPARATION.md)
+removes repetitive country/quote/offer copying for supported website prospects. Use **Prepare emails**
+or bulk **Prepare pending emails**; final recipient, evidence, eligibility and message approval
+remain manual. Missing evidence stays held. Includes NVIDIA connection testing and VPS update steps.
+
 **VPS setup:** [copy/paste commands for an existing n8n host](docs/VPS_DEPLOYMENT_COMMANDS.md)
 and [the full deployment/acceptance checklist](docs/VPS_DEPLOYMENT_CHECKLIST.md).
 Start with workers and sending disabled; inspect shared-host resource headroom

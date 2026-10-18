@@ -133,7 +133,7 @@ def test_search_queues_job_and_pipeline_polls_background_results_without_erasing
             lid = add_lead(db, 'Background Demo', 'https://background-demo.com', 'A', 'https://background-demo.com')
             page.clock.fast_forward(15001)
             page.locator(f'[data-lead="{lid}"]').click()
-            page.get_by_text('02 · Qualify company & select one offer', exact=True).click()
+            page.get_by_text('02 · Advanced: edit qualification & offer manually', exact=True).click()
             form = page.locator('#review-form [name=observation]')
             form.fill('Unsaved operator observation stays intact.')
             db.execute("UPDATE leads SET company='Updated Background Demo' WHERE id=?", (lid,))

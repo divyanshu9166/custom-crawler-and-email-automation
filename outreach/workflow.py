@@ -140,6 +140,22 @@ def snapshot(db, settings, lead_id=None):
         set_node('drafts', 'blocked', 'AI writer not configured', writer['note'])
     else:
         nodes['drafts']['details'].append(writer['note'])
+    preparation_state = job_state({'prepare'})
+    if preparation_state in {'running', 'queued', 'failed'} and not messages:
+        nodes['drafts'].update(state=preparation_state,
+                               description='AI prepares source-backed qualification and four unsent drafts. Final recipient/message review remains manual.')
+        if preparation_state in {'running', 'queued'}:
+            nodes['qualify']['state'] = preparation_state
+    preparation_events = db.all("SELECT detail FROM events WHERE kind='preparation' ORDER BY id")
+    latest_preparation = {}
+    for event in preparation_events:
+        detail = json.loads(event['detail'])
+        if detail.get('lead_id') in ids:
+            latest_preparation[detail['lead_id']] = detail
+    exceptions = [r for r in latest_preparation.values() if r.get('state') in {'needs_attention', 'needs_evidence'}]
+    if exceptions and not messages and preparation_state not in {'running', 'queued'}:
+        nodes['drafts'].update(state='blocked', metric=f'{len(exceptions)} preparation exceptions')
+        nodes['drafts']['details'].extend(r['reason'] for r in exceptions)
     approved = sum(bool(c['reviewed_at']) for c in contacts)
     review_candidates = []
     for contact in contacts:

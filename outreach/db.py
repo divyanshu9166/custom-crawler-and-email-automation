@@ -189,9 +189,9 @@ class DB:
                                (time.time(),)).fetchall()
             # Research and screenshots of one lead must not execute simultaneously across lanes.
             busy = {json.loads(r[0]).get("lead_id") for r in con.execute(
-                "SELECT payload FROM jobs WHERE state='running' AND kind IN ('research','screenshot','performance','contact_research','professional_research','social_research')")}
+                "SELECT payload FROM jobs WHERE state='running' AND kind IN ('research','screenshot','performance','contact_research','professional_research','social_research','prepare')")}
             row = next((r for r in rows if (not kinds or r["kind"] in kinds)
-                        and (r["kind"] not in {"research", "screenshot", "performance", 'contact_research','professional_research','social_research'}
+                        and (r["kind"] not in {"research", "screenshot", "performance", 'contact_research','professional_research','social_research','prepare'}
                              or json.loads(r["payload"]).get("lead_id") not in busy)), None)
             if not row:
                 return None

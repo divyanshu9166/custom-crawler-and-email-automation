@@ -15,7 +15,7 @@ MAIL_FIELDS = {"sender_name", "sender_company", "sender_email", "sender_website"
 AUTH_FIELDS = {"admin_user", "admin_password_hash", "session_version"}
 WRITER_FIELDS = {'draft_api_url', 'draft_api_key', 'draft_model', 'draft_timeout_seconds'}
 RUNTIME_FIELDS = {'worker_enabled', 'sending_enabled'}
-RESEARCH_FIELDS = {'linkedin_people_search_enabled', 'linkedin_profile_experience_enabled',
+RESEARCH_FIELDS = {'auto_prepare_enabled', 'linkedin_people_search_enabled', 'linkedin_profile_experience_enabled',
                    'linkedin_contact_info_enabled', 'social_posts_enabled', 'social_posts_max_profiles',
                    'social_posts_max_posts'}
 
@@ -123,8 +123,8 @@ class Preferences:
             if set(patch) - WRITER_FIELDS:
                 raise ValueError('Unsupported AI writer setting')
             checked = Settings.model_validate({**self.settings.model_dump(), **patch})
-            from .email_writer import validate_endpoint
-            validate_endpoint(checked.draft_api_url)
+            from .email_writer import completion_url
+            completion_url(checked.draft_api_url)
             db.set('paused', 'true')
             self.persist({key: getattr(checked, key) for key in patch})
             db.event('workspace_writer_settings_changed', {'fields': sorted(patch), 'sending_paused': True})

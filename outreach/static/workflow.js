@@ -42,7 +42,7 @@ window.WorkbenchFlow=(()=>{
     el('flow-worker').textContent=!a?'':!a.worker_enabled?'Background worker disabled':a.worker_fresh?'Worker heartbeat current':'Worker heartbeat stale or unavailable; recorded running jobs may need inspection';
     const runtime=a?.crawler_runtime;
     if(a?.worker_fresh&&runtime?.at&&Date.now()/1000-runtime.at<30)el('flow-worker').textContent+=` · Crawl slots ${runtime.active}/${runtime.desired} (max ${runtime.maximum}) · ${String(runtime.reason||'').replaceAll('_',' ')}`;
-    const kinds={discover:'Prospect search',research:'Website / profile research',verify:'Email verification',screenshot:'Screenshots',performance:'PageSpeed audit',contact_research:'Public contact research',professional_research:'Public professional profiles'};
+    const kinds={prepare:'AI qualification & draft preparation',social_research:'LinkedIn / X posts',discover:'Prospect search',research:'Website / profile research',verify:'Email verification',screenshot:'Screenshots',performance:'PageSpeed audit',contact_research:'Public contact research',professional_research:'Public professional profiles'};
     el('flow-active-jobs').innerHTML=(a?.jobs||[]).map(j=>`<div class="flow-job"><strong>#${j.id} · ${cfg.esc(kinds[j.kind]||j.kind)}</strong><span class="badge">${j.state==='running'?'Running':'Queued'}</span><small>${cfg.esc(j.company||'Global discovery')} · ${j.state==='running'?'Started '+(j.started_at?stamp(j.started_at):'time unavailable'):'Due '+stamp(j.due_at)}</small></div>`).join('');
     el('flow-activity-note').textContent=(a?.note||'')+(a&&a.running+a.queued>a.display_limit?' Showing the first '+a.display_limit+' active jobs.':'');
     el('flow-open-data').textContent=state.lead_id?'Open prospect data':'Open pipeline';

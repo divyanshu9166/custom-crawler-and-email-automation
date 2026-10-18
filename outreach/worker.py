@@ -70,6 +70,15 @@ async def execute_job(db, settings, job):
         elif job['kind']=='social_research':
             from .social_research import research_known_posts
             await research_known_posts(db, settings, payload['lead_id'])
+        elif job['kind'] == 'prepare':
+            from threading import Event
+            from .preparation import prepare
+            cancelled = Event()
+            try:
+                await asyncio.to_thread(prepare, db, settings, payload['lead_id'], cancelled=cancelled.is_set)
+            except asyncio.CancelledError:
+                cancelled.set()
+                raise
         else:
             raise ValueError("Unknown job kind")
         current_job = db.one('SELECT * FROM jobs WHERE id=?', (job['id'],))
@@ -92,6 +101,10 @@ async def execute_job(db, settings, job):
         db.execute("UPDATE jobs SET state=?,due_at=?,error=? WHERE id=?",
                    ("pending" if retry else "failed", time.time() + delay, error, job["id"]))
         db.event("job_failed", {"job": job["id"], "kind": job["kind"], "error": error, "will_retry": retry})
+    finally:
+        if job['kind'] in {'research', 'contact_research', 'professional_research', 'social_research', 'screenshot', 'performance'}:
+            from .preparation import maybe_schedule
+            maybe_schedule(db, settings, payload.get('lead_id'))
 
 
 class WorkerLock:
@@ -219,7 +232,7 @@ async def run(db, settings, stop):
     tasks = [asyncio.create_task(mail_loop(db, settings, stop)),
              asyncio.create_task(monitor_resources(admission, stop)),
              asyncio.create_task(job_loop(db, settings, stop, {"discover", "verify"}, schedules=True))]
-    tasks.extend(asyncio.create_task(job_loop(db, settings, stop, {"research", "screenshot", "performance", 'contact_research','professional_research','social_research'}, admission=admission))
+    tasks.extend(asyncio.create_task(job_loop(db, settings, stop, {"research", "screenshot", "performance", 'contact_research','professional_research','social_research','prepare'}, admission=admission))
                  for _ in range(settings.crawl_concurrency))
     try:
         await asyncio.gather(*tasks)

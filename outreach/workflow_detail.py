@@ -24,7 +24,7 @@ STAGES = [
     ('E2', 'Other-domain email candidates', 'Extraction + review', 'prospect'),
     ('E3', 'Review source & inbox ownership', 'Human review', 'prospect'),
     ('F', 'Reacher verification', 'Automatic', 'prospect'),
-    ('G', 'Country, buyer & opportunity review', 'Human review', 'prospect'),
+    ('G', 'Country, buyer & opportunity review', 'AI preparation + exception/final review', 'prospect'),
     ('Q', 'Screenshots & optional lab audit', 'Automatic, optional', 'prospect'),
     ('H', 'Hold & further research', 'Automatic hold + review', 'prospect'),
     ('AA', 'Campaign A: inquiries & bookings', 'Proposals + review', 'prospect'),

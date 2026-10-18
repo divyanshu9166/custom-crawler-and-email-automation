@@ -32,10 +32,67 @@ Quotes are metadata and need not be copied into the body. Include the business n
 
 
 def configuration(settings):
-    ready = bool(settings.draft_api_key and settings.draft_model)
+    ready = bool(settings.draft_api_key.strip() and settings.draft_model.strip())
     return {'configured': ready, 'model': settings.draft_model,
             'note': 'Research-based AI writing configured; endpoint/quality not verified.' if ready else
                     'Configure DRAFT_API_KEY and DRAFT_MODEL for research-based emails. No template fallback.'}
+
+
+def completion_url(base):
+    """Accept a provider base URL or its full chat endpoint, without doubling paths."""
+    base = base.strip().rstrip('/')
+    validate_endpoint(base)
+    if base.endswith('/chat/completions'):
+        return base
+    if urlsplit(base).hostname == 'integrate.api.nvidia.com':
+        if urlsplit(base).path in {'', '/v1'}:
+            return 'https://integrate.api.nvidia.com/v1/chat/completions'
+        raise ValueError('NVIDIA API base URL must be https://integrate.api.nvidia.com/v1')
+    return base + '/chat/completions'
+
+
+def chat(settings, instructions, packet, *, before_request=None, max_tokens=3000):
+    """Shared bounded provider call; no body/key echo and no alternate-model fallback."""
+    if not configuration(settings)['configured']:
+        raise ValueError(configuration(settings)['note'])
+    url = completion_url(settings.draft_api_url)
+    model, key, timeout = settings.draft_model.strip(), settings.draft_api_key, settings.draft_timeout_seconds
+    payload = {'model': model, 'stream': False, 'temperature': 0.4, 'max_tokens': max_tokens,
+               'messages': [{'role': 'system', 'content': instructions}, {'role': 'user', 'content': packet}]}
+    if url == 'https://integrate.api.nvidia.com/v1/chat/completions' and model == 'nvidia/nemotron-3-ultra-550b-a55b':
+        payload['reasoning_effort'] = 'none'
+    try:
+        with httpx.Client(timeout=timeout, trust_env=False, follow_redirects=False) as client:
+            if before_request:
+                before_request()
+            response = client.post(url, headers={'Authorization': 'Bearer '+key}, json=payload)
+            if response.status_code != 200:
+                hint = (' Check the API base URL and exact model ID/account access in Settings; use Test AI connection.'
+                        if response.status_code == 404 else '')
+                raise ValueError(f'AI writing endpoint returned HTTP {response.status_code}; no template fallback' + hint)
+            if len(response.content) > 200_000:
+                raise ValueError('AI writing returned an oversized response')
+            data = response.json()
+        if (not isinstance(data, dict) or not isinstance(data.get('choices'), list)
+                or not data['choices'] or not isinstance(data['choices'][0], dict)):
+            raise ValueError('AI writing returned invalid response data; existing drafts preserved')
+        choice = data['choices'][0]
+        if choice.get('finish_reason') != 'stop':
+            raise ValueError('AI writing output incomplete or refused; no drafts saved')
+        return choice['message']['content']
+    except httpx.HTTPError:
+        raise ValueError('AI writing endpoint unavailable; existing drafts preserved, no template fallback') from None
+    except (KeyError, IndexError, TypeError, json.JSONDecodeError):
+        raise ValueError('AI writing returned invalid JSON; existing drafts preserved') from None
+
+
+def test_connection(settings):
+    """Explicit synthetic call: no prospect information and no messages saved."""
+    answer = chat(settings, 'Reply with OK only.', 'Connection test. No prospect data.', max_tokens=128)
+    if not isinstance(answer, str) or not answer.strip():
+        raise ValueError('AI connection returned no final text; check model/output settings')
+    return {'ready': True, 'model': settings.draft_model.strip(),
+            'note': 'Synthetic chat request passed. Prospect research and email quality still need review.'}
 
 
 def validate_endpoint(base):
@@ -110,41 +167,19 @@ def generate_sequence(settings, lead, contact, finding, evidence, *, before_requ
         if frozen != (settings.draft_api_url, settings.draft_api_key, settings.draft_model, settings.draft_timeout_seconds):
             raise ValueError('AI writing configuration changed during generation; result discarded')
     api_url, api_key, model, timeout = frozen
-    base = api_url.rstrip('/')
-    validate_endpoint(base)
+    completion_url(api_url)
     packet = research_packet(lead, finding, evidence)
     encoded = json.dumps(packet, ensure_ascii=True)
     from .web import EMAIL_RE
     encoded = re.sub(EMAIL_RE, '[contact omitted]', encoded)
     if contact.get('name'):
         encoded = encoded.replace(contact['name'], '[recipient omitted]')
-    payload = {'model': model, 'stream': False, 'temperature': 0.4, 'max_tokens': 3000,
-               'messages': [{'role': 'system', 'content': INSTRUCTIONS}, {'role': 'user', 'content': encoded}]}
-    if base == 'https://integrate.api.nvidia.com/v1' and model == 'nvidia/nemotron-3-ultra-550b-a55b':
-        # The hosted Ultra endpoint defaults to high reasoning effort. These
-        # already-reviewed drafting inputs need the budget for final JSON.
-        payload['reasoning_effort'] = 'none'
+    def checked():
+        if before_request:
+            before_request()
+        assert_configuration_unchanged()
     try:
-        with httpx.Client(timeout=timeout, trust_env=False, follow_redirects=False) as client:
-            if before_request:
-                before_request()
-            assert_configuration_unchanged()
-            response = client.post(base+'/chat/completions', headers={'Authorization': 'Bearer '+api_key}, json=payload)
-            if response.status_code != 200:
-                # Never return provider bodies: they may echo credentials or prospect data.
-                raise ValueError(f'AI writing endpoint returned HTTP {response.status_code}; no template fallback')
-            if len(response.content) > 200_000:
-                raise ValueError('AI writing returned an oversized response')
-            data = response.json()
-        if (not isinstance(data, dict) or not isinstance(data.get('choices'), list)
-                or not data['choices'] or not isinstance(data['choices'][0], dict)):
-            raise ValueError('AI writing returned invalid response data; existing drafts preserved')
-        choice = data['choices'][0]
-        if choice.get('finish_reason') != 'stop':
-            raise ValueError('AI writing output incomplete or refused; no drafts saved')
-        value = json.loads(choice['message']['content'])
-    except httpx.HTTPError:
-        raise ValueError('AI writing endpoint unavailable; existing drafts preserved, no template fallback') from None
+        value = json.loads(chat(settings, INSTRUCTIONS, encoded, before_request=checked))
     except (KeyError, IndexError, TypeError, json.JSONDecodeError):
         raise ValueError('AI writing returned invalid JSON; existing drafts preserved') from None
     assert_configuration_unchanged()

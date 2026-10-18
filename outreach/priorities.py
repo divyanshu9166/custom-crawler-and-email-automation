@@ -12,6 +12,8 @@ def ranked(db, settings, lead_id=None):
         con.execute('BEGIN')
         view = ReadView(con)
         leads = view.all("""SELECT l.*,
+            (SELECT json_extract(e.detail,'$.state') FROM events e WHERE e.kind='preparation' AND json_extract(e.detail,'$.lead_id')=l.id ORDER BY e.id DESC LIMIT 1) preparation_state,
+            (SELECT j.state FROM jobs j WHERE j.kind='prepare' AND json_extract(j.payload,'$.lead_id')=l.id ORDER BY j.id DESC LIMIT 1) preparation_job,
             (SELECT count(*) FROM contacts c WHERE c.lead_id=l.id) contact_count,
             EXISTS(SELECT 1 FROM evidence e WHERE e.lead_id=l.id AND e.fetched_at BETWEEN ? AND ?
               AND e.fetched_at>=COALESCE((SELECT created_at FROM crawls WHERE lead_id=l.id ORDER BY id DESC LIMIT 1),0)) current_evidence

@@ -43,7 +43,7 @@ def context(db, contact_id):
     return contact, lead
 
 
-def review_lead(db, lead_id, review):
+def review_lead(db, lead_id, review, *, expected_lead=None, expected_contacts=None, review_method='operator'):
     from .profiles import source_allowed
     lead = db.one("SELECT * FROM leads WHERE id=?", (lead_id,))
     if not lead:
@@ -138,8 +138,17 @@ def review_lead(db, lead_id, review):
     elif review.get("followup_quote") or review.get("followup_evidence_id"):
         raise ValueError("Provide the follow-up suggestion or clear its evidence fields")
     finding["review_required"] = False
+    finding['qualification_method'] = review_method
+    finding['final_message_review_required'] = True
     with db.connect() as con:
         con.execute("BEGIN IMMEDIATE")
+        if expected_lead is not None:
+            current = dict(con.execute('SELECT * FROM leads WHERE id=?', (lead_id,)).fetchone())
+            contacts_now = [dict(c) for c in con.execute('SELECT * FROM contacts WHERE lead_id=? ORDER BY id', (lead_id,))]
+            if (current != expected_lead or contacts_now != expected_contacts or
+                    con.execute('SELECT 1 FROM messages m JOIN contacts c ON c.id=m.contact_id WHERE c.lead_id=?', (lead_id,)).fetchone() or
+                    con.execute("SELECT 1 FROM jobs WHERE kind IN ('research','contact_research','professional_research','social_research') AND state IN ('pending','running') AND json_extract(payload,'$.lead_id')=?", (lead_id,)).fetchone()):
+                raise ValueError('Research, contact or drafts changed during preparation; existing work preserved')
         if con.execute("SELECT id FROM contacts WHERE lead_id=? AND status IN ('active','replied','hold','closed')", (lead_id,)).fetchone():
             raise ValueError("Outreach started during review; preserve its evidence")
         if con.execute("SELECT status FROM leads WHERE id=?", (lead_id,)).fetchone()[0] == "researching":
@@ -161,7 +170,7 @@ def review_lead(db, lead_id, review):
                      review["service"], review["fit_notes"], json.dumps([finding]), time.time(), lead_id))
         # A changed research review invalidates all unsent drafts for this company.
         con.execute("DELETE FROM messages WHERE contact_id IN (SELECT id FROM contacts WHERE lead_id=?) AND state='draft'", (lead_id,))
-    db.event("lead_reviewed", {"lead_id": lead_id, "service": review["service"]})
+    db.event("lead_reviewed", {"lead_id": lead_id, "service": review["service"], 'method': review_method})
 
 
 def draft_sequence(company, service, finding, source_url, recipient_name=""):
@@ -189,11 +198,13 @@ def draft_sequence(company, service, finding, source_url, recipient_name=""):
              "body": body, "evidence_ids": evidence_ids} for step, body in enumerate(bodies)]
 
 
-def create_drafts(db, settings, contact_id):
+def create_drafts(db, settings, contact_id, *, cancelled=lambda: False, preserve_existing=False):
     contact, lead = context(db, contact_id)
     assert_contact_ownership(db, contact, lead)
-    if lead["status"] != "qualified" or contact["status"] in {"suppressed", "active", "replied", "hold", "closed"}:
-        raise ValueError("Review the lead first; existing outreach cannot be overwritten")
+    if lead['status'] != 'qualified':
+        raise ValueError('Research qualification is pending. Use Prepare emails, or review one source-backed offer in section 02.')
+    if contact["status"] in {"suppressed", "active", "replied", "hold", "closed"}:
+        raise ValueError('Existing outreach/contact status cannot be overwritten; review its history first')
     from .offers import selected_offer
     if not selected_offer(db, lead):
         raise ValueError('Review current source evidence and one Campaign A/B offer before drafting')
@@ -220,9 +231,13 @@ def create_drafts(db, settings, contact_id):
     if source_ids != {e['id'] for e in sources}:
         raise ValueError('Reviewed writing sources are not current; qualify again')
     previous_messages = db.all('SELECT * FROM messages WHERE contact_id=? ORDER BY step', (contact_id,))
+    if preserve_existing and previous_messages:
+        raise ValueError('New messages appeared during automatic preparation; existing copy preserved')
     writer_configuration = (settings.draft_api_url, settings.draft_api_key, settings.draft_model, settings.draft_timeout_seconds)
 
     def assert_unchanged(reader):
+        if cancelled():
+            raise ValueError('Preparation cancelled; no new copy will be saved')
         from .sequence import Reader
         current = reader if hasattr(reader, 'all') else Reader(reader)
         if writer_configuration != (settings.draft_api_url, settings.draft_api_key, settings.draft_model, settings.draft_timeout_seconds):
