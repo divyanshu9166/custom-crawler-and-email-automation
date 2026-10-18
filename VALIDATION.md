@@ -15,7 +15,8 @@ Unsupported AI quotes and feature-absence claims remain rejected. Assessment get
 one correction request before any qualification write; network failures are not retried.
 
 The focused preparation, writer, feedback and Chromium preparation-UI suite passed
-**107 tests in 38.10 seconds**, with one existing Starlette/httpx warning. Ruff and diff
+**111 tests in 39.82 seconds**, with one existing Starlette/httpx warning, including the
+subsequent writer correction and preservation tests. Ruff and diff
 checks passed. This is focused validation, not a new full-suite or live delivery verdict.
 
 # AI connection-test feedback and diagnostic verdicts — 18 October 2026

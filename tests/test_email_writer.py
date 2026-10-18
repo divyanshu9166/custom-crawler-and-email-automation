@@ -179,6 +179,38 @@ def test_invalid_ai_output_rejected(problem, db, prepared):
         email_writer.validate_output(value, lead, contact, sources)
 
 
+@pytest.mark.parametrize('outcome', ['corrected', 'still_invalid', 'network_error', 'context_changed'])
+def test_writer_corrects_once_without_weakening_identity_or_preservation(db, settings, prepared, monkeypatch, outcome):
+    lead, _, _, sources = inputs(db, prepared)
+    before = db.all('SELECT * FROM messages')
+    calls = []
+    def handle(request):
+        packet = json.loads(request.content)
+        calls.append(json.loads(packet['messages'][1]['content']))
+        if outcome == 'network_error':
+            raise httpx.ReadTimeout('private provider detail', request=request)
+        value = output(lead, sources)
+        if len(calls) == 1 or outcome == 'still_invalid':
+            value['messages'][0]['body'] = value['messages'][0]['body'].replace(lead['company'], 'Your business')
+        if outcome == 'context_changed':
+            db.execute("UPDATE messages SET subject='Keep human edit' WHERE step=0")
+        return response(value)
+    provider(monkeypatch, settings, handle)
+    if outcome == 'corrected':
+        create_drafts(db, settings, prepared['contact_id'])
+        assert len(calls) == 2
+        assert 'business identity' in calls[1]['validation_feedback']['error']
+        email_writer.assert_ai_origin(db, prepared['contact_id'])
+        assert all(m['state'] == 'draft' and m['due_at'] is None for m in db.all('SELECT * FROM messages'))
+    else:
+        with pytest.raises(ValueError):
+            create_drafts(db, settings, prepared['contact_id'])
+        if outcome == 'context_changed':
+            before[0]['subject'] = 'Keep human edit'
+        assert db.all('SELECT * FROM messages') == before
+        assert len(calls) == (2 if outcome == 'still_invalid' else 1)
+
+
 @pytest.mark.parametrize('change', ['source', 'contact', 'lead', 'draft', 'suppression', 'model'])
 def test_research_or_context_change_during_provider_call_discards_output(db, settings, prepared, monkeypatch, change):
     lead, _, _, sources = inputs(db, prepared)

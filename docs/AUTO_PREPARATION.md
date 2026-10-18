@@ -30,6 +30,9 @@ not require a separate research-AI key. Worker must be ON; Sending can remain OF
 5. Generate four individual, source-supported AI drafts. Every message stays `draft` with
    no due date. Preserve existing messages, human edits and active/held/replied/closed contacts.
    Source/contact/configuration changes during generation discard stale output.
+   The writer can correct one locally rejected sequence, using the same strict checks.
+   The first email must include the supplied business name verbatim. Neither correction
+   path retries provider/network errors or enables template/model fallbacks.
 6. Show **Review email drafts** with an evidence summary. Recipient relevance, current
    source/offer accuracy, all four messages and outreach eligibility still require final
    operator approval. Reacher freshness, sender/mailbox configuration and existing send gates
