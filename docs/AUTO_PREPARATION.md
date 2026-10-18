@@ -15,11 +15,16 @@ not require a separate research-AI key. Worker must be ON; Sending can remain OF
 2. Prioritize up to twelve saved official pages (home/about/contact/services/products first)
    and send bounded context to the configured model. Remove email strings from that input.
    Include the original discovery query when available so segment relevance is considered.
+   Retain a current official company-name source within this budget when the ordinary
+   ranking would omit it; only count identity text present in the transmitted context.
 3. Ask the model for either a hold or one source-backed qualification/offer. Validate the
    exact country/opportunity quotes against current pages, country/timezone, source ownership,
    business type evidence, campaign goal and D2C/channel context. Reject absence/loss claims,
    helpdesk/recruitment-only sales pitches and generic chatbot pitches when captured text
    already identifies a chatbot. Partial captures never establish that a feature is missing.
+   A locally rejected assessment can receive one correction request with the controlled
+   validation error. Both attempts use the same evidence and validation gates; a second
+   failure stays held. Provider/network failures are not retried by this correction path.
 4. Apply the same qualification gates as the advanced editor. Record `research_ai` as the
    qualification method; this is not a record of human review or confirmed buying authority.
 5. Generate four individual, source-supported AI drafts. Every message stays `draft` with

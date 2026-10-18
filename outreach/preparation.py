@@ -39,6 +39,10 @@ Return ONLY JSON. Either {"ready":false,"reason":"specific missing evidence"}, o
 Omit optional commerce/channel fields when inapplicable. Do not invent legal entity type:
 corporate requires an explicit incorporated name/entity statement in sources. US timezone
 must be supported by a named business location in country_quote; otherwise hold.
+Every quote must be copied as ONE contiguous substring of one supplied source.
+Do not paraphrase, combine passages or insert ellipses into a quote. Keep quotes short.
+Never claim that live chat, a chatbot, a form or a calendar is absent. The captures
+are incomplete. Propose a specific experiment without asserting an unobserved deficiency.
 """
 
 
@@ -119,14 +123,29 @@ def _assessment(settings, lead, pages, before_request, target_query=''):
               'crawl_limit': 'Only supplied captures are established. Missing features cannot be inferred.',
               'sources': [{'id': p['id'], 'url': p['url'], 'title': p['title'], 'text': p['text'][:8000]} for p in pages]}
     from .web import EMAIL_RE
-    encoded = re.sub(EMAIL_RE, '[contact omitted]', json.dumps(packet, ensure_ascii=True))
-    try:
-        result = json.loads(email_writer.chat(settings, INSTRUCTIONS, encoded, before_request=before_request))
-    except (TypeError, json.JSONDecodeError):
-        raise ValueError('AI assessment returned invalid JSON; no qualification or draft saved') from None
-    if not isinstance(result, dict) or type(result.get('ready')) is not bool:
-        raise ValueError('AI assessment must explicitly select ready or hold')
-    return result
+    for attempt in range(2):
+        encoded = re.sub(EMAIL_RE, '[contact omitted]', json.dumps(packet, ensure_ascii=True))
+        # Provider/network failures are not retried. Only one locally rejected
+        # assessment gets a correction request, before any qualification write.
+        raw = email_writer.chat(settings, INSTRUCTIONS, encoded, before_request=before_request)
+        try:
+            try:
+                result = json.loads(raw)
+            except (TypeError, json.JSONDecodeError):
+                raise ValueError('AI assessment returned invalid JSON; no qualification or draft saved') from None
+            if not isinstance(result, dict) or type(result.get('ready')) is not bool:
+                raise ValueError('AI assessment must explicitly select ready or hold')
+            if result['ready']:
+                _validate_review(lead, result, pages)
+            return result
+        except ValueError as exc:
+            if attempt:
+                raise
+            packet['validation_feedback'] = {
+                'error': str(exc),
+                'action': 'Return a corrected assessment using the supplied sources only, or ready:false. '
+                          'Quotes must be short contiguous exact source substrings, with no ellipses. '
+                          'Do not claim any feature is absent or invent a pain point.'}
 
 
 def _validate_review(lead, result, pages):

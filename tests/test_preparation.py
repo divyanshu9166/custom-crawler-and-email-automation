@@ -81,6 +81,41 @@ def test_page_budget_retains_only_current_visible_official_identity_source(db, s
         assert all(m['state'] == 'draft' and m['due_at'] is None and not m['sent_at'] for m in db.all('SELECT * FROM messages'))
 
 
+@pytest.mark.parametrize('outcome', ['corrected', 'still_invalid', 'hold', 'network_error', 'changed_source'])
+def test_assessment_correction_is_bounded_and_validated_before_writes(db, settings, prospect, monkeypatch, outcome):
+    lid, _, eid = prospect
+    lead = db.one('SELECT * FROM leads WHERE id=?', (lid,))
+    packets = []
+    invalid = assessment(eid)
+    invalid['review']['country_quote'] = 'We are ... a UK business'
+    invalid['review']['observation'] = 'Your website has no chatbot.'
+    def chat(settings, instructions, packet, **kwargs):
+        kwargs['before_request']()
+        packets.append(json.loads(packet))
+        if outcome == 'network_error':
+            raise ValueError('AI provider response timed out; key validity is not established.')
+        value = (invalid if len(packets) == 1 or outcome == 'still_invalid' else
+                 {'ready': False, 'reason': 'Insufficient support'} if outcome == 'hold' else assessment(eid))
+        return json.dumps(value)
+    monkeypatch.setattr(email_writer, 'chat', chat)
+    def current():
+        if outcome == 'changed_source' and packets:
+            raise ValueError('Research changed during preparation')
+    pages = preparation._pages(db, lead)
+    if outcome in {'still_invalid', 'network_error', 'changed_source'}:
+        with pytest.raises(ValueError):
+            preparation._assessment(settings, lead, pages, current)
+    else:
+        value = preparation._assessment(settings, lead, pages, current)
+        assert value['ready'] is (outcome == 'corrected')
+    assert len(packets) == (1 if outcome in {'network_error', 'changed_source'} else 2)
+    if len(packets) == 2:
+        assert 'Country needs' in packets[1]['validation_feedback']['error']
+        assert 'observation' not in packets[1]['validation_feedback']
+    assert db.one('SELECT status FROM leads WHERE id=?', (lid,))['status'] == 'review'
+    assert not db.one('SELECT id FROM messages')
+
+
 def test_prepare_runs_real_writer_contract_and_leaves_all_messages_unsent(db, settings, prospect, monkeypatch):
     lid, cid, eid = prospect
     requests = []

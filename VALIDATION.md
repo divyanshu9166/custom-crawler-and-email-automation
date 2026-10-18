@@ -1,3 +1,23 @@
+# Live VPS provider diagnosis and preparation source selection — 18 October 2026
+
+Direct SSH inspection confirmed the managed writer key was present and loaded, with
+sending disabled. NVIDIA model-catalog access returned HTTP 200 in about 0.2 seconds;
+the selected DeepSeek model was listed, but both bounded synthetic normal and streaming
+chat requests timed out after 60 seconds. A synthetic Nemotron comparison returned complete
+final text in about 0.5 seconds with the same key. After the operator authorized the switch,
+the application writer-settings endpoint saved Nemotron and its connection-test endpoint
+passed. This isolates the observed DeepSeek inference failure, not its internal provider cause.
+
+The first real preparation attempt then exposed a separate page-selection problem: current
+official evidence contained the incorporated business name outside the twelve-page shortlist.
+Selection now retains such a source without increasing the budget or weakening validation.
+Unsupported AI quotes and feature-absence claims remain rejected. Assessment gets at most
+one correction request before any qualification write; network failures are not retried.
+
+The focused preparation, writer, feedback and Chromium preparation-UI suite passed
+**107 tests in 38.10 seconds**, with one existing Starlette/httpx warning. Ruff and diff
+checks passed. This is focused validation, not a new full-suite or live delivery verdict.
+
 # AI connection-test feedback and diagnostic verdicts — 18 October 2026
 
 The focused writer, preparation, real Chromium desktop/mobile, settings and runtime suite
