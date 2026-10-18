@@ -188,3 +188,14 @@ def test_writer_does_not_launder_unverified_review_summaries_into_source_context
     assert 'UNVERIFIED_' not in text
     assert packet['reviewed_finding']['quote'] == finding['quote']
     assert packet['reviewed_finding']['suggestion_status'].startswith('Proposed')
+
+
+def test_internal_research_labels_cannot_reach_the_email(db, prepared):
+    lead = db.one('SELECT * FROM leads WHERE id=?', (prepared['lead_id'],))
+    contact = db.one('SELECT * FROM contacts WHERE id=?', (prepared['contact_id'],))
+    pages = db.all('SELECT * FROM evidence')
+    value = {'messages':[{'step':0,'subject':'An idea for Bright Demo',
+        'body':'The reviewed finding suggests testing the Bright Demo enquiry flow. Would this be useful?',
+        'support':[{'evidence_id':prepared['evidence_id'],'quote':'Contact us for a consultation.'}]}]}
+    with pytest.raises(ValueError, match='internal research labels'):
+        email_writer.validate_output(value,lead,contact,pages)

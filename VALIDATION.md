@@ -1,3 +1,12 @@
+The source-first VPS retest returned one message in 1.97 seconds without the earlier London
+trial assertion. It still used an internal “reviewed finding” phrase; that exploratory copy
+was not saved. Automatic output now rejects internal research labels and gives the model its
+existing single bounded correction opportunity. The final focused suite passed **133 tests
+in 41.06 seconds**, including the label rejection and summary exclusion regressions. The app
+and public health endpoint passed; the saved single draft stayed unchanged, with zero scheduled
+or sent messages. Sending remained OFF. The fresh capture was partial with 11 render issues;
+PageSpeed remained failed/quota limited, so zero technical issues were asserted.
+
 # Source-first writer correction after live audit review — 19 October 2026
 
 The deployed audit-context path returned valid single-email JSON from Nemotron, but manual
