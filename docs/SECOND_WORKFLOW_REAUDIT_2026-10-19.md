@@ -99,6 +99,44 @@ differences, correction of an invalid implementation pitch, new-service-page rou
 audit handling, stale/tampered/concurrently changed previews, exact edited-email preservation,
 and desktop/mobile rendering. Production deployment acceptance is recorded after verification.
 
+## Verification and deployment checks
+
+The latest executed results cover 1,364 unique tests with no unresolved failures. This is a
+consolidated report from the full-suite run and focused post-fix reruns, not a claim that a
+single untouched run passed every revision. The full run passed 1,353 cases and exposed one
+outdated expectation that no artifact existed after drafting; that assertion was corrected
+to check an unsent draft preview, then re-executed successfully. Final writer/source/audit
+regressions passed 110 cases. All 35 node mappings were checked against the consolidated
+JUnit report at `data/offer-gap-verified-tests.xml`. Ruff and JavaScript syntax checks passed.
+
+Real Chromium desktop/mobile checks and the broader browser smoke passed, including the
+sandboxed preview, one email editor, draft save, collapsed advanced tools, no horizontal
+overflow, and no JavaScript errors. These checks use isolated fictional records.
+
+App code through `a27a19a` was pushed and deployed on the VPS. Spotless has one current,
+unsent audit/test-plan preview (artifact 1), with `exploratory_opportunity` and `preview_ready`
+states. No technical defect or client-confirmed pain was established. Its original edited
+email remained byte-for-byte unchanged: the message snapshot digest before and after the
+preview backfill was `31767e5d0ecbc21879e25f6482585f9c0e0d61f4f8e76978cdcb33e072f01307`.
+Sending and follow-ups stayed OFF, the worker stayed ON, and the sent-message count stayed
+zero. n8n and PostgreSQL remained running. A private SQLite backup was taken before changes.
+
+Live Nemotron samples on isolated copies exposed additional wording defects. The deployed
+writer now rejects unsupported sender experience, buyer-behaviour claims, operational
+deductions from company size, and internal capture-failure/data-availability wording. Failed
+audit reports remain available in Operations and provenance; only established observations
+are supplied to the writer. Local validation is a guardrail, not universal semantic proof;
+the final recipient and wording review remains required. No test sample replaced the saved
+email or was sent to the prospect.
+
+The final deployed Nemotron check returned a validated single-email sample on an isolated
+copy. It cited the published team size and quote invitation, proposed testing with an explicit
+target audience, and stated that the aim was to find out whether friction exists before making
+changes. It did not invent sender case studies, assert an existing client defect, infer inquiry
+volume, or expose capture failures. The saved message digest remained unchanged and sent
+count remained zero. This is a successful bounded sample, not a guarantee of every future
+model response. The app and public tunnel health checks returned HTTP 200.
+
 External limits remain separate: successful PageSpeed requests need available provider quota;
 the existing failed HTTP 429 runs provide no score. Platform access and actual client outcomes
 are not made complete by these code changes. A prototype is not a deployed integration.
