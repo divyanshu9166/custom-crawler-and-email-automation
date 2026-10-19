@@ -247,7 +247,7 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
                     raise ValueError('Pair the measured finding with a relevant proposed fix or diagnostic next step')
                 if step == 0 and 'Font display' in observation['fact'] and not (
                         re.search(r'font', body, re.I) and
-                        re.search(r'adjust|chang|set|implement|optim|rework|configur', body, re.I) and
+                        re.search(r'\b(?:adjust\w*|chang(?:e|ing)|set(?:ting)?|implement\w*|updat(?:e|ing)|configur(?:e|ing)|optim[isz]\w*)\b[^.!?]{0,100}\bfont|\bfont[^.!?]{0,80}\b(?:adjusted|changed|configured|updated|optimised|optimized)\b', body, re.I) and
                         re.search(r'text|content|visible|appear|read|sooner|earlier|faster', body, re.I)):
                     raise ValueError('Explain concrete help with the flagged font loading and its intended visible-content benefit; a score-only audit offer is insufficient')
             if observation['kind'] == 'lab_measurement' and not (
@@ -331,6 +331,14 @@ def generate_sequence(settings, lead, contact, finding, evidence, *, before_requ
     instructions += '''
 Write a helpful service offer, not an audit readout. Keep the measured finding brief,
 then say concretely what we can implement and why that change could be useful.
+Keep the initial email around 70-95 words. Use one short evidence sentence and
+at most one numerical measurement; do not dump the score, LCP and FCP together.
+Describe actual implementation we offer (adjust/configure/update font loading,
+defer appropriate noncritical resources), not only reviewing rules or testing a fallback.
+Mention the intended buyer-facing benefit in plain words, such as making service
+information and an existing quote option visible sooner, only where that route is sourced.
+Keep retesting to a short verification clause. Avoid technical report phrasing such as
+"largest contentful paint", "verification approach" and "visual regressions" in the pitch.
 Use conclusion.findings.help_plan and intended_benefit as proposed work and a goal,
 never as a result already achieved or a guarantee. For font-loading findings, explain
 adjusting font-loading behaviour so text appears sooner while checking icons still work.

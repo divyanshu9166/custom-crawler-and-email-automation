@@ -88,7 +88,7 @@ def test_source_led_other_offers_do_not_claim_a_technical_problem():
     assert not result['business_pain_confirmed']
 
 
-@pytest.mark.parametrize('specific_help', [False, True])
+@pytest.mark.parametrize('specific_help', [False, True, 'review_only'])
 def test_font_pitch_needs_implementation_and_intended_benefit(db, prepared, specific_help):
     lid = prepared['lead_id']
     audit(db,lid)
@@ -99,13 +99,14 @@ def test_font_pitch_needs_implementation_and_intended_benefit(db, prepared, spec
     lead = db.one('SELECT * FROM leads WHERE id=?',(lid,))
     context = diagnostics.snapshot(db,lead)
     body = 'Bright Demo scored 51/100 in a mobile Lighthouse lab test. '
-    body += ('I can adjust the flagged font-loading rules so text appears sooner, then retest text and icons. Would a short walkthrough be useful?' if specific_help else
+    body += ('I can adjust the flagged font-loading rules so text appears sooner, then retest text and icons. Would a short walkthrough be useful?' if specific_help is True else
+             'We can review the font-loading rules so text remains visible while fonts load. After the change we would repeat the same lab strategy. Would a call be useful?' if specific_help == 'review_only' else
              'Would reviewing the performance score and font finding be useful?')
     value = {'messages':[{'step':0,'subject':'Bright Demo mobile finding','body':body,
         'diagnostic_refs':[context['observations'][0]['ref']],
         'support':[{'evidence_id':prepared['evidence_id'],'quote':'Contact us for a consultation.'}]}]}
     contact = db.one('SELECT * FROM contacts WHERE id=?',(prepared['contact_id'],))
-    if specific_help:
+    if specific_help is True:
         assert email_writer.validate_output(value,lead,contact,db.all('SELECT * FROM evidence'),audit_context=context)
     else:
         with pytest.raises(ValueError,match='concrete help'):
