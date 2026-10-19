@@ -122,6 +122,11 @@ def test_phone_task_must_be_cited_not_just_a_generic_company_quote(db):
         validate(db, support_quote='based in London UK')
 
 
+def test_calling_pitch_cannot_invent_an_ongoing_sender_pilot(db):
+    with pytest.raises(ValueError, match='sender deployment or ongoing pilot'):
+        validate(db, "We're testing an AI calling agent. "+GOOD)
+
+
 def test_real_writer_contract_prepares_one_unsent_email_and_mode_specific_proof(db, settings, monkeypatch):
     lid, eid, review = voice_review(db)
     db.execute('UPDATE evidence SET text=text||? WHERE id=?', (' hello@offer-fixture.example', eid))

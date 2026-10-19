@@ -42,6 +42,9 @@ prove these problems. No unsolicited outbound campaign or customer consent is es
 Scope is inbound calls or callbacks requested by the customer, subject to implementation
 review. The local call_flow is a proposed outline, never a working voice demo or deployed
 agent. Ignore unrelated lab scores; diagnostic_refs must be []. No fixed email template.
+No sender deployment or ongoing pilot has been supplied. Do not say "we're testing",
+"we are running" or "we already use" an agent. Offer what we can build/configure
+for this business, then a proposed sample flow; never imply an existing working demo.
 Keep the initial email around 70-100 words, with one relevant low-pressure final question.
 """
 
@@ -82,6 +85,8 @@ def validate_copy(lead, finding, evidence, text, *, initial=True):
             e['id'] == finding.get('evidence_id') and finding.get('quote') and finding['quote'] in e['text'] for e in evidence):
         raise ValueError('Calling-agent copy requires a current Campaign A phone-process source')
     plan = pitch_plan(finding['quote'])
+    if re.search(r"\b(?:we(?:['’]re| are)|I am)\s+(?:testing|running|using|deploying|piloting|trialling)\b", text, re.I):
+        raise ValueError('Calling-agent pitch invented a sender deployment or ongoing pilot; offer proposed implementation instead')
     # Even a tentative rewrite must not smuggle invented pain or existing connections in.
     claims = r'\b(?:miss(?:ed|ing)? calls?|lost leads?|losing (?:leads|bookings)|overwhelmed|understaffed|never miss|guaranteed bookings|already (?:connected|integrated)|your existing (?:AI|voice|calling) agent)\b[^.!?]*'
     for match in re.finditer(claims, text, re.I):
