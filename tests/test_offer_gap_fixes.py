@@ -212,13 +212,24 @@ def test_workflow_map_requires_a_relevant_reviewed_artifact_not_every_draft_iter
 
 
 @pytest.mark.parametrize('claim', ['Your visitors struggle to request a quote.', 'Your quote flow has friction.', 'You are losing enquiries.',
-                                  'Facilities managers who typically start the conversation are your buyers.'])
+                                  'Facilities managers who typically start the conversation are your buyers.',
+                                  'Your team size suggests a high volume of inbound quote requests.'])
 def test_public_service_quote_does_not_support_invented_client_pain(db, prepared, claim):
     lead = db.one('SELECT * FROM leads WHERE id=?', (prepared['lead_id'],))
     pages = db.all('SELECT * FROM evidence WHERE lead_id=?', (lead['id'],))
     value = {'messages': [{'step': 0, 'subject': 'An idea for '+lead['company'],
                            'body': claim+' Could a short review help?', 'support': [{'evidence_id': pages[0]['id'], 'quote': 'Contact us for a consultation.'}]}]}
     with pytest.raises(ValueError, match='client pain'):
+        email_writer.validate_output(value, lead, {'name': ''}, pages)
+
+
+@pytest.mark.parametrize('claim', ["We've been running tests for similar businesses.", 'We have helped similar clients.', 'Our clients see better results.'])
+def test_writer_cannot_invent_sender_track_record(db, prepared, claim):
+    lead = db.one('SELECT * FROM leads WHERE id=?', (prepared['lead_id'],))
+    pages = db.all('SELECT * FROM evidence WHERE lead_id=?', (lead['id'],))
+    value = {'messages': [{'step': 0, 'subject': 'An idea for '+lead['company'], 'body': claim+' Could a short assessment help?',
+                           'support': [{'evidence_id': pages[0]['id'], 'quote': 'Contact us for a consultation.'}]}]}
+    with pytest.raises(ValueError, match='sender experience'):
         email_writer.validate_output(value, lead, {'name': ''}, pages)
 
 

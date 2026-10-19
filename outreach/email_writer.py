@@ -253,9 +253,11 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
             raise ValueError('Each of the first three emails must end with a simple question')
         ui_claim = subject+' '+body
         validate_offer_intent(lead, finding or {}, ui_claim)
+        if re.search(r"\b(?:we|I)(?:['’]ve| have) (?:been|worked|helped|delivered|built|tested|seen|run)\b|\b(?:we|I) (?:recently|previously|already) (?:worked|helped|delivered|built|tested|ran)\b|\bour (?:clients|customers)\b", ui_claim, re.I):
+            raise ValueError('AI writing invented sender experience; no sender case studies or track record were supplied')
         # A generic inquiry invitation or even a lab score does not establish
         # actual buyer behaviour. Reject common ungrounded pain assertions.
-        for claim in re.finditer(r'\b(?:you (?:are losing|lose)|your (?:visitors|customers) (?:struggle|abandon|leave)|(?:your|the|current|existing) (?:website|site|form|checkout|journey|quote flow) (?:is|has|causes?) (?:broken|confus\w*|friction|drop[- ]?off)|who (?:typically|usually|normally) (?:start|handle|make|manage|choose|buy))[^.?!]*', ui_claim, re.I):
+        for claim in re.finditer(r'\b(?:you (?:are losing|lose)|your (?:visitors|customers) (?:struggle|abandon|leave)|(?:your|the|current|existing) (?:website|site|form|checkout|journey|quote flow) (?:is|has|causes?) (?:broken|confus\w*|friction|drop[- ]?off)|who (?:typically|usually|normally) (?:start|handle|make|manage|choose|buy)|(?:high|heavy|large)[ -]volume(?: of)?(?: inbound)? (?:quote|enquir|inquir))[^.?!]*', ui_claim, re.I):
             normalized_claim = ' '.join(claim.group().casefold().split())
             if not any(normalized_claim in ' '.join(e['text'].casefold().split()) for e in evidence):
                 raise ValueError('AI writing asserted client pain or buyer behaviour absent from supplied sources; propose a test instead')
@@ -321,6 +323,10 @@ Do not invent who typically starts a conversation or makes a purchase, or assume
 journey already works smoothly. These require source evidence just like any other factual claim.
 Do not mention internal capture failures, partial renders, provider errors or missing measurements.
 They are research limitations, not findings about the prospect's business.
+No sender work history or case studies were supplied. Never claim that we have run tests,
+worked with similar businesses, seen results for clients or already completed such projects.
+Offer what we COULD assess next. Team size or locations do not establish inquiry volume,
+customer behaviour or bottlenecks. Do not turn those facts into an implied operational problem.
 '''
     from .web import EMAIL_RE
     def checked():
