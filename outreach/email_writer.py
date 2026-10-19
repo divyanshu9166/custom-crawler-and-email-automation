@@ -188,6 +188,9 @@ def research_packet(lead, finding, evidence, audit_context=None, proof_context=N
         calling_plan = pitch_plan(finding.get('quote', ''))
         proposal['suggestion'] = calling_plan['proposed_work']
     conclusion = research_conclusion(audit_context or {}, lead.get('service', ''))
+    if lead.get('campaign') == 'A' and lead.get('service') in {'website_build', 'website_improvement'}:
+        for item in conclusion['findings']:
+            item.pop('supporting_measurements', None)
     if conclusion['problem_led_required'] and conclusion['findings']:
         # A historical generic idea must not displace the current measured finding.
         proposal['suggestion'] = conclusion['findings'][0]['proposed_fix']
@@ -283,6 +286,8 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
         if step < 3 and not body.rstrip().endswith('?'):
             raise ValueError('Each of the first three emails must end with a simple question')
         ui_claim = subject+' '+body
+        if refs and re.search(r'\b(?:so|which means|suggesting|indicating)\b[^.?!]{0,100}\b(?:visitors|users|customers)\b[^.?!]{0,100}\b(?:wait|cannot|can.t|unable|struggl)', ui_claim, re.I):
+            raise ValueError('A lab score does not establish visitor waiting or quote/form usability; describe the measured finding and proposed goal separately')
         if lead.get('campaign') == 'A':
             from .pitch_strategy import build as solution, validate_copy as validate_solution
             validate_solution(solution(lead, finding or {}, evidence, audit_context, (finding or {}).get('business_tool_review')), ui_claim, initial=step == 0)

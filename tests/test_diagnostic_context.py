@@ -16,6 +16,19 @@ REAL_GENERATE = email_writer.generate_sequence
 REAL_CLIENT = httpx.Client
 
 
+def test_lab_score_cannot_establish_how_long_visitors_wait_for_a_quote_form(db, prepared):
+    performance(db, prepared['lead_id'])
+    lead = db.one('SELECT * FROM leads WHERE id=?', (prepared['lead_id'],))
+    pages = db.all('SELECT * FROM evidence WHERE lead_id=?', (prepared['lead_id'],))
+    audit = diagnostics.snapshot(db, lead)
+    value = {'messages':[{'step':0,'subject':'An idea for Bright Demo',
+        'body':'A mobile Lighthouse lab test scored 51/100, so visitors likely wait before the quote step is usable. We could optimise loading. Would a short review help?',
+        'support':[{'evidence_id':prepared['evidence_id'],'quote':'Contact us for a consultation.'}],
+        'diagnostic_refs':[audit['observations'][0]['ref']]}]}
+    with pytest.raises(ValueError, match='visitor waiting'):
+        email_writer.validate_output(value, lead, {'name':''}, pages, audit_context=audit, finding=json.loads(lead['findings'])[0])
+
+
 def performance(db, lid, **patch):
     report = {'lead_id': lid, 'url': 'https://bright-demo.com/', 'status': 'complete',
               'strategies': {'mobile': {'final_url': 'https://bright-demo.com/', 'score': 51,

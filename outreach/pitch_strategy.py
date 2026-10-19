@@ -162,6 +162,8 @@ not as proof that the existing layout is bad. Ground claimed design defects in s
 design observations. Do not manufacture them from the performance score.
 Explain the buyer-facing project before implementation detail. Mention one useful measured
 fact, then connect the proposed website work to finding services and reaching the next step.
+Use at most one numerical measurement. Do not dump LCP/FCP timings or infer when a quote
+form becomes usable from page-paint timings. Keep the actual business project central.
 Avoid writing an email that sounds like a Lighthouse report or lists font/CSS tasks alone.
 For an optional_fit_check calling agent, keep it conditional: if phone enquiries are relevant,
 it could collect requirement details and route a summary to the team. Do not infer a phone

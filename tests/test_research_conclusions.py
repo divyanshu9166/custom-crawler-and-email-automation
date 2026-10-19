@@ -61,7 +61,11 @@ def test_current_lab_finding_drives_fix_packet_and_reproducible_artifact(db, pre
     assert 'mobile strategy' in finding['reproduce']
     assert not conclusion['business_pain_confirmed']
     packet = email_writer.research_packet(lead, json.loads(lead['findings'])[0], db.all('SELECT * FROM evidence'), context)
-    assert packet['conclusion'] == conclusion
+    copy_conclusion = json.loads(json.dumps(conclusion))
+    for item in copy_conclusion['findings']:
+        item.pop('supporting_measurements', None)
+    assert packet['conclusion'] == copy_conclusion
+    assert finding['supporting_measurements']  # Measurements remain in the audit/artifact, not the sales readout.
     assert packet['reviewed_finding']['suggestion'] == finding['proposed_fix']
     artifact_id = prepare_automatic(db, lid)
     artifact = db.one('SELECT body FROM deliverables WHERE id=?', (artifact_id,))

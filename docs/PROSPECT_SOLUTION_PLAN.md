@@ -59,3 +59,26 @@ Authenticated `PUT /api/leads/{id}/business-tools` accepts `chatbot_status` as
 `evidence_reference`, such as an inspected screenshot. It does not accept an
 unverified absence declaration. This is an exception correction, not another
 mandatory questionnaire in the normal Pipeline flow.
+
+## Deployment review — 19 October 2026
+
+The changes were pushed and deployed. Spotless's existing EnquiryBot was recorded
+from the user's inspected screenshot, saved locally as
+`/data/review-evidence/spotless-chatbot-user.png` (review event 575). Its current
+official helpdesk phone route supports the optional support-agent proposal;
+it is not treated as proof of a sales-qualification problem.
+
+The live Nemotron draft produced the combined proposal, but editorial review
+removed an unsupported link between LCP timing and quote-form usability and
+shortened the technical readout. The saved email is an AI draft with editorial
+changes, not a claimed unedited model result. Website layout/loading is the main
+project, the existing chatbot is retained, and phone support is an optional feature.
+
+Source references for mentioned additions are attached from the verified plan,
+with `origin=verified_prospect_solution`; no quote is invented or body claim
+silently added. Writing context for Spotless was bounded to 5,692 characters of
+relevant excerpts across six current source pages.
+
+Backups include `/data/backups/before-prospect-solution-20261019-163000.db` and
+`/data/backups/before-editorial-review-20261019-164601.db`. One unscheduled draft
+remains; sending and follow-ups stayed off. No email or phone call was sent.
