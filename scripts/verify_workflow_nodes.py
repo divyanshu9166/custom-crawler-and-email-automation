@@ -118,7 +118,7 @@ def audit(root, junit):
 def markdown(report):
     lines = ['# Every-node acquisition workflow audit', '',
              '**Email-writing boundary:** tests use controlled AI/provider fixtures; they do not establish live model quality or mailbox delivery. AI preparation is optional and source validated; final recipient/message approval stays manual. No template fallback. See [automatic preparation](AUTO_PREPARATION.md).', '',
-             f"Latest recheck: **{report['diagram_node_count']} / {report['diagram_node_count']} nodes mapped to actual source and passing executed tests**. Full suite: **{report['suite_cases_passed']} passed**.", '',
+             f"Latest recheck: **{report['diagram_node_count']} / {report['diagram_node_count']} nodes mapped to actual source and passing executed tests**. Executed checks: **{report['suite_cases_passed']} passed**.", '',
              'The implementation is present for every node, with deliberate human gates. This does **not** mean all nodes are fully automatic or verified against real providers/clients. The dashboard supports eleven overview stages and all thirty-five detailed nodes with source/ownership, branch, hold and operator-recorded statuses.', '',
              '## What this audit corrected', '', *['- ' + item for item in report['findings_fixed']], '',
              'Six new regression cases reproduced six status defects before the fixes (6 failed / 4 passed). The ten workflow-map tests pass afterward. These were visibility/calculation defects; the underlying approval/send gates were independently enforced.', '',

@@ -213,7 +213,9 @@ def test_workflow_map_requires_a_relevant_reviewed_artifact_not_every_draft_iter
 
 @pytest.mark.parametrize('claim', ['Your visitors struggle to request a quote.', 'Your quote flow has friction.', 'You are losing enquiries.',
                                   'Facilities managers who typically start the conversation are your buyers.',
-                                  'Your team size suggests a high volume of inbound quote requests.'])
+                                  'Your team size suggests a high volume of inbound quote requests.',
+                                  'You have 1,500 professionals, which suggests a high-volume inbound operation.',
+                                  'You operate nationwide, which implies a complicated customer process.'])
 def test_public_service_quote_does_not_support_invented_client_pain(db, prepared, claim):
     lead = db.one('SELECT * FROM leads WHERE id=?', (prepared['lead_id'],))
     pages = db.all('SELECT * FROM evidence WHERE lead_id=?', (lead['id'],))
@@ -244,6 +246,9 @@ def test_failed_audit_reports_stay_internal_and_cannot_leak_into_email(db, prepa
              'body': 'The performance capture failed and the screenshot showed partial rendering issues. Could a review help?',
              'support': [{'evidence_id': pages[0]['id'], 'quote': finding['quote']}]}]}
     with pytest.raises(ValueError, match='capture failures'):
+        email_writer.validate_output(value, lead, {'name': ''}, pages)
+    value['messages'][0]['body'] = 'We have no data on how your buyers use the quote form. Could a test help?'
+    with pytest.raises(ValueError, match='research limitations'):
         email_writer.validate_output(value, lead, {'name': ''}, pages)
 
 

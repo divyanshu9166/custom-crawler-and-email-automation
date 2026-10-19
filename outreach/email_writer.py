@@ -257,7 +257,7 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
             raise ValueError('AI writing invented sender experience; no sender case studies or track record were supplied')
         # A generic inquiry invitation or even a lab score does not establish
         # actual buyer behaviour. Reject common ungrounded pain assertions.
-        for claim in re.finditer(r'\b(?:you (?:are losing|lose)|your (?:visitors|customers) (?:struggle|abandon|leave)|(?:your|the|current|existing) (?:website|site|form|checkout|journey|quote flow) (?:is|has|causes?) (?:broken|confus\w*|friction|drop[- ]?off)|who (?:typically|usually|normally) (?:start|handle|make|manage|choose|buy)|(?:high|heavy|large)[ -]volume(?: of)?(?: inbound)? (?:quote|enquir|inquir))[^.?!]*', ui_claim, re.I):
+        for claim in re.finditer(r'\b(?:you (?:are losing|lose)|your (?:visitors|customers) (?:struggle|abandon|leave)|(?:your|the|current|existing) (?:website|site|form|checkout|journey|quote flow) (?:is|has|causes?) (?:broken|confus\w*|friction|drop[- ]?off)|who (?:typically|usually|normally) (?:start|handle|make|manage|choose|buy)|(?:high|heavy|large)[ -]volume\b|(?:which|this|that) (?:suggests|implies|indicates|means)\b)[^.?!]*', ui_claim, re.I):
             normalized_claim = ' '.join(claim.group().casefold().split())
             if not any(normalized_claim in ' '.join(e['text'].casefold().split()) for e in evidence):
                 raise ValueError('AI writing asserted client pain or buyer behaviour absent from supplied sources; propose a test instead')
@@ -265,6 +265,8 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
             raise ValueError('AI writing exposed internal research labels; write directly to the prospect')
         if re.search(r'(?:capture|audit|screenshot|render(?:ing)?).{0,45}(?:failed|partial|blocked|unavailable)|(?:failed|partial).{0,45}(?:capture|render)', ui_claim, re.I):
             raise ValueError('AI writing exposed internal capture failures; cite established observations or propose an assessment')
+        if re.search(r'\bwe (?:have no|lack|do not have) (?:data|analytics|measurements)', ui_claim, re.I):
+            raise ValueError('AI writing exposed internal research limitations; ask a useful assessment question instead')
         if (re.search(r'\b(?:checkbox(?:es)?|checklist)\b', ui_claim, re.I)
                 and re.search(r'\b(?:current|existing|requires?|asks?|bundles?|select|uses?|contains?)\b', ui_claim, re.I)
                 and not any(re.search(r'\b(?:checkbox(?:es)?|checklist)\b', e['text'], re.I) for e in evidence)):
@@ -327,6 +329,9 @@ No sender work history or case studies were supplied. Never claim that we have r
 worked with similar businesses, seen results for clients or already completed such projects.
 Offer what we COULD assess next. Team size or locations do not establish inquiry volume,
 customer behaviour or bottlenecks. Do not turn those facts into an implied operational problem.
+State the sourced business fact directly without adding "which suggests/implies" deductions.
+Then propose a future test. Keep research unknowns implicit in the question; do not tell the
+prospect that we lack data or analytics about their business.
 '''
     from .web import EMAIL_RE
     def checked():
