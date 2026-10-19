@@ -19,7 +19,7 @@ def fictional_email_writer(monkeypatch):
     from outreach import email_writer
     from outreach.campaigns import draft_sequence
 
-    def generate(settings, lead, contact, finding, evidence, *, before_request=None, audit_context=None):
+    def generate(settings, lead, contact, finding, evidence, *, before_request=None, audit_context=None, proof_context=None):
         if before_request:
             before_request()
         source = next(e for e in evidence if e['id'] == finding['evidence_id'])

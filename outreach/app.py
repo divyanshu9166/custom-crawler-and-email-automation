@@ -154,6 +154,7 @@ class ReviewInput(Input):
     timezone: str = Field(max_length=100)
     business_type: Literal["corporate", "sole_trader", "other"]
     service: str
+    website_scope: Literal['auto', 'website_launch', 'new_service_page'] = 'auto'
     fit_notes: str = Field(min_length=12, max_length=1500)
     evidence_id: int
     quote: str = Field(min_length=8, max_length=700)
@@ -800,6 +801,10 @@ def create_app(settings=None):
     @app.post("/api/leads/{lead_id}/artifacts", dependencies=[Depends(auth)])
     def artifact_create(lead_id: int, value: ArtifactInput):
         return {"id": deliverables.create(db, lead_id, value.model_dump())}
+
+    @app.post("/api/leads/{lead_id}/proof-preview", dependencies=[Depends(auth)])
+    def prepare_proof_preview(lead_id: int):
+        return {'id': deliverables.prepare_automatic(db, lead_id), 'sending': False}
 
     @app.post("/api/artifacts/{artifact_id}/approve", dependencies=[Depends(auth)])
     def artifact_review(artifact_id: int, value: ProposalReviewInput):

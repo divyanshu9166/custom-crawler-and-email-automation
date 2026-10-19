@@ -174,6 +174,10 @@ async def test_connected_discovery_to_client_outcome(db, settings, safe_result, 
     if profile:
         assert db.all('SELECT id FROM contacts') == [] and queried == []
     value = review_value(db, lid, campaign)
+    if campaign == 'A' and not profile:
+        # An existing website with an inquiry invitation supports a proposed
+        # improvement assessment, not a missing-website/new-service-page pitch.
+        value['service'] = 'website_improvement'
     review_lead(db, lid, value)
     if profile:
         cid = add_contact(db, lid, 'bright-fixture@gmail.com', PROFILE, 'Alex', 'Founder',

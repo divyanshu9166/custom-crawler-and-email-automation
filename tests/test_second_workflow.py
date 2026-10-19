@@ -69,7 +69,8 @@ def test_every_offer_branch_selects_one_service_and_prepares_relevant_source_pro
     result = snapshot(db, lid)
     states = {n['id']: n['state'] for n in result['nodes']}
     assert len(states) == 15
-    assert states['input'] == states['goal'] == states['primary_offer'] == 'complete'
+    assert states['input'] == states['goal'] == 'complete'
+    assert states['primary_offer'] == ('qualification_only' if service.startswith('whatsapp_') else 'exploratory_opportunity')
     assert result['selected_service'] == service and kind in result['recommended_artifacts']
     assert states[node] == ('qualification_only' if service.startswith('whatsapp_') else 'selected')
     assert len(json.loads(db.one('SELECT findings FROM leads WHERE id=?', (lid,))['findings'])) == 1
@@ -77,7 +78,7 @@ def test_every_offer_branch_selects_one_service_and_prepares_relevant_source_pro
                 'intro': 'A proposed direction based on the reviewed public content.', 'primary_action': 'Explore the next step',
                 'faqs': [{'evidence_id': eid, 'question': 'What does the published information say?', 'quote': signal}]}
     aid = deliverables.create(db, lid, artifact)
-    assert {n['id']: n['state'] for n in snapshot(db, lid)['nodes']}['value_artifact'] == 'needs_artifact_review'
+    assert {n['id']: n['state'] for n in snapshot(db, lid)['nodes']}['value_artifact'] == 'preview_ready'
     deliverables.action(db, aid, 'approve')
     assert snapshot(db, lid)['reviewed_current_artifact_ids'] == [aid]
     body = db.one('SELECT body FROM deliverables WHERE id=?', (aid,))['body']
@@ -162,6 +163,7 @@ def test_expired_source_cannot_create_a_value_artifact(db, prepared, kind):
 
 
 def test_source_change_during_artifact_preparation_is_caught_before_commit(db, prepared, monkeypatch):
+    before = db.all('SELECT * FROM deliverables')
     original = deliverables.source_point
     def changed(*args):
         page, quote = original(*args)
@@ -170,7 +172,7 @@ def test_source_change_during_artifact_preparation_is_caught_before_commit(db, p
     monkeypatch.setattr(deliverables, 'source_point', changed)
     with pytest.raises(ValueError, match='Source changed'):
         deliverables.create(db, prepared['lead_id'], artifact_value())
-    assert not db.all('SELECT * FROM deliverables')
+    assert db.all('SELECT * FROM deliverables') == before
 
 
 def test_historical_artifact_without_source_snapshot_cannot_be_newly_approved(db, prepared):

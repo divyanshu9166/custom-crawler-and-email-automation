@@ -18,7 +18,7 @@ window.WorkbenchWorkspace = {
       section.append(form);
     }
   },
-  organize(data, finding, {esc, link}) {
+  organize(data, finding, {esc, link, api, reload}) {
     const detail = document.querySelector('#detail');
     const original = [...detail.children];
     const heading = detail.querySelector('.lead-heading');
@@ -42,11 +42,37 @@ window.WorkbenchWorkspace = {
     steps.className = 'workspace-steps';
     const hasSource = data.evidence.some(e => e.current_for_review && e.business_for_review !== false);
     const hasEmail = data.messages.some(m => m.step === 0);
-    steps.innerHTML = [['Research', hasSource], ['Match an offer', !!l.service], ['Review email', hasEmail]].map(([label,done],i) => `<li class="${done ? 'done' : ''}"><span>${done ? '✓' : i+1}</span>${label}</li>`).join('');
+    steps.innerHTML = [['Research', hasSource], ['Match an offer', !!data.offer_workflow?.selected_service], ['Review email', hasEmail]].map(([label,done],i) => `<li class="${done ? 'done' : ''}"><span>${done ? '✓' : i+1}</span>${label}</li>`).join('');
     const brief = document.createElement('section');
     brief.className = 'business-brief';
     const evidence = data.evidence.find(e => e.id === finding.evidence_id && e.current_for_review);
     brief.innerHTML = `<div class="brief-title"><span class="eyebrow">RESEARCH SUMMARY</span><h3>Why this prospect?</h3></div><div class="brief-facts"><div><span>Business fit</span><p>${esc(l.fit_notes || 'Research will establish whether this business matches your target.')}</p></div><div><span>Proposed approach</span><p>${esc(finding.suggestion || 'No supported offer yet. Prepare the email after research is available.')}</p></div></div>${evidence && finding.quote ? `<details class="brief-source"><summary>View supporting source</summary><blockquote>${esc(finding.quote)}</blockquote>${link(evidence.url)}<p class="small">Captured ${new Date(evidence.fetched_at*1000).toLocaleDateString()}. The proposed approach is an idea to review, not a confirmed client requirement.</p></details>` : ''}`;
+    const basis = data.offer_workflow?.evidence_basis;
+    if (basis) {
+      const labels = {measured_observation:'Measured observation',exploratory_opportunity:'Exploratory opportunity',insufficient_evidence:'More evidence needed'};
+      brief.insertAdjacentHTML('afterbegin', `<div class="audit-basis offer-evidence-basis"><strong>${esc(labels[basis.classification] || 'Evidence review')}</strong><p>${esc(basis.note)}</p></div>`);
+    }
+    const proofIds = data.offer_workflow?.prepared_current_artifact_ids || [];
+    const proof = data.deliverables.find(a => proofIds.includes(a.id));
+    const proofPanel = document.createElement('section');
+    proofPanel.className = 'panel proof-preview';
+    proofPanel.setAttribute('aria-label','Proof of value preview');
+    proofPanel.innerHTML = '<h3>Supporting preview</h3><p>Review alongside the email. A local concept or test plan is not a completed client implementation.</p>';
+    if (proof) {
+      proofPanel.insertAdjacentHTML('beforeend', `<details><summary>${esc(proof.title)} · ${proof.state === 'draft' ? 'Draft for review' : 'Reviewed'}</summary><iframe title="Proof of value preview" sandbox="" style="width:100%;height:430px;border:0" srcdoc="${esc(proof.body)}"></iframe></details>`);
+    } else if (data.offer_workflow?.selected_service) {
+      const button = document.createElement('button');
+      button.textContent = 'Prepare supporting preview';
+      const result = document.createElement('p');
+      result.setAttribute('role','status');
+      button.onclick = async () => {
+        button.disabled = true;
+        result.textContent = 'Preparing a source-backed preview; your email will be preserved…';
+        try { await api(`/api/leads/${l.id}/proof-preview`,'POST',{}); await reload(); }
+        catch (e) { result.textContent = e.message; button.disabled = false; }
+      };
+      proofPanel.append(button,result);
+    } else proofPanel.insertAdjacentHTML('beforeend','<p>Available automatically after a supported offer is selected.</p>');
     const audits = data.diagnostics;
     if (audits) {
       const labels = {performance:'PageSpeed lab test',screenshot:'Desktop / mobile capture'};
@@ -85,6 +111,7 @@ window.WorkbenchWorkspace = {
     detail.replaceChildren(intro, steps);
     if (preparation) detail.append(preparation);
     detail.append(brief);
+    if (proof || data.offer_workflow?.selected_service) detail.append(proofPanel);
     if (marker) {
       marker.className = 'email-section-heading';
       marker.innerHTML = '<span class="eyebrow">ONE PROSPECT · ONE INITIAL EMAIL</span><h3>Your email</h3><p>Review the recipient and wording. Saving a draft does not send it.</p>';

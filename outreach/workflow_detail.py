@@ -105,7 +105,7 @@ def build(db, settings, lead_id):
     sales = {s['lead_id']:s for s in db.all('SELECT * FROM sales') if s['lead_id'] in ids}
     activities = [a for a in db.all('SELECT * FROM activities') if a['lead_id'] in ids]
     tasks = [t for t in db.all('SELECT * FROM tasks') if t['lead_id'] in ids]
-    artifacts = [a for a in db.all('SELECT id,lead_id,state FROM deliverables') if a['lead_id'] in ids]
+    artifacts = [a for a in db.all('SELECT id,lead_id,state,kind FROM deliverables') if a['lead_id'] in ids]
     proposals = [p for p in db.all('SELECT id,lead_id,state,delivery_reference,details FROM proposals') if p['lead_id'] in ids]
     events = []
     for e in db.all("""SELECT kind,contact_id,created_at,CASE
@@ -273,17 +273,21 @@ def build(db, settings, lead_id):
     reviewed_reply.difference_update(t['lead_id'] for t in tasks if t['lead_id'] in reply_leads
                                     and t['kind'] in {'review','followup','audit','concept','demo'} and t['state']=='open')
     count('R',len(reviewed_reply),len(reply_leads),'Record actual reply intent and fulfill what was promised. Transport classification is automatic; commercial intent requires operator review.',bool(reply_leads))
-    approved_artifacts = 0
+    approved_artifact_leads = set()
+    from .offers import ARTIFACTS
+    services_by_lead = {lead['id']: lead['service'] for lead in leads}
     for artifact in artifacts:
         if artifact['state'] == 'sent':
-            approved_artifacts += 1  # Actual historical delivery remains a ledger fact.
+            approved_artifact_leads.add(artifact['lead_id'])  # Actual historical delivery remains a ledger fact.
         elif artifact['state'] == 'approved':
+            if artifact['kind'] not in ARTIFACTS.get(services_by_lead[artifact['lead_id']], []):
+                continue
             try:
                 assert_current_artifact(db, artifact)
-                approved_artifacts += 1
+                approved_artifact_leads.add(artifact['lead_id'])
             except ValueError:
                 pass
-    count('S',approved_artifacts,len(artifacts),'Review the promised audit/concept/FAQ/WhatsApp outline before sharing. These are discussion artifacts, not deployed client services.',bool(artifacts))
+    count('S',len(approved_artifact_leads),len({a['lead_id'] for a in artifacts}),'Review one relevant audit/concept/FAQ/WhatsApp outline per prospect before sharing. Automatic previews and older iterations do not require separate approvals. These are discussion artifacts, not deployed client services.',bool(artifacts))
     details = {lid:decoded(s['details']) for lid,s in sales.items()}
     qualified = {lid for lid,d in details.items() if lid in reply_leads and all(len(str(d.get(k,'')).strip())>=8 for k in QUALIFICATION)}
     count('T',len(qualified),len(reply_leads),'Confirmed problem, goal, success metric, buyer, budget context and timing come from the actual conversation.',bool(reply_leads))

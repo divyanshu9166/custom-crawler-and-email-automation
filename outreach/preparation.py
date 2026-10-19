@@ -28,6 +28,7 @@ Return ONLY JSON. Either {"ready":false,"reason":"specific missing evidence"}, o
 "country_source":"supplied source URL","country_quote":"exact source quote with country",
 "timezone":"Europe/London or supported US timezone","business_type":"corporate/sole_trader/other",
 "service":"website_improvement/chatbot/website_build/store_launch/store_improvement/whatsapp_marketing/whatsapp_automation",
+"website_scope":"auto",
 "primary_goal":"inquiries_bookings or d2c_growth","fit_notes":"concrete business/offer relevance",
 "industry":"only if supported","evidence_id":1,"quote":"exact source quote",
 "observation":"only observed facts; no unobserved deficiencies",
@@ -47,6 +48,8 @@ Every quote must be copied as ONE contiguous substring of one supplied source.
 Do not paraphrase, combine passages or insert ellipses into a quote. Keep quotes short.
 Never claim that live chat, a chatbot, a form or a calendar is absent. The captures
 are incomplete. Propose a specific experiment without asserting an unobserved deficiency.
+On an existing website, website_build is ONLY a proposed new service-page concept with an
+exact published new-service announcement quote. Do not claim the service page is absent.
 """
 
 
@@ -191,8 +194,10 @@ def _validate_review(lead, result, pages):
     claims = review['observation']+' '+review['suggestion']
     if re.search(r"\b(?:no|missing|lack(?:s|ing)?|without|doesn't have|do not have)\b.{0,50}\b(?:website|chatbot|booking|checkout|form)\b|\b(?:losing customers|lost sales|double your|guarantee)\b", claims, re.I):
         raise ValueError('Automatic assessment cannot infer missing features, losses or guaranteed results')
-    if review['service'] == 'website_build':
-        raise ValueError('An existing official website needs a supported improvement offer, not an absence pitch')
+    from .offers import review_context, evidence_basis
+    review_context(lead, review, by_id)
+    if not evidence_basis(lead, review, pages)['draft_allowed']:
+        raise ValueError('Insufficient service-relevant evidence; a generic contact link is not an offer')
     if review['service'] == 'chatbot' and re.search(r'enquirybot|intercom|tidio|drift|chatbot', text, re.I):
         raise ValueError('An existing chatbot signal needs a specific operator-reviewed improvement case')
     if review['service'].startswith('whatsapp_') and (review.get('channel_fit_status') != 'unknown' or review.get('customer_permission_status') != 'unknown'):

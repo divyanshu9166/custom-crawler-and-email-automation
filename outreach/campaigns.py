@@ -240,6 +240,9 @@ def create_drafts(db, settings, contact_id, *, cancelled=lambda: False, preserve
         raise ValueError('Archive previous follow-up drafts before regenerating the initial email')
     if preserve_existing and previous_messages:
         raise ValueError('New messages appeared during automatic preparation; existing copy preserved')
+    from .deliverables import prepare_automatic, writer_context as proof_snapshot
+    prepare_automatic(db, lead['id'])
+    proof_context = proof_snapshot(db, lead['id'])
     writer_configuration = (settings.draft_api_url, settings.draft_api_key, settings.draft_model, settings.draft_timeout_seconds)
 
     def assert_unchanged(reader):
@@ -253,7 +256,8 @@ def create_drafts(db, settings, contact_id, *, cancelled=lambda: False, preserve
                 or current.one('SELECT * FROM leads WHERE id=?', (lead['id'],)) != lead
                 or current.all('SELECT * FROM messages WHERE contact_id=? ORDER BY step', (contact_id,)) != previous_messages
                 or [e for e in fresh_evidence(current, lead['id']) if e['id'] in source_ids] != sources
-                or audit_snapshot(current, lead) != audit_context or source_busy(current, lead['id'])):
+                or audit_snapshot(current, lead) != audit_context or source_busy(current, lead['id'])
+                or proof_snapshot(current, lead['id']) != proof_context):
             raise ValueError('Contact, research or drafts changed during AI writing; result discarded')
         assert_contact_ownership(current, contact, lead)
         if not selected_offer(current, lead):
@@ -267,7 +271,8 @@ def create_drafts(db, settings, contact_id, *, cancelled=lambda: False, preserve
                 assert_outreach_open(check, lead['id'])
 
     generated = email_writer.generate_sequence(settings, lead, contact, finding, sources,
-                                               before_request=lambda: assert_unchanged(db), audit_context=audit_context)
+                                               before_request=lambda: assert_unchanged(db), audit_context=audit_context,
+                                               proof_context=proof_context)
     drafts = generated['messages']
     domain = settings.sender_email.split("@")[-1] if "@" in settings.sender_email else "outreach.invalid"
     with db.connect() as con:
@@ -323,6 +328,9 @@ def approve(db, settings, contact_id, basis, contact_relevance):
         raise ValueError("Review the initial email before approving; archive legacy follow-ups first in single-email mode")
     from .email_writer import assert_ai_origin
     assert_ai_origin(db, contact_id)
+    from .email_writer import validate_offer_intent
+    for message in messages:
+        validate_offer_intent(lead, findings[0], message['subject']+' '+message['body'])
     if any(re.search(r"\[(?:your|first|company|specific)[^\]]*\]|\{\{", m["body"], re.I) for m in messages):
         raise ValueError("Replace unresolved template placeholders")
     with db.connect() as con:

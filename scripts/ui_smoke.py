@@ -124,7 +124,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.get_by_role("button", name="Pipeline", exact=True).click()
             page.locator("[data-lead='1']").click()
             page.get_by_role("heading", name="Example Studio · DEMO").wait_for()
-            expect(page.locator('#detail')).to_contain_text('legacy template draft')
+            expect(page.locator('#detail')).to_contain_text('Legacy template drafts cannot be approved')
             expect(page.get_by_text("Platform research · linkedin.com · name matched website candidate", exact=True)).to_be_visible()
             page.get_by_text('Public X post · x.com · reciprocal profile link candidate', exact=True).click()
             expect(page.locator('#detail')).to_contain_text("This does not capture the author's profile")

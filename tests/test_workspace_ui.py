@@ -45,6 +45,12 @@ def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, m
             expect(page.locator('#research-again')).not_to_be_visible()
             expect(page.locator('header #resume')).to_have_count(0)
             expect(page.locator('#detail')).to_contain_text('Your email is ready to review')
+            expect(page.locator('.offer-evidence-basis')).to_contain_text('Exploratory opportunity')
+            expect(page.locator('[aria-label="Proof of value preview"]')).to_contain_text('Draft for review')
+            page.locator('.proof-preview summary').click()
+            expect(page.frame_locator('.proof-preview iframe').locator('body')).to_contain_text('No form was submitted')
+            assert page.locator('.proof-preview iframe').get_attribute('sandbox') == ''
+            page.locator('.proof-preview summary').click()
             expect(page.locator('.message')).not_to_contain_text('Scheduled after previous touch')
             expect(page.get_by_role('link', name='Review email', exact=True)).to_be_visible()
             assert mutations == []
