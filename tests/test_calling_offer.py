@@ -138,7 +138,8 @@ def test_real_writer_contract_prepares_one_unsent_email_and_mode_specific_proof(
     calls = []
     def chat(s, instructions, encoded, **kw):
         kw['before_request']()
-        packet = json.loads(encoded); calls.append(packet)
+        packet = json.loads(encoded)
+        calls.append(packet)
         assert packet['calling_plan']['use_case'] == 'lead_qualification'
         assert not packet['audit_context']['observations']
         assert not packet['conclusion']['findings']

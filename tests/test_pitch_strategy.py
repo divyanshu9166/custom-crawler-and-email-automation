@@ -144,7 +144,8 @@ def test_broader_context_reaches_real_writer_and_changes_invalidate_copy(setting
     seen = []
     def chat(s, instructions, encoded, **kwargs):
         kwargs['before_request']()
-        packet = json.loads(encoded); seen.append(packet)
+        packet = json.loads(encoded)
+        seen.append(packet)
         assert packet['prospect_solution']['chatbot_status'] == 'present'
         assert any(p['evidence_id'] == eid for p in packet['sources'])
         if change_during_generation == 'source':

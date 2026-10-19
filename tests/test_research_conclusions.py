@@ -31,7 +31,8 @@ def test_raw_research_is_not_a_problem_and_held_writer_preserves_edits(db, setti
             db.execute("UPDATE events SET created_at=? WHERE kind='performance'", (time.time()-8*86400,))
         if state == 'different_target':
             row = db.one("SELECT id,detail FROM events WHERE kind='performance'")
-            data = json.loads(row['detail']); data['url'] = 'https://another-demo.com/'
+            data = json.loads(row['detail'])
+            data['url'] = 'https://another-demo.com/'
             db.execute('UPDATE events SET detail=? WHERE id=?', (json.dumps(data), row['id']))
     if state == 'partial':
         db.event('screenshot', {'lead_id': lid, 'url': 'https://bright-demo.com/', 'complete': False,
