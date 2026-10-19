@@ -52,3 +52,25 @@ The call-flow preview is local, source-backed and unsent, not a deployed agent.
 
 The outreach software does not dial prospects or enable a calling campaign as part
 of selecting this service. Existing global email controls and final review remain.
+
+## Verification — 19 October 2026
+
+- 266 focused service, writer, preparation, artifact and workflow checks passed.
+- 14 desktop/mobile and preparation UI checks passed; the calling flow and intended
+  benefit appear in the main summary while advanced controls remain collapsed.
+- 44 API, profile and workflow checks passed. The final workflow-description edit
+  was followed by another 11 workflow-detail checks.
+- The live synthetic Nemotron test exposed an unsupported ongoing-pilot claim.
+  That wording is now rejected; 82 calling/writer/single-email checks passed after
+  this correction, including a new regression case.
+- A second live Nemotron synthetic business test passed: proposed inbound service,
+  location and timeline collection, team summary, human handoff and a practical
+  intended benefit. It created no lead, draft, phone call or booking in the database.
+- Code was pushed and deployed; VPS health and the authenticated lead API passed.
+  Existing message content remained identical to its pre-deployment hash. One
+  unscheduled draft remains; zero sent messages; sending and follow-ups stayed off.
+
+Pre-deployment SQLite backup:
+`/data/backups/before-calling-offer-20261019-155606.db`.
+These checks establish offer/drafting behaviour, not a functioning client telephony
+integration or measured commercial results.
