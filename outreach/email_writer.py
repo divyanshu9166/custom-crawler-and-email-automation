@@ -254,10 +254,16 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
                 target = r'load|script|render|perform|optim|bottleneck|profil|largest' if observation['kind'] == 'lab_measurement' else r'width|wrap|overflow|layout|scroll|viewport'
                 if not re.search(target, body, re.I) or not re.search(r'adjust|fix|trace|profil|review|optim|inspect|investigat|test|check', body, re.I):
                     raise ValueError('Pair the measured finding with a relevant proposed fix or diagnostic next step')
-                if step == 0 and 'Font display' in observation['fact'] and not (
+                from .pitch_strategy import build as solution
+                project_scope = (lead.get('campaign') == 'A' and lead.get('service') == 'website_improvement' and
+                    solution(lead, finding or {}, evidence, audit_context, (finding or {}).get('business_tool_review'))['optional_services'] and
+                    re.search(r'layout|redesign|journey', body, re.I) and
+                    re.search(r'refresh|rework|simplif|redesign|improv|optim|adjust|updat', body, re.I) and
+                    re.search(r'load|visible|appear|sooner|faster', body, re.I))
+                if step == 0 and 'Font display' in observation['fact'] and not (project_scope or (
                         re.search(r'font', body, re.I) and
                         re.search(r'\b(?:adjust\w*|chang(?:e|ing)|set(?:ting)?|implement\w*|updat(?:e|ing)|configur(?:e|ing)|optim[isz]\w*)\b[^.!?]{0,100}\bfont|\bfont[^.!?]{0,80}\b(?:adjusted|changed|configured|updated|optimised|optimized)\b', body, re.I) and
-                        re.search(r'text|content|visible|appear|read|sooner|earlier|faster', body, re.I)):
+                        re.search(r'text|content|visible|appear|read|sooner|earlier|faster', body, re.I))):
                     raise ValueError('Explain concrete help with the flagged font loading and its intended visible-content benefit; a score-only audit offer is insufficient')
             if observation['kind'] == 'lab_measurement' and not (
                     re.search(r'\bscore(?:d)?\b', body, re.I) and

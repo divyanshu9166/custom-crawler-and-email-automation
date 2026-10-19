@@ -138,7 +138,8 @@ def test_broader_context_reaches_real_writer_and_changes_invalidate_copy(setting
     eid = db.execute('INSERT INTO evidence(lead_id,url,title,text,sha256,fetched_at) VALUES(?,?,?,?,?,?)',
         (lid, 'https://bright-demo.com/contact', 'Contact', text, 'context-v1', time.time()))
     db.event('performance', {'lead_id':lid,'url':'https://bright-demo.com/','status':'complete',
-        'strategies':{'mobile':{'score':51,'final_url':'https://bright-demo.com/'}}})
+        'strategies':{'mobile':{'score':51,'final_url':'https://bright-demo.com/',
+            'opportunities':[{'id':'font-display-insight','title':'Font display'}]}}})
     seen = []
     def chat(s, instructions, encoded, **kwargs):
         kwargs['before_request']()

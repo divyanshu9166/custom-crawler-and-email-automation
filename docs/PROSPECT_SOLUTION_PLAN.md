@@ -15,8 +15,8 @@ not generate separate emails per service.
 ## Writer context
 
 The writer previously mainly received the reviewed finding and country page. It
-now receives up to six prioritized current official pages plus required review
-and commerce sources, a structured prospect solution, positive existing-tool
+now receives compact exact excerpts from up to six prioritized current official
+pages plus required review and commerce sources, a structured prospect solution, positive existing-tool
 observations, relevant optional additions and their evidence IDs.
 
 An existing chatbot can be established by a positive widget marker or an
@@ -34,6 +34,13 @@ observation does not itself overwrite an email.
 Lead with a relevant business project, cite one useful observation, explain the
 proposed change and practical benefit, then mention at most two relevant optional
 features briefly. End with one small next step for the overall project.
+
+Website-project instructions are separate from the technical-audit readout prompt.
+When relevant optional features are supplied, the initial email must explain the
+main project and briefly mention a relevant addition; a font/CSS-only email is
+rejected. A helpdesk phone route supports customer support, not an assumed sales
+qualification need. Long page bodies are reduced to decisive exact source excerpts
+so duplicate website text does not dominate the writing request.
 
 A PageSpeed score is not a complete design/CRO audit. It cannot establish ugly UI,
 a necessary full redesign or lost visitors/sales. Layout changes can be proposed
