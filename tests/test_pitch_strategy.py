@@ -102,6 +102,7 @@ def test_calling_addition_from_number_alone_stays_conditional():
     with pytest.raises(ValueError, match='conditional'):
         strategy.validate_copy(plan, 'We can add an AI calling agent to handle your enquiries.')
     strategy.validate_copy(plan, 'If phone enquiries are relevant, we can add an AI calling agent.')
+    strategy.validate_copy(plan, 'If phone enquiries are relevant, an AI-powered voice assistant could help.')
 
 
 def test_initial_website_pitch_cannot_omit_the_project_or_all_relevant_additions():
@@ -155,8 +156,8 @@ def test_broader_context_reaches_real_writer_and_changes_invalidate_copy(setting
                 (lid,'https://bright-demo.com/faq','FAQ','By Tidio. Questions about booking.', 'new-page',time.time()))
         return json.dumps({'messages':[{'step':0,'subject':'An enquiry journey idea for Bright Demo',
             'body':'Your mobile Lighthouse lab test scored 51/100. We can improve loading and propose a clearer mobile enquiry layout, keeping your existing assistant. If phone enquiries are relevant, an AI calling agent could collect service and location details and pass a summary to your team. Would a short outline of that project be useful?',
-            'support':[{'evidence_id':prepared['evidence_id'],'quote':'Contact us for a consultation.'},
-                       {'evidence_id':eid,'quote':text}], 'diagnostic_refs':[packet['audit_context']['observations'][0]['ref']]}]})
+            'support':[{'evidence_id':prepared['evidence_id'],'quote':'Contact us for a consultation.'}],
+            'diagnostic_refs':[packet['audit_context']['observations'][0]['ref']]}]})
     monkeypatch.setattr(email_writer, 'chat', chat)
     monkeypatch.setattr(email_writer, 'generate_sequence', REAL_GENERATE)
     if change_during_generation:
@@ -169,6 +170,7 @@ def test_broader_context_reaches_real_writer_and_changes_invalidate_copy(setting
         email_writer.assert_ai_origin(db, cid)
         event = json.loads(db.one("SELECT detail FROM events WHERE kind='drafts_created' ORDER BY id DESC LIMIT 1")['detail'])
         assert eid in event['source_ids']
+        assert any(f.get('origin') == 'verified_prospect_solution' and f['evidence_id'] == eid for f in event['support'][0])
         db.execute('UPDATE evidence SET sha256=? WHERE id=?', ('context-v2',eid))
         with pytest.raises(ValueError, match='Business context sources changed'):
             email_writer.assert_ai_origin(db, cid)

@@ -7,6 +7,12 @@ from urllib.parse import urlsplit
 BOT = re.compile(r'\b(?:(?:powered by|by) (?:enquirybot|intercom|tidio|livechat)|powered by (?:a |our )?chatbot|chat with (?:our|the) (?:assistant|bot))\b', re.I)
 PHONE = re.compile(r'(?:\+?\d[\d ()-]{7,}\d)')
 QUESTIONS = re.compile(r'frequently asked questions|customer support|questions about (?:booking|services|products)|how (?:do|can) I', re.I)
+CALLING_MENTION = re.compile(r'\b(?:AI(?:[ -]powered)?\s+(?:(?:calling|phone|voice|helpdesk|support)\s+)?(?:agent|assistant|receptionist)|(?:calling|voice|phone)\s+(?:agent|assistant))\b', re.I)
+
+
+def option_mentioned(option, text):
+    return bool(CALLING_MENTION.search(text) if option['service'] == 'ai_calling_agent' else
+                re.search(r'chatbot|FAQ assistant', text, re.I))
 
 
 def phone_match(text):
@@ -95,7 +101,7 @@ def build(lead, finding, pages, audit_context=None, review=None):
     question_page = next((p for p in official if QUESTIONS.search(p['text'])), None)
     if status != 'present' and question_page:
         plan['optional_services'].append({'service': 'chatbot', 'status': 'optional_fit_check',
-            'evidence_id': question_page['id'], 'proposal': 'Explore an assistant using approved answers and a human handoff alongside the website work; confirm existing tools and actual question handling first.'})
+            'evidence_id': question_page['id'], 'quote': QUESTIONS.search(question_page['text']).group(), 'proposal': 'Explore an assistant using approved answers and a human handoff alongside the website work; confirm existing tools and actual question handling first.'})
     from .calling import source_signal, pitch_plan
     route = next(((p, source_signal(p['text'])) for p in official if source_signal(p['text'])), None)
     if route:
@@ -116,14 +122,13 @@ def validate_copy(plan, text, *, initial=False):
     if initial and plan.get('primary_service') in {'website_improvement', 'website_build'} and plan.get('optional_services'):
         if plan['primary_service'] == 'website_improvement' and not re.search(r'layout|redesign|journey|service.to.(?:enquir|quot)|enquir.{0,20}(?:flow|page)', text, re.I):
             raise ValueError('Explain the primary website project and enquiry journey, not just a technical audit fix')
-        names = {'chatbot': r'chatbot|FAQ assistant', 'ai_calling_agent': r'AI (?:calling|phone|voice) (?:agent|assistant)'}
-        if not any(re.search(names[o['service']], text, re.I) for o in plan['optional_services']):
+        if not any(option_mentioned(o, text) for o in plan['optional_services']):
             raise ValueError('Briefly include one supplied relevant optional feature alongside the primary website project')
     if plan.get('chatbot_status') == 'present' and re.search(r'(?:add|build|install|introduc\w*|set up|deploy)\s+(?:a\s+|an\s+|new\s+|an? new\s+)?(?:AI\s+)?chatbot|(?:missing|no|without|lack\w*)\s+(?:a\s+|an\s+)?chatbot', text, re.I):
         raise ValueError('The prospect already has a chatbot; preserve it instead of pitching a new or missing chatbot')
     if re.search(r'(?:your|the|current)\s+(?:UI|design|website|site).{0,30}(?:ugly|outdated|poorly designed|not CRO optimised|not CRO optimized|losing conversions|needs (?:a )?redesign)', text, re.I):
         raise ValueError('A speed test does not establish poor UI/CRO or a necessary redesign; offer a proposed change supported by design evidence')
-    if re.search(r'AI (?:calling|phone|voice) (?:agent|assistant)', text, re.I) and plan.get('primary_service') != 'ai_calling_agent':
+    if CALLING_MENTION.search(text) and plan.get('primary_service') != 'ai_calling_agent':
         option = next((o for o in plan.get('optional_services', []) if o['service'] == 'ai_calling_agent'), None)
         if not option:
             raise ValueError('Calling add-on needs relevant current source context')

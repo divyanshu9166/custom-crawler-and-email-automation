@@ -258,7 +258,6 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
                 project_scope = (lead.get('campaign') == 'A' and lead.get('service') == 'website_improvement' and
                     solution(lead, finding or {}, evidence, audit_context, (finding or {}).get('business_tool_review'))['optional_services'] and
                     re.search(r'layout|redesign|journey', body, re.I) and
-                    re.search(r'refresh|rework|simplif|redesign|improv|optim|adjust|updat', body, re.I) and
                     re.search(r'load|visible|appear|sooner|faster', body, re.I))
                 if step == 0 and 'Font display' in observation['fact'] and not (project_scope or (
                         re.search(r'font', body, re.I) and
@@ -317,6 +316,7 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
         support = item.get('support')
         if not isinstance(support, list) or not support or len(support) > 6:
             raise ValueError('AI writing needs source support for every touch')
+        support = [dict(fact) if isinstance(fact, dict) else fact for fact in support]
         ids = set()
         for fact in support:
             if not isinstance(fact, dict) or type(fact.get('evidence_id')) is not int:
@@ -330,10 +330,14 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
         if lead.get('campaign') == 'A':
             strategy = solution(lead, finding or {}, evidence, audit_context, (finding or {}).get('business_tool_review'))
             for option in strategy['optional_services']:
-                mentioned = (re.search(r'AI (?:calling|voice|phone) (?:agent|assistant)', ui_claim, re.I) if option['service'] == 'ai_calling_agent' else
-                             re.search(r'(?:add|build|integrat\w*|introduc\w*)\s+(?:an?\s+)?chatbot', ui_claim, re.I))
-                if mentioned and option['evidence_id'] not in ids:
-                    raise ValueError('Cite the current source supporting the optional service as well as the main offer')
+                from .pitch_strategy import option_mentioned
+                if option_mentioned(option, ui_claim) and option['evidence_id'] not in ids:
+                    source = by_id.get(option['evidence_id'])
+                    quote = option.get('quote', '')
+                    if not source or len(quote) < 8 or quote not in source['text']:
+                        raise ValueError('A supporting feature needs its current exact research-plan source')
+                    support.append({'evidence_id': source['id'], 'quote': quote, 'origin': 'verified_prospect_solution'})
+                    ids.add(source['id'])
         greeting = 'Hi '+(contact['name'].split()[0] if contact.get('name', '').strip() else lead['company']+' team')+','
         result.append({'step': step, 'subject': subject.strip(), 'body': greeting+'\n\n'+body.strip(),
                        'evidence_ids': sorted(ids), 'support': support, 'diagnostic_refs': refs})
