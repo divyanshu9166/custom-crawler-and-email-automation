@@ -11,6 +11,7 @@ from .research import assert_contact_ownership, fresh_evidence
 
 
 OFFERS = {
+    "ai_calling_agent": ("phone enquiries", "a focused calling-agent flow", "collect useful caller details and connect callers to the right next step"),
     "website_build": ("website launch", "a focused website concept", "make your services and inquiry route clearer"),
     "website_improvement": ("website journey", "a short page improvement outline", "make the next step clearer for visitors"),
     "chatbot": ("customer questions", "a small FAQ assistant outline", "give visitors clearer answers and a route to human support"),
@@ -21,10 +22,11 @@ OFFERS = {
 }
 
 CAMPAIGN_SERVICES = {
-    "A": {"website_build", "website_improvement", "chatbot"},
+    "A": {"website_build", "website_improvement", "chatbot", "ai_calling_agent"},
     "B": {"store_launch", "store_improvement", "chatbot", "whatsapp_marketing", "whatsapp_automation"},
 }
 FOLLOWUP_IDEAS = {
+    "ai_calling_agent": "Pilot one inbound or requested-callback process with approved questions, caller confirmation, a human handoff and an agreed measure of summary or booking accuracy.",
     "website_build": "Start with one primary page, a clear description of the service and one inquiry route; agree on the success metric before expanding the site.",
     "website_improvement": "Check whether a first-time visitor can explain the offer and identify the next step; compare inquiry quality before and after a small change.",
     "chatbot": "Start with a narrow set of questions from approved content, a clear human handoff and a way to review incorrect or unanswered responses.",
@@ -105,7 +107,7 @@ def review_lead(db, lead_id, review, *, expected_lead=None, expected_contacts=No
         if (not review.get("website_search_reviewed") or len(ownership) < 30 or len(search_notes) < 30
                 or len(activity) < 8 or activity not in evidence["text"] or not source_allowed(lead, evidence["url"])):
             raise ValueError("Review profile ownership, quote business activity and acknowledge website-search limitations")
-        allowed = {"website_build", "chatbot"} if lead["campaign"] == "A" else {"store_launch", "chatbot"}
+        allowed = {"website_build", "chatbot", "ai_calling_agent"} if lead["campaign"] == "A" else {"store_launch", "chatbot"}
         if review["service"] not in allowed:
             raise ValueError("Profile-only prospects need website/store launch or a sourced customer-question offer")
         profile_review = {"evidence_id": evidence["id"], "evidence_sha256": evidence["sha256"],

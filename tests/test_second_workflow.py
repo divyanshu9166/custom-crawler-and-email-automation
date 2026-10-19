@@ -34,6 +34,9 @@ CASES = [
     ('A', 'website_build', 'We are announcing a new service.', 'website_build', 'concept'),
     ('A', 'website_improvement', 'Book a consultation with our team.', 'website_improvement', 'audit'),
     ('A', 'chatbot', 'Frequently asked questions about booking.', 'inquiry_chatbot', 'faq_demo'),
+    ('A', 'ai_calling_agent', 'Call us for a quote about your cleaning requirements.', 'calling_agent', 'call_flow'),
+    ('A', 'ai_calling_agent', 'Call us to book an appointment.', 'calling_agent', 'call_flow'),
+    ('A', 'ai_calling_agent', 'Phone our customer support team with questions about your service.', 'calling_agent', 'call_flow'),
     ('B', 'store_launch', 'Our online store is launching soon.', 'store_launch', 'concept'),
     ('B', 'store_improvement', 'Add to cart to purchase our products.', 'store_improvement', 'audit'),
     ('B', 'chatbot', 'Customer support answers questions about products.', 'shopping_chatbot', 'faq_demo'),
@@ -68,7 +71,7 @@ def test_every_offer_branch_selects_one_service_and_prepares_relevant_source_pro
     review_lead(db, lid, review)
     result = snapshot(db, lid)
     states = {n['id']: n['state'] for n in result['nodes']}
-    assert len(states) == 15
+    assert len(states) == 16
     assert states['input'] == states['goal'] == 'complete'
     assert states['primary_offer'] == ('qualification_only' if service.startswith('whatsapp_') else 'exploratory_opportunity')
     assert result['selected_service'] == service and kind in result['recommended_artifacts']
@@ -207,5 +210,5 @@ def test_offer_readout_and_d2c_validation_use_the_authenticated_api(db, settings
     assert client.post(f'/api/leads/{lid}/review', json=review).status_code == 200
     detail = client.get(f'/api/leads/{lid}').json()
     assert detail['offer_workflow']['selected_service'] == 'store_improvement'
-    assert len(detail['offer_workflow']['nodes']) == 15
+    assert len(detail['offer_workflow']['nodes']) == 16
     assert detail['offer_proposals'][0]['quote'] in detail['evidence'][0]['text']

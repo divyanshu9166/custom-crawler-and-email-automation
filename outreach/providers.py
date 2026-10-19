@@ -213,7 +213,7 @@ async def verify_email(settings, email, *, before_probe=None):
 
 
 SERVICES = {"website_build", "website_improvement", "chatbot", "store_launch", "store_improvement",
-            "whatsapp_marketing", "whatsapp_automation"}
+            "whatsapp_marketing", "whatsapp_automation", "ai_calling_agent"}
 
 
 async def research_suggestions(settings, lead, evidence):

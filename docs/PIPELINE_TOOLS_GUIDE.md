@@ -37,6 +37,7 @@ the expandable **What does each tool do?** reference.
 | Country evidence / exact location quote | Tie the country decision to an exact saved source excerpt. |
 | Business type | Record the reviewed entity category used by eligibility checks. A lab score does not establish legal entity type. |
 | Primary service | Select one website, store, chatbot or WhatsApp offer matching the evidence. |
+| AI calling agent / call flow | Campaign A phone qualification, booking or support proposal, with a local call-flow outline. No calls or live integrations are activated. |
 | Reviewed primary goal | Match inquiry/booking or D2C routing to the chosen campaign. |
 | Why this business fits | Explain relevance using actual business context. |
 | Observation / suggestion | Separate what was observed from what we propose doing. |

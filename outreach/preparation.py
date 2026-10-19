@@ -23,6 +23,16 @@ Choose ONE service appropriate to Campaign A (inquiries/bookings) or B (D2C). A 
 WhatsApp link is not customer permission. Hold uncertain business identity, country,
 selling stage, source ownership or relevance. Do not select a service merely because a
 generic Contact us link exists. Prefer hold to a weak or irrelevant offer.
+AI calling agent is a distinct Campaign A service for inbound calls or requested callbacks.
+Select it only when an exact source quote links a phone/callback route to quote enquiries,
+appointments/bookings or customer support. A phone number or Get a Quote button alone
+is insufficient. Choose ONE task: qualification (service/location/timeline and team summary),
+booking (approved calendar integration, caller confirmation and human handoff), or support
+(approved answers and human transfer). Support is a valid use case, not evidence of sales pain.
+Explain the concrete proposed call flow and practical benefit; do not invent missed calls,
+lost leads, call volume, staff overload, existing integrations or consent to unsolicited calls.
+Do not select this offer merely because a website audit failed. Medical emergencies and
+recruitment lines are outside this offer. Existing phone/agent tools are not assumed absent.
 Website/store improvement requires a current reproducible diagnostic finding.
 If diagnostics establish no issue, hold that pitch; do not switch to an unrelated
 service merely to produce an email. Other offers still need their own positive evidence.
@@ -30,7 +40,7 @@ Return ONLY JSON. Either {"ready":false,"reason":"specific missing evidence"}, o
 {"ready":true,"review":{"company":"unchanged supplied company","country":"UK or US",
 "country_source":"supplied source URL","country_quote":"exact source quote with country",
 "timezone":"Europe/London or supported US timezone","business_type":"corporate/sole_trader/other",
-"service":"website_improvement/chatbot/website_build/store_launch/store_improvement/whatsapp_marketing/whatsapp_automation",
+"service":"ai_calling_agent/website_improvement/chatbot/website_build/store_launch/store_improvement/whatsapp_marketing/whatsapp_automation",
 "website_scope":"auto",
 "primary_goal":"inquiries_bookings or d2c_growth","fit_notes":"concrete business/offer relevance",
 "industry":"only if supported","evidence_id":1,"quote":"exact source quote",

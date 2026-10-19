@@ -349,7 +349,7 @@ class ArtifactMarker(Input):
 
 
 class ArtifactInput(Input):
-    kind: Literal["audit", "concept", "faq_demo", "whatsapp_flow"]
+    kind: Literal["audit", "concept", "faq_demo", "whatsapp_flow", "call_flow"]
     title: str = Field(min_length=5, max_length=200)
     points: list[ArtifactPoint] = Field(default_factory=list, max_length=3)
     faqs: list[FAQPoint] = Field(default_factory=list, max_length=10)

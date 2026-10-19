@@ -50,7 +50,7 @@ flowchart TD
     Q --> G
     F -->|Unknown / risky / catch-all / invalid| H[Hold · inspect or research further]
     F -->|Safe and fresh| J[Review all messages and outreach eligibility]
-    G --> AA[Campaign A · website or inquiry/booking chatbot]
+    G --> AA[Campaign A · website, chatbot or AI calling agent]
     G --> BB[Campaign B · ecommerce or suitable WhatsApp workflow]
     AA --> I[Source-backed personalized draft + 3 follow-ups]
     BB --> I
@@ -74,7 +74,7 @@ flowchart TD
     Y --> Z[Record measured or inconclusive outcome and campaign learning]
 ```
 
-Campaign A targets service businesses, agencies and relevant SaaS businesses for better inquiry/booking journeys. Campaign B targets existing or launching ecommerce/D2C businesses. WhatsApp offers require actual channel fit and appropriate customer opt-in; US/UK stores are not assumed to use WhatsApp.
+Campaign A targets service businesses, agencies and relevant SaaS businesses for better inquiry/booking journeys. Its services include website/new service-page development, website improvement/redesign, chatbots with human handoff, and AI calling agents for phone lead qualification, booking assistance or customer support. Calling-agent selection requires a current positive phone/callback route linked to a specific business task; it is not justified by a generic quote button or poor PageSpeed score. Campaign B targets existing or launching ecommerce/D2C businesses. WhatsApp offers require actual channel fit and appropriate customer opt-in; US/UK stores are not assumed to use WhatsApp.
 
 This diagram describes the business process, including review and operator-recorded external actions. Profile email candidates can be captured before identity review but remain held. Qualification and verification run independently. Sales artifacts/calls depend on what was promised/agreed; the software does not automatically book calls, deliver proposals, collect payments or deploy client services. The detailed audit records these differences explicitly.
 

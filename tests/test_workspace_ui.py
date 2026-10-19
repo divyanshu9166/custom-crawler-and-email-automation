@@ -12,6 +12,56 @@ from outreach.campaigns import archive_followups
 
 
 @pytest.mark.parametrize('mobile', [False, True])
+def test_calling_offer_shows_its_call_flow_instead_of_unrelated_speed_pitch(settings, db, mobile):
+    from test_second_workflow import fixture_review
+    from outreach.campaigns import review_lead, create_drafts
+    from outreach.research import add_contact
+    lid, eid, review = fixture_review(db, 'A', 'ai_calling_agent', 'Call us for a quote about your project requirements.')
+    review_lead(db, lid, review)
+    db.execute('UPDATE evidence SET text=text||? WHERE id=?', (' hello@offer-fixture.example', eid))
+    cid = add_contact(db, lid, 'hello@offer-fixture.example', review['country_source'])
+    settings.worker_enabled = settings.sending_enabled = settings.followups_enabled = False
+    db.event('performance', {'lead_id': lid, 'status': 'complete', 'url': review['country_source'],
+                             'strategies': {'mobile': {'score': 40, 'final_url': review['country_source']}}})
+    create_drafts(db, settings, cid)
+    client = TestClient(create_app(settings), base_url=settings.public_url,
+                        headers={'Authorization': 'Bearer '+settings.api_token})
+    errors, mutations = [], []
+    with sync_playwright() as runtime:
+        browser = runtime.chromium.launch()
+        context = browser.new_context(viewport={'width': 390 if mobile else 1440, 'height': 1000})
+        def route(r):
+            assert r.request.url.startswith(settings.public_url+'/')
+            path = r.request.url.removeprefix(settings.public_url)
+            if r.request.method not in {'GET', 'HEAD'}:
+                mutations.append((r.request.method, path))
+            response = client.request(r.request.method, path, content=r.request.post_data_buffer,
+                                      headers={k: v for k, v in r.request.headers.items() if k in {'content-type', 'origin'}})
+            r.fulfill(status=response.status_code, body=response.content,
+                      headers={'content-type': response.headers.get('content-type', 'text/plain')})
+        context.route('**/*', route)
+        page = context.new_page()
+        page.on('pageerror', lambda e: errors.append(str(e)))
+        try:
+            page.goto(settings.public_url+'/?prospect='+str(lid))
+            pitch = page.locator('.pitch-summary')
+            expect(pitch).to_be_visible()
+            expect(pitch).to_contain_text('service, location and timeline')
+            expect(pitch).to_contain_text('before follow-up')
+            expect(pitch).not_to_contain_text('40/100')
+            expect(page.locator('[data-edit]')).to_have_count(1)
+            expect(page.locator('#advanced-research')).not_to_have_attribute('open', '')
+            expect(page.locator('#review-form select[name=service] option[value=ai_calling_agent]')).to_have_text('AI calling agent')
+            assert not errors and not mutations
+            assert page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1')
+            path = Path('data/workspace-ui')/('calling-mobile.png' if mobile else 'calling-desktop.png')
+            path.parent.mkdir(parents=True, exist_ok=True)
+            page.screenshot(path=str(path), full_page=True)
+        finally:
+            browser.close()
+
+
+@pytest.mark.parametrize('mobile', [False, True])
 @pytest.mark.parametrize('legacy', [False, True])
 @pytest.mark.parametrize('measured', [False, True])
 def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, mobile, legacy, measured):

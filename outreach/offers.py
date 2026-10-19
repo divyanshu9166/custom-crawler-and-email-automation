@@ -6,6 +6,7 @@ import re
 GOALS = {'A': 'inquiries_bookings', 'B': 'd2c_growth'}
 ARTIFACTS = {
     'website_build': ['concept', 'audit'], 'website_improvement': ['audit', 'concept'],
+    'ai_calling_agent': ['call_flow'],
     'chatbot': ['faq_demo', 'audit'], 'store_launch': ['concept', 'audit'],
     'store_improvement': ['audit', 'concept'],
     'whatsapp_marketing': ['whatsapp_flow', 'audit'], 'whatsapp_automation': ['whatsapp_flow', 'audit'],
@@ -22,6 +23,8 @@ def typed_context(context):
     result = {}
     for key, allowed in {
         'primary_goal': {'inquiries_bookings', 'd2c_growth'},
+        'calling_use_case': {'booking', 'lead_qualification', 'customer_support'},
+        'calling_scope': {'inbound_or_requested_callback'},
         'selling_stage': {'starting_ecommerce', 'selling_online'},
         'website_scope': {'website_launch', 'new_service_page'},
         'channel_fit_status': {'unknown', 'confirmed', 'not_suitable'},
@@ -59,6 +62,9 @@ def evidence_basis(lead, finding, pages, audit_context=None):
     usable = bool(source and not generic and (re.search(relevant, quote, re.I) or
                   service == 'website_build' and lead.get('lead_kind') == 'profile' or
                   lead.get('campaign') == 'B' and commerce_current and re.search(relevant, commerce_quote, re.I)))
+    if service == 'ai_calling_agent':
+        from .calling import source_signal
+        usable = bool(source and lead.get('campaign') == 'A' and source_signal(quote))
     observations = (audit_context or {}).get('observations', [])
     measured = usable and service in {'website_improvement', 'store_improvement'} and bool(observations)
     return {'classification': 'measured_observation' if measured else 'exploratory_opportunity' if usable else 'insufficient_evidence',
@@ -75,6 +81,14 @@ def review_context(lead, review, by_id):
         raise ValueError('Primary goal must match the selected Campaign A/B target')
     context = {'primary_goal': goal, 'goal_reviewed': bool(review.get('primary_goal'))}
     sources = {}
+    if review['service'] == 'ai_calling_agent':
+        from .calling import pitch_plan
+        page = by_id.get(review.get('evidence_id'))
+        quote = review.get('quote', '')
+        if lead['campaign'] != 'A' or not page or not quote or quote not in page['text']:
+            raise ValueError('Calling-agent offer needs Campaign A and a current exact business source quote')
+        plan = pitch_plan(quote)
+        context.update(calling_use_case=plan['use_case'], calling_scope=plan['scope'])
     if review['service'] == 'website_build':
         scope = review.get('website_scope', 'auto')
         if scope == 'auto':
@@ -135,7 +149,7 @@ def selected_offer(db, lead):
             not any(crawl_url(e['url']) == crawl_url(lead['country_source']) and finding.get('country_quote', '').strip()
                     and finding['country_quote'] in e['text'] for e in pages.values())):
         return ''
-    if lead['campaign'] == 'B' or lead['service'] == 'website_build':
+    if lead['campaign'] == 'B' or lead['service'] in {'website_build', 'ai_calling_agent'}:
         try:
             review_context(lead, {**finding, **finding.get('offer_context', {}), 'service': lead['service']}, pages)
         except ValueError:
@@ -169,6 +183,7 @@ def snapshot(db, lead_id):
         ('website_build', 'Website / new service page', 'selected' if selected == 'website_build' else 'not_selected'),
         ('website_improvement', 'Website improvement / redesign', 'selected' if selected == 'website_improvement' else 'not_selected'),
         ('inquiry_chatbot', 'Inquiry / booking chatbot + human handoff', 'selected' if selected == 'chatbot' and lead['campaign'] == 'A' else 'not_selected'),
+        ('calling_agent', 'AI calling agent · qualification, bookings & support', 'selected' if selected == 'ai_calling_agent' else 'not_selected'),
         ('store_launch', 'Starting ecommerce · store launch', 'selected' if selected == 'store_launch' and commerce_ready else 'not_selected'),
         ('store_improvement', 'Selling online · shopping journey', 'selected' if selected == 'store_improvement' and commerce_ready else 'not_selected'),
         ('shopping_chatbot', 'Shopping / support chatbot', 'selected' if selected == 'chatbot' and lead['campaign'] == 'B' and commerce_ready else 'not_selected'),
@@ -189,7 +204,11 @@ def snapshot(db, lead_id):
             if artifact['state'] in {'approved', 'sent'}:
                 approved.append(artifact['id'])
     nodes.append(('value_artifact', 'Prepare and review relevant proof of value', 'reviewed' if approved else 'preview_ready' if prepared else 'needs_artifact_review' if selected else 'waiting'))
-    return {'lead_id': lead_id, 'campaign': lead['campaign'], 'selected_service': selected, 'context': context,
+    calling_plan = {}
+    if selected == 'ai_calling_agent':
+        from .calling import pitch_plan
+        calling_plan = pitch_plan(finding['quote'])
+    return {'calling_plan': calling_plan, 'lead_id': lead_id, 'campaign': lead['campaign'], 'selected_service': selected, 'context': context,
             'nodes': [{'id': key, 'label': label, 'state': state} for key, label, state in nodes],
             'evidence_basis': basis, 'prepared_current_artifact_ids': prepared,
             'recommended_artifacts': ARTIFACTS.get(selected, []), 'reviewed_current_artifact_ids': approved,

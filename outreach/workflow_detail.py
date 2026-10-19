@@ -27,7 +27,7 @@ STAGES = [
     ('G', 'Country, buyer & opportunity review', 'AI preparation + exception/final review', 'prospect'),
     ('Q', 'Screenshots & optional lab audit', 'Automatic, optional', 'prospect'),
     ('H', 'Hold & further research', 'Automatic hold + review', 'prospect'),
-    ('AA', 'Campaign A: inquiries & bookings', 'Proposals + review', 'prospect'),
+    ('AA', 'Campaign A: websites, chatbots & AI calling', 'Proposals + review', 'prospect'),
     ('BB', 'Campaign B: ecommerce & WhatsApp', 'Proposals + review', 'prospect'),
     ('I', 'Personalized email', 'Drafting + review', 'prospect'),
     ('J', 'Review messages & eligibility', 'Human review', 'prospect'),
@@ -252,7 +252,8 @@ def build(db, settings, lead_id):
     put('H','blocked' if held_leads else 'waiting',f'{len(held_leads)} businesses held','H summarizes current held records. Partial capture and candidate review remain separate. Unknown/risky verification, blocked profiles and uncertain submissions require inspection; uncertain sends never retry automatically.')
     for key,campaign in [('AA','A'),('BB','B')]:
         relevant = [lead for lead in leads if lead['campaign']==campaign]
-        count(key,sum(bool(selected_offer(db, lead)) for lead in relevant),len(relevant),'Choose one source-backed offer suited to this business. WhatsApp channel presence does not establish customer permission, integrations or economic fit.',any(evidence[lead['id']] for lead in relevant))
+        description = ('Choose one website, chatbot or AI calling offer. Calling requires a published phone process for qualification, booking or support; missed calls and existing integrations are not assumed.' if campaign == 'A' else 'Choose one source-backed D2C offer. WhatsApp channel presence does not establish customer permission, integrations or economic fit.')
+        count(key,sum(bool(selected_offer(db, lead)) for lead in relevant),len(relevant),description,any(evidence[lead['id']] for lead in relevant))
     for key,group in [('I','drafts'),('J','approval'),('K','approval'),('L','send'),('M','replies')]:
         nodes[key].update({k:grouped[group][k] for k in ['state','metric','description','details']})
     nodes['K']['description'] = 'Recorded approval activates one reviewed sequence; submission still obeys quota, minimum spacing, local windows and fresh inbox/verification gates.'

@@ -86,6 +86,21 @@ def proposals(lead, evidence):
             if lead.get('website') and domain_of(page['url']) != domain_of(lead['website']):
                 continue
         text = page.get('text', '')
+        if campaign == 'A':
+            from .calling import source_signal, pitch_plan
+            signal = source_signal(text)
+            if signal:
+                plan = pitch_plan(signal['quote'])
+                key = (len(signal['quote']), page['url'], signal['quote'])
+                if 'ai_calling_agent' not in selected_keys or key < selected_keys['ai_calling_agent']:
+                    selected_keys['ai_calling_agent'] = key
+                    choices['ai_calling_agent'] = {
+                        'evidence_id': page['id'], 'quote': signal['quote'], 'source_url': page['url'],
+                        'observation': 'The saved page publishes a phone route for '+signal['use_case'].replace('_', ' ')+': '+signal['quote'],
+                        'suggestion': plan['proposed_work'], 'service': 'ai_calling_agent', 'priority': 80,
+                        'review_required': True, 'kind': 'opportunity', 'proposal_method': 'explicit_public_signal',
+                        'source_selection': 'Phone route linked to a specific business task',
+                        'limitations': plan['limitations']}
         for service, priority, pattern, observation, suggestion in rules:
             if service not in allowed:
                 continue

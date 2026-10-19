@@ -71,6 +71,7 @@ window.WorkbenchWorkspace = {
       ['Country source & exact location quote', 'Link the country decision to words actually captured on the business source.'],
       ['Business type', 'Record the reviewed entity category used by contact eligibility checks; it is not inferred from a lab score.'],
       ['Primary service & reviewed goal', 'Choose one offer and the matching inquiry or ecommerce goal.'],
+      ['AI calling agent / call flow', 'A proposed qualification, booking or support phone workflow based on a published phone process. The preview does not make calls or connect a live calendar.'],
       ['Save qualification', 'Save the source-backed business and offer decision. A changed qualification invalidates unsent drafts.'],
       ['Supporting preview', 'A local proposed audit/concept/FAQ/workflow to review. It is not automatically delivered to the prospect.'],
       ['Recipient & sending approval', 'Review recipient relevance, eligibility and messages before allowing scheduling. Global sending controls still apply.']
@@ -122,11 +123,17 @@ window.WorkbenchWorkspace = {
     const audits = data.diagnostics;
     const conclusion = audits?.conclusion;
     const best = conclusion?.findings[0];
+    const calling = data.offer_workflow?.calling_plan;
     const pitch = document.createElement('section');
     pitch.className = 'pitch-summary';
     pitch.setAttribute('aria-label', 'Research conclusion');
     const held = conclusion && !conclusion.draft_allowed;
     pitch.innerHTML = `<div class="pitch-heading"><span class="eyebrow">THE OFFER AT A GLANCE</span><span class="workspace-pill">${held ? 'More evidence needed' : best ? 'Measured finding' : 'Proposed opportunity'}</span></div><h3>${held ? 'Improvement pitch on hold' : 'What we found & how we can help'}</h3><div class="pitch-points"><div><span>01 · What we found</span><p>${esc(best?.fact || (held ? conclusion.summary : evidence && finding.quote ? finding.quote : 'Research is still establishing a relevant offer.'))}</p></div><div><span>02 · What we can do</span><p>${esc(best?.proposed_fix || (held ? 'Wait for a current, reproducible finding before proposing a website fix.' : finding.suggestion || 'Select a source-backed service after research.'))}</p></div><div><span>03 · Intended benefit</span><p>${esc(best?.intended_benefit || 'Confirm the business goal and usefulness of the proposed change before implementation. No client result has been measured.')}</p></div></div><details class="quick-evidence"><summary>View supporting evidence</summary>${best ? `<p>${esc(best.fact)}</p>${link(best.report_url || best.url)}<p class="small">${new Date(best.captured_at*1000).toLocaleString()} · Lab/capture evidence; customer impact is unconfirmed.</p>` : evidence && finding.quote ? `<blockquote>${esc(finding.quote)}</blockquote>${link(evidence.url)}` : '<p>No current evidence supports this pitch yet.</p>'}</details>${held && hasEmail ? '<p class="small">Your existing email is preserved. A saved draft is not proof of an identified problem.</p>' : ''}`;
+    if (calling?.proposed_work) {
+      const points = pitch.querySelectorAll('.pitch-points p');
+      points[1].textContent = calling.proposed_work;
+      points[2].textContent = calling.intended_benefit;
+    }
     if (hasEmail) {
       const reviewLink = preparation?.querySelector('a[href="#email-sequence"]');
       if (reviewLink) { reviewLink.className = 'text-control'; pitch.querySelector('.pitch-heading').append(reviewLink); }

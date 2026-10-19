@@ -72,7 +72,7 @@ def create(db, lead_id, value, *, automatic_context=None):
     if lead['status'] == 'researching':
         raise ValueError('Source research is running; wait before preparing an artifact')
     kind = value["kind"]
-    if kind not in {"audit", "concept", "faq_demo", "whatsapp_flow"}:
+    if kind not in {"audit", "concept", "faq_demo", "whatsapp_flow", "call_flow"}:
         raise ValueError("Unsupported value artifact")
     findings = json.loads(lead["findings"])
     points = value.get("points") or [f for f in findings if f.get("review_required") is False]
@@ -99,6 +99,8 @@ def create(db, lead_id, value, *, automatic_context=None):
             for metric in finding['supporting_measurements']:
                 content += '<p>' + esc(metric['metric']) + ': ' + esc(metric['numericValue']) + ' ' + esc(metric['numericUnit']) + '</p>'
         for item in automatic_context['audit_context'].get('observations', []):
+            if lead['service'] == 'ai_calling_agent':
+                continue
             content += '<p>' + esc(item['fact']) + '</p><p class="small">Test/capture source: ' + esc(item['url']) + ' · ' + esc(time.strftime('%Y-%m-%d', time.gmtime(item['captured_at']))) + '</p>'
         content += '<p>Agree the baseline, test task and success metric with the business before implementation. No form was submitted and no client outcome has been measured.</p></section>'
     disclaimer = "Source-backed observations and proposed tests. No private analytics or guaranteed conversion uplift is assumed."
@@ -142,6 +144,17 @@ def create(db, lead_id, value, *, automatic_context=None):
             answers.append(f'<details><summary>{esc(faq["question"])}</summary><p>{esc(quote)}</p><a href="{esc(page["url"])}">Read approved source</a></details>')
         content = '<section><h2>Try the approved knowledge excerpts</h2>' + "".join(answers) + f'<p>For other questions, reach the team through its <a href="{esc(lead["website"])}">official website</a>.</p></section>' + content
         disclaimer = "Interactive FAQ knowledge prototype. Answers are exact approved excerpts; this is not a live AI assistant, account lookup or helpdesk integration."
+    elif kind == 'call_flow':
+        from .offers import selected_offer
+        from .calling import pitch_plan
+        if selected_offer(db, lead) != 'ai_calling_agent':
+            raise ValueError('Qualify a current Campaign A calling-agent offer before creating its call flow')
+        plan = pitch_plan(findings[0]['quote'])
+        steps = [plan['proposed_work'], 'Introduce the automated assistant and confirm the caller wishes to continue.',
+                 'Confirm collected details before recording or booking anything; provide a clear human transfer.',
+                 *plan['pilot_checks']]
+        content = '<section><h2>Proposed '+esc(plan['use_case'].replace('_', ' '))+' call flow</h2><ol class="flow">'+''.join('<li>'+esc(step)+'</li>' for step in steps)+'</ol><p>'+esc(plan['intended_benefit'])+'</p></section>'+content
+        disclaimer = 'Discussion outline only, not a deployed calling agent or live calendar/CRM connection. No phone calls, recordings or bookings were made.'
     elif kind == "whatsapp_flow":
         if lead['status'] != 'qualified' or lead["service"] not in {"whatsapp_marketing", "whatsapp_automation"}:
             raise ValueError("Select and qualify a WhatsApp offer before creating its workflow")
@@ -207,6 +220,7 @@ def prepare_automatic(db, lead_id):
         raise ValueError('Insufficient evidence for a useful proof preview')
     service = lead['service']
     plans = {
+        'ai_calling_agent': 'Scope one source-backed inbound or requested-callback task, approved qualification/booking/support steps, and a human handoff before a synthetic-call pilot.',
         'website_build': 'Explore one proposed service page with a clear service description and inquiry route; confirm scope with the business first.',
         'website_improvement': 'Test one existing service-to-inquiry journey on mobile with representative buyers; observe clarity and task completion before suggesting changes.',
         'chatbot': 'Review the published answer excerpts with the business, then test a narrow FAQ prototype and a proposed human-support route.',
@@ -216,6 +230,9 @@ def prepare_automatic(db, lead_id):
         'whatsapp_automation': 'Confirm customer channel fit and permission first; only then map one eligible order/support event and a human-support route.',
     }
     kind = ARTIFACTS[service][0]
+    if service == 'ai_calling_agent':
+        from .calling import pitch_plan
+        plans[service] = pitch_plan(finding['quote'])['proposed_work']
     # Summaries may contain unsupported historical model claims. Only the exact
     # cited business quote becomes an observation; the test plan is a proposal.
     value = {'kind': kind, 'title': lead['company']+' — proposed '+kind.replace('_', ' '),

@@ -8,6 +8,11 @@ IMPROVEMENTS = {'website_improvement', 'store_improvement'}
 
 
 def build(audit, service):
+    if service == 'ai_calling_agent':
+        return {'state': 'opportunity_only', 'problem_led_required': False, 'draft_allowed': True,
+                'summary': 'Assess one source-backed phone workflow; technical website audits do not establish a calling-agent need.',
+                'findings': [], 'next_action': 'Review the published phone task and proposed call flow, then agree a small pilot.',
+                'business_pain_confirmed': False}
     findings = []
     reports = {r.get('event_id'): r for r in audit.get('reports', [])}
     for observation in audit.get('observations', []):
