@@ -222,6 +222,20 @@ def test_public_service_quote_does_not_support_invented_client_pain(db, prepared
         email_writer.validate_output(value, lead, {'name': ''}, pages)
 
 
+def test_failed_audit_reports_stay_internal_and_cannot_leak_into_email(db, prepared):
+    lead = db.one('SELECT * FROM leads WHERE id=?', (prepared['lead_id'],))
+    finding = json.loads(lead['findings'])[0]
+    pages = db.all('SELECT * FROM evidence WHERE lead_id=?', (lead['id'],))
+    audit = {'reports': [{'state': 'failed', 'error': 'INTERNAL_PROVIDER_ERROR'}], 'observations': []}
+    packet = email_writer.research_packet(lead, finding, pages, audit)
+    assert 'INTERNAL_PROVIDER_ERROR' not in json.dumps(packet) and 'reports' not in packet['audit_context']
+    value = {'messages': [{'step': 0, 'subject': 'An idea for '+lead['company'],
+             'body': 'The performance capture failed and the screenshot showed partial rendering issues. Could a review help?',
+             'support': [{'evidence_id': pages[0]['id'], 'quote': finding['quote']}]}]}
+    with pytest.raises(ValueError, match='capture failures'):
+        email_writer.validate_output(value, lead, {'name': ''}, pages)
+
+
 def test_real_writer_corrects_unknown_whatsapp_pitch_using_typed_context_and_real_proof(db, settings, monkeypatch):
     lid, eid, review = fixture_review(db, 'B', 'whatsapp_automation', 'Chat with us on WhatsApp about your order.')
     review_lead(db, lid, review)

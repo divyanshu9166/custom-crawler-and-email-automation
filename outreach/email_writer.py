@@ -189,7 +189,10 @@ def research_packet(lead, finding, evidence, audit_context=None, proof_context=N
         context['qualification_only'] = not (context['channel_fit_status'] == context['customer_permission_status'] == 'confirmed')
     return {'business': {k: lead.get(k, '') for k in ('company', 'campaign', 'country', 'service',
                                                     'lead_kind', 'website', 'profile_url', 'website_status')},
-            'reviewed_finding': proposal, 'audit_context': audit_context or {},
+            'reviewed_finding': proposal,
+            # Failed-provider/render reports belong in Operations and provenance,
+            # not in prose sent to prospects. Supply only established observations.
+            'audit_context': {'observations': (audit_context or {}).get('observations', []), 'business_pain_confirmed': False},
             'offer_basis': evidence_basis(lead, finding, evidence, audit_context),
             'proof_preview': proof_context or {},
             'sources': [{'evidence_id': e['id'], 'url': e['url'], 'sha256': e['sha256'],
@@ -258,6 +261,8 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
                 raise ValueError('AI writing asserted client pain or buyer behaviour absent from supplied sources; propose a test instead')
         if re.search(r'reviewed finding|reviewed summary|research packet|audit_context|evidence_id|source_ids', ui_claim, re.I):
             raise ValueError('AI writing exposed internal research labels; write directly to the prospect')
+        if re.search(r'(?:capture|audit|screenshot|render(?:ing)?).{0,45}(?:failed|partial|blocked|unavailable)|(?:failed|partial).{0,45}(?:capture|render)', ui_claim, re.I):
+            raise ValueError('AI writing exposed internal capture failures; cite established observations or propose an assessment')
         if (re.search(r'\b(?:checkbox(?:es)?|checklist)\b', ui_claim, re.I)
                 and re.search(r'\b(?:current|existing|requires?|asks?|bundles?|select|uses?|contains?)\b', ui_claim, re.I)
                 and not any(re.search(r'\b(?:checkbox(?:es)?|checklist)\b', e['text'], re.I) for e in evidence)):
@@ -314,6 +319,8 @@ Without proof_preview, do not claim any existing asset. Keep one focused offer a
 Treat proposed test participants as a suggested audience, not the client's known decision-makers.
 Do not invent who typically starts a conversation or makes a purchase, or assume the desktop
 journey already works smoothly. These require source evidence just like any other factual claim.
+Do not mention internal capture failures, partial renders, provider errors or missing measurements.
+They are research limitations, not findings about the prospect's business.
 '''
     from .web import EMAIL_RE
     def checked():
