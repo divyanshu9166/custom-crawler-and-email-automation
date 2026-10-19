@@ -219,6 +219,12 @@ def create_drafts(db, settings, contact_id, *, cancelled=lambda: False, preserve
     from . import email_writer
     source_ids = {finding['evidence_id']}
     available = fresh_evidence(db, lead['id'])
+    from .pitch_strategy import context_pages, review_snapshot
+    tool_review = review_snapshot(db, lead['id'])
+    context_ids = [p['id'] for p in context_pages(lead, finding, available)] if lead['campaign'] == 'A' else []
+    if lead['campaign'] == 'A':
+        source_ids.update(context_ids)
+        finding = {**finding, 'business_tool_review': tool_review}
     country_page = next((e for e in available if crawl_url(e['url']) == crawl_url(lead['country_source'])), None)
     if not country_page:
         raise ValueError('Reviewed writing sources are not current; qualify again')
@@ -258,6 +264,8 @@ def create_drafts(db, settings, contact_id, *, cancelled=lambda: False, preserve
                 or current.one('SELECT * FROM leads WHERE id=?', (lead['id'],)) != lead
                 or current.all('SELECT * FROM messages WHERE contact_id=? ORDER BY step', (contact_id,)) != previous_messages
                 or [e for e in fresh_evidence(current, lead['id']) if e['id'] in source_ids] != sources
+                or review_snapshot(current, lead['id']) != tool_review
+                or lead['campaign'] == 'A' and [p['id'] for p in context_pages(lead, finding, fresh_evidence(current, lead['id']))] != context_ids
                 or audit_snapshot(current, lead) != audit_context or source_busy(current, lead['id'])
                 or proof_snapshot(current, lead['id']) != proof_context):
             raise ValueError('Contact, research or drafts changed during AI writing; result discarded')

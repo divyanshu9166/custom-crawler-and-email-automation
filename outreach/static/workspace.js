@@ -134,6 +134,17 @@ window.WorkbenchWorkspace = {
       points[1].textContent = calling.proposed_work;
       points[2].textContent = calling.intended_benefit;
     }
+    const solution = data.offer_workflow?.prospect_solution;
+    if (solution && !held) {
+      if (solution.project_scope) pitch.querySelectorAll('.pitch-points p')[1].textContent = solution.project_scope;
+      const names = {chatbot:'Chatbot with human handoff', ai_calling_agent:'AI calling agent'};
+      const additions = solution.optional_services || [];
+      const note = document.createElement('p');
+      note.className = 'small';
+      note.textContent = (solution.chatbot_status === 'present' ? 'Existing chatbot: preserve it. ' : '') +
+        (additions.length ? 'Optional additions: '+additions.map(o => names[o.service]+(o.status === 'optional_fit_check' ? ' (confirm fit)' : '')).join(' · ')+'.' : '');
+      if (note.textContent) pitch.querySelector('.quick-evidence').before(note);
+    }
     if (hasEmail) {
       const reviewLink = preparation?.querySelector('a[href="#email-sequence"]');
       if (reviewLink) { reviewLink.className = 'text-control'; pitch.querySelector('.pitch-heading').append(reviewLink); }

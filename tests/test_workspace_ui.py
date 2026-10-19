@@ -69,6 +69,7 @@ def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, m
     if not legacy:
         archive_followups(db, prepared['contact_id'])
     if measured:
+        db.execute('UPDATE evidence SET text=text||? WHERE id=?', (' By EnquiryBot. Phone 0330 094 7733.', prepared['evidence_id']))
         db.event('performance', {'lead_id': prepared['lead_id'], 'url': 'https://bright-demo.com/',
             'status': 'complete', 'errors': [], 'strategies': {'mobile': {'score': 51,
                 'final_url': 'https://bright-demo.com/', 'metrics': {
@@ -106,6 +107,9 @@ def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, m
             page.goto(settings.public_url+'/')
             expect(page.locator('#pipeline')).to_be_visible()
             expect(page.locator('#detail h2')).to_have_text('Bright Demo')
+            if measured:
+                expect(page.locator('.pitch-summary')).to_contain_text('Existing chatbot: preserve it.')
+                expect(page.locator('.pitch-summary')).to_contain_text('AI calling agent (confirm fit)')
             assert 'prospect='+str(prepared['lead_id']) in page.url
             expect(page.locator('[data-edit]')).to_have_count(1)
             expect(page.locator('[data-edit]')).to_be_visible()
@@ -125,7 +129,7 @@ def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, m
             expect(page.locator('header #resume')).to_have_count(0)
             if measured:
                 expect(page.locator('[aria-label="Research conclusion"]')).to_contain_text('What we found & how we can help')
-                expect(page.locator('[aria-label="Research conclusion"]')).to_contain_text('largest visible element')
+                expect(page.locator('[aria-label="Research conclusion"]')).to_contain_text('mobile service-to-enquiry layout')
                 expect(page.locator('.offer-evidence-basis')).to_contain_text('Measured observation')
             else:
                 expect(page.locator('#detail')).to_contain_text('Improvement pitch needs evidence')

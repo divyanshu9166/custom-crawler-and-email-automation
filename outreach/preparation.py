@@ -19,7 +19,13 @@ its absence. A partial crawl cannot establish feature absence. A useful assessme
 idea may be proposed as an experiment, not as proof that the website is broken.
 Check target_query when provided: the business must actually match that industry/segment,
 not just share a keyword in a blog/job/customer testimonial. Hold mismatched prospects.
-Choose ONE service appropriate to Campaign A (inquiries/bookings) or B (D2C). A public
+Choose ONE PRIMARY service appropriate to Campaign A (inquiries/bookings) or B (D2C).
+For Campaign A assess the whole prospect: website availability, existing assistant,
+actual design/loading findings and inquiry/support channels. Where website work is the
+main need, select website_build or website_improvement, rather than selecting a chatbot
+merely because questions are published. The writer can attach relevant optional chatbot
+or calling-agent features to this primary project; do not choose multiple primary services.
+A performance score alone is not evidence of poor UI or CRO. A public
 WhatsApp link is not customer permission. Hold uncertain business identity, country,
 selling stage, source ownership or relevance. Do not select a service merely because a
 generic Contact us link exists. Prefer hold to a weak or irrelevant offer.

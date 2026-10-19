@@ -3,7 +3,9 @@
 Current product flow: Find prospects → read the research summary → review one personalized initial email. Automatic follow-ups are disabled by default. Manual qualification, source reports, verification details and sales tools remain available under advanced sections. Existing unapproved follow-ups are archived with their original copy; the initial email and user edits are preserved.
 
 ## Scope
-US/UK cold email acquisition for (A) website development/improvement, inquiry/booking chatbots and AI calling agents for qualification, bookings or customer support, and (B) new/existing D2C stores, shopping/support chatbots and permission-based WhatsApp workflows. One relevant offer per prospect. Research public evidence; do not invent conversion losses or private metrics.
+Campaign A uses a [prospect-specific primary project and optional features](docs/PROSPECT_SOLUTION_PLAN.md): preserve existing tools, match website build/improvement scope to current evidence, and condition chatbot/calling additions on business context.
+
+US/UK cold email acquisition for (A) website development/improvement, inquiry/booking chatbots and AI calling agents for qualification, bookings or customer support, and (B) new/existing D2C stores, shopping/support chatbots and permission-based WhatsApp workflows. One primary project per prospect, with relevant optional chatbot/calling features in the same email. Research public evidence; do not invent conversion losses or private metrics.
 
 Campaign A calling-agent offer: discovery, source-based task selection, qualification,
 one AI-written email and a local call-flow outline are implemented. See

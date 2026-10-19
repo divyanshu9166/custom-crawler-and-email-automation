@@ -190,7 +190,7 @@ def snapshot(db, lead_id):
         ('whatsapp_fit', 'WhatsApp customer fit and permission', 'confirmed' if channel_ready else 'needs_qualification' if whatsapp else 'not_selected'),
         ('whatsapp_offer', 'WhatsApp marketing / automation', 'confirmed_fit' if channel_ready else 'qualification_only' if whatsapp else 'not_selected'),
         ('whatsapp_qualify', 'Qualify channel and opt-in first', 'needs_qualification' if whatsapp and not channel_ready else 'not_selected'),
-        ('primary_offer', 'Choose ONE primary offer', 'qualification_only' if whatsapp and not channel_ready else basis['classification'] if selected and commerce_ready else 'needs_review'),
+        ('primary_offer', 'One primary project + relevant optional additions', 'qualification_only' if whatsapp and not channel_ready else basis['classification'] if selected and commerce_ready else 'needs_review'),
     ]
     approved, prepared = [], []
     for artifact in db.all("SELECT * FROM deliverables WHERE lead_id=?", (lead_id,)):
@@ -208,7 +208,9 @@ def snapshot(db, lead_id):
     if selected == 'ai_calling_agent':
         from .calling import pitch_plan
         calling_plan = pitch_plan(finding['quote'])
-    return {'calling_plan': calling_plan, 'lead_id': lead_id, 'campaign': lead['campaign'], 'selected_service': selected, 'context': context,
+    from .pitch_strategy import build as solution, review_snapshot
+    strategy = solution(lead, finding, fresh_evidence(db, lead_id), review=review_snapshot(db, lead_id))
+    return {'prospect_solution': strategy, 'calling_plan': calling_plan, 'lead_id': lead_id, 'campaign': lead['campaign'], 'selected_service': selected, 'context': context,
             'nodes': [{'id': key, 'label': label, 'state': state} for key, label, state in nodes],
             'evidence_basis': basis, 'prepared_current_artifact_ids': prepared,
             'recommended_artifacts': ARTIFACTS.get(selected, []), 'reviewed_current_artifact_ids': approved,

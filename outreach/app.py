@@ -146,6 +146,12 @@ class BrowserReferenceInput(Input):
     capture_method: Literal['operator_browser_reference', 'browser_connector_reference'] = 'operator_browser_reference'
 
 
+class BusinessToolReviewInput(Input):
+    chatbot_status: Literal['present', 'unknown']
+    source_url: str = Field(max_length=2000)
+    evidence_reference: str = Field(min_length=12, max_length=500)
+
+
 class ReviewInput(Input):
     company: str = Field(min_length=2, max_length=200)
     country: Literal["US", "UK"]
@@ -974,6 +980,19 @@ def create_app(settings=None):
             if not changed:
                 raise ValueError("Contact changed; reload before editing")
         return {"status": "saved", "note": "Regenerate any existing drafts to use the updated name"}
+
+    @app.put('/api/leads/{lead_id}/business-tools', dependencies=[Depends(auth)])
+    def business_tool_review(lead_id: int, value: BusinessToolReviewInput):
+        from .profiles import source_allowed
+        from .research import fresh_evidence
+        from .web import crawl_url
+        lead = db.one('SELECT * FROM leads WHERE id=?', (lead_id,))
+        if not lead:
+            raise HTTPException(404)
+        if not source_allowed(lead, value.source_url) or not any(crawl_url(p['url']) == crawl_url(value.source_url) for p in fresh_evidence(db, lead_id)):
+            raise ValueError('Existing-tool review needs a current saved official business page and an inspectable evidence reference')
+        db.event('business_tool_review', {'lead_id': lead_id, **value.model_dump()})
+        return {'status': 'saved', 'note': 'Tool observation recorded. Existing copy preserved; rewrite to use this context.'}
 
     @app.post("/api/contacts/{contact_id}/draft", dependencies=[Depends(auth)])
     def draft(contact_id: int):
