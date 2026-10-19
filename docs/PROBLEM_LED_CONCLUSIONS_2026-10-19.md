@@ -74,3 +74,38 @@ Spotless. The real finding gate rejects that current diagnostic snapshot without
 calling an AI provider. The deployed JavaScript includes the conclusion panel.
 Sending remains OFF, the sole edited message's before/after hash matches, and zero
 messages have been sent. No new audit result or prospect defect was fabricated.
+
+## Subsequent live evidence and actual replacement draft
+
+After the user reported still seeing the preserved email, a fresh report was run
+through Google's ordinary public PageSpeed UI (not the quota-limited unauthenticated
+API). [Original mobile report](https://pagespeed.web.dev/analysis/https-www-spotlessclean-co-uk/lpuec3s7ba?form_factor=mobile):
+19 October 2026, 17:25:25 IST; emulated Moto G Power, Slow 4G, Lighthouse 13.5.0.
+It reported **58/100**, **13.1 s LCP**, 3.3 s FCP, 180 ms TBT and 0.012 CLS.
+These are displayed, rounded lab values; field-user data was unavailable.
+The expanded report specifically flagged font display and render-blocking resources,
+including first-party FontAwesome fonts and CSS/scripts. Estimated savings are not
+promised outcomes.
+
+Screenshots, visible report text and a structured transcription were saved locally
+under `data/spotless-live-pagespeed-20261019` and on the VPS under
+`/data/audit-evidence/spotless-live-pagespeed-20261019`. The report was explicitly
+imported as `manual_public_pagespeed_ui`, event `performance:563:mobile`.
+This assisted import does not establish unattended PageSpeed API reliability; a key
+is still unconfigured.
+
+The latest API insight collector now retains positive modern `metricSavings`
+font/render-blocking insights. Supported insight IDs drive specific proposed fixes;
+unknown IDs and arbitrary provider titles do not become client-problem claims.
+229 focused checks passed, with a further 17-check collector/conclusion rerun passing.
+
+The prospect had returned to research review with unreviewed proposals. Current
+official homepage quotes and the measured lab finding were reviewed to select the
+single improvement offer. Before replacing its email, another private database backup
+was made at `/data/backups/before-spotless-qualified-redraft-20261019-120436.db`.
+Nemotron generated a replacement initial email with subject
+“Spotless Commercial Cleaning Ltd — mobile page speed observation”, citing 58/100,
+13.1-second lab LCP, font-display and render-blocking findings and a before/after
+verification approach. The old generic wording is no longer the current draft.
+Exactly one unscheduled, unsent draft remains, with sending OFF. No recipient probe
+or contact message was sent during this work.
