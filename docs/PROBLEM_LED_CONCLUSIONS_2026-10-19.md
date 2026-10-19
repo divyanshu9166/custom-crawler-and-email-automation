@@ -66,3 +66,11 @@ JavaScript syntax and whitespace checks also passed.
 Before deployment, a private SQLite backup was created on the VPS at
 `/data/backups/before-problem-led-20261019-105559.db`. Sending was confirmed OFF;
 the existing one-message snapshot was unchanged before the app update.
+
+Deployment verification: application commit `0c71f48` was pushed, rebuilt and
+started on the VPS. Compose reports healthy, and the authenticated live lead API
+returns `needs_evidence`, `problem_led_required=true`, `draft_allowed=false` for
+Spotless. The real finding gate rejects that current diagnostic snapshot without
+calling an AI provider. The deployed JavaScript includes the conclusion panel.
+Sending remains OFF, the sole edited message's before/after hash matches, and zero
+messages have been sent. No new audit result or prospect defect was fabricated.
