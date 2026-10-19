@@ -211,7 +211,8 @@ def test_workflow_map_requires_a_relevant_reviewed_artifact_not_every_draft_iter
     assert next(n for n in detailed_snapshot(db, settings, lid)['nodes'] if n['id'] == 'S')['state'] == 'complete'
 
 
-@pytest.mark.parametrize('claim', ['Your visitors struggle to request a quote.', 'Your quote flow has friction.', 'You are losing enquiries.'])
+@pytest.mark.parametrize('claim', ['Your visitors struggle to request a quote.', 'Your quote flow has friction.', 'You are losing enquiries.',
+                                  'Facilities managers who typically start the conversation are your buyers.'])
 def test_public_service_quote_does_not_support_invented_client_pain(db, prepared, claim):
     lead = db.one('SELECT * FROM leads WHERE id=?', (prepared['lead_id'],))
     pages = db.all('SELECT * FROM evidence WHERE lead_id=?', (lead['id'],))

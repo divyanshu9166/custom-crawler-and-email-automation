@@ -252,7 +252,7 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
         validate_offer_intent(lead, finding or {}, ui_claim)
         # A generic inquiry invitation or even a lab score does not establish
         # actual buyer behaviour. Reject common ungrounded pain assertions.
-        for claim in re.finditer(r'\b(?:you (?:are losing|lose)|your (?:visitors|customers) (?:struggle|abandon|leave)|(?:your|the|current|existing) (?:website|site|form|checkout|journey|quote flow) (?:is|has|causes?) (?:broken|confus\w*|friction|drop[- ]?off))[^.?!]*', ui_claim, re.I):
+        for claim in re.finditer(r'\b(?:you (?:are losing|lose)|your (?:visitors|customers) (?:struggle|abandon|leave)|(?:your|the|current|existing) (?:website|site|form|checkout|journey|quote flow) (?:is|has|causes?) (?:broken|confus\w*|friction|drop[- ]?off)|who (?:typically|usually|normally) (?:start|handle|make|manage|choose|buy))[^.?!]*', ui_claim, re.I):
             normalized_claim = ' '.join(claim.group().casefold().split())
             if not any(normalized_claim in ' '.join(e['text'].casefold().split()) for e in evidence):
                 raise ValueError('AI writing asserted client pain or buyer behaviour absent from supplied sources; propose a test instead')
@@ -311,6 +311,9 @@ proof_preview, when present, identifies a real LOCAL discussion preview for fina
 offer to share that preview after review, but never claim it was delivered, attached or implemented.
 A concept/FAQ/WhatsApp outline is a prototype/planning artifact, not a working client integration.
 Without proof_preview, do not claim any existing asset. Keep one focused offer and one question.
+Treat proposed test participants as a suggested audience, not the client's known decision-makers.
+Do not invent who typically starts a conversation or makes a purchase, or assume the desktop
+journey already works smoothly. These require source evidence just like any other factual claim.
 '''
     from .web import EMAIL_RE
     def checked():
