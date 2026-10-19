@@ -206,6 +206,11 @@ def test_bounded_writer_correction_explicitly_supplies_allowed_empty_audit_refs(
     settings.draft_model, settings.draft_api_key = 'fictional-audit-model', 'fictional-fixture-key'
     cid, lid = prepared['contact_id'], prepared['lead_id']
     archive_followups(db, cid)
+    # A source-led FAQ proposal can still be written without a technical defect.
+    findings = json.loads(db.one('SELECT findings FROM leads WHERE id=?', (lid,))['findings'])
+    findings[0]['service'] = 'chatbot'
+    findings[0]['quote'] = 'We offer UK consulting services. Contact us for a consultation.'
+    db.execute("UPDATE leads SET service='chatbot',findings=? WHERE id=?", (json.dumps(findings), lid))
     performance(db, lid, status='failed', strategies={}, errors=[{'reason':'HTTP 429'}])
     calls = []
     def respond(request):

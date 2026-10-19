@@ -23,6 +23,9 @@ Choose ONE service appropriate to Campaign A (inquiries/bookings) or B (D2C). A 
 WhatsApp link is not customer permission. Hold uncertain business identity, country,
 selling stage, source ownership or relevance. Do not select a service merely because a
 generic Contact us link exists. Prefer hold to a weak or irrelevant offer.
+Website/store improvement requires a current reproducible diagnostic finding.
+If diagnostics establish no issue, hold that pitch; do not switch to an unrelated
+service merely to produce an email. Other offers still need their own positive evidence.
 Return ONLY JSON. Either {"ready":false,"reason":"specific missing evidence"}, or
 {"ready":true,"review":{"company":"unchanged supplied company","country":"UK or US",
 "country_source":"supplied source URL","country_quote":"exact source quote with country",
@@ -272,6 +275,14 @@ def prepare(db, settings, lead_id, *, cancelled=lambda: False):
             record('needs_evidence', 'AI found insufficient support for a relevant offer; inspect source evidence before retrying')
             return
         review = _validate_review(lead, assessment, pages)
+        if (db.all('SELECT * FROM contacts WHERE lead_id=? ORDER BY id', (lead_id,)) != contacts_before or
+                db.one('SELECT 1 FROM messages m JOIN contacts c ON c.id=m.contact_id WHERE c.lead_id=?', (lead_id,))):
+            raise ValueError('Contact or drafts changed during preparation; newer work preserved')
+        from .conclusions import build
+        conclusion = build(audit_context, review['service'])
+        if not conclusion['draft_allowed']:
+            record('needs_evidence', conclusion['summary'])
+            return
         # Serialize current-input recheck and qualification using the same SQLite connection.
         # review_lead performs its own transaction and source-hash checks as well.
         review_lead(db, lead_id, review, expected_lead=lead, expected_contacts=contacts_before, review_method='research_ai')

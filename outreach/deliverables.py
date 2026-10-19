@@ -91,6 +91,13 @@ def create(db, lead_id, value, *, automatic_context=None):
     content = "".join(sections)
     if automatic_context is not None:
         content += '<section><h2>Evidence and test plan</h2><p>' + esc(automatic_context['basis']['note']) + '</p>'
+        from .conclusions import build
+        conclusion = build(automatic_context['audit_context'], lead['service'])
+        content += '<h3>Research conclusion</h3><p>' + esc(conclusion['summary']) + '</p>'
+        for finding in conclusion['findings'][:1]:
+            content += '<p><strong>Proposed fix:</strong> ' + esc(finding['proposed_fix']) + '</p><p><strong>Reproduce:</strong> ' + esc(finding['reproduce']) + '</p><p><strong>Verify:</strong> ' + esc(finding['verification']) + '</p><p>' + esc(finding['limitations']) + '</p>'
+            for metric in finding['supporting_measurements']:
+                content += '<p>' + esc(metric['metric']) + ': ' + esc(metric['numericValue']) + ' ' + esc(metric['numericUnit']) + '</p>'
         for item in automatic_context['audit_context'].get('observations', []):
             content += '<p>' + esc(item['fact']) + '</p><p class="small">Test/capture source: ' + esc(item['url']) + ' · ' + esc(time.strftime('%Y-%m-%d', time.gmtime(item['captured_at']))) + '</p>'
         content += '<p>Agree the baseline, test task and success metric with the business before implementation. No form was submitted and no client outcome has been measured.</p></section>'

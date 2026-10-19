@@ -94,7 +94,7 @@ async function refreshPipeline(){
   finally{pipelineRefreshInFlight=false;}
 }
 function leadState(l){
-  if(l.initial_email_state==='draft'||l.preparation_state==='drafts_ready')return ['Email ready','ready'];
+  if(l.initial_email_state==='draft'||l.preparation_state==='drafts_ready')return ['Draft saved','ready'];
   if(['pending','running'].includes(l.preparation_job))return ['Preparing email','working'];
   if(l.status==='researching')return ['Researching','working'];
   if(['needs_attention','needs_evidence'].includes(l.preparation_state)||l.status==='research_failed')return ['Needs attention','attention'];

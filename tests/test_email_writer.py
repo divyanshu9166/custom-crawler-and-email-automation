@@ -17,6 +17,20 @@ REAL_GENERATE = email_writer.generate_sequence
 REAL_CLIENT = httpx.Client
 
 
+@pytest.fixture
+def prepared(prepared, db):
+    # Provider protocol tests exercise an allowed source-led FAQ proposal.
+    # Problem-led improvement gating is covered with real diagnostics separately.
+    lead = db.one('SELECT findings FROM leads WHERE id=?', (prepared['lead_id'],))
+    findings = json.loads(lead['findings'])
+    findings[0]['service'] = 'chatbot'
+    findings[0]['quote'] = 'We offer UK consulting services. Contact us for a consultation.'
+    db.execute("UPDATE leads SET service='chatbot',findings=? WHERE id=?", (json.dumps(findings), prepared['lead_id']))
+    from outreach.deliverables import prepare_automatic
+    prepare_automatic(db, prepared['lead_id'])
+    return prepared
+
+
 def inputs(db, prepared):
     lead = db.one('SELECT * FROM leads WHERE id=?', (prepared['lead_id'],))
     contact = db.one('SELECT * FROM contacts WHERE id=?', (prepared['contact_id'],))

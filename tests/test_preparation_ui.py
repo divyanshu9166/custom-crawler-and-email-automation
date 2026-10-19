@@ -24,6 +24,8 @@ def test_one_click_preparation_shows_drafts_or_preserves_unsaved_edits(settings,
                      (lid, 'https://bright-demo.com/', 'Bright Demo Ltd', text, hashlib.sha256(text.encode()).hexdigest(), time.time()))
     db.execute("UPDATE leads SET status='review' WHERE id=?", (lid,))
     add_contact(db, lid, 'hello@bright-demo.com', 'https://bright-demo.com/')
+    db.event('performance', {'lead_id': lid, 'url': 'https://bright-demo.com/', 'status': 'complete',
+        'errors': [], 'strategies': {'mobile': {'score': 51, 'final_url': 'https://bright-demo.com/'}}})
     review = {'company': 'Bright Demo Ltd', 'country': 'UK', 'country_source': 'https://bright-demo.com/',
               'country_quote': 'provides commercial cleaning across the UK.', 'timezone': 'Europe/London',
               'business_type': 'corporate', 'service': 'website_improvement', 'primary_goal': 'inquiries_bookings',

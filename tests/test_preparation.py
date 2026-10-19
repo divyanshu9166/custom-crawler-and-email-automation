@@ -31,6 +31,9 @@ def prospect(db, settings):
     db.execute("UPDATE leads SET status='review' WHERE id=?", (lid,))
     cid = add_contact(db, lid, 'hello@bright-demo.com', 'https://bright-demo.com/')
     db.event('discovery', {'query': 'commercial cleaning UK', 'lead_ids': [lid]})
+    # Qualification/writer protocol cases start with an actual controlled lab finding.
+    db.event('performance', {'lead_id': lid, 'url': 'https://bright-demo.com/', 'status': 'complete',
+        'strategies': {'mobile': {'final_url': 'https://bright-demo.com/', 'score': 51}}, 'errors': []})
     return lid, cid, eid
 
 
@@ -128,8 +131,10 @@ def test_prepare_runs_real_writer_contract_and_leaves_all_messages_unsent(db, se
             assert packet['target_query'] == 'commercial cleaning UK'
             value = assessment(eid)
         else:
+            observation = json.loads(payload['messages'][1]['content'])['audit_context']['observations'][0]
             value = {'messages': [{'step': i, 'subject': f'Bright Demo Ltd quote idea {i}',
-                      'body': f'Bright Demo Ltd invites visitors to request an office cleaning quote. One idea {i}: explain the schedule options alongside that invitation. Would a short outline be useful?',
+                      'body': f'Bright Demo Ltd scored 51/100 in our mobile Lighthouse lab test. One idea {i}: profile the measured loading bottleneck before optimising it. Would reviewing this finding be useful?',
+                      'diagnostic_refs': [observation['ref']] if i == 0 else [],
                       'support': [{'evidence_id': eid, 'quote': 'Request a quote for office cleaning.'}]} for i in range(4)]}
         return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(value)}}]})
     monkeypatch.setattr(email_writer, 'generate_sequence', REAL_GENERATE)

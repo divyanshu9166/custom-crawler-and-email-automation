@@ -62,14 +62,18 @@ def test_real_writer_creates_one_initial_and_approval_dispatch_never_schedules_f
     archive_followups(db, cid)
     source = db.one('SELECT * FROM evidence WHERE id=?', (prepared['evidence_id'],))
     lead = db.one('SELECT * FROM leads WHERE id=?', (prepared['lead_id'],))
+    db.event('performance', {'lead_id': lead['id'], 'url': lead['website'], 'status': 'complete', 'errors': [],
+        'strategies': {'mobile': {'score': 51, 'final_url': lead['website']}}})
     requests = []
     def handle(request):
         payload = json.loads(request.content)
         requests.append(payload)
         assert 'Write ONE' in payload['messages'][0]['content']
         assert payload['max_tokens'] == 1200
+        observation = json.loads(payload['messages'][1]['content'])['audit_context']['observations'][0]
         value = {'messages': [{'step': 0, 'subject': 'An idea for '+lead['company'],
-                  'body': 'I noticed '+lead['company']+' invites visitors to contact you for a consultation. Would a brief review of the existing enquiry journey be useful?',
+                  'body': lead['company']+' scored 51/100 in our mobile Lighthouse lab test. Would reviewing the measured loading bottleneck before optimising it be useful?',
+                  'diagnostic_refs': [observation['ref']],
                   'support': [{'evidence_id': source['id'], 'quote': 'Contact us for a consultation.'}]}]}
         return httpx.Response(200, json={'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(value)}}]})
     real_client = httpx.Client

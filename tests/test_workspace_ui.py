@@ -11,10 +11,18 @@ from outreach.campaigns import archive_followups
 
 @pytest.mark.parametrize('mobile', [False, True])
 @pytest.mark.parametrize('legacy', [False, True])
-def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, mobile, legacy):
+@pytest.mark.parametrize('measured', [False, True])
+def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, mobile, legacy, measured):
     settings.worker_enabled = settings.sending_enabled = settings.followups_enabled = False
     if not legacy:
         archive_followups(db, prepared['contact_id'])
+    if measured:
+        db.event('performance', {'lead_id': prepared['lead_id'], 'url': 'https://bright-demo.com/',
+            'status': 'complete', 'errors': [], 'strategies': {'mobile': {'score': 51,
+                'final_url': 'https://bright-demo.com/', 'metrics': {
+                    'largest-contentful-paint': {'numericValue': 4800, 'numericUnit': 'millisecond'}}}}})
+        from outreach.deliverables import prepare_automatic
+        prepare_automatic(db, prepared['lead_id'])
     client = TestClient(create_app(settings), base_url=settings.public_url,
                         headers={'Authorization': 'Bearer '+settings.api_token})
     errors, mutations = [], []
@@ -44,8 +52,16 @@ def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, m
             expect(page.locator('#review-form')).not_to_be_visible()
             expect(page.locator('#research-again')).not_to_be_visible()
             expect(page.locator('header #resume')).to_have_count(0)
-            expect(page.locator('#detail')).to_contain_text('Your email is ready to review')
-            expect(page.locator('.offer-evidence-basis')).to_contain_text('Exploratory opportunity')
+            if measured:
+                expect(page.locator('[aria-label="Research conclusion"]')).to_contain_text('Finding → proposed fix')
+                expect(page.locator('[aria-label="Research conclusion"]')).to_contain_text('largest visible element')
+                expect(page.locator('.offer-evidence-basis')).to_contain_text('Measured observation')
+            else:
+                expect(page.locator('#detail')).to_contain_text('Improvement pitch needs evidence')
+                expect(page.locator('[aria-label="Research conclusion"]')).to_contain_text('Improvement pitch on hold')
+                expect(page.locator('[aria-label="Research conclusion"]')).to_contain_text('Your existing email is preserved')
+                expect(page.locator('#screenshot')).to_be_visible()
+                expect(page.locator('.offer-evidence-basis')).to_contain_text('Exploratory opportunity')
             expect(page.locator('[aria-label="Proof of value preview"]')).to_contain_text('Draft for review')
             page.locator('.proof-preview summary').click()
             expect(page.frame_locator('.proof-preview iframe').locator('body')).to_contain_text('No form was submitted')

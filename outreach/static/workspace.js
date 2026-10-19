@@ -74,6 +74,44 @@ window.WorkbenchWorkspace = {
       proofPanel.append(button,result);
     } else proofPanel.insertAdjacentHTML('beforeend','<p>Available automatically after a supported offer is selected.</p>');
     const audits = data.diagnostics;
+    const conclusion = audits?.conclusion;
+    if (conclusion) {
+      const approach = brief.querySelector('.brief-facts > div:last-child p');
+      if (approach && conclusion.problem_led_required && conclusion.findings.length) approach.textContent = conclusion.findings[0].proposed_fix;
+      if (!conclusion.draft_allowed) {
+        steps.children[1]?.classList.remove('done');
+        const number = steps.children[1]?.querySelector('span');
+        if (number) number.textContent = '2';
+        if (approach) approach.textContent = 'No problem-led fix selected until a current finding is available.';
+        if (preparation) {
+          preparation.classList.add('is-attention');
+          preparation.classList.remove('is-ready');
+          preparation.querySelector('h3').textContent = 'Improvement pitch needs evidence';
+          preparation.querySelector('p').textContent = 'Complete a current audit before creating a problem-led email. Any existing draft is preserved for inspection.';
+          preparation.querySelector('.eyebrow').textContent = 'FINDING NEEDED';
+        }
+      }
+      const section = document.createElement('section');
+      section.className = 'panel research-conclusion';
+      section.setAttribute('aria-label','Research conclusion');
+      section.innerHTML = `<span class="eyebrow">RESEARCH CONCLUSION</span><h3>${conclusion.state === 'finding_ready' ? 'Finding → proposed fix' : conclusion.problem_led_required ? 'Improvement pitch on hold' : 'No verified website problem'}</h3><p>${esc(conclusion.summary)}</p>${conclusion.findings.slice(0,1).map(f => `<p><strong>Proposed fix:</strong> ${esc(f.proposed_fix)}</p><p><strong>How to verify:</strong> ${esc(f.verification)}</p><details><summary>Evidence & reproduction steps</summary>${link(f.url)}<p>${esc(f.fact)} · ${new Date(f.captured_at*1000).toLocaleString()}</p><p>${esc(f.reproduce)}</p>${f.screenshot ? `<a href="/api/screenshots/${encodeURIComponent(f.screenshot)}" target="_blank" rel="noopener">View capture</a>` : '<p>Evidence: saved lab/capture report; no screenshot linked to this finding.</p>'}<p>${esc(f.limitations)}</p></details>`).join('')}<p>${esc(conclusion.next_action)}</p>${hasEmail && !conclusion.draft_allowed ? '<p>Your existing email is preserved. It is not evidence of an identified problem; do not use it as a problem-led pitch.</p>' : ''}`;
+      if (!conclusion.draft_allowed) {
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+        for (const id of ['screenshot', 'performance']) {
+          const button = detail.querySelector('#'+id);
+          if (button) actions.append(button);
+        }
+        section.append(actions);
+      }
+      const proofDetails = section.querySelector('details');
+      for (const metric of conclusion.findings[0]?.supporting_measurements || []) {
+        const line = document.createElement('p');
+        line.textContent = `${metric.metric}: ${metric.numericValue} ${metric.numericUnit}`;
+        proofDetails?.append(line);
+      }
+      brief.prepend(section);
+    }
     if (audits) {
       const labels = {performance:'PageSpeed lab test',screenshot:'Desktop / mobile capture'};
       const states = {not_run:'Not run',stale:'Outdated for current research',target_unverified:'Capture target not recorded',failed:'Failed',partial:'Partial capture',complete:'Completed'};
@@ -84,6 +122,11 @@ window.WorkbenchWorkspace = {
     const prepare = detail.querySelector('#prepare-emails');
     if (prepare && preparation) {
       prepare.textContent = 'Create email';
+      if (conclusion && !conclusion.draft_allowed) {
+        prepare.disabled = true;
+        prepare.textContent = 'Finding needed before email';
+        prepare.title = conclusion.summary;
+      }
       if (!hasEmail) {
         const control = !hasSource ? detail.querySelector('#research-again') : !data.contacts.length ? detail.querySelector('#contact-research') : prepare;
         if (control) {

@@ -1,6 +1,7 @@
 """Bounded audit inputs, separate from public-page quotes and business pain claims."""
 import json
 import math
+import re
 import time
 
 from .web import crawl_url
@@ -61,6 +62,9 @@ def snapshot(db, lead, now=None):
         else:
             complete = report.get('complete') is True and not report.get('issues')
             item.update(state='complete' if complete else 'partial', render_issue_count=len(report.get('issues', [])))
+            item['screenshots'] = {device: name for device, name in report.get('files', {}).items()
+                                   if device in {'desktop', 'mobile'} and isinstance(name, str)
+                                   and re.fullmatch(rf"lead-{lead['id']}-\d+-[a-f0-9]{{6}}-(?:mobile|desktop)\.png", name)}
             visual = report.get('visual', {})
             # No absence/form/drop-off assertions from a DOM count or a failed widget.
             for device, key, width in [('desktop', 'horizontalOverflow', visual.get('viewport', {}).get('width')),
@@ -70,4 +74,6 @@ def snapshot(db, lead, now=None):
                         'kind': 'render_observation', 'fact': f'Horizontal page overflow was observed in our {device} capture at {width}px width.',
                         'anchor': str(width), 'url': target, 'captured_at': event['created_at']})
         result['reports'].append(item)
+    from .conclusions import build
+    result['conclusion'] = build(result, lead.get('service', ''))
     return result
