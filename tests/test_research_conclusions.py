@@ -88,6 +88,22 @@ def test_source_led_other_offers_do_not_claim_a_technical_problem():
     assert not result['business_pain_confirmed']
 
 
+@pytest.mark.parametrize('opportunity,fragment', [('font-display-insight', 'font-display fallback'),
+    ('render-blocking-insight', 'critical styles'), ('untrusted-random-claim', 'largest visible element')])
+def test_only_supported_positive_insights_change_the_proposed_fix(db, prepared, opportunity, fragment):
+    lid = prepared['lead_id']
+    audit(db, lid)
+    event = db.one("SELECT id,detail FROM events WHERE kind='performance'")
+    report = json.loads(event['detail'])
+    report['strategies']['mobile']['opportunities'] = [{'id': opportunity, 'title': 'UNTRUSTED TITLE'}]
+    report['report_url'] = 'https://pagespeed.web.dev/analysis/example/report?form_factor=mobile'
+    db.execute('UPDATE events SET detail=? WHERE id=?', (json.dumps(report), event['id']))
+    value = diagnostics.snapshot(db, db.one('SELECT * FROM leads WHERE id=?', (lid,)))
+    assert fragment in value['conclusion']['findings'][0]['proposed_fix']
+    assert 'UNTRUSTED TITLE' not in json.dumps(value)
+    assert value['conclusion']['findings'][0]['report_url'] == report['report_url']
+
+
 def test_automatic_preparation_holds_unsupported_improvement_without_changing_review(db, settings, prepared, monkeypatch):
     lid = prepared['lead_id']
     db.execute('DELETE FROM messages')

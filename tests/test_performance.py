@@ -33,10 +33,12 @@ async def test_pagespeed_preserves_lab_evidence_and_partial_results(db, settings
             "fetchTime": "2026-10-10T10:00:00Z", "lighthouseVersion": "fixture",
             "categories": {"performance": {"score": .83}},
             "audits": {"largest-contentful-paint": {"displayValue": "2.8 s", "numericValue": 2800, "numericUnit": "millisecond"},
-                       "unused-css": {"scoreDisplayMode": "numeric", "score": .5, "title": "Reduce unused CSS"}}}})
+                       "unused-css": {"scoreDisplayMode": "numeric", "score": .5, "title": "Reduce unused CSS"},
+                       "font-display-insight": {"scoreDisplayMode": "metricSavings", "score": 0, "title": "Font display"}}}})
     monkeypatch.setattr(httpx.AsyncClient, "get", get)
     result = await performance_audit(db, settings, prepared["lead_id"])
     assert result["strategies"]["mobile"]["score"] == 83
+    assert any(o['id'] == 'font-display-insight' for o in result['strategies']['mobile']['opportunities'])
     assert result["status"] == ("complete" if desktop == "ok" else "partial")
     raw = db.one("SELECT detail FROM events WHERE kind='performance'")["detail"]
     assert "private-fixture-key" not in raw

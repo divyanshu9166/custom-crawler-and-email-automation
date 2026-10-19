@@ -3,6 +3,7 @@ import json
 import math
 import re
 import time
+from urllib.parse import urlsplit
 
 from .web import crawl_url
 
@@ -48,7 +49,12 @@ def snapshot(db, lead, now=None):
                 if (type(score) not in (int, float) or not math.isfinite(score) or not 0 <= score <= 100
                         or value.get('final_url') != target):
                     continue
-                measurement = {'strategy': strategy, 'score': score, 'metrics': {}}
+                measurement = {'strategy': strategy, 'score': score, 'metrics': {}, 'opportunities': []}
+                titles = {'font-display-insight': 'Font display', 'font-display': 'Font display',
+                          'render-blocking-insight': 'Render-blocking requests', 'render-blocking-resources': 'Render-blocking requests'}
+                for opportunity in value.get('opportunities', [])[:12]:
+                    if isinstance(opportunity, dict) and isinstance(opportunity.get('id'), str) and opportunity['id'] in titles:
+                        measurement['opportunities'].append({'id': opportunity['id'], 'title': titles[opportunity['id']]})
                 for key in ('largest-contentful-paint', 'first-contentful-paint', 'total-blocking-time', 'cumulative-layout-shift'):
                     metric = value.get('metrics', {}).get(key, {})
                     number = metric.get('numericValue')
@@ -56,9 +62,14 @@ def snapshot(db, lead, now=None):
                         measurement['metrics'][key] = {'numericValue': number, 'numericUnit': str(metric.get('numericUnit', ''))[:30]}
                 item['measurements'].append(measurement)
                 if score < 90:
+                    details = ' Lighthouse flagged '+', '.join(dict.fromkeys(o['title'] for o in measurement['opportunities']))+'.' if measurement['opportunities'] else ''
                     result['observations'].append({'ref': f"performance:{event['id']}:{strategy}",
-                        'kind': 'lab_measurement', 'fact': f'{strategy} Lighthouse lab performance score: {score}/100.',
+                        'kind': 'lab_measurement', 'fact': f'{strategy} Lighthouse lab performance score: {score}/100.'+details,
                         'anchor': str(score), 'url': target, 'captured_at': event['created_at']})
+            public_report = urlsplit(report.get('report_url', ''))
+            if (public_report.scheme == 'https' and public_report.netloc == 'pagespeed.web.dev'
+                    and public_report.path.startswith('/analysis/')):
+                item['report_url'] = public_report.geturl()
         else:
             complete = report.get('complete') is True and not report.get('issues')
             item.update(state='complete' if complete else 'partial', render_issue_count=len(report.get('issues', [])))

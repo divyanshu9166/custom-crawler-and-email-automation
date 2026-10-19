@@ -105,6 +105,7 @@ window.WorkbenchWorkspace = {
         section.append(actions);
       }
       const proofDetails = section.querySelector('details');
+      if (proofDetails && conclusion.findings[0]?.report_url) proofDetails.insertAdjacentHTML('beforeend', `<p>Original PageSpeed report: ${link(conclusion.findings[0].report_url)}</p>`);
       for (const metric of conclusion.findings[0]?.supporting_measurements || []) {
         const line = document.createElement('p');
         line.textContent = `${metric.metric}: ${metric.numericValue} ${metric.numericUnit}`;

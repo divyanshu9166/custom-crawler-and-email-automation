@@ -47,6 +47,13 @@ async def performance_audit(db, settings, lead_id):
                                  for key, value in audits.items() if isinstance(value, dict)
                                  and value.get("scoreDisplayMode") == "numeric"
                                  and isinstance(value.get("score"), (int, float)) and value["score"] < 1][:12]
+                # Current Lighthouse insights use metricSavings rather than the
+                # older numeric display mode. Retain these positive diagnoses.
+                insight_ids = {'font-display-insight', 'render-blocking-insight'}
+                insights = [{"id": key, "title": audits[key].get('title'), "displayValue": audits[key].get('displayValue')}
+                            for key in sorted(insight_ids) if isinstance(audits.get(key), dict)
+                            and type(audits[key].get('score')) in (int, float) and 0 <= audits[key]['score'] < 1]
+                opportunities = (insights + [o for o in opportunities if o['id'] not in insight_ids])[:12]
                 report["strategies"][strategy] = {"final_url": final_url, "score": round(score * 100),
                     "fetch_time": result.get("fetchTime"), "lighthouse_version": result.get("lighthouseVersion"),
                     "metrics": metrics, "opportunities": opportunities, "warnings": result.get("runWarnings", [])[:12]}

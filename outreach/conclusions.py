@@ -23,7 +23,14 @@ def build(audit, service):
             metrics = measurement.get('metrics', {})
             lcp = metrics.get('largest-contentful-paint', {})
             supporting_measurements = [{'metric': key, **value} for key, value in metrics.items()]
-            if lcp.get('numericUnit') == 'millisecond' and lcp.get('numericValue', 0) > 2500:
+            opportunities = {o['id'] for o in measurement.get('opportunities', [])}
+            if opportunities & {'font-display-insight', 'font-display'}:
+                fix = 'Review the flagged font loading rules so text can remain visible while fonts load; test an appropriate font-display fallback and check both text and icon rendering.'
+                test = 'Repeat the same mobile/desktop lab strategy after the font-loading change; compare paint timings and confirm the flagged font-display issue is resolved without visual regressions.'
+            elif opportunities & {'render-blocking-insight', 'render-blocking-resources'}:
+                fix = 'Review the flagged blocking CSS and scripts; inline only required critical styles and defer noncritical resources after checking their dependencies.'
+                test = 'Repeat the same lab strategy after the loading change; compare paint timings and retest the affected page interactions.'
+            elif lcp.get('numericUnit') == 'millisecond' and lcp.get('numericValue', 0) > 2500:
                 fix = 'Trace the largest visible element in a repeat lab run; inspect its loading priority and dependencies, then optimise the confirmed bottleneck.'
                 test = 'Compare largest-contentful-paint before and after the change under the same lab settings; aim for 2,500 ms or less.'
             else:
@@ -41,6 +48,7 @@ def build(audit, service):
         findings.append({**observation, 'proposed_fix': fix, 'verification': test,
                          'reproduce': reproduce, 'limitations': limit,
                          'supporting_measurements': supporting_measurements,
+                         'report_url': report.get('report_url'),
                          'screenshot': report.get('screenshots', {}).get(device)})
     required = service in IMPROVEMENTS
     ready = bool(findings)
