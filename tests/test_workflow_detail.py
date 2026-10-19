@@ -140,7 +140,10 @@ def test_recorded_sales_references_and_inconclusive_outcome_are_separate_from_de
     db.execute('INSERT INTO sales(lead_id,stage,details,updated_at) VALUES(?,?,?,?)',(lid,'completed',json.dumps(detail),time.time()))
     mapped=nodes(db,settings,lid)
     assert all(mapped[k]['state']=='complete' for k in ['O','R','T','U','V','W','X','Y','Z'])
-    assert mapped['S']['state']=='waiting'
+    # Draft creation now prepares an unsent discussion preview; recorded sales
+    # references do not approve or deliver that artifact.
+    assert mapped['S']['state']=='review'
+    assert db.one('SELECT state FROM deliverables WHERE lead_id=?', (lid,))['state'] == 'draft'
     assert mapped['Z']['metric']=='1 client outcome records · 0 SMTP-accepted messages'
     assert 'does not collect payment' in mapped['X']['description']
 
