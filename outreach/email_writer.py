@@ -201,7 +201,7 @@ def research_packet(lead, finding, evidence, audit_context=None, proof_context=N
         context.setdefault('channel_fit_status', 'unknown')
         context.setdefault('customer_permission_status', 'unknown')
         context['qualification_only'] = not (context['channel_fit_status'] == context['customer_permission_status'] == 'confirmed')
-    from .pitch_strategy import build as solution
+    from .pitch_strategy import build as solution, writer_excerpt
     strategy = solution(lead, finding, evidence, audit_context, finding.get('business_tool_review'))
     return {'prospect_solution': strategy, 'calling_plan': calling_plan, 'business': {k: lead.get(k, '') for k in ('company', 'campaign', 'country', 'service',
                                                     'lead_kind', 'website', 'profile_url', 'website_status')},
@@ -213,7 +213,7 @@ def research_packet(lead, finding, evidence, audit_context=None, proof_context=N
             'offer_basis': evidence_basis(lead, finding, evidence, audit_context),
             'proof_preview': proof_context or {},
             'sources': [{'evidence_id': e['id'], 'url': e['url'], 'sha256': e['sha256'],
-                         'fetched_at': e['fetched_at'], 'context': e['text'][:6000]} for e in evidence]}
+                         'fetched_at': e['fetched_at'], 'context': writer_excerpt(e, finding) if lead.get('campaign') == 'A' else e['text'][:6000]} for e in evidence]}
 
 
 def validate_offer_intent(lead, finding, text):
@@ -280,7 +280,7 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
         ui_claim = subject+' '+body
         if lead.get('campaign') == 'A':
             from .pitch_strategy import build as solution, validate_copy as validate_solution
-            validate_solution(solution(lead, finding or {}, evidence, audit_context, (finding or {}).get('business_tool_review')), ui_claim)
+            validate_solution(solution(lead, finding or {}, evidence, audit_context, (finding or {}).get('business_tool_review')), ui_claim, initial=step == 0)
         if lead.get('service') == 'ai_calling_agent':
             from .calling import validate_copy, source_signal
             validate_copy(lead, finding or {}, evidence, ui_claim, initial=step == 0)
@@ -405,7 +405,10 @@ Then propose a future test. Keep research unknowns implicit in the question; do 
 prospect that we lack data or analytics about their business.
 ''' if lead.get('service') != 'ai_calling_agent' else CALLING_INSTRUCTIONS
     if lead.get('campaign') == 'A':
-        instructions += SOLUTION_INSTRUCTIONS
+        if lead.get('service') in {'website_build', 'website_improvement'}:
+            instructions = (INSTRUCTIONS if settings.followups_enabled else SINGLE_INSTRUCTIONS) + SOLUTION_INSTRUCTIONS
+        else:
+            instructions += SOLUTION_INSTRUCTIONS
     from .web import EMAIL_RE
     def checked():
         if before_request:

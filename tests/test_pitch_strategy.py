@@ -49,6 +49,22 @@ def test_a_published_phone_task_supports_a_more_specific_addition():
     assert option['status'] == 'source_backed_option' and 'calendar' in option['proposal']
 
 
+def test_helpdesk_context_is_not_used_as_a_sales_qualification_need():
+    lead, finding, pages = inputs('Call our customer support team for help.')
+    plan = strategy.build(lead, finding, pages)
+    assert next(o for o in plan['optional_services'] if o['service'] == 'ai_calling_agent')['use_case'] == 'customer_support'
+    with pytest.raises(ValueError, match='helpdesk phone route'):
+        strategy.validate_copy(plan, 'We can add an AI calling agent to qualify sales leads.')
+
+
+def test_bounded_writer_context_keeps_decisive_quotes_from_long_pages():
+    lead, finding, pages = inputs('')
+    pages[0]['text'] = 'Business introduction. '*1000+' Book a consultation. By EnquiryBot. Call our customer support team for help.'
+    excerpt = strategy.writer_excerpt(pages[0], finding)
+    assert len(excerpt) < 4000 and len(excerpt) < len(pages[0]['text'])
+    assert finding['quote'] in excerpt and 'By EnquiryBot' in excerpt and 'customer support team' in excerpt
+
+
 def test_a_date_or_vendor_blog_mention_is_not_a_phone_number_or_installed_bot():
     lead, finding, pages = inputs('Published 2026-10-19. We discuss Intercom alternatives in our blog.')
     plan = strategy.build(lead, finding, pages)
@@ -86,6 +102,16 @@ def test_calling_addition_from_number_alone_stays_conditional():
     with pytest.raises(ValueError, match='conditional'):
         strategy.validate_copy(plan, 'We can add an AI calling agent to handle your enquiries.')
     strategy.validate_copy(plan, 'If phone enquiries are relevant, we can add an AI calling agent.')
+
+
+def test_initial_website_pitch_cannot_omit_the_project_or_all_relevant_additions():
+    lead, finding, pages = inputs('Phone 0330 094 7733.')
+    plan = strategy.build(lead, finding, pages)
+    with pytest.raises(ValueError, match='primary website project'):
+        strategy.validate_copy(plan, 'We can adjust fonts. If useful, an AI calling agent could help.', initial=True)
+    with pytest.raises(ValueError, match='optional feature'):
+        strategy.validate_copy(plan, 'We can refresh the mobile enquiry layout and improve loading.', initial=True)
+    strategy.validate_copy(plan, 'We can refresh the mobile enquiry layout. If phone enquiries are relevant, an AI calling agent could collect details for the team.', initial=True)
 
 
 def test_review_api_records_a_typed_positive_observation_and_preserves_the_email(settings, db, prepared):

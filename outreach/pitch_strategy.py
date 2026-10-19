@@ -48,6 +48,29 @@ def context_pages(lead, finding, pages):
     return sorted([p for p in pages if source_allowed(lead, p['url'])], key=rank)[:6]
 
 
+def writer_excerpt(page, finding):
+    """Keep decisive exact evidence and short context rather than duplicate long pages."""
+    text = page['text']
+    parts = [text[:900]]
+    quotes = [finding.get('quote', ''), finding.get('country_quote', ''),
+              finding.get('offer_context', {}).get('commerce_quote', '')]
+    quotes += [(finding.get(key) or {}).get('quote', '') for key in ('trigger', 'followup')]
+    for quote in quotes:
+        if quote and quote in text and not any(quote in part for part in parts):
+            parts.append(quote)
+    matches = [BOT.search(text), phone_match(text), QUESTIONS.search(text)]
+    from .calling import source_signal
+    call = source_signal(text)
+    if call and not any(call['quote'] in part for part in parts):
+        parts.append(call['quote'])
+    for match in matches:
+        if match:
+            excerpt = text[max(0, match.start()-80):match.end()+160]
+            if not any(excerpt in part for part in parts):
+                parts.append(excerpt)
+    return '\n[...]\n'.join(parts)[:4000]
+
+
 def build(lead, finding, pages, audit_context=None, review=None):
     official = context_pages(lead, finding, pages)
     tool = next((p for p in official if BOT.search(p['text'])), None)
@@ -78,7 +101,7 @@ def build(lead, finding, pages, audit_context=None, review=None):
     if route:
         page, signal = route
         plan['optional_services'].append({'service': 'ai_calling_agent', 'status': 'source_backed_option',
-            'evidence_id': page['id'], 'quote': signal['quote'], 'proposal': pitch_plan(signal['quote'])['proposed_work']})
+            'use_case': signal['use_case'], 'evidence_id': page['id'], 'quote': signal['quote'], 'proposal': pitch_plan(signal['quote'])['proposed_work']})
     else:
         phone = next(((p, phone_match(p['text'])) for p in official if phone_match(p['text'])), None)
         if phone and re.search(r'quot|enquir|inquir|book|appointment|consult|service', finding.get('quote', ''), re.I):
@@ -89,7 +112,13 @@ def build(lead, finding, pages, audit_context=None, review=None):
     return plan
 
 
-def validate_copy(plan, text):
+def validate_copy(plan, text, *, initial=False):
+    if initial and plan.get('primary_service') in {'website_improvement', 'website_build'} and plan.get('optional_services'):
+        if plan['primary_service'] == 'website_improvement' and not re.search(r'layout|redesign|journey|service.to.(?:enquir|quot)|enquir.{0,20}(?:flow|page)', text, re.I):
+            raise ValueError('Explain the primary website project and enquiry journey, not just a technical audit fix')
+        names = {'chatbot': r'chatbot|FAQ assistant', 'ai_calling_agent': r'AI (?:calling|phone|voice) (?:agent|assistant)'}
+        if not any(re.search(names[o['service']], text, re.I) for o in plan['optional_services']):
+            raise ValueError('Briefly include one supplied relevant optional feature alongside the primary website project')
     if plan.get('chatbot_status') == 'present' and re.search(r'(?:add|build|install|introduc\w*|set up|deploy)\s+(?:a\s+|an\s+|new\s+|an? new\s+)?(?:AI\s+)?chatbot|(?:missing|no|without|lack\w*)\s+(?:a\s+|an\s+)?chatbot', text, re.I):
         raise ValueError('The prospect already has a chatbot; preserve it instead of pitching a new or missing chatbot')
     if re.search(r'(?:your|the|current)\s+(?:UI|design|website|site).{0,30}(?:ugly|outdated|poorly designed|not CRO optimised|not CRO optimized|losing conversions|needs (?:a )?redesign)', text, re.I):
@@ -100,6 +129,8 @@ def validate_copy(plan, text):
             raise ValueError('Calling add-on needs relevant current source context')
         if option['status'] == 'optional_fit_check' and not re.search(r'\bif\b|whether|worth exploring|confirm.{0,30}phone', text, re.I):
             raise ValueError('A listed phone number permits a conditional calling-agent fit check, not an established need')
+        if option.get('use_case') == 'customer_support' and re.search(r'(?:qualify|qualifying)\s+(?:your\s+|new\s+|sales\s+)?leads', text, re.I):
+            raise ValueError('A helpdesk phone route supports a support proposal, not an assumed sales-qualification workflow')
 
 
 WRITER_INSTRUCTIONS = """
@@ -108,6 +139,14 @@ Keep the selected primary service central. You may briefly include up to TWO rel
 optional_services as supporting additions, only from this supplied plan. They are optional,
 not additional diagnosed problems. Website redesign/build may be the main project and an
 assistant/calling agent a supporting feature; one primary service does not forbid additions.
+Follow the optional calling use_case: a helpdesk route supports approved support answers
+and human handoff, not an assumed sales-qualification or booking workflow.
+For a website project, use project_scope to explain the project, not just its font/CSS
+tasks. If optional_services is nonempty, include the strongest ONE relevant addition
+in one short sentence, clearly optional; do not omit all additions or make a service menu.
+When a current chatbot is present, briefly say it can be retained. A useful website
+proposal can refresh the mobile service-to-enquiry layout while fixing the measured
+loading issue; this is proposed scope, not proof that a full redesign is necessary.
 If chatbot_status=present, acknowledge/preserve that assistant where relevant. Do not offer
 to add another chatbot or assert it is absent. Unknown means unknown, not confirmed absence.
 If the website was not found in research, retain the supplied uncertainty while offering
