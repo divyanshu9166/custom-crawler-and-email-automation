@@ -108,7 +108,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             # This legacy source-tool smoke deliberately exercises advanced panels.
             # test_workspace_ui.py verifies the focused, collapsed default instead.
             page.add_init_script("""document.addEventListener('DOMContentLoaded',()=>{
-              const open=()=>document.querySelectorAll('#advanced-research,.discovery-advanced,.settings-group,.saved-sources,.list-tools').forEach(el=>{el.open=true;});
+              const open=()=>document.querySelectorAll('#advanced-research,.advanced-group,.discovery-advanced,.settings-group,.saved-sources,.list-tools').forEach(el=>{el.open=true;});
               new MutationObserver(open).observe(document.body,{childList:true,subtree:true});open();
             });""")
             errors = []
@@ -404,6 +404,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.reload()
             page.get_by_role("button", name="Pipeline", exact=True).click()
             page.locator(f"[data-lead='{history_lead}']").click()
+            page.get_by_role('combobox', name='Source capture period').select_option('all')
             expect(page.get_by_text(f"#{old_id} · Old fictional source · Historical capture", exact=True)).to_be_visible()
             page.get_by_text("02 · Advanced: edit qualification & offer manually", exact=True).click()
             assert page.locator("#review-form select[name='evidence_id'] option").evaluate_all("items=>items.map(x=>x.value)") == [str(fresh_id)]
