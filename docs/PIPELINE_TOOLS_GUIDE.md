@@ -65,3 +65,19 @@ layout, grouped advanced controls, current/history filtering and pagination, pre
 edits, no accidental sending, unavailable-checker wording, and specific font-help copy.
 Both JavaScript files passed syntax checks. This does not establish mailbox/provider
 availability or guarantee an AI draft's quality without final review.
+
+Deployment verification (19 October 2026): the UI and writer changes were pushed
+and deployed to the VPS. An additional 99 focused writer/conclusion checks passed
+after tightening the font-implementation guard: a review-only sentence followed
+by "after the change" no longer satisfies a concrete implementation offer.
+The regenerated Spotless draft describes adjusting font-loading rules, checking
+icons, and the intended earlier visibility of service information and the existing
+quote option. It remains one unscheduled, unsent draft. Live health and lead API
+checks passed; sending and follow-ups remained off, with zero sent messages.
+The previous draft was backed up locally on the VPS at
+`/data/backups/before-value-copy-20261019-151635.db`.
+
+The current mailbox verifier is unavailable; publication/ownership evidence does
+not establish that the mailbox exists or that its recipient is the buyer. The
+PageSpeed finding came from a saved public UI report; unattended PageSpeed API
+availability remains a separate deployment dependency.
