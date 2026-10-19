@@ -1,5 +1,7 @@
 """The routine workspace shows one email and keeps technical controls out of the way."""
 from pathlib import Path
+import time
+import json
 
 import pytest
 from fastapi.testclient import TestClient
@@ -23,6 +25,15 @@ def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, m
                     'largest-contentful-paint': {'numericValue': 4800, 'numericUnit': 'millisecond'}}}}})
         from outreach.deliverables import prepare_automatic
         prepare_automatic(db, prepared['lead_id'])
+    for index in range(17):
+        historical = index >= 14
+        db.execute('INSERT INTO evidence(lead_id,url,title,text,sha256,fetched_at) VALUES(?,?,?,?,?,?)',
+            (prepared['lead_id'], f'https://bright-demo.com/source-{index}/',
+             ('Archived' if historical else 'Current')+f' page {index}', 'Fictional source browser fixture.',
+             f'fixture-{index}', time.time()-(31*86400 if historical else 0)))
+    if not measured:
+        db.execute("UPDATE contacts SET verification='unknown',verification_raw=? WHERE id=?",
+            (json.dumps({'error':'VerificationUnavailable','provider_status':{'ready':False}}), prepared['contact_id']))
     client = TestClient(create_app(settings), base_url=settings.public_url,
                         headers={'Authorization': 'Bearer '+settings.api_token})
     errors, mutations = [], []
@@ -51,9 +62,19 @@ def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, m
             expect(page.locator('#advanced-research')).not_to_have_attribute('open', '')
             expect(page.locator('#review-form')).not_to_be_visible()
             expect(page.locator('#research-again')).not_to_be_visible()
+            expect(page.locator('.contact-tools')).not_to_be_visible()
+            if not measured:
+                expect(page.locator('.sending-readiness')).to_contain_text('Mailbox checker unavailable')
+            page.get_by_role('button',name='View sending checks',exact=True).click()
+            expect(page.locator('#recipient-tools-group')).to_have_attribute('open','')
+            expect(page.get_by_role('button',name='Check mailbox',exact=True)).to_be_visible()
+            page.locator('#advanced-research > summary').click()
+            expect(page.locator('.tool-guide')).not_to_have_attribute('open','')
+            expect(page.locator('[data-draft]').first).to_have_attribute('type','button')
+            expect(page.locator('[aria-label="Research conclusion"]')).to_contain_text('03 · Intended benefit')
             expect(page.locator('header #resume')).to_have_count(0)
             if measured:
-                expect(page.locator('[aria-label="Research conclusion"]')).to_contain_text('Finding → proposed fix')
+                expect(page.locator('[aria-label="Research conclusion"]')).to_contain_text('What we found & how we can help')
                 expect(page.locator('[aria-label="Research conclusion"]')).to_contain_text('largest visible element')
                 expect(page.locator('.offer-evidence-basis')).to_contain_text('Measured observation')
             else:
@@ -63,10 +84,13 @@ def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, m
                 expect(page.locator('#screenshot')).to_be_visible()
                 expect(page.locator('.offer-evidence-basis')).to_contain_text('Exploratory opportunity')
             expect(page.locator('[aria-label="Proof of value preview"]')).to_contain_text('Draft for review')
+            page.locator('#advanced-research > summary').click()
+            page.locator('#research-tools-group > summary').click()
             page.locator('.proof-preview summary').click()
             expect(page.frame_locator('.proof-preview iframe').locator('body')).to_contain_text('No form was submitted')
             assert page.locator('.proof-preview iframe').get_attribute('sandbox') == ''
             page.locator('.proof-preview summary').click()
+            page.locator('#advanced-research > summary').click()
             expect(page.locator('.message')).not_to_contain_text('Scheduled after previous touch')
             expect(page.get_by_role('link', name='Review email', exact=True)).to_be_visible()
             assert mutations == []
@@ -84,6 +108,15 @@ def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, m
             expect(page.locator('[data-source-text]').first).to_have_text('')
             page.locator('#advanced-research > summary').click()
             page.locator('.saved-sources > summary').click()
+            expect(page.locator('.source-count')).to_have_text('12 of 15 matching pages')
+            page.get_by_role('button',name='Show more pages',exact=True).click()
+            expect(page.locator('.source-count')).to_have_text('15 of 15 matching pages')
+            page.get_by_role('searchbox',name='Search saved pages').fill('Archived')
+            expect(page.locator('.source-count')).to_have_text('0 of 0 matching pages')
+            page.get_by_role('combobox',name='Source capture period').select_option('history')
+            expect(page.locator('.source-count')).to_have_text('3 of 3 matching pages')
+            page.get_by_role('searchbox',name='Search saved pages').fill('')
+            page.get_by_role('combobox',name='Source capture period').select_option('current')
             page.locator('[data-evidence-id] > summary').first.click()
             expect(page.locator('[data-source-text]').first).to_contain_text('UK consulting services')
             page.locator('#advanced-research > summary').click()

@@ -29,11 +29,57 @@ window.WorkbenchWorkspace = {
     const advanced = document.createElement('details');
     advanced.className = 'advanced-workspace';
     advanced.id = 'advanced-research';
-    advanced.innerHTML = '<summary>Research details & advanced tools<span>Sources, qualification, audits and history</span></summary><div class="advanced-content"></div>';
+    advanced.innerHTML = '<summary>Advanced tools & evidence<span>Optional research, source history, qualification and sending checks</span></summary><div class="advanced-content"></div>';
     const advancedBody = advanced.querySelector('div');
+    const group = (title, note, id) => {
+      const section = document.createElement('details');
+      section.className = 'advanced-group';
+      section.id = id;
+      section.innerHTML = `<summary>${title}<span>${note}</span></summary><div class="advanced-group-content"></div>`;
+      advancedBody.append(section);
+      return section.querySelector('div');
+    };
+    const researchTools = group('Research & audits', 'Refresh website research, run audits and inspect reports', 'research-tools-group');
+    const peopleTools = group('People & public profiles', 'Published contacts, LinkedIn/X observations and ownership checks', 'people-tools-group');
+    const qualificationTools = group('Qualification & service selection', 'Correct the automatic business review only when needed', 'qualification-tools-group');
+    const recipientTools = group('Recipient & sending checks', 'Mailbox status, contact details and final sending approval', 'recipient-tools-group');
+    const guide = document.createElement('details');
+    guide.className = 'tool-guide';
+    const uses = [
+      ['Save draft', 'Save your edited subject and email. This does not send it.'],
+      ['Rewrite from research / Regenerate email', 'Replace an unapproved email with fresh AI wording from the current reviewed finding. Saved edits can be replaced.'],
+      ['Check mailbox', 'Queue technical mailbox verification. Syntax or MX records alone do not prove a working inbox.'],
+      ['Do not contact', 'Suppress this address so the system does not send outreach to it.'],
+      ['Name, Role & Save contact', 'Correct the person and job role associated with a published address. This does not prove buying authority.'],
+      ['Technical verification response', 'Raw checker diagnostics for troubleshooting. VerificationUnavailable means the checker failed, not that the address is valid or invalid.'],
+      ['Research again', 'Start a fresh research pass. Reviewed findings can return to review; the displayed old email is not automatically rewritten.'],
+      ['Continue crawl', 'Resume the existing crawl and eligible bounded retries; it does not restart every page.'],
+      ['Find public contacts', 'Research published business contact routes using public sources; it does not guess addresses.'],
+      ['Check verifier', 'Check whether the verification service is available. This is separate from checking a real mailbox.'],
+      ['Desktop & mobile audit', 'Capture the website at desktop/mobile sizes and inspect bounded layout observations. A partial render is not a proven website defect.'],
+      ['PageSpeed audit', 'Queue a Lighthouse lab performance test. Provider access/quota must work; a failed request creates no score.'],
+      ['Review priority', 'Order prospects by evidence and readiness. The score is not a probability of winning a client.'],
+      ['Public professional profiles', 'Inspect public LinkedIn/X profile observations and official team-page evidence for a relevant buyer.'],
+      ['Known public profile URL', 'Optionally target a particular public profile. Leave blank for the configured discovery search.'],
+      ['Research public professional profiles', 'Queue that profile research; review source ownership and current company relevance afterward.'],
+      ['LinkedIn / X post research', 'Collect accessible public posts for business context; posts alone do not prove buying intent.'],
+      ['Discovery sources', 'Show where the company or profile candidate came from. A search match still needs identity review.'],
+      ['Saved source pages', 'Inspect saved page excerpts, URLs and capture dates. Search or filter current research and historical captures.'],
+      ['Historical capture', 'An older saved page that was not refreshed in the latest research pass; retained for reference.'],
+      ['Use this sourced idea', 'Fill the manual review form with a suggested service and source quote. It does not approve or send anything.'],
+      ['Company, country & timezone', 'Confirm which business and market the research concerns and the time zone used for scheduling.'],
+      ['Country source & exact location quote', 'Link the country decision to words actually captured on the business source.'],
+      ['Business type', 'Record the reviewed entity category used by contact eligibility checks; it is not inferred from a lab score.'],
+      ['Primary service & reviewed goal', 'Choose one offer and the matching inquiry or ecommerce goal.'],
+      ['Save qualification', 'Save the source-backed business and offer decision. A changed qualification invalidates unsent drafts.'],
+      ['Supporting preview', 'A local proposed audit/concept/FAQ/workflow to review. It is not automatically delivered to the prospect.'],
+      ['Recipient & sending approval', 'Review recipient relevance, eligibility and messages before allowing scheduling. Global sending controls still apply.']
+    ];
+    guide.innerHTML = `<summary>What does each tool do?</summary><p>These tools are for exceptions and deeper review. You do not need to open every section for each prospect.</p><div class="tool-reference"><table><thead><tr><th>Tool</th><th>Purpose</th></tr></thead><tbody>${uses.map(([name,use])=>`<tr><td>${esc(name)}</td><td>${esc(use)}</td></tr>`).join('')}</tbody></table></div>`;
+    advancedBody.prepend(guide);
     const sources = document.createElement('details');
     sources.className = 'saved-sources';
-    sources.innerHTML = `<summary>Saved source pages (${data.evidence.length})</summary>`;
+    sources.innerHTML = `<summary>Saved source pages (${data.evidence.length})</summary><p>Current captures can support the review. Historical captures are retained for reference.</p><div class="source-filters"><input type="search" aria-label="Search saved pages" placeholder="Search saved pages"><select aria-label="Source capture period"><option value="current">Current research</option><option value="history">Historical captures</option><option value="all">All saved pages</option></select></div><p class="source-count" role="status"></p><div class="source-results"></div><button type="button" class="source-more">Show more pages</button>`;
     const intro = document.createElement('section');
     intro.className = 'prospect-header';
     const l = data.lead;
@@ -75,6 +121,16 @@ window.WorkbenchWorkspace = {
     } else proofPanel.insertAdjacentHTML('beforeend','<p>Available automatically after a supported offer is selected.</p>');
     const audits = data.diagnostics;
     const conclusion = audits?.conclusion;
+    const best = conclusion?.findings[0];
+    const pitch = document.createElement('section');
+    pitch.className = 'pitch-summary';
+    pitch.setAttribute('aria-label', 'Research conclusion');
+    const held = conclusion && !conclusion.draft_allowed;
+    pitch.innerHTML = `<div class="pitch-heading"><span class="eyebrow">THE OFFER AT A GLANCE</span><span class="workspace-pill">${held ? 'More evidence needed' : best ? 'Measured finding' : 'Proposed opportunity'}</span></div><h3>${held ? 'Improvement pitch on hold' : 'What we found & how we can help'}</h3><div class="pitch-points"><div><span>01 · What we found</span><p>${esc(best?.fact || (held ? conclusion.summary : evidence && finding.quote ? finding.quote : 'Research is still establishing a relevant offer.'))}</p></div><div><span>02 · What we can do</span><p>${esc(best?.proposed_fix || (held ? 'Wait for a current, reproducible finding before proposing a website fix.' : finding.suggestion || 'Select a source-backed service after research.'))}</p></div><div><span>03 · Intended benefit</span><p>${esc(best?.intended_benefit || 'Confirm the business goal and usefulness of the proposed change before implementation. No client result has been measured.')}</p></div></div><details class="quick-evidence"><summary>View supporting evidence</summary>${best ? `<p>${esc(best.fact)}</p>${link(best.report_url || best.url)}<p class="small">${new Date(best.captured_at*1000).toLocaleString()} · Lab/capture evidence; customer impact is unconfirmed.</p>` : evidence && finding.quote ? `<blockquote>${esc(finding.quote)}</blockquote>${link(evidence.url)}` : '<p>No current evidence supports this pitch yet.</p>'}</details>${held && hasEmail ? '<p class="small">Your existing email is preserved. A saved draft is not proof of an identified problem.</p>' : ''}`;
+    if (hasEmail) {
+      const reviewLink = preparation?.querySelector('a[href="#email-sequence"]');
+      if (reviewLink) { reviewLink.className = 'text-control'; pitch.querySelector('.pitch-heading').append(reviewLink); }
+    }
     if (conclusion) {
       const approach = brief.querySelector('.brief-facts > div:last-child p');
       if (approach && conclusion.problem_led_required && conclusion.findings.length) approach.textContent = conclusion.findings[0].proposed_fix;
@@ -93,7 +149,7 @@ window.WorkbenchWorkspace = {
       }
       const section = document.createElement('section');
       section.className = 'panel research-conclusion';
-      section.setAttribute('aria-label','Research conclusion');
+      section.setAttribute('aria-label','Diagnostic details');
       section.innerHTML = `<span class="eyebrow">RESEARCH CONCLUSION</span><h3>${conclusion.state === 'finding_ready' ? 'Finding → proposed fix' : conclusion.problem_led_required ? 'Improvement pitch on hold' : 'No verified website problem'}</h3><p>${esc(conclusion.summary)}</p>${conclusion.findings.slice(0,1).map(f => `<p><strong>Proposed fix:</strong> ${esc(f.proposed_fix)}</p><p><strong>How to verify:</strong> ${esc(f.verification)}</p><details><summary>Evidence & reproduction steps</summary>${link(f.url)}<p>${esc(f.fact)} · ${new Date(f.captured_at*1000).toLocaleString()}</p><p>${esc(f.reproduce)}</p>${f.screenshot ? `<a href="/api/screenshots/${encodeURIComponent(f.screenshot)}" target="_blank" rel="noopener">View capture</a>` : '<p>Evidence: saved lab/capture report; no screenshot linked to this finding.</p>'}<p>${esc(f.limitations)}</p></details>`).join('')}<p>${esc(conclusion.next_action)}</p>${hasEmail && !conclusion.draft_allowed ? '<p>Your existing email is preserved. It is not evidence of an identified problem; do not use it as a problem-led pitch.</p>' : ''}`;
       if (!conclusion.draft_allowed) {
         const actions = document.createElement('div');
@@ -102,7 +158,7 @@ window.WorkbenchWorkspace = {
           const button = detail.querySelector('#'+id);
           if (button) actions.append(button);
         }
-        section.append(actions);
+        pitch.append(actions);
       }
       const proofDetails = section.querySelector('details');
       if (proofDetails && conclusion.findings[0]?.report_url) proofDetails.insertAdjacentHTML('beforeend', `<p>Original PageSpeed report: ${link(conclusion.findings[0].report_url)}</p>`);
@@ -142,10 +198,14 @@ window.WorkbenchWorkspace = {
       if (node === preparation || node === marker || node === primary) continue;
       if (node.hasAttribute('data-evidence-id')) {
         if (!sources.parentElement) advancedBody.append(sources);
-        sources.append(node);
+        sources.querySelector('.source-results').append(node);
         continue;
       }
-      advancedBody.append(node);
+      if (node.classList.contains('step-label')) continue;
+      if (node.querySelector('#review-form') || node.classList.contains('offer-review')) qualificationTools.append(node);
+      else if (node.classList.contains('contact') || node.querySelector('#contact-form')) recipientTools.append(node);
+      else if (/professional profiles|LinkedIn \/ X|Public contact research|Platform research|Published inboxes|Browser-observed|Public X post/i.test(node.querySelector('summary')?.textContent || '')) peopleTools.append(node);
+      else researchTools.append(node);
     }
     if (heading) {
       heading.querySelector('h2')?.remove();
@@ -153,15 +213,46 @@ window.WorkbenchWorkspace = {
       heading.classList.add('research-tools');
     }
     detail.replaceChildren(intro, steps);
-    if (preparation) detail.append(preparation);
-    detail.append(brief);
-    if (proof || data.offer_workflow?.selected_service) detail.append(proofPanel);
+    if (preparation && !hasEmail) detail.append(preparation);
+    else if (preparation) researchTools.append(preparation);
+    detail.append(pitch);
+    researchTools.append(brief);
+    if (proof || data.offer_workflow?.selected_service) researchTools.append(proofPanel);
     if (marker) {
       marker.className = 'email-section-heading';
       marker.innerHTML = '<span class="eyebrow">ONE PROSPECT · ONE INITIAL EMAIL</span><h3>Your email</h3><p>Review the recipient and wording. Saving a draft does not send it.</p>';
       detail.append(marker);
     }
-    if (primary) detail.append(primary);
+    if (primary) {
+      const tools = primary.querySelector('.contact-tools');
+      const contact = data.contacts.find(c => String(c.id) === primary.dataset.contact);
+      if (tools) {
+        const rewrite = tools.querySelector('[data-draft]');
+        if (rewrite && hasEmail) {
+          rewrite.type = 'button';
+          rewrite.disabled = rewrite.disabled || held || !data.offer_workflow?.selected_service;
+          rewrite.textContent = 'Rewrite from research';
+          rewrite.title = 'Replaces this unapproved draft with new AI wording based on current research.';
+          primary.querySelector('.composer-footer')?.append(rewrite);
+        }
+        recipientTools.append(tools);
+      }
+      const readiness = document.createElement('p');
+      readiness.className = 'sending-readiness';
+      let verification = {};
+      try { verification = JSON.parse(contact?.verification_raw || '{}'); } catch (_) {}
+      const unavailable = verification.error === 'VerificationUnavailable' || verification.provider_status?.ready === false;
+      const label = !contact?.source_eligible ? 'Publication or inbox ownership needs review.' : unavailable ? 'Mailbox checker unavailable. This inbox has not been verified.' : contact.verification !== 'safe' || contact.verification_fresh === false ? 'Mailbox verification is still required.' : 'Mailbox check passed. Buyer relevance and final sending approval still need review.';
+      readiness.innerHTML = `<span>${esc(label)}</span><button type="button" class="text-control">View sending checks</button>`;
+      readiness.querySelector('button').onclick = () => {
+        advanced.open = true;
+        recipientTools.parentElement.open = true;
+        if (tools) tools.open = true;
+        recipientTools.parentElement.scrollIntoView({block:'start'});
+      };
+      primary.querySelector('.recipient-bar')?.after(readiness);
+      detail.append(primary);
+    }
     else {
       const empty = document.createElement('div');
       empty.className = 'email-empty';
@@ -169,6 +260,31 @@ window.WorkbenchWorkspace = {
       detail.append(empty);
     }
     detail.append(advanced);
+    let sourceLimit = 12;
+    const sourceNodes = [...sources.querySelectorAll('[data-evidence-id]')];
+    const sourceById = new Map(data.evidence.map(e => [String(e.id),e]));
+    sourceNodes.sort((a,b) => {
+      const left = sourceById.get(a.dataset.evidenceId), right = sourceById.get(b.dataset.evidenceId);
+      return Number(!!right.current_for_review)-Number(!!left.current_for_review) ||
+        Number(right.id === finding.evidence_id)-Number(left.id === finding.evidence_id) || right.fetched_at-left.fetched_at;
+    });
+    for (const node of sourceNodes) sources.querySelector('.source-results').append(node);
+    const filterSources = () => {
+      const query = sources.querySelector('input').value.trim().toLowerCase();
+      const period = sources.querySelector('select').value;
+      const matching = sourceNodes.filter(node => {
+        const page = sourceById.get(node.dataset.evidenceId);
+        return (period === 'all' || (period === 'current') === !!page.current_for_review) &&
+          `${page.title} ${page.url}`.toLowerCase().includes(query);
+      });
+      const visible = new Set(matching.slice(0,sourceLimit));
+      for (const node of sourceNodes) { node.hidden = !visible.has(node); if (node.hidden) node.open = false; }
+      sources.querySelector('.source-count').textContent = `${Math.min(sourceLimit,matching.length)} of ${matching.length} matching pages`;
+      sources.querySelector('.source-more').hidden = matching.length <= sourceLimit;
+    };
+    for (const control of sources.querySelectorAll('input,select')) control.addEventListener('input', event => { event.stopPropagation(); sourceLimit = 12; filterSources(); });
+    sources.querySelector('.source-more').onclick = () => { sourceLimit += 12; filterSources(); };
+    filterSources();
     // A direct email link opens the prospect workspace without making the user find it.
     if (location.hash === '#email-sequence' && hasEmail) marker?.scrollIntoView({block:'start'});
   }

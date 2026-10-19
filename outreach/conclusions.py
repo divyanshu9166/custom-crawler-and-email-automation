@@ -45,7 +45,12 @@ def build(audit, service):
             limit = 'Overflow was observed in this capture. Whether it affects a real customer task must still be checked.'
         else:
             continue
+        help_plan = [fix, test]
+        benefit = ('Aim to make page content visible sooner and keep the next step usable; confirm the improvement with the repeat test.'
+                   if observation['kind'] == 'lab_measurement' else
+                   'Aim to let visitors read and use the page without unintended sideways scrolling; confirm this on the affected viewport.')
         findings.append({**observation, 'proposed_fix': fix, 'verification': test,
+                         'help_plan': help_plan, 'intended_benefit': benefit,
                          'reproduce': reproduce, 'limitations': limit,
                          'supporting_measurements': supporting_measurements,
                          'report_url': report.get('report_url'),

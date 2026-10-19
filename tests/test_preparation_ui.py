@@ -69,6 +69,7 @@ def test_one_click_preparation_shows_drafts_or_preserves_unsaved_edits(settings,
             expect(page.get_by_role('region', name='Email preparation')).to_contain_text('Fictional earlier provider failure')
             if editing:
                 page.locator('#advanced-research > summary').click()
+                page.locator('#qualification-tools-group > summary').click()
                 page.get_by_text('02 · Advanced: edit qualification & offer manually', exact=True).click()
                 page.locator('#review-form [name=fit_notes]').fill('Keep this unsaved operator edit.')
             preparation.prepare(db, settings, lid)
@@ -78,7 +79,7 @@ def test_one_click_preparation_shows_drafts_or_preserves_unsaved_edits(settings,
                 expect(page.locator('#review-form [name=fit_notes]')).to_have_value('Keep this unsaved operator edit.')
                 expect(page.locator('#notice')).to_contain_text('Your edits are preserved')
             else:
-                expect(page.get_by_role('region', name='Email preparation')).to_contain_text('Your email is ready to review')
+                expect(page.locator('[aria-label="Research conclusion"]')).to_contain_text('What we found & how we can help')
                 expect(page.locator('[data-edit]')).to_have_count(1)
                 expect(page.locator('[data-edit]').first.locator('[name=body]')).not_to_have_value('')
                 page.get_by_role('link', name='Review email').click()

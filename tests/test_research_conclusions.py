@@ -88,6 +88,30 @@ def test_source_led_other_offers_do_not_claim_a_technical_problem():
     assert not result['business_pain_confirmed']
 
 
+@pytest.mark.parametrize('specific_help', [False, True])
+def test_font_pitch_needs_implementation_and_intended_benefit(db, prepared, specific_help):
+    lid = prepared['lead_id']
+    audit(db,lid)
+    event = db.one("SELECT id,detail FROM events WHERE kind='performance'")
+    report = json.loads(event['detail'])
+    report['strategies']['mobile']['opportunities'] = [{'id':'font-display-insight'}]
+    db.execute('UPDATE events SET detail=? WHERE id=?',(json.dumps(report),event['id']))
+    lead = db.one('SELECT * FROM leads WHERE id=?',(lid,))
+    context = diagnostics.snapshot(db,lead)
+    body = 'Bright Demo scored 51/100 in a mobile Lighthouse lab test. '
+    body += ('I can adjust the flagged font-loading rules so text appears sooner, then retest text and icons. Would a short walkthrough be useful?' if specific_help else
+             'Would reviewing the performance score and font finding be useful?')
+    value = {'messages':[{'step':0,'subject':'Bright Demo mobile finding','body':body,
+        'diagnostic_refs':[context['observations'][0]['ref']],
+        'support':[{'evidence_id':prepared['evidence_id'],'quote':'Contact us for a consultation.'}]}]}
+    contact = db.one('SELECT * FROM contacts WHERE id=?',(prepared['contact_id'],))
+    if specific_help:
+        assert email_writer.validate_output(value,lead,contact,db.all('SELECT * FROM evidence'),audit_context=context)
+    else:
+        with pytest.raises(ValueError,match='concrete help'):
+            email_writer.validate_output(value,lead,contact,db.all('SELECT * FROM evidence'),audit_context=context)
+
+
 @pytest.mark.parametrize('opportunity,fragment', [('font-display-insight', 'font-display fallback'),
     ('render-blocking-insight', 'critical styles'), ('untrusted-random-claim', 'largest visible element')])
 def test_only_supported_positive_insights_change_the_proposed_fix(db, prepared, opportunity, fragment):
