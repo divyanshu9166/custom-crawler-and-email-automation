@@ -9,7 +9,7 @@ from fastapi.testclient import TestClient
 
 from outreach.app import create_app
 from outreach.db import DB, SCHEMA
-from outreach.mail import mailbox_key, mailbox_usage, mark_sent, record_inbound, send_one, smtp_send
+from outreach.mail import mailbox_key, mailbox_usage, mark_sent, record_inbound, record_nonacceptance, send_one, smtp_send
 from test_campaigns_mail import inbound, ready
 from test_third_workflow import dsn
 
@@ -238,6 +238,32 @@ def test_stop_during_smtp_login_prevents_data_submission(db, settings, active, m
     monkeypatch.setattr('outreach.mail.smtplib.SMTP', SMTP)
     assert send_one(db, settings, now, smtp_send) == 'cancelled'
     assert db.one('SELECT outcome FROM send_attempts')['outcome'] == 'cancelled'
+    assert db.one('SELECT state FROM messages WHERE step=0')['state'] == ('queued' if stop == 'pause' else 'cancelled')
+    if stop == 'pause':
+        db.set('paused', 'false')
+        later = now + settings.min_send_interval_seconds + 1
+        db.set('imap_last_success', later)
+        assert send_one(db, settings, later, lambda *_: None) == 'sent'
+
+
+def test_permanent_nonacceptance_suppresses_in_same_transaction(db, active):
+    row = db.one('SELECT * FROM messages WHERE step=0')
+    db.execute("UPDATE messages SET state='sending' WHERE id=?", (row['id'],))
+    record_nonacceptance(db, row, 'Permanent SMTP recipient rejection', permanent=True)
+    assert state(db) == 'BOUNCED'
+    assert db.one('SELECT status FROM contacts')['status'] == 'suppressed'
+    assert not db.one("SELECT 1 FROM messages WHERE state='queued'")
+
+
+def test_suppression_failure_rolls_back_permanent_nonacceptance(db, active, monkeypatch):
+    row = db.one('SELECT * FROM messages WHERE step=0')
+    db.execute("UPDATE messages SET state='sending' WHERE id=?", (row['id'],))
+    def failed_suppression(*args, **kwargs):
+        raise RuntimeError('Synthetic failure before suppression commit')
+    monkeypatch.setattr(db, 'suppress', failed_suppression)
+    with pytest.raises(RuntimeError, match='Synthetic failure'):
+        record_nonacceptance(db, row, 'Permanent SMTP recipient rejection', permanent=True)
+    assert db.one('SELECT state FROM messages WHERE step=0')['state'] == 'sending'
 
 
 def test_unsubscribe_one_click_is_public_idempotent_and_scanner_safe(db, settings, active):

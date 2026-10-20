@@ -242,7 +242,9 @@ def send_one(db, settings, now=None, sender=smtp_send):
                 sender(settings, message)
         except SubmissionCancelled:
             finish_attempt(db, attempt_id, 'cancelled', now, 'Contact stopped before SMTP submission')
-            db.execute("UPDATE messages SET state='cancelled' WHERE id=? AND state='sending'", (row['id'],))
+            # A global pause defers an unsent item. Only a contact/sales stop
+            # cancels it; otherwise Resume sending would strand active contacts.
+            record_nonacceptance(db, row, 'Not submitted: sending paused or contact stopped')
             return 'cancelled'
         except BeforeSubmissionError as exc:
             finish_attempt(db, attempt_id, 'not_submitted', now, str(exc))
@@ -256,9 +258,7 @@ def send_one(db, settings, now=None, sender=smtp_send):
             code = next(iter(exc.recipients.values()))[0]
             finish_attempt(db, attempt_id, 'rejected', now, 'SMTP recipient refused', code)
             record_nonacceptance(db, row, 'SMTP recipient refused; server did not accept the message', permanent)
-            if permanent:
-                db.suppress(contact["email"], "SMTP permanent recipient rejection")
-            else:
+            if not permanent:
                 schedule_retry(db, row, now)
             return "failed"
         except (smtplib.SMTPSenderRefused, smtplib.SMTPDataError) as exc:
@@ -308,9 +308,12 @@ def record_nonacceptance(db, row, error, permanent=False):
         con.execute('BEGIN IMMEDIATE')
         contact = con.execute('SELECT * FROM contacts WHERE id=?', (row['contact_id'],)).fetchone()
         held = con.execute('SELECT cold_email_hold FROM sales WHERE lead_id=?', (contact['lead_id'],)).fetchone()
-        stopped = contact['status'] not in {'active', 'hold'} or bool(held and held[0])
+        stopped = (contact['status'] != 'active' or bool(held and held[0])
+                   or con.execute('SELECT 1 FROM suppression WHERE email=?', (contact['email'],)).fetchone())
         con.execute('UPDATE messages SET state=?,error=? WHERE id=?',
                     ('failed' if permanent else 'cancelled' if stopped else 'queued', error, row['id']))
+        if permanent:
+            db.suppress(contact['email'], 'SMTP permanent recipient rejection', con)
 
 
 def mark_sent(db, row, now, *, followups_enabled=False, attempt_id=None):

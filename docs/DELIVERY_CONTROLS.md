@@ -62,6 +62,11 @@ storage, watch renewal and full-sync recovery on an expired history cursor.
 - Contact stop and pause controls are checked again after SMTP login, before
   submission. A message already being accepted by SMTP cannot be recalled; any
   later follow-ups are cancelled.
+  A global pause before submission leaves the unsent item queued for Resume;
+  a reply, opt-out or conversation hold cancels it instead.
+- Permanent SMTP recipient rejection records failure and global suppression in
+  one transaction. A database error rolls back both operations rather than
+  leaving a recorded hard bounce without its suppression entry.
 
 **Operations → Email delivery** shows state counts and mailbox usage. Queue,
 attempt logs and the suppression list are collapsed below. A do-not-contact
