@@ -57,7 +57,8 @@ def test_partial_audit_cannot_promote_exploratory_proposal_to_measured_problem(d
     assert basis['classification'] == 'exploratory_opportunity'
     assert basis['business_pain_confirmed'] is False and basis['diagnostic_refs'] == []
     db.event('performance', {'lead_id': lead['id'], 'url': lead['website'], 'status': 'complete',
-                            'strategies': {'mobile': {'final_url': lead['website'], 'score': 51}}})
+                            'strategies': {'mobile': {'final_url': lead['website'], 'score': 51,
+                                'metrics': {'largest-contentful-paint': {'numericValue':4800,'numericUnit':'millisecond'}}}}})
     basis = offers.snapshot(db, lead['id'])['evidence_basis']
     assert basis['classification'] == 'measured_observation'
     assert basis['business_pain_confirmed'] is False and len(basis['diagnostic_refs']) == 1

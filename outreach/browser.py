@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import time
+from pathlib import Path
 
 from .web import PublicWeb, normalize_url, crawl_url, domain_of
 
@@ -306,6 +307,7 @@ class RenderSession:
                     href: el.getAttribute('href') || '', top: Math.round(el.getBoundingClientRect().top)}))
             })""")
             if screenshot_paths:
+                visual['journey_checks'] = []
                 for label, path in screenshot_paths.items():
                     if label == "mobile":
                         await page.set_viewport_size({"width": 390, "height": 844})
@@ -317,7 +319,15 @@ class RenderSession:
                             .slice(0,100).map(el=>({text:el.innerText.trim().slice(0,150),
                                 top:Math.round(el.getBoundingClientRect().top),
                                 aboveFold:el.getBoundingClientRect().top>=0 && el.getBoundingClientRect().bottom<=innerHeight}))""")
+                    if self.settings.journey_audit_enabled:
+                        from .journey import capture
+                        reader = Path(__file__).with_name('static').joinpath('journey-reader.js').read_text(encoding='utf-8')
+                        first = await page.evaluate(reader)
+                        await page.wait_for_timeout(350)
+                        second = await page.evaluate(reader)
                     await page.screenshot(path=str(path), full_page=True, timeout=20000)
+                    if self.settings.journey_audit_enabled:
+                        visual['journey_checks'].append(capture(first, second, label, path.name))
         except Exception as exc:
             issues.append({"url": url, "reason": str(exc)[:160] if isinstance(exc, ValueError) else type(exc).__name__})
         finally:
@@ -355,6 +365,9 @@ async def screenshot(db, settings, lead_id):
     if lead.get("lead_kind") == "profile":
         raise ValueError("Website visual audit needs an official company website")
     url = crawl_url(lead["website"])
+    requested_at = time.time()
+    if settings.journey_audit_enabled:
+        db.event('journey_audit_started', {'lead_id': lead_id, 'url': url, 'version': 1})
     web = PublicWeb(settings)
     robots, _, _ = await web.robots(url)
     if not robots.can_fetch(settings.crawler_user_agent, url):
@@ -364,14 +377,25 @@ async def screenshot(db, settings, lead_id):
     stamp = f"lead-{lead_id}-{int(time.time())}-{hashlib.sha256(url.encode()).hexdigest()[:6]}"
     paths = {label: folder / f"{stamp}-{label}.png" for label in ("desktop", "mobile")}
     renderer = RenderSession(web)
+    journey = None
     try:
         await renderer.start()
         result = await renderer.render(url, domain_of(url), robots, screenshot_paths=paths)
+        if settings.journey_audit_enabled:
+            from .journey import extend
+            async def render_target(target):
+                name = f"lead-{lead_id}-{int(time.time())}-{hashlib.sha256(target.encode()).hexdigest()[:6]}"
+                target_paths = {device: folder / f'{name}-{device}.png' for device in ('desktop','mobile')}
+                captured = await renderer.render(target, domain_of(url), robots, screenshot_paths=target_paths)
+                return captured.get('visual', {}).get('journey_checks', [])
+            journey = await extend(web, robots, url, result['visual'], render_target)
     finally:
         await renderer.close()
     files = {label: path.name for label, path in paths.items() if path.exists()}
     db.event("screenshot", {"lead_id": lead_id, "url": url, "files": files, "visual": result["visual"],
-                            "issues": result["issues"], "complete": not result["issues"]})
+                            "requested_at": requested_at,
+                            "issues": result["issues"], "complete": not result["issues"],
+                            **({'journey': journey} if journey is not None else {})})
     db.execute("UPDATE leads SET research_notes=research_notes || ? WHERE id=?",
                ("\nScreenshots: " + json.dumps(files) + "; render issues: " + str(len(result["issues"])), lead_id))
     if not files:

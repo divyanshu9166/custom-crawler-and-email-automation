@@ -29,7 +29,8 @@ def snapshot(db, lead, now=None):
         item = {'kind': kind, 'event_id': event['id'], 'captured_at': event['created_at']}
         if kind == 'performance':
             item['quota_limited'] = any(e.get('reason') == 'HTTP 429' for e in report.get('errors', []))
-        current = 0 <= now-event['created_at'] <= 7*86400 and (not crawl or event['created_at'] >= crawl['created_at'])
+        current = 0 <= now-event['created_at'] <= 7*86400 and (not crawl or
+            min(event['created_at'], report.get('requested_at', event['created_at'])) >= crawl['created_at'])
         try:
             same_target = crawl_url(report.get('url', '')) == target
         except ValueError:
@@ -77,6 +78,12 @@ def snapshot(db, lead, now=None):
                                    if device in {'desktop', 'mobile'} and isinstance(name, str)
                                    and re.fullmatch(rf"lead-{lead['id']}-\d+-[a-f0-9]{{6}}-(?:mobile|desktop)\.png", name)}
             visual = report.get('visual', {})
+            from .journey import observations
+            journey = report.get('journey') or {}
+            item['journey'] = {'state': journey.get('state', 'not_run'),
+                'checked_pages': len({c.get('url') for c in journey.get('captures', []) if c.get('state') == 'checked'}),
+                'checked_links': len(journey.get('links', [])), 'limitations': journey.get('limitations', [])}
+            result['observations'].extend(observations(journey, lead, event['id'], event['created_at']))
             # No absence/form/drop-off assertions from a DOM count or a failed widget.
             for device, key, width in [('desktop', 'horizontalOverflow', visual.get('viewport', {}).get('width')),
                                        ('mobile', 'mobileHorizontalOverflow', 390)]:
@@ -85,6 +92,7 @@ def snapshot(db, lead, now=None):
                         'kind': 'render_observation', 'fact': f'Horizontal page overflow was observed in our {device} capture at {width}px width.',
                         'anchor': str(width), 'url': target, 'captured_at': event['created_at']})
         result['reports'].append(item)
+    result['observations'].sort(key=lambda o: o.get('priority', 30), reverse=True)
     from .conclusions import build
     result['conclusion'] = build(result, lead.get('service', ''))
     return result

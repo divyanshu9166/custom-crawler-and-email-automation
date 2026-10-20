@@ -75,7 +75,9 @@ exact published new-service announcement quote. Do not claim the service page is
 def latest(db, lead_id):
     event = db.one("SELECT detail,created_at FROM events WHERE kind='preparation' AND json_extract(detail,'$.lead_id')=? ORDER BY id DESC LIMIT 1", (lead_id,))
     job = db.one("SELECT id,state,error,created_at,started_at FROM jobs WHERE kind='prepare' AND json_extract(payload,'$.lead_id')=? ORDER BY id DESC LIMIT 1", (lead_id,))
-    return {'result': json.loads(event['detail']) if event else None, 'job': job}
+    result = json.loads(event['detail']) if event else None
+    return {'result': result, 'job': job,
+            'research_pending': bool(result and result['state'] == 'research_pending' and source_busy(db, lead_id))}
 
 
 def source_busy(db, lead_id):
@@ -277,11 +279,16 @@ def prepare(db, settings, lead_id, *, cancelled=lambda: False):
             record('preserved', 'Existing drafts/messages preserved; review them or regenerate explicitly')
             return
         contact = _contact(db, lead)
-        contacts_before = db.all('SELECT * FROM contacts WHERE lead_id=? ORDER BY id', (lead_id,))
         from .sales import assert_outreach_open
         with db.connect() as con:
             assert_outreach_open(con, lead_id)
         unchanged()
+        from .journey import needs_audit
+        if needs_audit(db, settings, lead):
+            db.enqueue('screenshot', {'lead_id': lead_id})
+            record('research_pending', 'Checking the mobile and enquiry journey before matching a problem and writing the email')
+            return
+        contacts_before = db.all('SELECT * FROM contacts WHERE lead_id=? ORDER BY id', (lead_id,))
         discovery = db.one("SELECT detail FROM events WHERE (kind='prospect_signal' AND json_extract(detail,'$.lead_id')=?) OR (kind='discovery' AND EXISTS(SELECT 1 FROM json_each(events.detail,'$.lead_ids') WHERE value=?)) ORDER BY id DESC LIMIT 1", (lead_id, lead_id))
         target_query = json.loads(discovery['detail']).get('query', '') if discovery else ''
         assessment = _assessment(settings, lead, pages, unchanged, target_query, audit_context)

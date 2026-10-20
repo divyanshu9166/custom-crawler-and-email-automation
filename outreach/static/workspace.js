@@ -134,6 +134,14 @@ window.WorkbenchWorkspace = {
       points[1].textContent = calling.proposed_work;
       points[2].textContent = calling.intended_benefit;
     }
+    if (best?.screenshot) {
+      const captureLink = document.createElement('a');
+      captureLink.textContent = 'View saved screenshot';
+      captureLink.href = '/api/screenshots/'+encodeURIComponent(best.screenshot);
+      captureLink.target = '_blank';
+      captureLink.rel = 'noopener';
+      pitch.querySelector('.quick-evidence').append(captureLink);
+    }
     const solution = data.offer_workflow?.prospect_solution;
     if (solution && !held) {
       if (solution.project_scope) pitch.querySelectorAll('.pitch-points p')[1].textContent = solution.project_scope;
@@ -188,6 +196,13 @@ window.WorkbenchWorkspace = {
       brief.prepend(section);
     }
     if (audits) {
+      const journey = audits.reports.find(r=>r.kind==='screenshot')?.journey;
+      if (journey && journey.state !== 'not_run') {
+        const note = document.createElement('p');
+        note.className = 'small';
+        note.textContent = `Enquiry journey: ${journey.checked_pages} page(s) sampled · ${journey.checked_links} link(s) checked · ${journey.state}. Form submission and conversion impact are not tested.`;
+        pitch.querySelector('.quick-evidence').before(note);
+      }
       const labels = {performance:'PageSpeed lab test',screenshot:'Desktop / mobile capture'};
       const states = {not_run:'Not run',stale:'Outdated for current research',target_unverified:'Capture target not recorded',failed:'Failed',partial:'Partial capture',complete:'Completed'};
       const owner = data.contacts.find(c => data.messages.some(m => m.contact_id === c.id && m.step === 0));
@@ -198,19 +213,24 @@ window.WorkbenchWorkspace = {
     if (prepare && preparation) {
       prepare.textContent = 'Create email';
       if (conclusion && !conclusion.draft_allowed) {
-        prepare.disabled = true;
-        prepare.textContent = 'Finding needed before email';
+        prepare.disabled = !audits?.journey_audit_available || data.preparation?.research_pending ||
+          ['pending','running'].includes(data.preparation?.job?.state);
+        prepare.textContent = audits?.journey_audit_available ? 'Check journey & prepare email' : 'Finding needed before email';
         prepare.title = conclusion.summary;
       }
       if (!hasEmail) {
         const control = !hasSource ? detail.querySelector('#research-again') : !data.contacts.length ? detail.querySelector('#contact-research') : prepare;
         if (control) {
           control.classList.add('primary');
-          control.textContent = !hasSource ? 'Research business' : !data.contacts.length ? 'Find a contact' : 'Create email';
+          control.textContent = !hasSource ? 'Research business' : !data.contacts.length ? 'Find a contact' : held && audits?.journey_audit_available ? 'Check journey & prepare email' : 'Create email';
           preparation.querySelector('.next-action-controls').append(control);
         }
       }
       else prepare.hidden = true;
+      if (data.preparation?.research_pending) {
+        prepare.disabled = true;
+        prepare.textContent = 'Checking enquiry journey…';
+      }
     }
     for (const node of original) {
       if (node === preparation || node === marker || node === primary) continue;

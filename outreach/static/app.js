@@ -112,7 +112,7 @@ function renderLeads(){
 const options = (values, selected) => values.map(v=>`<option value="${esc(v)}" ${v===selected?"selected":""}>${esc(v === "ai_calling_agent" ? "AI calling agent" : v.replaceAll("_"," "))}</option>`).join("");
 function preparationHTML(data,finding){
   const p=data.preparation||{},j=p.job,r=p.result;
-  const busy=j&&['pending','running'].includes(j.state), ready=data.messages.some(m=>m.step===0);
+  const busy=p.research_pending||(j&&['pending','running'].includes(j.state)), ready=data.messages.some(m=>m.step===0);
   const hasSource=data.evidence.some(e=>e.current_for_review&&e.business_for_review!==false);
   const failed=!ready&&!busy&&(j?.state==='failed'||['needs_attention','needs_evidence'].includes(r?.state));
   const title=ready?'Your email is ready to review':busy?(researchRunning?'Preparing your email':'Email preparation is queued'):failed?'This prospect needs a closer look':!hasSource?'Start with the business research':!data.contacts.length?'Find a published business contact':'Create a relevant first email';
@@ -122,7 +122,12 @@ function preparationHTML(data,finding){
 async function pollPreparation(id){
   if(currentId!==id||document.hidden||$('#pipeline').hidden)return;
   try{const p=await api(`/api/leads/${id}/preparation`);if(currentId!==id)return;
-    if(p.job&&['pending','running'].includes(p.job.state)){preparationTimer=setTimeout(()=>pollPreparation(id),4000);return;}
+    if(p.research_pending){
+      const panel=document.querySelector('[aria-label="Email preparation"]');
+      if(panel){panel.querySelector('h3').textContent=researchRunning?'Checking the enquiry journey':'Journey audit is queued';panel.querySelector('p').textContent='Checking public enquiry links, form labels and mobile layout before writing. Nothing will be sent.';}
+      const button=$('#prepare-emails');if(button){button.disabled=true;button.textContent='Checking enquiry journey…';}
+    }
+    if(p.research_pending||(p.job&&['pending','running'].includes(p.job.state))){preparationTimer=setTimeout(()=>pollPreparation(id),4000);return;}
     if(detailDirty){notice('Preparation finished. Your edits are preserved; use Refresh to view the result.');return;}
     await loadLead(id);
     if(p.result?.state==='drafts_ready')$('#email-sequence')?.scrollIntoView({block:'start'});
@@ -191,7 +196,7 @@ async function loadLead(id){
   window.WorkbenchWorkspace.organize(data,finding,{esc,link,api,reload:()=>loadLead(id)});
   document.querySelectorAll('[data-source-text]').forEach(node=>node.closest('details').addEventListener('toggle',()=>{if(node.closest('details').open&&!node.dataset.loaded){node.textContent=data.evidence.find(e=>e.id===Number(node.dataset.sourceText))?.text||'';node.dataset.loaded='true';}}));
   detailDirty=false;$('#detail').oninput=()=>{detailDirty=true;};
-  if(data.preparation?.job&&['pending','running'].includes(data.preparation.job.state))preparationTimer=setTimeout(()=>pollPreparation(id),4000);
+  if(data.preparation?.research_pending||(data.preparation?.job&&['pending','running'].includes(data.preparation.job.state)))preparationTimer=setTimeout(()=>pollPreparation(id),4000);
   $('#prepare-emails').onclick=()=>act(()=>api(`/api/leads/${id}/prepare`,'POST'),'Preparation queued. One email will be created; nothing will be sent.');
   document.querySelectorAll('[data-single-email]').forEach(b=>b.onclick=()=>act(()=>api(`/api/contacts/${b.dataset.singleEmail}/single-email`,'POST'),'Initial email kept. Old follow-ups archived; nothing sent.'));
   bindSales(id,data);

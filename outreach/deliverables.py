@@ -96,6 +96,10 @@ def create(db, lead_id, value, *, automatic_context=None):
         content += '<h3>Research conclusion</h3><p>' + esc(conclusion['summary']) + '</p>'
         for finding in conclusion['findings'][:1]:
             content += '<p><strong>Proposed fix:</strong> ' + esc(finding['proposed_fix']) + '</p><p><strong>Reproduce:</strong> ' + esc(finding['reproduce']) + '</p><p><strong>Verify:</strong> ' + esc(finding['verification']) + '</p><p>' + esc(finding['limitations']) + '</p>'
+            if finding.get('selector'):
+                content += '<p><strong>Observed element:</strong> ' + esc(finding['selector']) + '</p>'
+            if finding.get('screenshot'):
+                content += '<p><strong>Saved capture:</strong> ' + esc(finding['screenshot']) + '</p>'
             for metric in finding['supporting_measurements']:
                 content += '<p>' + esc(metric['metric']) + ': ' + esc(metric['numericValue']) + ' ' + esc(metric['numericUnit']) + '</p>'
         for item in automatic_context['audit_context'].get('observations', []):
@@ -238,6 +242,14 @@ def prepare_automatic(db, lead_id):
     value = {'kind': kind, 'title': lead['company']+' — proposed '+kind.replace('_', ' '),
              'points': [{'evidence_id': finding['evidence_id'], 'quote': finding['quote'],
                          'observation': 'Published business context for a proposed assessment', 'suggestion': plans[service]}]}
+    from .conclusions import build
+    points = build(audit, service)['findings']
+    if points and points[0]['kind'] == 'journey_observation':
+        value['points'][0]['suggestion'] = points[0]['proposed_fix']
+        image = points[0].get('screenshot')
+        path = db.path.parent / 'screenshots' / image if image else None
+        if path and path.is_file() and path.stat().st_size <= 10_000_000:
+            value['screenshot_name'] = image
     if kind == 'concept':
         value.update(headline='Proposed '+('service-page' if finding.get('offer_context', {}).get('website_scope') == 'new_service_page' else 'launch')+' direction',
                      intro='A discussion concept based on the cited business information; scope and copy need confirmation.',

@@ -33,7 +33,8 @@ def prospect(db, settings):
     db.event('discovery', {'query': 'commercial cleaning UK', 'lead_ids': [lid]})
     # Qualification/writer protocol cases start with an actual controlled lab finding.
     db.event('performance', {'lead_id': lid, 'url': 'https://bright-demo.com/', 'status': 'complete',
-        'strategies': {'mobile': {'final_url': 'https://bright-demo.com/', 'score': 51}}, 'errors': []})
+        'strategies': {'mobile': {'final_url': 'https://bright-demo.com/', 'score': 51,
+            'metrics': {'largest-contentful-paint': {'numericValue':4800,'numericUnit':'millisecond'}}}}, 'errors': []})
     return lid, cid, eid
 
 

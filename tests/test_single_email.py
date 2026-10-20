@@ -63,7 +63,8 @@ def test_real_writer_creates_one_initial_and_approval_dispatch_never_schedules_f
     source = db.one('SELECT * FROM evidence WHERE id=?', (prepared['evidence_id'],))
     lead = db.one('SELECT * FROM leads WHERE id=?', (prepared['lead_id'],))
     db.event('performance', {'lead_id': lead['id'], 'url': lead['website'], 'status': 'complete', 'errors': [],
-        'strategies': {'mobile': {'score': 51, 'final_url': lead['website']}}})
+        'strategies': {'mobile': {'score': 51, 'final_url': lead['website'],
+            'metrics': {'largest-contentful-paint': {'numericValue':4800,'numericUnit':'millisecond'}}}}})
     requests = []
     def handle(request):
         payload = json.loads(request.content)

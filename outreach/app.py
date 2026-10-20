@@ -760,7 +760,7 @@ def create_app(settings=None):
         from .preparation import latest as preparation_status
         from .diagnostics import snapshot as audit_snapshot
         return {"lead": row, "evidence": evidence, "crawl": crawl,
-                "diagnostics": audit_snapshot(db, row),
+                "diagnostics": {**audit_snapshot(db, row), 'journey_audit_available': settings.browser_enabled and settings.journey_audit_enabled and settings.auto_visual_audit},
                 'preparation': preparation_status(db, lead_id),
                 'professional_captures':professional_captures,
                 'professional_report':json.loads(professional_report['detail']) if professional_report else None,

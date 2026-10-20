@@ -35,7 +35,7 @@ def settings(tmp_path):
     # exercised with followups_enabled=False in test_single_email.py.
     return Settings(_env_file=None, data_dir=tmp_path, admin_password="test-admin-password-123",
                     api_token="test-token-" + "a" * 40, public_url="https://outreach.example.com",
-                    worker_enabled=False, sending_enabled=True, followups_enabled=True, auto_contact_research=False,auto_professional_research=False,
+                    worker_enabled=False, sending_enabled=True, followups_enabled=True, auto_contact_research=False,auto_professional_research=False, journey_audit_enabled=False,
                     commoncrawl_hints_enabled=False, professional_refresh_official_links=False, search_fallback_engines="", sender_name="Test Sender",
                     sender_company="Example Studio", sender_email="team@sender.example.com",
                     postal_address="123 Example Street, Test City", domain_auth_confirmed=True,

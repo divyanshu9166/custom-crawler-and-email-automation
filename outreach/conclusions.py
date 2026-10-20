@@ -21,7 +21,7 @@ def build(audit, service):
         report = reports.get(int(parts[1])) if len(parts) == 3 and parts[1].isdigit() else None
         if not report:
             continue
-        device = ref.split(':')[-1]
+        device = observation.get('device', ref.split(':')[-1])
         supporting_measurements = []
         if observation['kind'] == 'lab_measurement':
             measurement = next((m for m in report.get('measurements', []) if m['strategy'] == device), {})
@@ -38,11 +38,35 @@ def build(audit, service):
             elif lcp.get('numericUnit') == 'millisecond' and lcp.get('numericValue', 0) > 2500:
                 fix = 'Trace the largest visible element in a repeat lab run; inspect its loading priority and dependencies, then optimise the confirmed bottleneck.'
                 test = 'Compare largest-contentful-paint before and after the change under the same lab settings; aim for 2,500 ms or less.'
+            elif metrics.get('total-blocking-time', {}).get('numericValue', 0) > 200 and metrics['total-blocking-time'].get('numericUnit') == 'millisecond':
+                fix = 'Trace the long main-thread tasks in the repeat lab run, then split or defer confirmed noncritical script work and retest the enquiry controls.'
+                test = 'Compare total blocking time under the same lab settings and check keyboard, touch and existing widget interactions after the script changes.'
+            elif metrics.get('cumulative-layout-shift', {}).get('numericValue', 0) > .1:
+                fix = 'Inspect the layout-shift trace to identify moving elements, then stabilise their confirmed sizing or insertion behaviour without hiding required content.'
+                test = 'Repeat the same lab layout-shift measurement and check the affected content and controls while the page loads.'
+            elif metrics.get('first-contentful-paint', {}).get('numericValue', 0) > 1800 and metrics['first-contentful-paint'].get('numericUnit') == 'millisecond':
+                fix = 'Trace the initial rendering path, then improve the confirmed loading dependencies so initial content can be painted sooner.'
+                test = 'Repeat first-contentful-paint under the same lab settings and inspect the initial content and existing enquiry controls.'
             else:
-                fix = 'Profile the page under the same Lighthouse settings, identify the largest measured loading or scripting bottleneck, and optimise that bottleneck.'
-                test = 'Repeat the same device lab test before and after implementation and compare its score and underlying timings.'
+                continue  # A low aggregate score alone does not identify an actionable problem.
             reproduce = f'Run Lighthouse performance on the exact source URL using the {device} strategy. Results may vary between runs.'
             limit = 'This is a lab performance finding. Its root cause, visitor experience and business impact still need confirmation.'
+        elif observation['kind'] == 'journey_observation':
+            code = observation['code']
+            if code == 'broken_cta':
+                fix = 'Repair the existing enquiry/booking link or restore its destination, then update every matching call to action and check the route on mobile and desktop.'
+                test = 'Repeat the two public GET checks and open the same visible link on both viewports; verify the intended destination loads without submitting a form.'
+                benefit = 'Give visitors using that existing link a working route to the enquiry step; measure actual enquiries separately.'
+            elif code == 'form_labels':
+                fix = 'Add clear persistent labels connected to the observed form fields, retaining their existing validation and integration; check the form with keyboard and mobile layouts.'
+                test = 'Repeat the same form capture and confirm each observed control has a nonempty associated label or accessible name; do not submit real enquiries.'
+                benefit = 'Make the enquiry fields clearer to identify and revisit, including with assistive technology; actual completion improvement remains to be measured.'
+            else:
+                fix = 'Identify the element extending the mobile layout, then adjust its width, wrapping or overflow rules while retaining intentional scrolling components.'
+                test = 'Repeat both viewport samples and verify the document fits while the existing enquiry controls remain visible and usable.'
+                benefit = 'Keep the enquiry page readable within the captured viewport; verify usability before claiming an improvement.'
+            reproduce = f'Open {observation["url"]} in the {device} viewport and inspect {observation["selector"]}; repeat the captured check.'
+            limit = observation['scope']
         elif observation['kind'] == 'render_observation':
             fix = 'Identify the element wider than the viewport and adjust its width, wrapping or overflow rules; retain intentional carousels.'
             test = f'Repeat the capture at {observation["anchor"]}px and confirm the document fits without hiding required content.'
@@ -51,7 +75,7 @@ def build(audit, service):
         else:
             continue
         help_plan = [fix, test]
-        benefit = ('Aim to make page content visible sooner and keep the next step usable; confirm the improvement with the repeat test.'
+        benefit = benefit if observation['kind'] == 'journey_observation' else ('Aim to make page content visible sooner and keep the next step usable; confirm the improvement with the repeat test.'
                    if observation['kind'] == 'lab_measurement' else
                    'Aim to let visitors read and use the page without unintended sideways scrolling; confirm this on the affected viewport.')
         findings.append({**observation, 'proposed_fix': fix, 'verification': test,
@@ -59,7 +83,8 @@ def build(audit, service):
                          'reproduce': reproduce, 'limitations': limit,
                          'supporting_measurements': supporting_measurements,
                          'report_url': report.get('report_url'),
-                         'screenshot': report.get('screenshots', {}).get(device)})
+                         'screenshot': observation.get('screenshot') or report.get('screenshots', {}).get(device)})
+    findings.sort(key=lambda f: f.get('priority', 30), reverse=True)
     required = service in IMPROVEMENTS
     ready = bool(findings)
     return {'state': 'finding_ready' if ready else 'needs_evidence' if required else 'opportunity_only',

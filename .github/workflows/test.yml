@@ -26,6 +26,7 @@ jobs:
       - run: python scripts/verify_workflow_nodes.py --junit data/ci-workflow-tests.xml
       - run: node --check outreach/static/app.js && node --check outreach/static/sales.js && node --check outreach/static/workflow.js && node --check outreach/static/settings.js && node --check outreach/static/login.js && node --check outreach/static/workspace.js
       - run: python scripts/ui_smoke.py
+      - run: node --check outreach/static/journey-reader.js
       - run: python scripts/init_env.py
       - run: docker compose --profile verify --profile search --profile n8n config --quiet
       - run: docker build -t outreach-test .

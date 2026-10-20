@@ -93,6 +93,10 @@ def build(lead, finding, pages, audit_context=None, review=None):
             'source_ids': [p['id'] for p in official]}
     if service == 'website_improvement':
         plan['project_scope'] = 'Propose a clearer mobile service-to-enquiry layout and address the measured loading issue, preserving useful existing tools. Confirm the visual redesign scope in a focused review.'
+        from .conclusions import build as conclusion
+        points = conclusion(audit_context or {}, service)['findings']
+        if points and points[0]['kind'] == 'journey_observation':
+            plan['project_scope'] = points[0]['proposed_fix']+' Preserve useful existing tools and confirm any wider redesign scope separately.'
     elif service == 'website_build':
         plan['project_scope'] = ('Build a focused services website with a clear enquiry route, subject to confirming that the business needs a website.' if lead.get('lead_kind') == 'profile' else
                                  'Create the reviewed new service page; do not imply the existing website is missing.')
