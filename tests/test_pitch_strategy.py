@@ -113,6 +113,8 @@ def test_initial_website_pitch_cannot_omit_the_project_or_all_relevant_additions
     with pytest.raises(ValueError, match='optional feature'):
         strategy.validate_copy(plan, 'We can refresh the mobile enquiry layout and improve loading.', initial=True)
     strategy.validate_copy(plan, 'We can refresh the mobile enquiry layout. If phone enquiries are relevant, an AI calling agent could collect details for the team.', initial=True)
+    strategy.validate_copy(plan, 'We can improve mobile loading so service information appears sooner. If phone enquiries are relevant, an AI calling agent could collect details for the team.', initial=True)
+    strategy.validate_copy(plan, 'We can adjust font loading so the existing quote option appears sooner. If phone enquiries are relevant, an AI calling agent could help.', initial=True)
 
 
 def test_review_api_records_a_typed_positive_observation_and_preserves_the_email(settings, db, prepared):

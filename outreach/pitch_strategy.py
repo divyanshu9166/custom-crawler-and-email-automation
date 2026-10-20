@@ -124,7 +124,8 @@ def build(lead, finding, pages, audit_context=None, review=None):
 
 def validate_copy(plan, text, *, initial=False):
     if initial and plan.get('primary_service') in {'website_improvement', 'website_build'} and plan.get('optional_services'):
-        if plan['primary_service'] == 'website_improvement' and not re.search(r'layout|redesign|journey|service.to.(?:enquir|quot)|enquir.{0,20}(?:flow|page)', text, re.I):
+        project = r'layout|redesign|journey|service.to.(?:enquir|quot)|enquir.{0,20}(?:flow|page)|(?:website|site|mobile).{0,50}(?:load|speed|perform|optim)|(?:service|quote|enquir).{0,45}(?:information|text|content|visible|appear|option|route)'
+        if plan['primary_service'] == 'website_improvement' and not re.search(project, text, re.I):
             raise ValueError('Explain the primary website project and enquiry journey, not just a technical audit fix')
         if not any(option_mentioned(o, text) for o in plan['optional_services']):
             raise ValueError('Briefly include one supplied relevant optional feature alongside the primary website project')
@@ -169,6 +170,8 @@ fact, then connect the proposed website work to finding services and reaching th
 Use at most one numerical measurement. Do not dump LCP/FCP timings or infer when a quote
 form becomes usable from page-paint timings. Keep the actual business project central.
 Avoid writing an email that sounds like a Lighthouse report or lists font/CSS tasks alone.
+The website project can be loading optimisation tied to service information or the
+existing enquiry route. Do not force a redesign/layout claim when only loading evidence exists.
 For an optional_fit_check calling agent, keep it conditional: if phone enquiries are relevant,
 it could collect requirement details and route a summary to the team. Do not infer a phone
 bottleneck from a listed number. Keep optional additions to one short sentence, with one
