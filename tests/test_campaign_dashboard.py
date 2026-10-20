@@ -3,6 +3,7 @@ import csv
 import io
 import json
 import sqlite3
+from datetime import datetime, timezone
 
 import pytest
 from fastapi.testclient import TestClient
@@ -48,6 +49,51 @@ def test_aggregation_does_not_multiply_contacts_or_messages(db, active):
     totals = summary(db)['totals']
     assert (totals['prospects'], totals['contacts'], totals['sent'], totals['replied'], totals['bounced']) == (1, 2, 2, 1, 1)
     assert totals['queued'] == 2
+
+
+def test_reporting_uses_utc_events_and_scopes_without_leaking_payloads(db, prepared, monkeypatch):
+    now = datetime(2026, 10, 20, 0, 5, tzinfo=timezone.utc).timestamp()
+    monkeypatch.setattr('outreach.campaign_manager.time.time', lambda: now)
+    cid = prepared['contact_id']
+    db.execute("UPDATE messages SET state='sent',sent_at=? WHERE step=0", (now - 600,))
+    # Old and future submissions remain lifetime totals, but outside this trend.
+    db.execute("UPDATE messages SET state='sent',sent_at=? WHERE step=1", (now - 15 * 86400,))
+    db.execute("UPDATE messages SET state='sent',sent_at=? WHERE step=2", (now + 86400,))
+    for kind, at in [('reply', now - 600), ('bounce', now - 100), ('opt_out', now),
+                     ('reply', now - 15 * 86400), ('reply', now + 60)]:
+        db.execute('INSERT INTO events(kind,contact_id,detail,created_at) VALUES(?,?,?,?)',
+                   (kind, cid, '{"private":"must-not-leak"}', at))
+    db.execute('UPDATE leads SET deleted_at=?', (now,))
+    report = summary(db)
+    assert len(report['analytics']['series']) == 14
+    assert report['analytics']['timezone'] == 'UTC'
+    assert report['analytics']['series'][0]['date'] == '2026-10-07'
+    assert report['analytics']['series'][-2] == {'date': '2026-10-19', 'sent': 1, 'replies': 1, 'bounces': 0, 'unsubscribes': 0}
+    assert report['analytics']['series'][-1] == {'date': '2026-10-20', 'sent': 0, 'replies': 0, 'bounces': 1, 'unsubscribes': 1}
+    assert report['totals']['sent'] == 3 and report['totals']['deleted'] == 1
+    # Event history is distinct from current contact outcomes, including after deletion.
+    assert report['totals']['replied'] == 0
+    a, b = report['campaigns']
+    assert a['trend'] == report['analytics']['series']
+    assert all(not any(point[key] for key in ('sent', 'replies', 'bounces', 'unsubscribes')) for point in b['trend'])
+    assert b['activity'] == [] and len(a['activity']) == 4
+    assert 'must-not-leak' not in json.dumps(report)
+
+
+def test_each_campaign_retains_its_own_recent_events(db, prepared):
+    cid = prepared['contact_id']
+    for n in range(9):
+        db.execute('INSERT INTO events(kind,contact_id,detail,created_at) VALUES(?,?,?,?)', ('reply', cid, '{}', 10+n))
+    other = create(db, 'Busy separate campaign', 'B')
+    lid = db.execute("INSERT INTO leads(domain,website,company,campaign,campaign_id,source_url,created_at,updated_at) VALUES('shop.example.org','https://shop.example.org','Synthetic shop','B',?,'https://shop.example.org',1,1)", (other,))
+    contact = db.execute("INSERT INTO contacts(lead_id,email,source_url,unsubscribe_token,created_at) VALUES(?,'shop@example.org','https://shop.example.org','synthetic-analytics-token',1)", (lid,))
+    for n in range(12):
+        db.execute('INSERT INTO events(kind,contact_id,detail,created_at) VALUES(?,?,?,?)', ('sent', contact, '{}', 100+n))
+    report = summary(db)
+    assert len(report['analytics']['activity']) == 6
+    assert {r['campaign_id'] for r in report['analytics']['activity']} == {other}
+    a = report['campaigns'][0]
+    assert len(a['activity']) == 6 and a['activity'][0]['created_at'] == 18
 
 
 def test_move_only_unapproved_same_goal_prospects(db, settings, prepared):

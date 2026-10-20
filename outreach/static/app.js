@@ -73,7 +73,9 @@ async function refresh({reloadDetail=true,includeDiagnostics=true,includePipelin
   $("#platform-browser-mode").textContent="VPS browser discovery is enabled. "+(status.platform_browser_public_fallback?"Free public search and independent company pages remain available when the platform is held or its website link is missing. ":"Public-source failover is disabled. ")+(Object.keys(status.platform_browser_holds||{}).length?"Operator attention needed: "+JSON.stringify(status.platform_browser_holds):"Sources, business identity and contact ownership still require review.");
   researchRunning=!!status.worker_enabled;
   $("#mode").textContent=status.demo?"Offline demo · fictional prospects":!status.sending_enabled?"Sending off":status.paused?"Sending paused":"Sending enabled";
-  $('#campaign-send-status').textContent=!status.sending_enabled?'Global sending is OFF. Campaign resume and bulk preparation do not enable sending.':status.paused?'Global sending is paused. Campaign queues remain subject to the global pause.':'Global sending is enabled. Only approved, eligible records in open campaign queues can send within mailbox limits.';
+  $('#campaign-send-status').textContent=!status.sending_enabled?'● Sending off':status.paused?'● Sending paused':'● Sending enabled';
+  $('#campaign-send-status').dataset.state=!status.sending_enabled?'off':status.paused?'paused':'enabled';
+  $('#campaign-send-status').title='Campaign resume and bulk preparation never override global sending controls, approval or mailbox limits.';
   $("#worker-control").textContent=`Research: ${status.worker_enabled?'ON':'OFF'}`;
   $("#resume").disabled=!!status.demo||!status.worker_enabled||!status.sending_enabled;
   $("#resume").title=status.demo?'Offline demo':(!status.worker_enabled||!status.sending_enabled)?'Enable worker and sending in Settings first':'Resume approved eligible sequences';
@@ -293,7 +295,7 @@ async function operations(){try{const [status,jobs,events,salesReport,delivery]=
 window.WorkbenchFlow.init({api,esc,notice,view,openLead:id=>{view('pipeline');loadLead(id).catch(e=>notice(e.message,true));}});
 window.WorkbenchWorkspace.initialize();
 window.WorkbenchSettings.init({api,esc,notice,refresh});
-window.WorkbenchCampaigns.init({api,esc,stamp,notice,openDiscovery:()=>view('discovery'),openLead:id=>{view('pipeline');loadLead(id).catch(e=>notice(e.message,true));}});
+window.WorkbenchCampaigns.init({api,esc,stamp,notice,openDiscovery:()=>view('discovery'),openOperations:()=>view('operations'),openLead:id=>{view('pipeline');loadLead(id).catch(e=>notice(e.message,true));}});
 const startUrl=new URL(location.href),startInPipeline=startUrl.hash!=='#campaigns'&&(startUrl.searchParams.has('prospect')||startUrl.searchParams.get('view')==='pipeline'||startUrl.hash==='#email-sequence');
 if(startInPipeline){view('pipeline');refresh().then(()=>{if(!currentId){const requested=Number(startUrl.searchParams.get('prospect'));if(Number.isSafeInteger(requested)&&requested>0)return loadLead(requested);if(allLeads.length)return loadLead(allLeads[0].id);}}).catch(e=>notice(e.message,true));}
 else{view('campaigns');refresh({reloadDetail:false,includeDiagnostics:false,includePipeline:false}).catch(e=>notice(e.message,true));}

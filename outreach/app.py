@@ -509,7 +509,7 @@ def create_app(settings=None):
     @app.get("/static/{name}")
     def static(name: str, request: Request, creds: HTTPBasicCredentials | None = Depends(basic),
                token: HTTPAuthorizationCredentials | None = Depends(bearer)):
-        if name not in {"app.js", "campaigns-dashboard.js", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js", "style.css", "login.js"}:
+        if name not in {"app.js", "campaigns-dashboard.js", "campaigns-dashboard.css", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js", "style.css", "login.js"}:
             raise HTTPException(404)
         if name in {"app.js", "campaigns-dashboard.js", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js"}:
             auth(request, creds, token)

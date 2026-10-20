@@ -4,6 +4,7 @@ import io
 import json
 import sqlite3
 import time
+from datetime import datetime, timedelta, timezone
 
 
 # Aggregate each relation before joining: multiple contacts/messages must not
@@ -38,6 +39,10 @@ def assert_target(db, campaign_id, goal):
 
 
 def summary(db):
+    now = time.time()
+    today = datetime.fromtimestamp(now, timezone.utc).date()
+    days = [(today - timedelta(days=n)).isoformat() for n in range(13, -1, -1)]
+    since = datetime.combine(today - timedelta(days=13), datetime.min.time(), timezone.utc).timestamp()
     with db.connect() as con:
         con.execute('BEGIN')
         fields = ','.join(f'COALESCE(SUM(f.{name}),0) AS {name}' for name in COUNTERS)
@@ -54,8 +59,49 @@ def summary(db):
         for row in rows:
             for key in ('pending_jobs', 'running_jobs', 'failed_jobs'):
                 row[key] = jobs.get(row['id'], {}).get(key, 0)
+        # Use recorded timestamps, never inferred delivery or fabricated demo data.
+        accepted = list(con.execute('''SELECT l.campaign_id,date(m.sent_at,'unixepoch') day,COUNT(*) n
+            FROM messages m JOIN contacts c ON c.id=m.contact_id JOIN leads l ON l.id=c.lead_id
+            WHERE m.sent_at>=? AND m.sent_at<=? GROUP BY l.campaign_id,day''', (since, now)))
+        outcomes = list(con.execute('''SELECT l.campaign_id,date(e.created_at,'unixepoch') day,e.kind,COUNT(*) n
+            FROM events e JOIN contacts c ON c.id=e.contact_id JOIN leads l ON l.id=c.lead_id
+            WHERE e.kind IN ('reply','bounce','opt_out') AND e.created_at>=? AND e.created_at<=?
+            GROUP BY l.campaign_id,day,e.kind''', (since, now)))
+        recent = [dict(r) for r in con.execute('''SELECT e.id,e.kind,e.created_at,l.id lead_id,
+            l.company,l.campaign_id,g.name campaign_name FROM events e
+            JOIN contacts c ON c.id=e.contact_id JOIN leads l ON l.id=c.lead_id
+            JOIN campaign_groups g ON g.id=l.campaign_id
+            WHERE e.kind IN ('sent','reply','bounce','opt_out','send_uncertain','send_rejected')
+            AND e.created_at<=? ORDER BY e.created_at DESC,e.id DESC LIMIT 6''', (now,))]
+        campaign_activity = {}
+        for item in con.execute('''WITH ranked AS (
+            SELECT e.id,e.kind,e.created_at,l.id lead_id,l.company,l.campaign_id,
+            ROW_NUMBER() OVER (PARTITION BY l.campaign_id ORDER BY e.created_at DESC,e.id DESC) position
+            FROM events e JOIN contacts c ON c.id=e.contact_id JOIN leads l ON l.id=c.lead_id
+            WHERE e.kind IN ('sent','reply','bounce','opt_out','send_uncertain','send_rejected')
+            AND e.created_at<=?) SELECT id,kind,created_at,lead_id,company,campaign_id FROM ranked
+            WHERE position<=6 ORDER BY created_at DESC,id DESC''', (now,)):
+            campaign_activity.setdefault(item['campaign_id'], []).append(dict(item))
+        def trend(campaign_id=None):
+            points = {day: {'date': day, 'sent': 0, 'replies': 0, 'bounces': 0, 'unsubscribes': 0} for day in days}
+            for item in accepted:
+                if campaign_id is None or item['campaign_id'] == campaign_id:
+                    points[item['day']]['sent'] += item['n']
+            for item in outcomes:
+                if campaign_id is None or item['campaign_id'] == campaign_id:
+                    key = {'reply': 'replies', 'bounce': 'bounces', 'opt_out': 'unsubscribes'}[item['kind']]
+                    points[item['day']][key] += item['n']
+            return list(points.values())
+        for row in rows:
+            row['trend'] = trend(row['id'])
+            # Bound each campaign independently so a busy campaign cannot hide another.
+            row['activity'] = campaign_activity.get(row['id'], [])
         totals = {key: sum(r[key] for r in rows) for key in (*COUNTERS, 'prospects', 'active_prospects', 'deleted')}
+        for key in ('pending_jobs', 'running_jobs', 'failed_jobs'):
+            totals[key] = sum(r[key] for r in rows)
         return {'campaigns': rows, 'totals': totals,
+                'generated_at': now,
+                'analytics': {'days': 14, 'timezone': 'UTC', 'series': trend(), 'activity': recent[:6]},
                 'note': 'Sent counts SMTP-accepted messages, not inbox placement. Bounce/reply/unsubscribe count current contact outcomes. Deleted is a separate prospect flag; history stays included.'}
 
 

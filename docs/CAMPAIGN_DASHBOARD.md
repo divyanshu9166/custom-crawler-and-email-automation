@@ -4,6 +4,37 @@ The home page now opens **Campaigns**. Pipeline remains the individual prospect
 review/editor. An existing `?prospect=ID` or `?view=pipeline` link opens that view;
 `/#campaigns` opens the overview. No email is approved or sent by opening it.
 
+## Using the reporting workspace
+
+The dashboard has three views instead of one long page:
+
+- **Overview**: six lifetime counters, a 14-day activity chart, actionable work
+  queues and a compact campaign comparison table.
+- **Prospects**: search, outcome shortcuts, market/Deleted filters, paginated
+  records and CSV export. Select rows to reveal bulk preparation, move,
+  delete and restore controls. Open a company to review its single initial email.
+- **Delivery activity**: the six latest recorded sending and inbox events for
+  the selected campaign or all campaigns. Open an event's company for details.
+
+**Reporting scope** updates the counters, chart, work queue and activity together,
+and constrains the prospect list. Prospect search/outcome/market/Deleted filters
+affect that list only. Campaign comparison always shows all campaigns so you can
+switch context without clearing filters. Counter cards and message queue rows
+open the matching prospect view; research job rows open Operations.
+
+The chart groups persisted acceptance timestamps and reply events by **UTC day**,
+including today and the previous 13 days. Reply events are historical events,
+distinct from the lifetime counters' *current contact outcomes*. A later opt-out
+can therefore change a contact's outcome while leaving its earlier reply in the
+chart/history. The activity feed never exposes raw event payloads, email bodies,
+credentials or unsubscribe tokens. Empty charts show real zeroes; no sample data
+is inserted. Deleted prospects remain in historical reporting.
+
+Campaign directory “Active prospects” excludes deleted records; the top
+“Prospects” counter includes them and labels the active count separately. SMTP
+acceptance is not evidence of inbox delivery. No open rates, click rates or
+conversion rates are estimated from these counts.
+
 ## Named campaigns and attribution
 
 Create names such as **UK Cleaning – October**, choosing business goal A
@@ -49,7 +80,7 @@ or verified delivery rates.
 
 ## Bulk work
 
-Campaign cards show per-campaign results and pause/resume controls. Campaign pause
+Campaign comparison rows show per-campaign results and pause/resume controls. Campaign pause
 blocks SMTP claiming and rechecks after login, before submission. Inbox monitoring
 continues. Campaign resume does not enable global sending, remove suppression,
 approve drafts, override limits or automatically start follow-ups. Already
