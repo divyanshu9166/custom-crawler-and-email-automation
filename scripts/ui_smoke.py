@@ -404,6 +404,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.reload()
             page.get_by_role("button", name="Pipeline", exact=True).click()
             page.locator(f"[data-lead='{history_lead}']").click()
+            expect(page.get_by_role('heading', name='FICTIONAL source freshness review', exact=True)).to_be_visible()
             page.get_by_role('combobox', name='Source capture period').select_option('all')
             expect(page.get_by_text(f"#{old_id} · Old fictional source · Historical capture", exact=True)).to_be_visible()
             page.get_by_text("02 · Advanced: edit qualification & offer manually", exact=True).click()
