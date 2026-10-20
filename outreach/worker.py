@@ -17,6 +17,9 @@ log = logging.getLogger(__name__)
 async def execute_job(db, settings, job):
     payload = json.loads(job["payload"])
     try:
+        if db.one('SELECT 1 FROM leads WHERE deleted_at IS NOT NULL AND (id=? OR id=(SELECT lead_id FROM contacts WHERE id=?))', (payload.get('lead_id'), payload.get('contact_id'))):
+            db.execute("UPDATE jobs SET state='cancelled',error='Prospect deleted; work cancelled' WHERE id=?", (job['id'],))
+            return
         if job["kind"] == "research":
             payload = resumable_restart(db, job)
             if payload.get('auto_pass'):
@@ -177,7 +180,8 @@ async def job_loop(db, settings, stop, kinds, schedules=False, admission=None):
             if schedules and settings.worker_enabled:
                 for schedule in db.all("SELECT * FROM schedules WHERE enabled=1 AND next_run<=?", (time.time(),)):
                     db.enqueue("discover", {"query": schedule["query"], "campaign": schedule["campaign"],
-                                           "country_hint": schedule["country_hint"], "limit": schedule["result_limit"]})
+                                           "country_hint": schedule["country_hint"], "limit": schedule["result_limit"],
+                                           **({'campaign_id': schedule['campaign_id']} if schedule.get('campaign_id') else {})})
                     db.execute("UPDATE schedules SET next_run=? WHERE id=?",
                                (time.time() + schedule["interval_hours"] * 3600, schedule["id"]))
             admitted = settings.worker_enabled and (not admission or admission.acquire())

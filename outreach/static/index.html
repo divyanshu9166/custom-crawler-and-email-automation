@@ -8,7 +8,7 @@
 
   <title>Outreach Workbench</title><link rel="stylesheet" href="/static/style.css">
 
-  <script src="/static/sales.js" defer></script><script src="/static/growth.js" defer></script><script src="/static/workflow.js" defer></script><script src="/static/settings.js" defer></script><script src="/static/workspace.js" defer></script><script src="/static/app.js" defer></script>
+  <script src="/static/sales.js" defer></script><script src="/static/growth.js" defer></script><script src="/static/workflow.js" defer></script><script src="/static/settings.js" defer></script><script src="/static/workspace.js" defer></script><script src="/static/campaigns-dashboard.js" defer></script><script src="/static/app.js" defer></script>
 
 </head>
 
@@ -20,11 +20,26 @@
 
   </header>
 
-  <nav aria-label="Workspace"><span class="nav-label">WORKSPACE</span><button data-view="pipeline" class="selected"><span class="nav-symbol" aria-hidden="true">▤</span>Pipeline</button><button data-view="discovery"><span class="nav-symbol" aria-hidden="true">⌕</span>Find prospects</button><span class="nav-label nav-divider">INSIGHTS</span><button data-view="operations"><span class="nav-symbol" aria-hidden="true">◷</span>Operations</button><button data-view="workflow"><span class="nav-symbol" aria-hidden="true">◇</span>Workflow map</button><button data-view="learning"><span class="nav-symbol" aria-hidden="true">↗</span>Learning</button><span class="nav-label nav-divider">MANAGE</span><button data-view="settings"><span class="nav-symbol" aria-hidden="true">⚙</span>Settings</button><a href="/api/export">↓ Export CSV</a><div class="nav-foot">One prospect.<br>One relevant email.<br><span>Research saved on your VPS.</span></div></nav>
+  <nav aria-label="Workspace"><span class="nav-label">WORKSPACE</span><button data-view="campaigns" class="selected"><span class="nav-symbol" aria-hidden="true">▦</span>Campaigns</button><button data-view="pipeline"><span class="nav-symbol" aria-hidden="true">▤</span>Pipeline</button><button data-view="discovery"><span class="nav-symbol" aria-hidden="true">⌕</span>Find prospects</button><span class="nav-label nav-divider">INSIGHTS</span><button data-view="operations"><span class="nav-symbol" aria-hidden="true">◷</span>Operations</button><button data-view="workflow"><span class="nav-symbol" aria-hidden="true">◇</span>Workflow map</button><button data-view="learning"><span class="nav-symbol" aria-hidden="true">↗</span>Learning</button><span class="nav-label nav-divider">MANAGE</span><button data-view="settings"><span class="nav-symbol" aria-hidden="true">⚙</span>Settings</button><a href="/api/export">↓ Export CSV</a><div class="nav-foot">One prospect.<br>One relevant email.<br><span>Research saved on your VPS.</span></div></nav>
 
   <div id="notice" role="status" aria-live="polite"></div>
 
   <main>
+
+    <section id="campaigns" class="view" hidden>
+      <div class="page-heading"><div><span class="eyebrow">CAMPAIGN DASHBOARD</span><h2>Every campaign. One overview.</h2><p>Monitor delivery, manage prospect batches and keep your sending queue under control.</p></div><div class="actions"><button id="campaign-refresh">Refresh campaigns</button><button id="campaign-new" class="primary">+ New campaign</button></div></div>
+      <p id="campaign-send-status" class="small" role="status">Reading sending controls…</p><div id="campaign-metrics" class="metrics campaign-metrics"></div><p id="campaign-note" class="small"></p>
+      <details id="campaign-create" class="panel"><summary>Create a named campaign</summary><form id="campaign-create-form"><div class="columns"><label>Campaign name<input name="name" required minlength="3" maxlength="100" placeholder="UK Cleaning – October"></label><label>Business goal<select name="goal"><option value="A">A · Enquiries &amp; bookings</option><option value="B">B · Ecommerce growth</option></select></label></div><button class="primary">Create campaign</button><p class="small">Prospects stay linked to their business goal. Existing approved outreach cannot be moved between campaigns.</p></form></details>
+      <div id="campaign-cards" class="campaign-cards"></div>
+      <section class="panel campaign-prospects"><div class="section-head"><h3 id="campaign-list-heading">Campaign prospects</h3><a id="campaign-export" class="button" href="/api/campaign-export">Export matching CSV</a></div>
+        <div class="campaign-filters"><label>Campaign<select id="campaign-filter"><option value="">All campaigns</option></select></label><label>Outcome<select id="campaign-outcome"><option value="all">All outcomes</option><option value="sent">Sent</option><option value="queued">Queued</option><option value="drafts">Drafts</option><option value="bounced">Bounced</option><option value="replied">Replied</option><option value="unsubscribed">Unsubscribed / DNC</option><option value="attention">Errors / uncertain</option><option value="no_contact">No contact yet</option></select></label><label>Confirmed market<select id="campaign-market"><option value="">All markets</option><option>UK</option><option>US</option></select></label><label>Records<select id="campaign-deleted"><option value="active">Active prospects</option><option value="deleted">Deleted prospects</option><option value="all">Include deleted</option></select></label><label>Search<input id="campaign-search" type="search" placeholder="Company, domain or email" maxlength="200"></label></div>
+        <div class="campaign-bulk"><span id="campaign-selection">0 selected on this page</span><label>Bulk action<select id="campaign-bulk-action"><option value="prepare">Prepare initial emails</option><option value="assign">Move to campaign</option><option value="delete">Delete prospects</option><option value="restore">Restore deleted prospects</option></select></label><label id="bulk-campaign-label" hidden>Destination<select id="bulk-campaign"></select></label><label id="bulk-reason-label" hidden>Deletion reason<input id="bulk-reason" maxlength="500" placeholder="Reason for removing these prospects"></label><label id="bulk-confirm-label" class="check" hidden><input id="bulk-confirm" type="checkbox">Stop queued work and move selected prospects to Deleted. Keep history and suppression.</label><button id="campaign-bulk-run" disabled>Apply to selected</button></div>
+        <div id="campaign-bulk-results" role="status" aria-live="polite"></div><p class="small">Bulk preparation never sends or approves emails. Global controls, mailbox limits and individual review remain in force. Deleted prospects are recoverable; their pending emails are cancelled.</p>
+        <div class="campaign-table-scroll"><table class="campaign-table"><thead><tr><th><input id="campaign-select-page" type="checkbox" aria-label="Select this page"></th><th>Prospect</th><th>Campaign</th><th>Contacts &amp; research</th><th>Sent</th><th>Queued</th><th>Outcomes / issues</th><th>Last sent / deleted</th></tr></thead><tbody id="campaign-rows"></tbody></table></div>
+        <div class="section-head campaign-pagination"><p id="campaign-list-status" role="status">Loading campaign data…</p><div class="actions"><button id="campaign-prev" disabled>Previous page</button><button id="campaign-next" disabled>Next page</button></div></div>
+      </section>
+    </section>
+
 
     <section id="workflow" class="view" hidden>
 
@@ -67,7 +82,7 @@
 
           <details><summary>Repeat this search (optional)</summary><label>Run every (hours)<input name="interval_hours" type="number" min="1" max="720" placeholder="24"></label></details>
 
-          <button class="primary" type="submit">Start research</button>
+          <label>Save prospects in<select name="campaign_id" class="campaign-target"><option value="">Default campaign for this goal</option></select></label><button class="primary" type="submit">Start research</button>
 
         </form>
 
@@ -79,7 +94,7 @@
 
           <div class="columns"><label>Business goal<select name="campaign"><option value="A">More enquiries & bookings</option><option value="B">Ecommerce growth</option></select></label><label>Market hint<select name="country_hint"><option>UK</option><option>US</option></select></label></div>
 
-          <button class="primary" type="submit">Add & research</button>
+          <label>Save prospects in<select name="campaign_id" class="campaign-target"><option value="">Default campaign for this goal</option></select></label><button class="primary" type="submit">Add & research</button>
 
         </form>
 
@@ -89,7 +104,7 @@
       <p id="fxembed-mode" class="panel" hidden></p>
       <section class="panel" aria-label="Recorded source coverage"><h3>Recorded platform coverage</h3><p>Latest saved observations. Website matches and published emails still require review.</p><div id="discovery-source-coverage"></div><h4>Source access and extraction</h4><div id="provider-source-status"></div></section>
 
-      <form id="profile-lead-form" class="panel"><h3>Add a business without a known website</h3><p>Use its specific public business profile or listing. Research checks for a website first. Blocked, ambiguous and indexed-only evidence stays held.</p><label>Business name<input name="company" required minlength="2"></label><label>Public business profile URL<input name="profile_url" type="url" required placeholder="https://www.facebook.com/business-profile"></label><div class="columns"><label>Business goal<select name="campaign"><option value="A">More enquiries & bookings</option><option value="B">Ecommerce growth</option></select></label><label>Market<select name="country_hint"><option>UK</option><option>US</option></select></label></div><button class="primary" type="submit">Research business profile</button></form>
+      <form id="profile-lead-form" class="panel"><h3>Add a business without a known website</h3><p>Use its specific public business profile or listing. Research checks for a website first. Blocked, ambiguous and indexed-only evidence stays held.</p><label>Business name<input name="company" required minlength="2"></label><label>Public business profile URL<input name="profile_url" type="url" required placeholder="https://www.facebook.com/business-profile"></label><div class="columns"><label>Business goal<select name="campaign"><option value="A">More enquiries & bookings</option><option value="B">Ecommerce growth</option></select></label><label>Market<select name="country_hint"><option>UK</option><option>US</option></select></label></div><label>Save prospects in<select name="campaign_id" class="campaign-target"><option value="">Default campaign for this goal</option></select></label><button class="primary" type="submit">Research business profile</button></form>
 
       <form id="browser-reference-form" class="panel"><h3>Research a website linked from a business profile</h3><p>If a public business profile opens in your browser, save its visible website link here. A new company goes to website research; an existing company's review stays intact.</p><label>Business name<input name="company" required minlength="2" maxlength="200"></label><label>Profile / listing URL<input name="source_url" type="url" required></label><label>Visible company website link<input name="website" type="url" required></label><label>Brief factual observation<textarea name="observation" required minlength="8" maxlength="300" placeholder="The company About page links this website and lists Seattle as its headquarters."></textarea></label><label>When you observed it<input name="observed_at" type="datetime-local" required></label><div class="columns"><label>Business goal<select name="campaign"><option value="A">More enquiries & bookings</option><option value="B">Ecommerce growth</option></select></label><label>Market hint<select name="country_hint"><option>UK</option><option>US</option></select></label></div><label class="check"><input name="public_business_confirmed" type="checkbox" required>I saw this on the public business profile or listing.</label><button type="submit">Save reference & research new company</button></form>
 

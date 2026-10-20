@@ -196,6 +196,9 @@ def send_one(db, settings, now=None, sender=smtp_send):
                 assert_outreach_open(con, contact["lead_id"])
             except ValueError:
                 continue
+            group = con.execute('SELECT g.state FROM leads l JOIN campaign_groups g ON g.id=l.campaign_id WHERE l.id=?', (contact['lead_id'],)).fetchone()
+            if group and group[0] == 'paused':
+                continue
             if contact["status"] != "active" or con.execute("SELECT 1 FROM suppression WHERE email=?", (contact["email"],)).fetchone():
                 continue
             try:
@@ -231,9 +234,10 @@ def send_one(db, settings, now=None, sender=smtp_send):
                         WHERE m.id=? AND NOT EXISTS(SELECT 1 FROM suppression s WHERE s.email=c.email)""", (row['id'],)).fetchone()
                     paused = con.execute("SELECT value FROM settings WHERE key='paused'").fetchone()
                     held = con.execute('SELECT cold_email_hold FROM sales WHERE lead_id=?', (contact['lead_id'],)).fetchone()
+                    scope = con.execute('SELECT l.deleted_at,g.state FROM leads l LEFT JOIN campaign_groups g ON g.id=l.campaign_id WHERE l.id=?', (contact['lead_id'],)).fetchone()
                     if (not current or current['status'] != 'active' or current['state'] != 'sending'
                             or not settings.sending_enabled or not paused or paused[0] != 'false'
-                            or bool(held and held[0])):
+                            or bool(held and held[0]) or bool(scope and (scope['deleted_at'] or scope['state'] == 'paused'))):
                         raise SubmissionCancelled()
             if sender is smtp_send:
                 sender(settings, message, before_submission=still_allowed)

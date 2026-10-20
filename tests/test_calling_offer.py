@@ -70,7 +70,7 @@ def test_automatic_assessment_accepts_support_and_infers_mode_without_an_extra_f
 
 def test_campaign_b_cannot_qualify_a_calling_agent_even_with_a_phone_signal(db):
     lid, eid, review = voice_review(db)
-    db.execute("UPDATE leads SET campaign='B' WHERE id=?", (lid,))
+    db.execute("UPDATE leads SET campaign='B',campaign_id=(SELECT id FROM campaign_groups WHERE goal='B' AND is_default=1) WHERE id=?", (lid,))
     with pytest.raises(ValueError, match='Campaign B'):
         review_lead(db, lid, review)
     assert offers.snapshot(db, lid)['selected_service'] == ''

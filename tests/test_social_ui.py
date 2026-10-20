@@ -55,7 +55,7 @@ def test_dashboard_shows_saved_provider_outcomes_and_post_trigger_sources(settin
         page = context.new_page()
         page.on('pageerror', lambda error: errors.append(str(error)))
         try:
-            page.goto(settings.public_url+'/')
+            page.goto(settings.public_url+'/?view=pipeline')
             page.get_by_role('button', name='Pipeline', exact=True).click()
             expect(page.locator(f'[data-lead="{lid}"]')).to_contain_text('Bright Demo')
             page.locator('#filter').fill('NO MATCHING BUSINESS')
@@ -119,7 +119,7 @@ def test_search_queues_job_and_pipeline_polls_background_results_without_erasing
         page.set_default_timeout(5000)
         try:
             page.clock.install()
-            page.goto(settings.public_url+'/')
+            page.goto(settings.public_url+'/?view=pipeline')
             page.get_by_role('button', name='Find prospects', exact=True).first.click()
             expect(page.locator('#search-form')).to_be_visible()
             assert not db.one('SELECT id FROM jobs')

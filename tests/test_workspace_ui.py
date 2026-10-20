@@ -104,7 +104,7 @@ def test_focused_workspace_one_editor_and_safe_archive(settings, db, prepared, m
         page = context.new_page()
         page.on('pageerror', lambda e: errors.append(str(e)))
         try:
-            page.goto(settings.public_url+'/')
+            page.goto(settings.public_url+'/?view=pipeline')
             expect(page.locator('#pipeline')).to_be_visible()
             expect(page.locator('#detail h2')).to_have_text('Bright Demo')
             if measured:

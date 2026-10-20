@@ -59,7 +59,7 @@ def test_one_click_preparation_shows_drafts_or_preserves_unsaved_edits(settings,
         page.on('pageerror', lambda e: errors.append(str(e)))
         try:
             page.clock.install()
-            page.goto(settings.public_url+'/')
+            page.goto(settings.public_url+'/?view=pipeline')
             page.get_by_role('button', name='Pipeline', exact=True).click()
             page.locator(f'[data-lead="{lid}"]').click()
             expect(page.locator('#review-form')).not_to_be_visible()

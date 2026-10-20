@@ -119,6 +119,12 @@ CREATE INDEX IF NOT EXISTS attempts_message ON send_attempts(message_id,id);
 CREATE TABLE IF NOT EXISTS inbound_receipts (
  fingerprint TEXT PRIMARY KEY, contact_id INTEGER NOT NULL REFERENCES contacts(id), created_at REAL NOT NULL
 );
+CREATE TABLE IF NOT EXISTS campaign_groups (
+ id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE COLLATE NOCASE,
+ goal TEXT NOT NULL CHECK(goal IN ('A','B')), state TEXT NOT NULL DEFAULT 'active' CHECK(state IN ('active','paused')),
+ is_default INTEGER NOT NULL DEFAULT 0, created_at REAL NOT NULL, updated_at REAL NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS campaign_default ON campaign_groups(goal) WHERE is_default=1;
 """
 
 
@@ -128,7 +134,7 @@ class DB:
         path.parent.mkdir(parents=True, exist_ok=True)
         with self.connect() as con:
             version = con.execute("PRAGMA user_version").fetchone()[0]
-            if version > 5:
+            if version > 6:
                 raise RuntimeError("Database belongs to a newer application version")
             con.executescript(SCHEMA)
             columns = {r[1] for r in con.execute("PRAGMA table_info(leads)")}
@@ -151,7 +157,28 @@ class DB:
                     WHEN status='replied' THEN 'REPLIED'
                     WHEN EXISTS(SELECT 1 FROM messages m WHERE m.contact_id=contacts.id AND m.sent_at IS NOT NULL) THEN 'SENT'
                     ELSE '' END""")
-            con.execute("PRAGMA user_version=5")
+            for goal, name in [('A', 'Campaign A - Enquiries and bookings'), ('B', 'Campaign B - Ecommerce growth')]:
+                con.execute('INSERT OR IGNORE INTO campaign_groups(name,goal,is_default,created_at,updated_at) VALUES(?,?,1,?,?)', (name, goal, time.time(), time.time()))
+            columns = {r[1] for r in con.execute('PRAGMA table_info(leads)')}
+            for name, definition in {'campaign_id': 'INTEGER REFERENCES campaign_groups(id)',
+                                     'deleted_at': 'REAL', 'delete_reason': "TEXT NOT NULL DEFAULT ''"}.items():
+                if name not in columns:
+                    con.execute(f'ALTER TABLE leads ADD COLUMN {name} {definition}')
+            con.execute('UPDATE leads SET campaign_id=(SELECT id FROM campaign_groups WHERE goal=leads.campaign AND is_default=1) WHERE campaign_id IS NULL')
+            if 'campaign_id' not in {r[1] for r in con.execute('PRAGMA table_info(schedules)')}:
+                con.execute('ALTER TABLE schedules ADD COLUMN campaign_id INTEGER REFERENCES campaign_groups(id)')
+            con.executescript('''
+                CREATE INDEX IF NOT EXISTS leads_campaign_group ON leads(campaign_id,deleted_at,id);
+                CREATE TRIGGER IF NOT EXISTS leads_default_campaign AFTER INSERT ON leads WHEN NEW.campaign_id IS NULL
+                BEGIN UPDATE leads SET campaign_id=(SELECT id FROM campaign_groups WHERE goal=NEW.campaign AND is_default=1) WHERE id=NEW.id; END;
+                CREATE TRIGGER IF NOT EXISTS leads_matching_campaign BEFORE UPDATE OF campaign_id,campaign ON leads
+                WHEN NEW.campaign_id IS NOT NULL AND NOT EXISTS(SELECT 1 FROM campaign_groups WHERE id=NEW.campaign_id AND goal=NEW.campaign)
+                BEGIN SELECT RAISE(ABORT,'Campaign business goal does not match prospect'); END;
+                CREATE TRIGGER IF NOT EXISTS leads_matching_campaign_insert BEFORE INSERT ON leads
+                WHEN NEW.campaign_id IS NOT NULL AND NOT EXISTS(SELECT 1 FROM campaign_groups WHERE id=NEW.campaign_id AND goal=NEW.campaign)
+                BEGIN SELECT RAISE(ABORT,'Campaign business goal does not match prospect'); END;
+            ''')
+            con.execute("PRAGMA user_version=6")
 
     @contextmanager
     def connect(self):
@@ -196,6 +223,9 @@ class DB:
         encoded = json.dumps(payload, sort_keys=True)
         with self.connect() as con:
             con.execute("BEGIN IMMEDIATE")
+            deleted = con.execute('SELECT 1 FROM leads WHERE deleted_at IS NOT NULL AND (id=? OR id=(SELECT lead_id FROM contacts WHERE id=?))', (payload.get('lead_id'), payload.get('contact_id'))).fetchone()
+            if deleted:
+                raise ValueError('Deleted prospects cannot queue new work')
             row = con.execute("SELECT id FROM jobs WHERE kind=? AND payload=? AND state IN ('pending','running')",
                               (kind, encoded)).fetchone()
             if row:
@@ -206,6 +236,9 @@ class DB:
     def claim(self, kinds=None):
         with self.connect() as con:
             con.execute("BEGIN IMMEDIATE")
+            con.execute("""UPDATE jobs SET state='cancelled',error='Prospect deleted; pending work cancelled'
+                WHERE state='pending' AND EXISTS(SELECT 1 FROM leads l WHERE l.deleted_at IS NOT NULL
+                AND (l.id=json_extract(jobs.payload,'$.lead_id') OR l.id=(SELECT lead_id FROM contacts WHERE id=json_extract(jobs.payload,'$.contact_id'))))""")
             rows = con.execute("SELECT * FROM jobs WHERE state='pending' AND due_at<=? ORDER BY CASE kind WHEN 'verify' THEN 0 WHEN 'screenshot' THEN 1 ELSE 2 END,due_at,id",
                                (time.time(),)).fetchall()
             # Research and screenshots of one lead must not execute simultaneously across lanes.

@@ -2,7 +2,7 @@
 
 The application is the only sending-queue owner. SQLite under `/data/outreach.db`
 stores the queue, suppression list, inbox receipts and SMTP-attempt ledger locally
-on the VPS. Schema version 5 adds fields/tables without deleting drafts or history.
+on the VPS. Delivery fields were introduced in schema version 5; the campaign dashboard extends it to version 6 without deleting drafts or history.
 
 ## Contact delivery states
 

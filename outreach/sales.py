@@ -31,6 +31,9 @@ def stop_company(con, lead_id, status="hold"):
 
 
 def assert_outreach_open(con, lead_id):
+    scope = con.execute('SELECT l.deleted_at,g.state FROM leads l LEFT JOIN campaign_groups g ON g.id=l.campaign_id WHERE l.id=?', (lead_id,)).fetchone()
+    if scope and scope['deleted_at']:
+        raise ValueError('Prospect is deleted; restore and review before outreach')
     row = con.execute("SELECT cold_email_hold FROM sales WHERE lead_id=?", (lead_id,)).fetchone()
     if row and row[0]:
         raise ValueError("Company has a shared outreach/sales hold; review its activity before cold email")

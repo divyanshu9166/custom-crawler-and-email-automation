@@ -4,7 +4,7 @@ PageSpeed still depends on provider quota/key. [Live findings and remaining gaps
 
 # Outreach Workbench
 
-**Current workspace (18 October 2026):** Pipeline opens directly to a prospect summary and one initial email. Research tools, manual qualification and sales history are under **Research details & advanced tools**. New drafting produces one personalized email; automatic follow-ups are OFF. Existing unapproved follow-ups can be archived without changing the initial email or its edits. See [the focused workspace](docs/FOCUSED_WORKSPACE.md).
+**Current workspace (20 October 2026):** Campaigns is the home dashboard for named campaigns, delivery totals and bulk operations. Pipeline opens a prospect summary and one initial email for individual review. Research tools, manual qualification and sales history are under **Research details & advanced tools**. New drafting produces one personalized email; automatic follow-ups are OFF. Existing unapproved follow-ups can be archived without changing the initial email or its edits. See [the focused workspace](docs/FOCUSED_WORKSPACE.md).
 
 A cold email system for US/UK prospects. Campaign A covers website development/improvement and inquiry/booking chatbots. Campaign B covers new/existing D2C stores, shopping/support chatbots and permission-based WhatsApp opportunities. Crawler quality takes priority; host size controls concurrency and throughput.
 
@@ -78,6 +78,8 @@ Offer suggestions now exclude legal boilerplate, rejected marketplaces, foreign 
 **Earlier crawler comparison:** homepage-first scheduling, bounded temporary retries, checked HTML reuse in Chromium and clearer coverage diagnostics are implemented. On the same four sites under the same 180-second diagnostic, saved pages increased from 35 to 36; three sites yielded captures, one remained blocked by HTTP 403, and the published inbox count stayed at one. See [the comparison and limits](docs/CRAWLER_OPTIMIZATION.md).
 
 **Delivery controls (20 October 2026):** explicit `SENT`, `BOUNCED`, `REPLIED`, `UNSUBSCRIBED` outcomes; automatic sequence cancellation, durable suppression, per-mailbox rolling limits, bounded temporary-error retries and one-click unsubscribe. See [delivery controls and deployment requirements](docs/DELIVERY_CONTROLS.md). Sending and automatic follow-ups remain OFF.
+
+**Campaign dashboard:** the home page now shows named campaigns, campaign-level delivery counters, paused queues, filters, paginated bulk actions, recoverable Deleted prospects and full matching CSV export. See [campaign management and reporting semantics](docs/CAMPAIGN_DASHBOARD.md). Pipeline remains the individual email review view.
 
 ## Architecture
 

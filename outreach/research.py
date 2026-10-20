@@ -10,7 +10,9 @@ from . import providers
 from .web import PublicWeb, domain_of, crawl_url, normalize_email, outreach_email_allowed, BLOCKED_SOURCES, EMAIL_RE
 
 
-def add_lead(db, company, website, campaign, source_url, country_hint=""):
+def add_lead(db, company, website, campaign, source_url, country_hint="", campaign_id=None):
+    from .campaign_manager import assert_target
+    assert_target(db, campaign_id, campaign)
     website, source_url = crawl_url(website), crawl_url(source_url)
     domain = domain_of(website)
     if any(domain == d or domain.endswith("." + d) for d in BLOCKED_SOURCES):
@@ -21,10 +23,15 @@ def add_lead(db, company, website, campaign, source_url, country_hint=""):
         raise ValueError("Campaign must be A or B")
     now = time.time()
     with db.connect() as con:
-        con.execute("INSERT OR IGNORE INTO leads(domain,website,company,campaign,source_url,research_notes,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?)",
+        con.execute("INSERT OR IGNORE INTO leads(domain,website,company,campaign,source_url,research_notes,created_at,updated_at,campaign_id) VALUES(?,?,?,?,?,?,?,?,?)",
                     (domain, website, company[:200], campaign, source_url,
-                     f"Discovery country hint: {country_hint or 'unknown'}; confirm against original source.", now, now))
-        return con.execute("SELECT id FROM leads WHERE domain=?", (domain,)).fetchone()[0]
+                     f"Discovery country hint: {country_hint or 'unknown'}; confirm against original source.", now, now, campaign_id))
+        row = con.execute('SELECT id,campaign_id,deleted_at FROM leads WHERE domain=?', (domain,)).fetchone()
+        if row['deleted_at']:
+            raise ValueError('Existing prospect is deleted; restore it explicitly before research')
+        if campaign_id and row['campaign_id'] != campaign_id:
+            raise ValueError('Existing prospect belongs to another campaign; use reviewed campaign assignment')
+        return row['id']
 
 
 def current_evidence(db, lead_id):
@@ -95,6 +102,8 @@ def company_publication(db, contact, lead):
 
 
 def assert_contact_ownership(db, contact, lead):
+    if lead.get('deleted_at'):
+        raise ValueError('Deleted prospect cannot verify recipients or start outreach')
     from .profiles import assert_profile_review, source_allowed
     if not outreach_email_allowed(contact['email']):
         raise ValueError('Dedicated privacy/security/automated inbox is not a relevant outreach contact')
@@ -146,6 +155,8 @@ def add_contact(db, lead_id, email, source_url, name="", role="", ownership_note
     lead = db.one("SELECT * FROM leads WHERE id=?", (lead_id,))
     if not lead:
         raise ValueError("Lead not found")
+    if lead.get('deleted_at'):
+        raise ValueError('Deleted prospect cannot import contacts')
     if lead.get("lead_kind") == "profile":
         assert_profile_review(db, lead)
     email_domain = email.split("@")[1]
@@ -362,9 +373,13 @@ async def research_lead(db, settings, lead_id, continuation=False, protect_revie
         db.enqueue('professional_research',{'lead_id':lead_id})
 
 
-async def discover_leads(db, settings, query, campaign, country_hint, limit):
+async def discover_leads(db, settings, query, campaign, country_hint, limit, campaign_id=None):
+    from .campaign_manager import assert_target
+    assert_target(db, campaign_id, campaign)
     from .discovery import prospect_candidates
     context = {"run_id": secrets.token_hex(12), "base_query": query, "campaign": campaign, "country_hint": country_hint}
+    if campaign_id:
+        context['campaign_id'] = campaign_id
     db.event("discovery_started", {**context, "limit": limit})
     added = []
     def import_candidate(row):
@@ -373,7 +388,7 @@ async def discover_leads(db, settings, query, campaign, country_hint, limit):
         parts = urlsplit(row["url"])
         website = urlunsplit((parts.scheme, parts.netloc, "/", "", ""))
         try:
-            lid = add_lead(db, row["title"] or domain_of(website), website, campaign, row.get("source_url", row["url"]), country_hint)
+            lid = add_lead(db, row["title"] or domain_of(website), website, campaign, row.get("source_url", row["url"]), country_hint, **({'campaign_id': campaign_id} if campaign_id else {}))
             if db.one("SELECT status FROM leads WHERE id=?", (lid,))["status"] == "new":
                 payload = {'lead_id': lid}
                 if row.get('research_seed_url') and crawl_url(row['research_seed_url']) != crawl_url(website):
@@ -389,7 +404,7 @@ async def discover_leads(db, settings, query, campaign, country_hint, limit):
         match = db.one("SELECT id FROM leads WHERE domain=?", (domain_of(signal["website"]),)) if signal.get("website") else None
         if not signal.get("website") and signal.get("company") and len(set(added)) < limit:
             try:
-                lid = add_profile_lead(db, signal["company"], signal["source_url"], campaign, country_hint)
+                lid = add_profile_lead(db, signal["company"], signal["source_url"], campaign, country_hint, **({'campaign_id': campaign_id} if campaign_id else {}))
                 if db.one("SELECT status FROM leads WHERE id=?", (lid,))["status"] == "new":
                     db.enqueue("research", {"lead_id": lid})
                 if lid not in added:

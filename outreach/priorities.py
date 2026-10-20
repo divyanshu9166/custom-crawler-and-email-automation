@@ -18,7 +18,7 @@ def ranked(db, settings, lead_id=None):
             (SELECT m.state FROM messages m JOIN contacts c ON c.id=m.contact_id WHERE c.lead_id=l.id AND m.step=0 ORDER BY m.id DESC LIMIT 1) initial_email_state,
             EXISTS(SELECT 1 FROM evidence e WHERE e.lead_id=l.id AND e.fetched_at BETWEEN ? AND ?
               AND e.fetched_at>=COALESCE((SELECT created_at FROM crawls WHERE lead_id=l.id ORDER BY id DESC LIMIT 1),0)) current_evidence
-            FROM leads l""" + (' WHERE l.id=?' if lead_id else '') + ' ORDER BY l.id DESC' + ('' if lead_id else ' LIMIT 500'),
+            FROM leads l""" + (' WHERE l.id=?' if lead_id else ' WHERE l.deleted_at IS NULL') + ' ORDER BY l.id DESC' + ('' if lead_id else ' LIMIT 500'),
             (now - 30*86400, now + 60, lead_id) if lead_id else (now - 30*86400, now + 60))
         contacts = view.all('SELECT c.id,c.lead_id,c.email,c.source_url,c.status,c.verification,c.verified_at FROM contacts c WHERE c.lead_id IN (' +
                             ('SELECT id FROM leads WHERE id=?' if lead_id else 'SELECT id FROM leads ORDER BY id DESC LIMIT 500') + ')',

@@ -22,7 +22,7 @@ async function act(fn, message="Saved") {
   try{await refresh();}catch(error){notice(`${message} Dashboard refresh failed: ${error.message}`,true);return;}
   notice(message);
 }
-function view(name){document.querySelectorAll(".view").forEach(el=>el.hidden=el.id!==name);document.querySelectorAll("nav button").forEach(el=>el.classList.toggle("selected",el.dataset.view===name));if(name==="pipeline")refreshPipeline();if(name==="operations")operations();if(name==="discovery")schedules();if(name==="workflow")window.WorkbenchFlow.refresh();if(name==="settings")window.WorkbenchSettings.load();if(name==="learning")loadLearning();}
+function view(name){document.querySelectorAll(".view").forEach(el=>el.hidden=el.id!==name);document.querySelectorAll("nav button").forEach(el=>el.classList.toggle("selected",el.dataset.view===name));if(name==='campaigns'){history.replaceState(null,'','#campaigns');window.WorkbenchCampaigns.refresh();}else if(location.hash==='#campaigns')history.replaceState(null,'',location.pathname+location.search);if(name==="pipeline")refreshPipeline();if(name==="operations")operations();if(name==="discovery"){schedules();window.WorkbenchCampaigns.loadTargets();}if(name==="workflow")window.WorkbenchFlow.refresh();if(name==="settings")window.WorkbenchSettings.load();if(name==="learning")loadLearning();}
 document.querySelectorAll("nav button").forEach(button=>button.onclick=()=>view(button.dataset.view));
 $("#start-discovery").onclick=()=>view("discovery");
 $("#pipeline-find").onclick=()=>view("discovery");
@@ -36,7 +36,7 @@ $("#refresh").onclick=()=>refresh().catch(e=>notice(e.message,true));
 $("#learning-refresh").onclick=loadLearning;
 $("#filter").oninput=renderLeads;
 $("#lead-sort").onchange=renderLeads;
-function formObject(form){return Object.fromEntries(new FormData(form));}
+function formObject(form){const value=Object.fromEntries(new FormData(form));if('campaign_id' in value){if(value.campaign_id)value.campaign_id=Number(value.campaign_id);else delete value.campaign_id;}return value;}
 $("#search-form").onsubmit=event=>{event.preventDefault();const obj=formObject(event.target);obj.limit=Number(obj.limit);const recurring=!!obj.interval_hours;if(recurring)obj.interval_hours=Number(obj.interval_hours);else delete obj.interval_hours;act(()=>api(recurring?"/api/schedules":"/api/discover","POST",obj),recurring?"Recurring research scheduled.":"Search queued.").then(schedules);};
 $("#profile-lead-form").onsubmit=event=>{event.preventDefault();act(()=>api("/api/profile-leads","POST",formObject(event.target)),"Business profile queued for research.");};
 $("#browser-reference-form").onsubmit=event=>{event.preventDefault();const value=formObject(event.target);value.observed_at=new Date(value.observed_at).getTime()/1000;value.public_business_confirmed=event.target.elements.public_business_confirmed.checked;act(()=>api('/api/browser-references','POST',value),'Business reference saved. Check the company research queue.');};
@@ -63,16 +63,17 @@ function renderSourceCoverage(coverage){
   const rows=coverage?.rows||[];
   $("#discovery-source-coverage").innerHTML=rows.length?`<div class="source-coverage-scroll"><table><thead><tr><th>Source</th><th>Signals</th><th>Captured</th><th>Unavailable / stale</th><th>Website candidates</th><th>Recovered via independent sources</th><th>Published email candidates</th></tr></thead><tbody>${rows.map(r=>`<tr><th>${esc(r.source)}</th><td>${Number(r.signals)}</td><td>${Number(r.captured)}</td><td>${Number(r.unavailable)}</td><td>${Number(r.website_candidates)}</td><td>${Number(r.failover_candidates)}</td><td>${Number(r.published_email_candidates)}</td></tr>`).join('')}</tbody></table></div><p class="small">${esc(coverage.scope)}. ${esc(coverage.note)}</p>`:'<p>No platform capture observations recorded yet. Search-run failures remain visible in Workflow → Recent search runs.</p>';
 }
-async function refresh({reloadDetail=true,includeDiagnostics=true}={}){
+async function refresh({reloadDetail=true,includeDiagnostics=true,includePipeline=true}={}){
   const selectedAtStart=currentId;
   const diagnostics=includeDiagnostics?Promise.allSettled([api('/api/source-coverage'),api('/api/source-status')]):null;
-  const [status, leads]=await Promise.all([api("/api/status"),api("/api/leads")]);allLeads=leads;
+  const [status, leads]=await Promise.all([api("/api/status"),includePipeline?api("/api/leads"):Promise.resolve(allLeads)]);allLeads=leads;
   $("#platform-browser-mode").hidden=!status.platform_browser_enabled;
   $("#fxembed-mode").hidden=!status.fxembed_profiles_enabled;
   $("#fxembed-mode").textContent="X bio research uses the free FxEmbed community source. Returned emails are candidates; current publication, inbox ownership and buyer relevance need review.";
   $("#platform-browser-mode").textContent="VPS browser discovery is enabled. "+(status.platform_browser_public_fallback?"Free public search and independent company pages remain available when the platform is held or its website link is missing. ":"Public-source failover is disabled. ")+(Object.keys(status.platform_browser_holds||{}).length?"Operator attention needed: "+JSON.stringify(status.platform_browser_holds):"Sources, business identity and contact ownership still require review.");
   researchRunning=!!status.worker_enabled;
   $("#mode").textContent=status.demo?"Offline demo · fictional prospects":!status.sending_enabled?"Sending off":status.paused?"Sending paused":"Sending enabled";
+  $('#campaign-send-status').textContent=!status.sending_enabled?'Global sending is OFF. Campaign resume and bulk preparation do not enable sending.':status.paused?'Global sending is paused. Campaign queues remain subject to the global pause.':'Global sending is enabled. Only approved, eligible records in open campaign queues can send within mailbox limits.';
   $("#worker-control").textContent=`Research: ${status.worker_enabled?'ON':'OFF'}`;
   $("#resume").disabled=!!status.demo||!status.worker_enabled||!status.sending_enabled;
   $("#resume").title=status.demo?'Offline demo':(!status.worker_enabled||!status.sending_enabled)?'Enable worker and sending in Settings first':'Resume approved eligible sequences';
@@ -136,6 +137,7 @@ async function pollPreparation(id){
 async function loadLead(id){
   clearTimeout(preparationTimer);
   currentId=id;const request=++detailRequest;renderLeads();const data=await api(`/api/leads/${id}`);if(request!==detailRequest||currentId!==id)return;const l=data.lead;const address=new URL(location.href);address.searchParams.set('prospect',String(id));history.replaceState(null,'',address.pathname+address.search+address.hash);
+  if(l.deleted_at){$('#detail').innerHTML=`<section class="panel"><span class="badge">Deleted prospect</span><h2>${esc(l.company)}</h2><p>Deleted ${stamp(l.deleted_at)} · ${esc(l.delete_reason)}</p><p>Pending emails are cancelled. History and suppression are preserved. Restore from Campaigns → Deleted prospects before reviewing further outreach.</p><button id="deleted-campaigns">Open campaigns</button>${data.messages.map(m=>`<details><summary>${esc(m.subject)} · ${esc(m.state)}</summary><pre>${esc(m.body)}</pre></details>`).join('')}</section>`;$('#deleted-campaigns').onclick=()=>view('campaigns');return;}
   let finding=JSON.parse(l.findings||"[]")[0]||{};
   if(!l.service&&finding.review_required===true&&finding.proposal_method==='explicit_public_signal')finding=data.offer_proposals.find(p=>p.service===finding.service)||data.offer_proposals[0]||{};
   const isProfile=l.lead_kind==='profile';
@@ -291,5 +293,9 @@ async function operations(){try{const [status,jobs,events,salesReport,delivery]=
 window.WorkbenchFlow.init({api,esc,notice,view,openLead:id=>{view('pipeline');loadLead(id).catch(e=>notice(e.message,true));}});
 window.WorkbenchWorkspace.initialize();
 window.WorkbenchSettings.init({api,esc,notice,refresh});
-refresh().then(()=>{if(!currentId&&allLeads.length){const requested=Number(new URL(location.href).searchParams.get('prospect'));return loadLead(allLeads.find(l=>l.id===requested)?.id||allLeads[0].id);}}).catch(e=>notice(e.message,true));
+window.WorkbenchCampaigns.init({api,esc,stamp,notice,openDiscovery:()=>view('discovery'),openLead:id=>{view('pipeline');loadLead(id).catch(e=>notice(e.message,true));}});
+const startUrl=new URL(location.href),startInPipeline=startUrl.hash!=='#campaigns'&&(startUrl.searchParams.has('prospect')||startUrl.searchParams.get('view')==='pipeline'||startUrl.hash==='#email-sequence');
+if(startInPipeline){view('pipeline');refresh().then(()=>{if(!currentId){const requested=Number(startUrl.searchParams.get('prospect'));if(Number.isSafeInteger(requested)&&requested>0)return loadLead(requested);if(allLeads.length)return loadLead(allLeads[0].id);}}).catch(e=>notice(e.message,true));}
+else{view('campaigns');refresh({reloadDetail:false,includeDiagnostics:false,includePipeline:false}).catch(e=>notice(e.message,true));}
 setInterval(()=>{if(!document.hidden&&!$('#pipeline').hidden)refreshPipeline();},15000);
+setInterval(()=>{if(!document.hidden&&!$('#campaigns').hidden)window.WorkbenchCampaigns.refresh();},30000);

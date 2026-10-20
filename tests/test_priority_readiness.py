@@ -66,7 +66,7 @@ def test_d2c_priority_rechecks_separate_commerce_evidence(db, settings, prepared
     findings[0]['offer_context'] = {'primary_goal': 'd2c_growth', 'goal_reviewed': True,
         'selling_stage': 'selling_online', 'commerce_evidence_id': eid, 'commerce_quote': quote,
         'd2c_fit_notes': 'Fictional product ownership and shopping process reviewed for this test.'}
-    db.execute("UPDATE leads SET campaign='B',service='store_improvement',findings=? WHERE id=?",
+    db.execute("UPDATE leads SET campaign='B',campaign_id=(SELECT id FROM campaign_groups WHERE goal='B' AND is_default=1),service='store_improvement',findings=? WHERE id=?",
                (json.dumps(findings), lid))
     assert priority(db, settings, prepared)['score'] == 100
     if change == 'missing_source':

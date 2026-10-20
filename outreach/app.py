@@ -6,11 +6,11 @@ import secrets
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Literal
+from typing import Annotated, Literal
 from decimal import Decimal
 
 from fastapi import FastAPI, Depends, HTTPException, Request, Query
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response, StreamingResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials, HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.exceptions import RequestValidationError
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -96,6 +96,7 @@ class LeadInput(Input):
     campaign: Literal["A", "B"]
     source_url: str = Field(max_length=2000)
     country_hint: str = Field(default="", max_length=50)
+    campaign_id: int | None = Field(default=None, ge=1)
 
 
 class ContactInput(Input):
@@ -111,6 +112,7 @@ class ProfileLeadInput(Input):
     profile_url: str = Field(max_length=2000)
     campaign: Literal["A", "B"]
     country_hint: Literal["US", "UK"]
+    campaign_id: int | None = Field(default=None, ge=1)
 
 
 class ProfessionalResearchInput(Input):
@@ -133,6 +135,23 @@ class SearchInput(Input):
     campaign: Literal["A", "B"]
     country_hint: Literal["US", "UK"]
     limit: int = Field(default=10, ge=1, le=30)
+    campaign_id: int | None = Field(default=None, ge=1)
+
+
+class CampaignCreateInput(Input):
+    name: str = Field(min_length=3, max_length=100)
+    goal: Literal['A', 'B']
+
+
+class CampaignStateInput(Input):
+    state: Literal['active', 'paused']
+
+
+class CampaignBulkInput(Input):
+    lead_ids: list[Annotated[int, Field(ge=1, strict=True)]] = Field(min_length=1, max_length=200)
+    action: Literal['assign', 'delete', 'restore', 'prepare']
+    campaign_id: int | None = Field(default=None, ge=1)
+    reason: str = Field(default='', max_length=500)
 
 
 class BrowserReferenceInput(Input):
@@ -490,9 +509,9 @@ def create_app(settings=None):
     @app.get("/static/{name}")
     def static(name: str, request: Request, creds: HTTPBasicCredentials | None = Depends(basic),
                token: HTTPAuthorizationCredentials | None = Depends(bearer)):
-        if name not in {"app.js", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js", "style.css", "login.js"}:
+        if name not in {"app.js", "campaigns-dashboard.js", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js", "style.css", "login.js"}:
             raise HTTPException(404)
-        if name in {"app.js", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js"}:
+        if name in {"app.js", "campaigns-dashboard.js", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js"}:
             auth(request, creds, token)
         return FileResponse(Path(__file__).parent / "static" / name)
 
@@ -693,6 +712,43 @@ def create_app(settings=None):
     def leads():
         return priorities.ranked(db, settings)
 
+    @app.get('/api/campaigns', dependencies=[Depends(auth)])
+    def campaigns_overview():
+        from .campaign_manager import summary
+        return summary(db)
+
+    @app.post('/api/campaigns', dependencies=[Depends(auth)])
+    def create_campaign(value: CampaignCreateInput):
+        from .campaign_manager import create
+        return {'id': create(db, value.name, value.goal)}
+
+    @app.patch('/api/campaigns/{campaign_id}', dependencies=[Depends(auth)])
+    def update_campaign(campaign_id: int, value: CampaignStateInput):
+        from .campaign_manager import set_state
+        return set_state(db, campaign_id, value.state)
+
+    @app.get('/api/campaign-prospects', dependencies=[Depends(auth)])
+    def campaign_prospects(campaign_id: int | None = Query(default=None, ge=1),
+                           state: str = Query(default='all', max_length=30), market: Literal['', 'US', 'UK'] = '',
+                           search: str = Query(default='', max_length=200), deleted: Literal['active', 'deleted', 'all'] = 'active',
+                           limit: int = Query(default=50, ge=1, le=100), offset: int = Query(default=0, ge=0)):
+        from .campaign_manager import prospects
+        return prospects(db, campaign_id=campaign_id, state=state, market=market, search=search, deleted=deleted, limit=limit, offset=offset)
+
+    @app.post('/api/campaign-prospects/bulk', dependencies=[Depends(auth)])
+    def campaign_bulk(value: CampaignBulkInput):
+        from .campaign_manager import bulk
+        return bulk(db, settings, **value.model_dump())
+
+    @app.get('/api/campaign-export', dependencies=[Depends(auth)])
+    def campaign_export(campaign_id: int | None = Query(default=None, ge=1),
+                        state: str = Query(default='all', max_length=30), market: Literal['', 'US', 'UK'] = '',
+                        search: str = Query(default='', max_length=200), deleted: Literal['active', 'deleted', 'all'] = 'active'):
+        from .campaign_manager import export_csv, where
+        filters = dict(campaign_id=campaign_id, state=state, market=market, search=search, deleted=deleted)
+        where(**filters)  # Validate before beginning a streaming response.
+        return StreamingResponse(export_csv(db, **filters), media_type='text/csv', headers={'Content-Disposition': 'attachment; filename=campaign-prospects.csv'})
+
     @app.post("/api/leads", dependencies=[Depends(auth)])
     def new_lead(value: LeadInput):
         lead_id = add_lead(db, **value.model_dump())
@@ -705,7 +761,7 @@ def create_app(settings=None):
             raise ValueError("Import up to 500 rows at a time")
         for number, row in enumerate(rows, 2):
             try:
-                parsed = LeadInput(**{key: row.get(key, "") for key in LeadInput.model_fields})
+                parsed = LeadInput(**{key: row[key] for key in LeadInput.model_fields if row.get(key)})
                 lid = add_lead(db, **parsed.model_dump())
                 if row.get("email"):
                     cid = add_contact(db, lid, row["email"], row.get("email_source") or row["source_url"], row.get("name", ""), row.get("role", ""))
@@ -718,7 +774,9 @@ def create_app(settings=None):
 
     @app.post("/api/discover", dependencies=[Depends(auth)])
     def discover(value: SearchInput):
-        return {"job_id": db.enqueue("discover", value.model_dump())}
+        from .campaign_manager import assert_target
+        assert_target(db, value.campaign_id, value.campaign)
+        return {"job_id": db.enqueue("discover", value.model_dump(exclude_none=True))}
 
     @app.get("/api/schedules", dependencies=[Depends(auth)])
     def schedules():
@@ -726,8 +784,10 @@ def create_app(settings=None):
 
     @app.post("/api/schedules", dependencies=[Depends(auth)])
     def add_schedule(value: ScheduleInput):
-        sid = db.execute("INSERT INTO schedules(query,campaign,country_hint,result_limit,interval_hours,next_run) VALUES(?,?,?,?,?,?)",
-                         (value.query, value.campaign, value.country_hint, value.limit, value.interval_hours, time.time()))
+        from .campaign_manager import assert_target
+        assert_target(db, value.campaign_id, value.campaign)
+        sid = db.execute("INSERT INTO schedules(query,campaign,country_hint,result_limit,interval_hours,next_run,campaign_id) VALUES(?,?,?,?,?,?,?)",
+                         (value.query, value.campaign, value.country_hint, value.limit, value.interval_hours, time.time(), value.campaign_id))
         return {"id": sid}
 
     @app.delete("/api/schedules/{schedule_id}", dependencies=[Depends(auth)])

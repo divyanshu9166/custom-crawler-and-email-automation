@@ -182,7 +182,7 @@ def test_unsupported_assessments_stay_held_without_drafts(db, settings, prospect
     elif problem == 'whatsapp_permission':
         r.update(service='whatsapp_automation', channel_fit_status='confirmed', customer_permission_status='confirmed')
     elif problem == 'campaign_b':
-        db.execute("UPDATE leads SET campaign='B' WHERE id=?", (lid,))
+        db.execute("UPDATE leads SET campaign='B',campaign_id=(SELECT id FROM campaign_groups WHERE goal='B' AND is_default=1) WHERE id=?", (lid,))
         r.update(service='store_improvement', primary_goal='d2c_growth')
     else:
         r.update(country='US', timezone='America/New_York')

@@ -27,13 +27,13 @@ def test_country_evidence_must_match_saved_source(db, prepared, bad):
 
 
 def test_campaign_b_rejects_non_d2c_website_offer(db, prepared):
-    db.execute("UPDATE leads SET campaign='B' WHERE id=?", (prepared["lead_id"],))
+    db.execute("UPDATE leads SET campaign='B',campaign_id=(SELECT id FROM campaign_groups WHERE goal='B' AND is_default=1) WHERE id=?", (prepared["lead_id"],))
     with pytest.raises(ValueError, match="Campaign B"):
         review_lead(db, prepared["lead_id"], review_payload(db, prepared))
 
 
 def test_whatsapp_requires_recorded_channel_fit(db, prepared):
-    db.execute("UPDATE leads SET campaign='B' WHERE id=?", (prepared["lead_id"],))
+    db.execute("UPDATE leads SET campaign='B',campaign_id=(SELECT id FROM campaign_groups WHERE goal='B' AND is_default=1) WHERE id=?", (prepared["lead_id"],))
     review = {**review_payload(db, prepared), "service": "whatsapp_automation"}
     with pytest.raises(ValueError, match="WhatsApp channel fit"):
         review_lead(db, prepared["lead_id"], review)

@@ -25,7 +25,7 @@ def value(kind, prepared):
 def test_each_value_artifact_is_sourced_reviewable_and_deliverable(client, db, prepared, kind):
     lid = prepared["lead_id"]
     if kind == "whatsapp_flow":
-        db.execute("UPDATE leads SET campaign='B' WHERE id=?", (lid,))
+        db.execute("UPDATE leads SET campaign='B',campaign_id=(SELECT id FROM campaign_groups WHERE goal='B' AND is_default=1) WHERE id=?", (lid,))
         review = {**review_payload(db, prepared), "service": "whatsapp_automation", "channel_fit_notes": "Illustrative channel context; qualify permission and actual customer fit before any pilot."}
         db.execute('UPDATE evidence SET text=text || ? WHERE id=?', (' We sell our own products online to consumers.', prepared['evidence_id']))
         review.update(selling_stage='selling_online', commerce_evidence_id=prepared['evidence_id'],

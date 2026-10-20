@@ -51,7 +51,7 @@ def test_approval_snapshot_is_atomic_and_survives_later_business_label_changes(d
     assert snapshot == {'lead_id': lid, 'campaign': 'A', 'country': 'UK', 'service': 'website_improvement',
                         'industry': '', 'prospect_kind': 'website'}
     accepted_fixture(db, cid)
-    db.execute("UPDATE leads SET campaign='B',country='US',service='whatsapp_automation' WHERE id=?", (lid,))
+    db.execute("UPDATE leads SET campaign='B',campaign_id=(SELECT id FROM campaign_groups WHERE goal='B' AND is_default=1),country='US',service='whatsapp_automation' WHERE id=?", (lid,))
     cohort = report(db)['cohorts'][0]
     assert (cohort['campaign'], cohort['country'], cohort['service']) == ('A', 'UK', 'website_improvement')
     assert cohort['attribution'] == 'approval_snapshot'

@@ -688,7 +688,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.locator('[name="username"]').fill('fixture-admin')
             page.locator('[name="password"]').fill(changed_password)
             page.get_by_role('button',name='Sign in',exact=True).click()
-            expect(page.locator('#pipeline')).to_be_visible()
+            expect(page.locator('#campaigns')).to_be_visible()
             assert not errors
             browser.close()
         print("Browser smoke passed: auth, source-backed research, template-demo hold and missing AI writer configuration, demo isolation, shared activity, sales qualification, tasks, proposal creation/review, artifact creation/review/export, offline HTML rendering and FAQ interaction, sourced inbox candidate/ownership review, mobile layout, unsafe approval rejection, committed-action/refresh-failure feedback historical-source exclusion from new review and profile-only qualification/contact workflow and writer configuration hold, connected node drag/zoom/status map, private mailbox-settings save and credential-change/re-login, campaign learning empty/nonzero rates and escaped cohort labels, priority ordering, financial entry/void arithmetic, permission-reviewed case study lifecycle and post-client plans; zero JS errors.")

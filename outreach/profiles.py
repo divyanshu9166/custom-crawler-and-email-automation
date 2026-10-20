@@ -69,7 +69,9 @@ def source_allowed(lead, url, db=None, email=None):
     return False
 
 
-def add_profile_lead(db, company, profile_url, campaign, country_hint=""):
+def add_profile_lead(db, company, profile_url, campaign, country_hint="", campaign_id=None):
+    from .campaign_manager import assert_target
+    assert_target(db, campaign_id, campaign)
     profile_url = canonical_profile(profile_url)
     if campaign not in {"A", "B"} or len(company.strip()) < 2 or country_hint not in {"US", "UK"}:
         raise ValueError("Provide a business name and Campaign A or B")
@@ -80,11 +82,14 @@ def add_profile_lead(db, company, profile_url, campaign, country_hint=""):
     now = time.time()
     with db.connect() as con:
         con.execute("""INSERT OR IGNORE INTO leads(domain,website,company,campaign,source_url,research_notes,
-            created_at,updated_at,lead_kind,profile_url,website_status,discovery_country) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)""",
+            created_at,updated_at,lead_kind,profile_url,website_status,discovery_country,campaign_id) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                     (key, "", company.strip()[:200], campaign, profile_url,
                      f"Profile discovery country hint: {country_hint or 'unknown'}; identity, activity and website status need research/review.",
-                     now, now, "profile", profile_url, "not_checked", country_hint))
-        return con.execute("SELECT id FROM leads WHERE domain=?", (key,)).fetchone()[0]
+                     now, now, "profile", profile_url, "not_checked", country_hint, campaign_id))
+        row = con.execute('SELECT id,campaign_id,deleted_at FROM leads WHERE domain=?', (key,)).fetchone()
+        if row['deleted_at'] or (campaign_id and row['campaign_id'] != campaign_id):
+            raise ValueError('Existing prospect is deleted or belongs to another campaign; review it explicitly')
+        return row['id']
 
 
 def assert_profile_review(db, lead):
@@ -150,7 +155,7 @@ async def research_profile(db, settings, lead):
             finding = None
             report["errors"].append({"stage": "profile", "reason": snapshot.get("state", "unavailable")})
         if signal.get("website"):
-            target = add_lead(db, lead["company"], signal["website"], lead["campaign"], lead["profile_url"], _country_hint(lead))
+            target = add_lead(db, lead["company"], signal["website"], lead["campaign"], lead["profile_url"], _country_hint(lead), campaign_id=lead.get("campaign_id"))
             if db.one("SELECT status FROM leads WHERE id=?", (target,))["status"] == "new":
                 payload = {'lead_id': target}
                 if signal.get('official_match_url') and crawl_url(signal['official_match_url']) != crawl_url(signal['website']):
