@@ -383,6 +383,8 @@ def resume_contact(db, settings, contact_id, note, next_at):
         raise ValueError("Only held, unsuppressed contacts may resume; replied or closed conversations stay stopped")
     if db.one("SELECT id FROM messages WHERE contact_id=? AND state='uncertain'", (contact_id,)):
         raise ValueError("Reconcile uncertain sends first")
+    if db.one("SELECT id FROM messages WHERE contact_id=? AND state='failed'", (contact_id,)):
+        raise ValueError('A failed message requires delivery review; do not skip it or reset its retry budget')
     if (not contact["reviewed_at"] or contact["verification"] != "safe" or not contact["verified_at"]
             or time.time() - contact["verified_at"] > settings.verification_max_age_hours * 3600):
         raise ValueError("Previous sequence approval and a fresh safe verification are required")
@@ -398,7 +400,7 @@ def resume_contact(db, settings, contact_id, note, next_at):
         if (current["status"] != "hold" or current["verification"] != "safe"
                 or current["verified_at"] != contact["verified_at"]
                 or con.execute("SELECT 1 FROM suppression WHERE email=?", (contact["email"],)).fetchone()
-                or con.execute("SELECT 1 FROM messages WHERE contact_id=? AND state='uncertain'", (contact_id,)).fetchone()):
+                or con.execute("SELECT 1 FROM messages WHERE contact_id=? AND state IN ('uncertain','failed')", (contact_id,)).fetchone()):
             raise ValueError("Contact changed during resume; reload and review its conversation")
         pending = con.execute("SELECT * FROM messages WHERE contact_id=? AND state IN ('draft','queued','cancelled') ORDER BY step", (contact_id,)).fetchall()
         if not pending:

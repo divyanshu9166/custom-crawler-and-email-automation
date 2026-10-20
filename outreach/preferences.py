@@ -11,7 +11,7 @@ from .web import normalize_email
 MAIL_FIELDS = {"sender_name", "sender_company", "sender_email", "sender_website", "postal_address",
                "smtp_host", "smtp_port", "smtp_user", "smtp_password", "smtp_security",
                "imap_host", "imap_port", "imap_user", "imap_password", "imap_folder",
-               "daily_send_limit", "min_send_interval_seconds", "send_hour_start", "send_hour_end", "domain_auth_confirmed"}
+               "daily_send_limit", "hourly_send_limit", "min_send_interval_seconds", "send_hour_start", "send_hour_end", "domain_auth_confirmed"}
 AUTH_FIELDS = {"admin_user", "admin_password_hash", "session_version"}
 WRITER_FIELDS = {'draft_api_url', 'draft_api_key', 'draft_model', 'draft_timeout_seconds'}
 RUNTIME_FIELDS = {'worker_enabled', 'sending_enabled'}

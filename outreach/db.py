@@ -109,6 +109,16 @@ CREATE INDEX IF NOT EXISTS events_kind_recent ON events(kind,id);
 CREATE INDEX IF NOT EXISTS crawls_company ON crawls(lead_id,id);
 CREATE INDEX IF NOT EXISTS contacts_company ON contacts(lead_id);
 CREATE INDEX IF NOT EXISTS events_contact_kind ON events(contact_id,kind,created_at);
+CREATE TABLE IF NOT EXISTS send_attempts (
+ id INTEGER PRIMARY KEY, message_id INTEGER NOT NULL REFERENCES messages(id),
+ mailbox TEXT NOT NULL, started_at REAL NOT NULL, finished_at REAL,
+ outcome TEXT NOT NULL DEFAULT 'sending', smtp_code INTEGER, error TEXT NOT NULL DEFAULT ''
+);
+CREATE INDEX IF NOT EXISTS attempts_mailbox ON send_attempts(mailbox,started_at);
+CREATE INDEX IF NOT EXISTS attempts_message ON send_attempts(message_id,id);
+CREATE TABLE IF NOT EXISTS inbound_receipts (
+ fingerprint TEXT PRIMARY KEY, contact_id INTEGER NOT NULL REFERENCES contacts(id), created_at REAL NOT NULL
+);
 """
 
 
@@ -117,7 +127,8 @@ class DB:
         self.path = path
         path.parent.mkdir(parents=True, exist_ok=True)
         with self.connect() as con:
-            if con.execute("PRAGMA user_version").fetchone()[0] > 4:
+            version = con.execute("PRAGMA user_version").fetchone()[0]
+            if version > 5:
                 raise RuntimeError("Database belongs to a newer application version")
             con.executescript(SCHEMA)
             columns = {r[1] for r in con.execute("PRAGMA table_info(leads)")}
@@ -130,7 +141,17 @@ class DB:
             }.items():
                 if name not in columns:
                     con.execute(f"ALTER TABLE leads ADD COLUMN {name} {definition}")
-            con.execute("PRAGMA user_version=4")
+            columns = {r[1] for r in con.execute('PRAGMA table_info(contacts)')}
+            if 'delivery_state' not in columns:
+                con.execute("ALTER TABLE contacts ADD COLUMN delivery_state TEXT NOT NULL DEFAULT '' CHECK(delivery_state IN ('','SENT','BOUNCED','REPLIED','UNSUBSCRIBED'))")
+            if version < 5:
+                con.execute("""UPDATE contacts SET delivery_state=CASE
+                    WHEN EXISTS(SELECT 1 FROM suppression s WHERE s.email=contacts.email AND (lower(s.reason) LIKE '%bounce%' OR s.reason='SMTP permanent recipient rejection')) THEN 'BOUNCED'
+                    WHEN status='suppressed' OR EXISTS(SELECT 1 FROM suppression s WHERE s.email=contacts.email) THEN 'UNSUBSCRIBED'
+                    WHEN status='replied' THEN 'REPLIED'
+                    WHEN EXISTS(SELECT 1 FROM messages m WHERE m.contact_id=contacts.id AND m.sent_at IS NOT NULL) THEN 'SENT'
+                    ELSE '' END""")
+            con.execute("PRAGMA user_version=5")
 
     @contextmanager
     def connect(self):
@@ -208,14 +229,20 @@ class DB:
             con.execute("UPDATE jobs SET state='pending' WHERE state='running'")
             con.execute("UPDATE contacts SET status='hold' WHERE status='active' AND id IN (SELECT contact_id FROM messages WHERE state='sending')")
             con.execute("UPDATE messages SET state='uncertain',error='Process restarted during send; reconcile manually' WHERE state='sending'")
+            con.execute("UPDATE send_attempts SET outcome='uncertain',finished_at=?,error='Process restarted during send; reconcile manually' WHERE outcome='sending'", (time.time(),))
 
-    def suppress(self, email, reason, con=None):
+    def suppress(self, email, reason, con=None, *, state=None):
         if con is None:
             with self.connect() as connection:
-                self.suppress(email, reason, connection)
+                connection.execute('BEGIN IMMEDIATE')
+                self.suppress(email, reason, connection, state=state)
             return
         email = email.strip().lower()
+        state = state or ('BOUNCED' if reason in {'bounce', 'SMTP permanent recipient rejection'} else 'UNSUBSCRIBED')
+        if state not in {'BOUNCED', 'UNSUBSCRIBED'}:
+            raise ValueError('Invalid suppression state')
         con.execute("INSERT INTO suppression VALUES(?,?,?) ON CONFLICT(email) DO UPDATE SET reason=excluded.reason",
                     (email, reason, time.time()))
-        con.execute("UPDATE contacts SET status='suppressed' WHERE email=?", (email,))
+        # A later bounce must never erase an explicit opt-out.
+        con.execute("UPDATE contacts SET status='suppressed',delivery_state=CASE WHEN delivery_state='UNSUBSCRIBED' THEN delivery_state ELSE ? END WHERE email=? COLLATE NOCASE", (state, email))
         con.execute("UPDATE messages SET state='cancelled' WHERE contact_id IN (SELECT id FROM contacts WHERE email=?) AND state IN ('draft','queued')", (email,))

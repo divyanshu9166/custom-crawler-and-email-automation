@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     imap_password: str = ""
     imap_folder: str = "INBOX"
     daily_send_limit: int = Field(20, ge=1, le=500)
+    hourly_send_limit: int = Field(10, ge=1, le=500)
     min_send_interval_seconds: int = Field(180, ge=60)
     send_hour_start: int = Field(9, ge=0, le=23)
     send_hour_end: int = Field(17, ge=1, le=24)
@@ -128,6 +129,7 @@ class Settings(BaseSettings):
         return self.data_dir / "outreach.db"
 
     def sending_gaps(self):
+        from urllib.parse import urlsplit
         required = ["sender_name", "sender_company", "sender_email", "postal_address",
                     "smtp_host", "smtp_user", "smtp_password", "imap_host", "imap_user", "imap_password"]
         gaps = [key for key in required if not getattr(self, key)]
@@ -135,6 +137,9 @@ class Settings(BaseSettings):
             gaps.append("domain_auth_confirmed")
         if not self.public_url.startswith("https://"):
             gaps.append("public_url must be HTTPS for unsubscribe links")
+        host = (urlsplit(self.public_url).hostname or '').lower()
+        if host == 'trycloudflare.com' or host.endswith('.trycloudflare.com'):
+            gaps.append('public_url must use a stable domain for lasting unsubscribe links; quick tunnels expire')
         if self.smtp_security not in {"starttls", "ssl"}:
             gaps.append("smtp_security must be starttls or ssl")
         if self.send_hour_end <= self.send_hour_start:

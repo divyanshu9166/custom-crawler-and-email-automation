@@ -196,4 +196,4 @@ def test_v2_database_migrates_without_losing_data(tmp_path):
     db = DB(path)
     lead = db.one("SELECT * FROM leads")
     assert lead["website"] == "https://bright-demo.com/" and lead["lead_kind"] == "website"
-    assert db.one("PRAGMA user_version")["user_version"] == 4
+    assert db.one("PRAGMA user_version")["user_version"] == 5

@@ -73,6 +73,7 @@ class MailSettingsInput(Input):
     imap_password: str | None = Field(default=None, max_length=1000)
     imap_folder: str | None = Field(default=None, max_length=150)
     daily_send_limit: int | None = Field(default=None, ge=1, le=500)
+    hourly_send_limit: int | None = Field(default=None, ge=1, le=500)
     min_send_interval_seconds: int | None = Field(default=None, ge=60, le=86400)
     send_hour_start: int | None = Field(default=None, ge=0, le=23)
     send_hour_end: int | None = Field(default=None, ge=1, le=24)
@@ -207,6 +208,10 @@ class DraftInput(Input):
 
 class SuppressionInput(Input):
     reason: str = Field(min_length=3, max_length=500)
+
+
+class SuppressionEntryInput(SuppressionInput):
+    email: str = Field(min_length=3, max_length=254)
 
 
 class SequenceRevisionInput(Input):
@@ -640,6 +645,37 @@ def create_app(settings=None):
             db.event("paused", {})
         return {"paused": True}
 
+    @app.get('/api/delivery', dependencies=[Depends(auth)])
+    def delivery(limit: int = Query(default=50, ge=1, le=100), offset: int = Query(default=0, ge=0)):
+        from .mail import mailbox_key, mailbox_usage
+        now = time.time()
+        with db.connect() as con:
+            con.execute('BEGIN')
+            return {
+                'mailbox': mailbox_key(settings), 'daily_limit': settings.daily_send_limit,
+                'hourly_limit': settings.hourly_send_limit,
+                'used_24h': mailbox_usage(con, mailbox_key(settings), now - 86400),
+                'used_1h': mailbox_usage(con, mailbox_key(settings), now - 3600),
+                'states': [dict(r) for r in con.execute("SELECT delivery_state AS state,COUNT(*) AS count FROM contacts WHERE delivery_state<>'' GROUP BY delivery_state")],
+                'queue_counts': [dict(r) for r in con.execute('SELECT state,COUNT(*) AS count FROM messages GROUP BY state')],
+                'queue': [dict(r) for r in con.execute("""SELECT m.id,c.email,c.delivery_state,m.step,m.state,m.due_at,m.error,
+                    (SELECT COUNT(*) FROM send_attempts a WHERE a.message_id=m.id) AS attempts
+                    FROM messages m JOIN contacts c ON c.id=m.contact_id
+                    WHERE m.state IN ('queued','sending','uncertain','failed') ORDER BY m.id DESC LIMIT ? OFFSET ?""", (limit, offset))],
+                'suppressed_count': con.execute('SELECT COUNT(*) FROM suppression').fetchone()[0],
+                'suppression': [dict(r) for r in con.execute('SELECT email,reason,created_at FROM suppression ORDER BY created_at DESC,email LIMIT ? OFFSET ?', (limit, offset))],
+                'attempts': [dict(r) for r in con.execute('SELECT * FROM send_attempts ORDER BY id DESC LIMIT ? OFFSET ?', (limit, offset))],
+                'limit': limit, 'offset': offset,
+                'note': 'SENT means SMTP accepted, not inbox placement. Unknown submissions require manual reconciliation. Budgets use rolling windows; suppression is permanent.'}
+
+    @app.post('/api/suppression', dependencies=[Depends(auth)])
+    def add_suppression(value: SuppressionEntryInput):
+        from .web import normalize_email
+        email = normalize_email(value.email)
+        db.suppress(email, value.reason)
+        db.event('suppressed', {'email': email, 'reason': value.reason})
+        return {'email': email, 'state': 'UNSUBSCRIBED'}
+
     @app.post("/api/resume", dependencies=[Depends(auth)])
     def resume():
         with preferences.lock:
@@ -1048,7 +1084,8 @@ def create_app(settings=None):
         if value.outcome == "sent":
             mark_sent(db, row, time.time(), followups_enabled=settings.followups_enabled)
         else:
-            db.execute("UPDATE messages SET state='draft',due_at=NULL WHERE contact_id=? AND state IN ('uncertain','queued')", (row["contact_id"],))
+            from .mail import reconcile_not_sent
+            reconcile_not_sent(db, row)
         # Never automatically resume after reconciliation: preserve replies/opt-outs received meanwhile.
         db.event("send_reconciled", value.model_dump(), row["contact_id"])
         return {"status": "reconciled", "note": "Contact remains held; inspect its conversation before any further outreach"}
@@ -1085,11 +1122,15 @@ def create_app(settings=None):
 
     @app.post("/unsubscribe/{token}", response_class=HTMLResponse)
     def unsubscribe(token: str):
-        row = db.one("SELECT id,email FROM contacts WHERE unsubscribe_token=?", (token,))
-        if not row:
-            raise HTTPException(404)
-        db.suppress(row["email"], "unsubscribe link")
-        db.event("opt_out", {"channel": "link"}, row["id"])
+        with db.connect() as con:
+            con.execute('BEGIN IMMEDIATE')
+            row = con.execute("SELECT id,email,delivery_state FROM contacts WHERE unsubscribe_token=?", (token,)).fetchone()
+            if not row:
+                raise HTTPException(404)
+            db.suppress(row['email'], 'unsubscribe link', con)
+            if row['delivery_state'] != 'UNSUBSCRIBED':
+                con.execute('INSERT INTO events(kind,contact_id,detail,created_at) VALUES(?,?,?,?)',
+                            ('opt_out', row['id'], '{"channel":"link"}', time.time()))
         return "<h1>You have been unsubscribed.</h1>"
 
     return app

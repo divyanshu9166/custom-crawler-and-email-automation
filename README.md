@@ -77,6 +77,8 @@ Offer suggestions now exclude legal boilerplate, rejected marketplaces, foreign 
 
 **Earlier crawler comparison:** homepage-first scheduling, bounded temporary retries, checked HTML reuse in Chromium and clearer coverage diagnostics are implemented. On the same four sites under the same 180-second diagnostic, saved pages increased from 35 to 36; three sites yielded captures, one remained blocked by HTTP 403, and the published inbox count stayed at one. See [the comparison and limits](docs/CRAWLER_OPTIMIZATION.md).
 
+**Delivery controls (20 October 2026):** explicit `SENT`, `BOUNCED`, `REPLIED`, `UNSUBSCRIBED` outcomes; automatic sequence cancellation, durable suppression, per-mailbox rolling limits, bounded temporary-error retries and one-click unsubscribe. See [delivery controls and deployment requirements](docs/DELIVERY_CONTROLS.md). Sending and automatic follow-ups remain OFF.
+
 ## Architecture
 
 ```text
@@ -88,8 +90,8 @@ SearXNG / optional SerpApi / CSV with official business URLs
   -> saved evidence + business-domain emails + held ownership-review candidates
   -> Reacher: safe / catch_all / risky / invalid / disposable / unknown
   -> review company, country, buyer and ONE service
-  -> generate and edit 4 source-grounded email drafts
-  -> approve eligible contact + all messages
+  -> generate and review one evidence-based email (follow-ups OFF by default)
+  -> approve eligible contact + reviewed email
   -> SMTP -> IMAP replies / bounces -> stop, hold or suppress
 ```
 

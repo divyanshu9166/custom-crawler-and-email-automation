@@ -162,11 +162,13 @@ def add_contact(db, lead_id, email, source_url, name="", role="", ownership_note
             raise ValueError("This inbox is already linked to another company; review shared ownership before proceeding")
         if different_domain and existing and existing["status"] != "new":
             raise ValueError("Existing outreach history: preserve this contact's ownership review")
-        suppressed = con.execute("SELECT 1 FROM suppression WHERE email=?", (email,)).fetchone()
+        suppressed = con.execute("SELECT reason FROM suppression WHERE email=?", (email,)).fetchone()
         con.execute("INSERT OR IGNORE INTO contacts(lead_id,email,name,role,source_url,unsubscribe_token,created_at,status) VALUES(?,?,?,?,?,?,?,?)",
                     (lead_id, email, name[:150], role[:150], source_url, secrets.token_urlsafe(32), time.time(),
                      "suppressed" if suppressed else "new"))
         cid = con.execute("SELECT id FROM contacts WHERE email=?", (email,)).fetchone()[0]
+        if suppressed:
+            db.suppress(email, suppressed['reason'], con)
         if not different_domain and existing and existing['status'] == 'new':
             from .sequence import Reader
             if company_publication(Reader(con), {'email': email, 'source_url': source_url}, lead):
