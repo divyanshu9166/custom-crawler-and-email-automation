@@ -107,6 +107,16 @@ def test_email_can_use_one_underlying_lab_timing_without_a_generic_score(db,prep
             email_writer.validate_output(*args,audit_context=audit)
 
 
+def test_overlong_initial_pitch_is_rejected_before_it_can_replace_copy(db,prepared):
+    lead = db.one('SELECT * FROM leads WHERE id=?',(prepared['lead_id'],))
+    contact = db.one('SELECT * FROM contacts WHERE id=?',(prepared['contact_id'],))
+    value = {'messages':[{'step':0,'subject':'Bright Demo proposal',
+        'body':('Discuss the proposed enquiry improvement. '*30)+'Would a walkthrough help?',
+        'support':[{'evidence_id':prepared['evidence_id'],'quote':'Contact us for a consultation.'}]}]}
+    with pytest.raises(ValueError,match='130 words'):
+        email_writer.validate_output(value,lead,contact,db.all('SELECT * FROM evidence'))
+
+
 @pytest.mark.parametrize('url', ['https://other-demo.com/contact/','http://127.0.0.1/admin', URL+'logout/', URL+'contact/?delete=1', URL+'#contact','mailto:team@bright-demo.com'])
 def test_external_mutating_or_non_navigation_urls_are_not_requested(url):
     value = journey.capture(sample(),sample(),'mobile',IMAGE)

@@ -282,6 +282,8 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
                 raise ValueError('A performance score must retain its score /100 unit')
         if type(step) is not int or step not in range(message_count) or step in steps:
             raise ValueError('AI writing returned invalid or duplicate message steps')
+        if message_count == 1 and isinstance(body, str) and len(body.split()) > 130:
+            raise ValueError('Keep the initial email within 130 words: one observed fact, concrete help, brief optional addition and one question')
         if (not isinstance(subject, str) or not 3 <= len(subject.strip()) <= 150
                 or '\n' in subject or '\r' in subject or not isinstance(body, str)
                 or not 30 <= len(body.strip()) <= 2500):
@@ -440,6 +442,8 @@ prospect that we lack data or analytics about their business.
 ''' if lead.get('service') != 'ai_calling_agent' else CALLING_INSTRUCTIONS
     if lead.get('campaign') == 'A':
         instructions += SOLUTION_INSTRUCTIONS
+    if not settings.followups_enabled:
+        instructions += '\nHard limit: 130 words before the greeting. Use 2-3 short paragraphs. Explain the observation in plain language (largest visible content appeared, not technical paint-timing jargon). Keep one specific implementation, one intended benefit and one small question.\n'
     from .web import EMAIL_RE
     def checked():
         if before_request:
