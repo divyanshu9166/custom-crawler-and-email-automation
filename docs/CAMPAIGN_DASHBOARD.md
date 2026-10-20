@@ -20,7 +20,10 @@ The dashboard has three views instead of one long page:
 and constrains the prospect list. Prospect search/outcome/market/Deleted filters
 affect that list only. Campaign comparison always shows all campaigns so you can
 switch context without clearing filters. Counter cards and message queue rows
-open the matching prospect view; research job rows open Operations.
+open the matching prospect view; automation job rows open Operations. Job counts
+include all associated job kinds, not only website research. Failed job history
+counts stored failed records; a newer run may already have succeeded. Operations
+shows the underlying runs for inspection.
 
 The chart groups persisted acceptance timestamps and reply events by **UTC day**,
 including today and the previous 13 days. Reply events are historical events,
