@@ -41,7 +41,7 @@ def build(audit, service):
             elif metrics.get('total-blocking-time', {}).get('numericValue', 0) > 200 and metrics['total-blocking-time'].get('numericUnit') == 'millisecond':
                 fix = 'Trace the long main-thread tasks in the repeat lab run, then split or defer confirmed noncritical script work and retest the enquiry controls.'
                 test = 'Compare total blocking time under the same lab settings and check keyboard, touch and existing widget interactions after the script changes.'
-            elif metrics.get('cumulative-layout-shift', {}).get('numericValue', 0) > .1:
+            elif metrics.get('cumulative-layout-shift', {}).get('numericValue', 0) > .1 and metrics['cumulative-layout-shift'].get('numericUnit') == 'unitless':
                 fix = 'Inspect the layout-shift trace to identify moving elements, then stabilise their confirmed sizing or insertion behaviour without hiding required content.'
                 test = 'Repeat the same lab layout-shift measurement and check the affected content and controls while the page loads.'
             elif metrics.get('first-contentful-paint', {}).get('numericValue', 0) > 1800 and metrics['first-contentful-paint'].get('numericUnit') == 'millisecond':
@@ -84,6 +84,10 @@ def build(audit, service):
                          'supporting_measurements': supporting_measurements,
                          'report_url': report.get('report_url'),
                          'screenshot': observation.get('screenshot') or report.get('screenshots', {}).get(device)})
+        primary = observation.get('primary_measurement')
+        if primary:
+            flags = observation['fact'].split('. Lighthouse flagged ',1)
+            findings[-1]['fact'] = f'{device} Lighthouse lab largest-contentful-paint: {primary["anchor"]} seconds.'+(' Lighthouse flagged '+flags[1] if len(flags)>1 else '')
     findings.sort(key=lambda f: f.get('priority', 30), reverse=True)
     required = service in IMPROVEMENTS
     ready = bool(findings)

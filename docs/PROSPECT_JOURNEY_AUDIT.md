@@ -13,6 +13,8 @@ These checks extend, rather than replace, Lighthouse observations. An enquiry-li
 
 A low aggregate score alone no longer enables an improvement pitch. A specific supported insight or underlying paint/blocking/layout-shift measurement is required before proposing a matching fix.
 
+The writer can use one validated underlying timing in seconds rather than repeating an aggregate score. LCP must be described as the largest visible content measurement, never total page-load time. Campaign A project guidance is appended to the detailed evidence/fix instructions so it cannot silently discard them; optional additions cannot bypass the specific repair requirement.
+
 ## Automatic workflow
 
 `JOURNEY_AUDIT_ENABLED=true` is the default. Existing automatic visual audits include these checks. For a new website prospect with a published contact, preparation can queue the audit before calling the writer. It resumes after the research job finishes; the dashboard polls through this stage.

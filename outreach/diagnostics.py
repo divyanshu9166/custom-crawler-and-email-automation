@@ -64,9 +64,14 @@ def snapshot(db, lead, now=None):
                 item['measurements'].append(measurement)
                 if score < 90:
                     details = ' Lighthouse flagged '+', '.join(dict.fromkeys(o['title'] for o in measurement['opportunities']))+'.' if measurement['opportunities'] else ''
+                    lcp = measurement['metrics'].get('largest-contentful-paint', {})
+                    primary = ({'metric':'largest-contentful-paint', 'value':lcp['numericValue']/1000,
+                        'anchor':f"{lcp['numericValue']/1000:g}", 'unit':'seconds'}
+                        if lcp.get('numericUnit') == 'millisecond' and lcp.get('numericValue',0) > 2500 else None)
                     result['observations'].append({'ref': f"performance:{event['id']}:{strategy}",
                         'kind': 'lab_measurement', 'fact': f'{strategy} Lighthouse lab performance score: {score}/100.'+details,
-                        'anchor': str(score), 'url': target, 'captured_at': event['created_at']})
+                        'anchor': str(score), 'url': target, 'captured_at': event['created_at'],
+                        **({'primary_measurement':primary} if primary else {})})
             public_report = urlsplit(report.get('report_url', ''))
             if (public_report.scheme == 'https' and public_report.netloc == 'pagespeed.web.dev'
                     and public_report.path.startswith('/analysis/')):

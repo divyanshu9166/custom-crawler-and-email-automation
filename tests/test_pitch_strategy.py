@@ -144,6 +144,8 @@ def test_broader_context_reaches_real_writer_and_changes_invalidate_copy(setting
     seen = []
     def chat(s, instructions, encoded, **kwargs):
         kwargs['before_request']()
+        assert 'primary_measurement is supplied' in instructions
+        assert 'highest-ranked journey finding' in instructions
         packet = json.loads(encoded)
         seen.append(packet)
         assert packet['prospect_solution']['chatbot_status'] == 'present'
@@ -156,7 +158,7 @@ def test_broader_context_reaches_real_writer_and_changes_invalidate_copy(setting
             db.execute('INSERT INTO evidence(lead_id,url,title,text,sha256,fetched_at) VALUES(?,?,?,?,?,?)',
                 (lid,'https://bright-demo.com/faq','FAQ','By Tidio. Questions about booking.', 'new-page',time.time()))
         return json.dumps({'messages':[{'step':0,'subject':'An enquiry journey idea for Bright Demo',
-            'body':'Your mobile Lighthouse lab test scored 51/100. We can improve loading and propose a clearer mobile enquiry layout, keeping your existing assistant. If phone enquiries are relevant, an AI calling agent could collect service and location details and pass a summary to your team. Would a short outline of that project be useful?',
+            'body':'Your mobile Lighthouse lab test scored 51/100. We can adjust font loading so service text appears sooner and propose a clearer mobile enquiry layout, keeping your existing assistant. If phone enquiries are relevant, an AI calling agent could collect service and location details and pass a summary to your team. Would a short outline of that project be useful?',
             'support':[{'evidence_id':prepared['evidence_id'],'quote':'Contact us for a consultation.'}],
             'diagnostic_refs':[packet['audit_context']['observations'][0]['ref']]}]})
     monkeypatch.setattr(email_writer, 'chat', chat)

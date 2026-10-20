@@ -60,6 +60,53 @@ def test_aggregate_low_score_without_underlying_finding_holds_improvement_pitch(
     assert not audit['conclusion']['findings']
 
 
+@pytest.mark.parametrize('metric,value,unit,fragment,ready', [
+    ('largest-contentful-paint',4800,'millisecond','largest visible element',True),
+    ('largest-contentful-paint',4800,'seconds','',False),
+    ('total-blocking-time',350,'millisecond','main-thread tasks',True),
+    ('total-blocking-time',100,'millisecond','',False),
+    ('cumulative-layout-shift',.25,'unitless','layout-shift trace',True),
+    ('cumulative-layout-shift',.25,'millisecond','',False),
+    ('first-contentful-paint',2800,'millisecond','initial rendering path',True),
+    ('first-contentful-paint',800,'millisecond','',False)])
+def test_underlying_lab_metric_has_a_matching_bounded_repair(db,prepared,metric,value,unit,fragment,ready):
+    lid = prepared['lead_id']
+    db.event('performance', {'lead_id':lid,'url':URL,'status':'complete',
+        'strategies':{'mobile':{'score':51,'final_url':URL,
+            'metrics':{metric:{'numericValue':value,'numericUnit':unit}}}}})
+    result = diagnostics.snapshot(db,db.one('SELECT * FROM leads WHERE id=?',(lid,)))['conclusion']
+    assert result['draft_allowed'] is ready
+    if ready:
+        assert fragment in result['findings'][0]['proposed_fix']
+
+
+@pytest.mark.parametrize('wording', ['precise','wrong_unit','whole_page'])
+def test_email_can_use_one_underlying_lab_timing_without_a_generic_score(db,prepared,wording):
+    lid = prepared['lead_id']
+    db.event('performance', {'lead_id':lid,'url':URL,'status':'partial',
+        'strategies':{'mobile':{'score':58,'final_url':URL,
+            'opportunities':[{'id':'font-display-insight'}],
+            'metrics':{'largest-contentful-paint':{'numericValue':13100,'numericUnit':'millisecond'}}}}})
+    lead = db.one('SELECT * FROM leads WHERE id=?',(lid,))
+    audit = diagnostics.snapshot(db,lead)
+    assert '13.1 seconds' in audit['conclusion']['summary']
+    point = audit['observations'][0]
+    observation = ('largest visible content took 13.1 seconds' if wording == 'precise' else
+        'largest visible content took 13.1 milliseconds' if wording == 'wrong_unit' else 'the whole page loaded in 13.1 seconds')
+    body = ('In our mobile Lighthouse lab test for Bright Demo, '+observation+'. '
+        'I can adjust font loading so service text appears sooner, then retest the existing enquiry journey. '
+        'Would a short walkthrough of the proposed fix be useful?')
+    output = {'messages':[{'step':0,'subject':'Bright Demo enquiry journey','body':body,
+        'diagnostic_refs':[point['ref']],
+        'support':[{'evidence_id':prepared['evidence_id'],'quote':'Contact us for a consultation.'}]}]}
+    args = (output,lead,db.one('SELECT * FROM contacts WHERE id=?',(prepared['contact_id'],)),db.all('SELECT * FROM evidence'))
+    if wording == 'precise':
+        assert email_writer.validate_output(*args,audit_context=audit)
+    else:
+        with pytest.raises(ValueError):
+            email_writer.validate_output(*args,audit_context=audit)
+
+
 @pytest.mark.parametrize('url', ['https://other-demo.com/contact/','http://127.0.0.1/admin', URL+'logout/', URL+'contact/?delete=1', URL+'#contact','mailto:team@bright-demo.com'])
 def test_external_mutating_or_non_navigation_urls_are_not_requested(url):
     value = journey.capture(sample(),sample(),'mobile',IMAGE)
