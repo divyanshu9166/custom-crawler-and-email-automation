@@ -169,7 +169,14 @@ window.WorkbenchWorkspace = {
     const pitch = document.createElement('section');
     pitch.className = 'pitch-summary';
     pitch.setAttribute('aria-label', 'Research conclusion');
-    const held = conclusion && !conclusion.draft_allowed;
+    const assessmentHeld = !hasEmail && data.preparation?.result?.state === 'needs_evidence' && l.lead_kind !== 'profile' && !best;
+    const held = conclusion && (!conclusion.draft_allowed || assessmentHeld);
+    const performanceReport = audits?.reports.find(r=>r.kind==='performance');
+    const gapExplanation = assessmentHeld ? 'Research is saved, but no current reproducible website problem supports this offer. '+
+      (performanceReport?.quota_limited ? 'PageSpeed was blocked by provider quota; configure working PageSpeed access before retrying.' :
+       performanceReport?.state === 'not_run' ? 'PageSpeed has not been measured. Run the PageSpeed audit to check loading performance.' :
+       ['failed','stale','target_unverified'].includes(performanceReport?.state) ? 'The PageSpeed report is unavailable or not current. Resolve the audit issue before retrying.' :
+       'The available checks have not established a suitable problem-led offer. Further business evidence is needed; a draft is not guaranteed.') : '';
     pitch.innerHTML = `<div class="pitch-heading"><span class="eyebrow">THE OFFER AT A GLANCE</span><span class="workspace-pill">${held ? 'More evidence needed' : best ? 'Measured finding' : 'Proposed opportunity'}</span></div><h3>${held ? 'Improvement pitch on hold' : 'What we found & how we can help'}</h3><div class="pitch-points"><div><span>01 · What we found</span><p>${esc(best?.fact || (held ? conclusion.summary : evidence && finding.quote ? finding.quote : 'Research is still establishing a relevant offer.'))}</p></div><div><span>02 · What we can do</span><p>${esc(best?.proposed_fix || (held ? 'Wait for a current, reproducible finding before proposing a website fix.' : finding.suggestion || 'Select a source-backed service after research.'))}</p></div><div><span>03 · Intended benefit</span><p>${esc(best?.intended_benefit || 'Confirm the business goal and usefulness of the proposed change before implementation. No client result has been measured.')}</p></div></div><details class="quick-evidence"><summary>View supporting evidence</summary>${best ? `<p>${esc(best.fact)}</p>${link(best.report_url || best.url)}<p class="small">${new Date(best.captured_at*1000).toLocaleString()} · Lab/capture evidence; customer impact is unconfirmed.</p>` : evidence && finding.quote ? `<blockquote>${esc(finding.quote)}</blockquote>${link(evidence.url)}` : '<p>No current evidence supports this pitch yet.</p>'}</details>${held && hasEmail ? '<p class="small">Your existing email is preserved. A saved draft is not proof of an identified problem.</p>' : ''}`;
     if (calling?.proposed_work) {
       const points = pitch.querySelectorAll('.pitch-points p');
@@ -202,7 +209,7 @@ window.WorkbenchWorkspace = {
     if (conclusion) {
       const approach = brief.querySelector('.brief-facts > div:last-child p');
       if (approach && conclusion.problem_led_required && conclusion.findings.length) approach.textContent = conclusion.findings[0].proposed_fix;
-      if (!conclusion.draft_allowed) {
+      if (held) {
         steps.children[1]?.classList.remove('done');
         const number = steps.children[1]?.querySelector('span');
         if (number) number.textContent = '2';
@@ -211,7 +218,7 @@ window.WorkbenchWorkspace = {
           preparation.classList.add('is-attention');
           preparation.classList.remove('is-ready');
           preparation.querySelector('h3').textContent = 'Improvement pitch needs evidence';
-          preparation.querySelector('p').textContent = 'Complete a current audit before creating a problem-led email. Any existing draft is preserved for inspection.';
+          preparation.querySelector('p').textContent = gapExplanation || 'Complete a current audit before creating a problem-led email. Any existing draft is preserved for inspection.';
           preparation.querySelector('.eyebrow').textContent = 'FINDING NEEDED';
         }
       }
@@ -219,7 +226,7 @@ window.WorkbenchWorkspace = {
       section.className = 'panel research-conclusion';
       section.setAttribute('aria-label','Diagnostic details');
       section.innerHTML = `<span class="eyebrow">RESEARCH CONCLUSION</span><h3>${conclusion.state === 'finding_ready' ? 'Finding → proposed fix' : conclusion.problem_led_required ? 'Improvement pitch on hold' : 'No verified website problem'}</h3><p>${esc(conclusion.summary)}</p>${conclusion.findings.slice(0,1).map(f => `<p><strong>Proposed fix:</strong> ${esc(f.proposed_fix)}</p><p><strong>How to verify:</strong> ${esc(f.verification)}</p><details><summary>Evidence & reproduction steps</summary>${link(f.url)}<p>${esc(f.fact)} · ${new Date(f.captured_at*1000).toLocaleString()}</p><p>${esc(f.reproduce)}</p>${f.screenshot ? `<a href="/api/screenshots/${encodeURIComponent(f.screenshot)}" target="_blank" rel="noopener">View capture</a>` : '<p>Evidence: saved lab/capture report; no screenshot linked to this finding.</p>'}<p>${esc(f.limitations)}</p></details>`).join('')}<p>${esc(conclusion.next_action)}</p>${hasEmail && !conclusion.draft_allowed ? '<p>Your existing email is preserved. It is not evidence of an identified problem; do not use it as a problem-led pitch.</p>' : ''}`;
-      if (!conclusion.draft_allowed) {
+      if (held) {
         const actions = document.createElement('div');
         actions.className = 'actions';
         for (const id of ['screenshot', 'performance']) {
@@ -264,7 +271,7 @@ window.WorkbenchWorkspace = {
         const control = !hasSource ? detail.querySelector('#research-again') : !data.contacts.length ? detail.querySelector('#contact-research') : prepare;
         if (control) {
           control.classList.add('primary');
-          control.textContent = !hasSource ? 'Research business' : !data.contacts.length ? 'Find a contact' : held && audits?.journey_audit_available ? 'Check journey & prepare email' : 'Create email';
+          control.textContent = !hasSource ? 'Research business' : !data.contacts.length ? 'Find a contact' : held && audits?.journey_audit_available ? 'Check journey & prepare email' : assessmentHeld ? 'Retry offer assessment' : 'Create email';
           preparation.querySelector('.next-action-controls').append(control);
         }
       }

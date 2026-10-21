@@ -1,3 +1,17 @@
+## Explain unsupported website offers — 21 October 2026
+
+Lead 18 has saved source text, a partial screenshot capture and a checked journey
+with no validated observations; PageSpeed was not run. A live on-demand audit
+returned HTTP 429 for both mobile and desktop with no scores. No PageSpeed API
+key is configured. This is an external audit-access gap, not a demonstrated
+website defect or an AI authentication failure.
+
+Website prospects held by assessment now show a held offer, suppress generic
+unsupported solution text, explain current audit gaps/quota and expose audit
+actions. Existing drafts and profile-only flows are preserved. New UI regressions
+cover missing audits and quota-blocked audits. Provider access still needs a
+working quota/key; no complete prospect diagnosis or draft is claimed.
+
 ## Nested hidden HTML and deterministic crawl failures — 21 October 2026
 
 Reproduced AttributeError against the current Dazzle homepage and Total Clean

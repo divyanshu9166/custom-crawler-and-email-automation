@@ -88,3 +88,13 @@ browser queue. Provider latency and other queued draft requests can still delay
 completion; no fixed completion time is promised. Pending requests display
 “Email preparation is queued”; the existing poll changes this to “Preparing your
 email” only after the job starts. Sending controls are unchanged.
+
+### Unsupported offer after preparation
+
+When preparation returns needs_evidence for a website prospect and no validated
+finding exists, the main workspace holds the suggested fix instead of displaying
+an old/generic redesign suggestion. The current diagnostic report explains a
+missing PageSpeed run, a quota block, or an unavailable/stale report. Audit actions
+are visible next to the held offer. Retry offer assessment is not a promise of a
+draft; a site without a supported relevant finding remains held. Profile-only and
+existing-draft flows are preserved.

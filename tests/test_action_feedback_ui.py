@@ -325,3 +325,21 @@ def test_email_preparation_label_tracks_actual_job_state(settings,db,dashboard,p
     page.clock.fast_forward(5000)
     expect(panel.get_by_role('heading')).to_have_text('Preparing your email')
     assert not controls['mutations'] and not errors
+
+@pytest.mark.parametrize('quota',[False,True])
+def test_evidence_hold_explains_missing_audit_and_hides_generic_offer(settings,db,dashboard,prepared,quota):
+    page, controls, _, errors = dashboard
+    lid=prepared['lead_id']
+    db.execute('DELETE FROM messages')
+    db.execute('DELETE FROM events WHERE kind IN (?,?)',('performance','screenshot'))
+    db.execute("UPDATE leads SET status='review' WHERE id=?",(lid,))
+    db.event('preparation',{'lead_id':lid,'state':'needs_evidence','reason':'AI found insufficient support'})
+    if quota:
+        lead=db.one('SELECT website FROM leads WHERE id=?',(lid,))
+        db.event('performance',{'lead_id':lid,'url':lead['website'],'status':'failed','strategies':{},'errors':[{'reason':'HTTP 429'}]})
+    page.goto(settings.public_url+'/?prospect='+str(lid))
+    panel=page.get_by_role('region',name='Email preparation')
+    expect(panel).to_contain_text('provider quota' if quota else 'PageSpeed has not been measured')
+    expect(page.locator('.pitch-summary')).to_contain_text('More evidence needed')
+    expect(page.locator('.pitch-summary #performance')).to_be_visible()
+    assert not controls['mutations'] and not errors
