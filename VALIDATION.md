@@ -1,3 +1,15 @@
+## Independent email preparation worker — 21 October 2026
+
+Added one serial preparation lane separate from long browser research. Existing
+transactional per-prospect exclusion, research freshness checks, draft preservation,
+cancellation, and sending controls are retained. UI distinguishes pending requests
+from running preparation and updates the label through polling.
+
+129 focused worker/preparation/journey/UI/runtime tests passed. The new concurrency
+regression holds research open and verifies an unrelated preparation starts with
+one configured crawl worker. Same-prospect claim exclusion is also tested. Provider
+responses in tests are controlled; this does not guarantee live provider latency.
+
 ## Prospect research status and screenshot readiness — 21 October 2026
 
 Pipeline now shows actual queued/running source jobs, saved page/contact counts and separate screenshot availability. Selected-prospect polling preserves open forms and draft edits; completed research refreshes a clean workspace. Active journey/email preparation remains visible alongside screenshot jobs. Labels no longer infer active research from a stale lead status. The authenticated read-only activity endpoint exposes safe existing screenshot files, distinguishes partial/stale captures, and does not run providers or change settings. Schema 8 is retained with a compatible lead-job lookup index.

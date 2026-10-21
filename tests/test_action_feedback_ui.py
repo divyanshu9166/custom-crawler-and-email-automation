@@ -309,3 +309,19 @@ def test_import_result_counts_and_warning_tone_match_partial_outcome(settings,da
     expect(page.locator('#feedback-notifications .feedback-toast').last).to_have_attribute('data-tone','warning' if row_errors else 'success')
     assert controls['mutations']==['/api/import']
     assert not errors
+
+@pytest.mark.parametrize('mobile',[False,True])
+def test_email_preparation_label_tracks_actual_job_state(settings,db,dashboard,prepared,mobile):
+    page, controls, _, errors = dashboard
+    db.execute('DELETE FROM messages')
+    job = db.enqueue('prepare', {'lead_id':prepared['lead_id']})
+    page.set_viewport_size({'width':390 if mobile else 1440,'height':1000})
+    page.clock.install()
+    page.goto(settings.public_url+'/?prospect='+str(prepared['lead_id']))
+    panel=page.get_by_role('region',name='Email preparation')
+    expect(panel.get_by_role('heading')).to_have_text('Email preparation is queued')
+    expect(panel).to_contain_text('No need to click again')
+    db.execute("UPDATE jobs SET state='running' WHERE id=?",(job,))
+    page.clock.fast_forward(5000)
+    expect(panel.get_by_role('heading')).to_have_text('Preparing your email')
+    assert not controls['mutations'] and not errors

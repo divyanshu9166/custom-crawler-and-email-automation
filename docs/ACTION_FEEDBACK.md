@@ -77,3 +77,14 @@ Real Chromium tests cover desktop/mobile queue acknowledgement, repeat-click pre
 running/completed transitions, refreshed-tab tracking, paused workers, unknown request
 outcomes, offline polling, recorded failure, source-text escaping, settings validation
 and secret-value exclusion. Fixtures run no real provider jobs or email sends.
+
+### Email preparation queue
+
+Email preparation has one dedicated serial worker separate from browser research.
+Unrelated long crawls no longer occupy its worker. The same prospect still cannot
+run source research and preparation concurrently, and current-source and draft
+preservation checks remain enforced. A required journey audit still uses the
+browser queue. Provider latency and other queued draft requests can still delay
+completion; no fixed completion time is promised. Pending requests display
+“Email preparation is queued”; the existing poll changes this to “Preparing your
+email” only after the job starts. Sending controls are unchanged.

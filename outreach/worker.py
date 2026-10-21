@@ -238,8 +238,10 @@ async def run(db, settings, stop):
     # Inbox monitoring/sending never waits behind a long browser crawl. Verification stays serial.
     tasks = [asyncio.create_task(mail_loop(db, settings, stop)),
              asyncio.create_task(monitor_resources(admission, stop)),
-             asyncio.create_task(job_loop(db, settings, stop, {"discover", "verify"}, schedules=True))]
-    tasks.extend(asyncio.create_task(job_loop(db, settings, stop, {"research", "screenshot", "performance", 'contact_research','professional_research','social_research','prepare'}, admission=admission))
+             asyncio.create_task(job_loop(db, settings, stop, {"discover", "verify"}, schedules=True)),
+             # Provider I/O uses a separate serial lane; per-lead exclusion still applies in DB.claim.
+             asyncio.create_task(job_loop(db, settings, stop, {"prepare"}))]
+    tasks.extend(asyncio.create_task(job_loop(db, settings, stop, {"research", "screenshot", "performance", 'contact_research','professional_research','social_research'}, admission=admission))
                  for _ in range(settings.crawl_concurrency))
     try:
         await asyncio.gather(*tasks)
