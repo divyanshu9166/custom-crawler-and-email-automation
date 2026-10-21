@@ -158,7 +158,14 @@ def _assessment(settings, lead, pages, before_request, target_query='', audit_co
         raw = email_writer.chat(settings, INSTRUCTIONS, encoded, before_request=before_request)
         try:
             try:
-                result = json.loads(raw)
+                # Accept a complete JSON code fence, but never extract a guessed object
+                # from arbitrary prose or repair broken/ambiguous JSON.
+                content = raw.strip() if isinstance(raw, str) else raw
+                if isinstance(content, str) and content.startswith('```'):
+                    match = re.fullmatch(r'```(?:json)?\s*\n?(.*?)\n?```', content, re.S)
+                    if match:
+                        content = match[1]
+                result = json.loads(content)
             except (TypeError, json.JSONDecodeError):
                 raise ValueError('AI assessment returned invalid JSON; no qualification or draft saved') from None
             if not isinstance(result, dict) or type(result.get('ready')) is not bool:
@@ -176,6 +183,25 @@ def _assessment(settings, lead, pages, before_request, target_query='', audit_co
                           'Do not claim any feature is absent or invent a pain point.'}
 
 
+def _saved_review(db, lead, pages):
+    """Revalidate an existing qualification before paying AI to reconstruct it."""
+    from .app import ReviewInput
+    from .offers import selected_offer
+    if lead['status'] != 'qualified' or not selected_offer(db, lead):
+        return None
+    finding = (json.loads(lead['findings']) or [{}])[0]
+    values = {**finding, **finding.get('offer_context', {}),
+              **{k: lead[k] for k in ('company', 'country', 'country_source', 'timezone',
+                                    'business_type', 'service', 'fit_notes')}}
+    review = {k: v for k, v in values.items() if k in ReviewInput.model_fields}
+    try:
+        return {'ready': True, 'review': _validate_review(lead, {'ready': True, 'review': review}, pages)}
+    except ValueError:
+        # Stale, incomplete or unsupported qualifications go through assessment
+        # again. A saved label alone never establishes country or offer fit.
+        return None
+
+
 def _validate_review(lead, result, pages):
     # Reuse exactly the same schema and source gates as the manual editor.
     from .app import ReviewInput
@@ -186,11 +212,14 @@ def _validate_review(lead, result, pages):
     if review['company'] != lead['company']:
         raise ValueError('AI assessment changed the business identity')
     by_id = {p['id']: p for p in pages}
-    country_page = next((p for p in pages if p['url'] == review['country_source']), None)
-    quote = review.get('country_quote', '')
+    from .web import crawl_url
+    country_source = crawl_url(review['country_source'])
+    country_page = next((p for p in pages if crawl_url(p['url']) == country_source), None)
+    quote = review.get('country_quote', '').strip()
     pattern = r'\b(?:UK|United Kingdom|England|Scotland|Wales|Northern Ireland)\b' if review['country'] == 'UK' else r'\b(?:USA|United States)\b|\bU\.S\.(?=\W|$)'
-    if not country_page or quote not in country_page['text'] or not re.search(pattern, quote):
+    if not country_page or quote not in country_page['text'] or not re.search(pattern, quote, re.I):
         raise ValueError('Country needs an explicit current source quote; indexed country hints are insufficient')
+    review.update(country_source=country_page['url'], country_quote=quote)
     if review['country'] == 'US':
         cities = {'America/New_York': r'New York|Boston|Miami', 'America/Chicago': r'Chicago|Dallas|Austin',
                   'America/Los_Angeles': r'Los Angeles|San Francisco|Seattle', 'America/Denver': r'Denver',
@@ -291,7 +320,10 @@ def prepare(db, settings, lead_id, *, cancelled=lambda: False):
         contacts_before = db.all('SELECT * FROM contacts WHERE lead_id=? ORDER BY id', (lead_id,))
         discovery = db.one("SELECT detail FROM events WHERE (kind='prospect_signal' AND json_extract(detail,'$.lead_id')=?) OR (kind='discovery' AND EXISTS(SELECT 1 FROM json_each(events.detail,'$.lead_ids') WHERE value=?)) ORDER BY id DESC LIMIT 1", (lead_id, lead_id))
         target_query = json.loads(discovery['detail']).get('query', '') if discovery else ''
-        assessment = _assessment(settings, lead, pages, unchanged, target_query, audit_context)
+        saved_review = _saved_review(db, lead, pages)
+        assessment = saved_review or _assessment(settings, lead, pages, unchanged, target_query, audit_context)
+        if saved_review:
+            state['qualification_basis'] = 'saved_review_revalidated'
         unchanged()
         if not assessment['ready']:
             # Provider text can contain source instructions/PII. Keep a bounded summary only.
@@ -306,9 +338,13 @@ def prepare(db, settings, lead_id, *, cancelled=lambda: False):
         if not conclusion['draft_allowed']:
             record('needs_evidence', conclusion['summary'])
             return
-        # Serialize current-input recheck and qualification using the same SQLite connection.
-        # review_lead performs its own transaction and source-hash checks as well.
-        review_lead(db, lead_id, review, expected_lead=lead, expected_contacts=contacts_before, review_method='research_ai')
+        # New assessments use transactional qualification/source-hash checks.
+        # A reused qualification keeps its original review/provenance; the writer
+        # rechecks the current contact, sources, diagnostics and review before saving.
+        if not saved_review:
+            review_lead(db, lead_id, review, expected_lead=lead, expected_contacts=contacts_before, review_method='research_ai')
+        else:
+            unchanged()
         create_drafts(db, settings, contact['id'], cancelled=cancelled, preserve_existing=True)
         record('drafts_ready', 'AI preparation complete. Review the recipient, source-backed offer and email.',
                contact_id=contact['id'], service=review['service'], source_ids=[p['id'] for p in pages])

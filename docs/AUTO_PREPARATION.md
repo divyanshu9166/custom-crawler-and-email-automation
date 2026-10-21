@@ -16,7 +16,13 @@ not require a separate research-AI key. Worker must be ON; Sending can remain OF
    Include the original discovery query when available so segment relevance is considered.
    Retain a current official company-name source within this budget when the ordinary
    ranking would omit it; only count identity text present in the transmitted context.
-3. Ask the model for either a hold or one source-backed qualification/offer. Validate the
+3. If the prospect is already qualified, revalidate the saved country/offer against current
+   official pages and the same automatic validation gates. A valid qualification goes
+   directly to AI writing, keeping its original review and provenance. Record
+   `qualification_basis=saved_review_revalidated` in the preparation result. Removed,
+   expired, unreviewed or unsupported evidence cannot use this path; country and domain
+   hints never substitute for an exact current source quote.
+   Otherwise ask the model for either a hold or one source-backed qualification/offer. Validate the
    exact country/opportunity quotes against current pages, country/timezone, source ownership,
    business type evidence, campaign goal and D2C/channel context. Reject absence/loss claims,
    helpdesk/recruitment-only sales pitches and generic chatbot pitches when captured text
@@ -24,9 +30,14 @@ not require a separate research-AI key. Worker must be ON; Sending can remain OF
    A locally rejected assessment can receive one correction request with the controlled
    validation error. Both attempts use the same evidence and validation gates; a second
    failure stays held. Provider/network failures are not retried by this correction path.
-4. Apply the same qualification gates as the advanced editor. Record `research_ai` as the
+   Canonicalize country source URLs using the same rules as the advanced editor, including
+   root slashes, host case, ordinary fragments and tracking parameters. The quote must
+   still match the saved page verbatim. Complete JSON code fences are accepted; malformed
+   JSON and prose containing a JSON fragment remain rejected.
+4. Apply the same qualification gates as the advanced editor. For new assessments record `research_ai` as the
    qualification method; this is not a record of human review or confirmed buying authority.
-5. Generate four individual, source-supported AI drafts. Every message stays `draft` with
+5. Generate one initial, source-supported AI email by default. Follow-ups require the
+   separate existing opt-in setting; preparation does not enable them. Every message stays `draft` with
    no due date. Preserve existing messages, human edits and active/held/replied/closed contacts.
    Source/contact/configuration changes during generation discard stale output.
    The writer can correct one locally rejected sequence, using the same strict checks.

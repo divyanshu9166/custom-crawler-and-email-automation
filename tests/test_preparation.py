@@ -49,6 +49,86 @@ def assessment(eid):
         'suggestion': 'Explore a brief outline of cleaning schedule options next to the quote invitation; test usefulness with your team.'}}
 
 
+@pytest.mark.parametrize('source', ['https://bright-demo.com', 'https://BRIGHT-DEMO.com/#contact', 'https://bright-demo.com/?utm_source=research'])
+def test_country_source_uses_same_canonical_url_as_manual_review(db, prospect, source):
+    lid, _, eid = prospect
+    lead = db.one('SELECT * FROM leads WHERE id=?', (lid,))
+    value = assessment(eid)
+    value['review']['country_source'] = source
+    value['review']['country_quote'] = '  provides commercial cleaning across the UK.  '
+    result = preparation._validate_review(lead, value, preparation._pages(db, lead))
+    assert result['country_source'] == 'https://bright-demo.com/'
+    assert result['country_quote'] == 'provides commercial cleaning across the UK.'
+
+
+@pytest.mark.parametrize('format', ['plain', 'fenced', 'prose', 'broken'])
+def test_assessment_accepts_only_complete_json_with_optional_code_fence(db, settings, prospect, monkeypatch, format):
+    lid, _, eid = prospect
+    lead = db.one('SELECT * FROM leads WHERE id=?', (lid,))
+    value = json.dumps(assessment(eid))
+    output = {'plain': value, 'fenced': '```json\n'+value+'\n```',
+              'prose': 'Here is a result: '+value, 'broken': value[:-2]}[format]
+    calls = []
+    def chat(*args, **kwargs):
+        calls.append(True)
+        return output
+    monkeypatch.setattr(email_writer, 'chat', chat)
+    if format in {'prose', 'broken'}:
+        with pytest.raises(ValueError, match='invalid JSON'):
+            preparation._assessment(settings, lead, preparation._pages(db, lead), lambda: None)
+        assert len(calls) == 2
+    else:
+        assert preparation._assessment(settings, lead, preparation._pages(db, lead), lambda: None)['ready']
+        assert len(calls) == 1
+    assert not db.one('SELECT id FROM messages')
+
+
+@pytest.mark.parametrize('change', ['current', 'country_quote_removed', 'expired', 'unreviewed', 'unsafe_claim', 'changed_during_revalidation'])
+def test_qualified_prospect_reuses_only_current_validated_review(db, settings, prospect, monkeypatch, change):
+    from outreach.campaigns import review_lead
+    lid, _, eid = prospect
+    review_lead(db, lid, assessment(eid)['review'])
+    before = db.one('SELECT findings FROM leads WHERE id=?', (lid,))['findings']
+    if change == 'country_quote_removed':
+        db.execute("UPDATE evidence SET text=replace(text,'across the UK','for businesses') WHERE id=?", (eid,))
+    elif change == 'expired':
+        db.execute('UPDATE evidence SET fetched_at=? WHERE id=?', (time.time()-31*86400, eid))
+    elif change in {'unreviewed', 'unsafe_claim'}:
+        finding = json.loads(before)
+        if change == 'unreviewed':
+            finding[0]['review_required'] = True
+        else:
+            finding[0]['observation'] = 'Your website has no form and is losing customers.'
+        db.execute('UPDATE leads SET findings=? WHERE id=?', (json.dumps(finding), lid))
+    calls = []
+    def assess(*_args):
+        calls.append(True)
+        return {'ready': False, 'reason': 'Insufficient current evidence'}
+    monkeypatch.setattr(preparation, '_assessment', assess)
+    if change == 'changed_during_revalidation':
+        original = preparation._saved_review
+        def raced(db, lead, pages):
+            result = original(db, lead, pages)
+            db.execute('UPDATE leads SET fit_notes=? WHERE id=?', ('Newer operator review must be preserved.', lid))
+            return result
+        monkeypatch.setattr(preparation, '_saved_review', raced)
+    if change in {'expired', 'changed_during_revalidation'}:
+        with pytest.raises(ValueError):
+            preparation.prepare(db, settings, lid)
+    else:
+        preparation.prepare(db, settings, lid)
+    if change == 'current':
+        assert not calls
+        assert db.one('SELECT findings FROM leads WHERE id=?', (lid,))['findings'] == before
+        assert preparation.latest(db, lid)['result']['qualification_basis'] == 'saved_review_revalidated'
+        assert all(m['state'] == 'draft' and not m['due_at'] and not m['sent_at'] for m in db.all('SELECT * FROM messages'))
+        assert db.one('SELECT COUNT(*) n FROM messages')['n'] == 4
+    else:
+        assert not db.one('SELECT id FROM messages')
+        assert bool(calls) is (change in {'country_quote_removed', 'unreviewed', 'unsafe_claim'})
+    assert settings.sending_enabled is False
+
+
 def mock_assessment(monkeypatch, value):
     monkeypatch.setattr(preparation, '_assessment', lambda *a: copy.deepcopy(value))
 
