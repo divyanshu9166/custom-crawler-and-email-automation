@@ -1,3 +1,22 @@
+# Visible action feedback and background activity — 21 October 2026
+
+Added shared viewport notifications, accessible button loading states, guarded repeated
+submissions and an Activity panel for the latest 20 jobs started from the current tab.
+Queue acceptance, actual execution, completion, recorded failure and unavailable status
+are distinct. Job status survives tab refresh without storing credentials or payloads.
+Search progress is attributed to the actual worker job ID. The authenticated read-only
+status endpoint uses a compatible event index; schema version remains 8.
+
+The complete suite passed **1,660 tests in 660.52 seconds** with the existing
+Starlette/httpx deprecation warning. The 24 final focused checks include desktop/mobile
+feedback, repeat-click protection, offline/unknown acceptance, imports, secret-safe
+validation and runtime controls. Ruff, JavaScript syntax and all 35 workflow mappings
+passed. The full Chromium application smoke passed with zero JavaScript errors.
+Its concurrent status mock now drains before cleanup, and its map drag scrolls the
+node into the viewport. The runtime-switch test isolates adaptive admission from live
+host CPU; resource pressure retains separate controlled coverage. No real messages
+or provider jobs were submitted by these tests.
+
 # Google Business Profile intake in Campaign 3 — 21 October 2026
 
 Campaign 3 now has its own Find prospects form, named A-goal campaign, public Maps

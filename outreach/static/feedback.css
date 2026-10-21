@@ -1,0 +1,48 @@
+.feedback-stack{position:fixed;right:24px;top:92px;z-index:600;width:min(420px,calc(100vw - 32px));display:grid;gap:10px;pointer-events:none}
+.feedback-toast{display:flex;gap:12px;align-items:flex-start;padding:17px;background:#fff;border:1px solid #e0e6ef;border-left:4px solid #5461d8;border-radius:12px;box-shadow:0 10px 36px #20335426;pointer-events:auto;animation:feedback-enter .16s ease-out}
+.feedback-toast.success{border-left-color:#21866d}
+.feedback-toast.error{border-left-color:#cc4553}
+.feedback-toast.warning{border-left-color:#b57924}
+.feedback-icon{display:grid;place-items:center;flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#edf1ff;color:#5262c9;font-size:14px;font-weight:700}
+.success .feedback-icon{background:#eaf5ef;color:#21866d}
+.error .feedback-icon{background:#fff0f0;color:#cc4553}
+.warning .feedback-icon{background:#fff4df;color:#95631c}
+.feedback-content{min-width:0;flex:1}
+.feedback-content strong{font-size:13px;line-height:1.5}
+.feedback-content p{font-size:12px;line-height:1.65;margin:5px 0 0;color:#62728b;overflow-wrap:anywhere;max-height:130px;overflow:auto}
+.feedback-dismiss{flex-shrink:0;border:0!important;background:transparent!important;color:#6b7890!important;min-height:28px!important;width:28px;padding:0!important;font-size:20px!important}
+.feedback-link{background:transparent!important;border:0!important;color:#4c5ed1!important;padding:6px 0!important;font-size:12px!important;min-height:30px!important;text-align:left}
+.activity-toggle{display:flex;align-items:center;gap:7px;font-size:12px!important;padding:7px 10px!important;min-height:34px!important}
+.activity-count{border-radius:20px;background:#4e5cdd;color:white;min-width:18px;padding:1px 5px;font-size:10px;text-align:center}
+.activity-count[hidden]{display:none}
+.activity-panel{position:fixed;z-index:450;right:0;top:76px;bottom:0;width:min(450px,100vw);padding:24px;background:#fff;border-left:1px solid #dce3ef;box-shadow:-12px 0 40px #1d304a1c;overflow:auto}
+.activity-panel[hidden]{display:none}
+.activity-panel-heading,.activity-job-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.activity-panel h2{font-size:22px;margin:6px 0 14px}
+.activity-job{border:1px solid #e1e6ef;border-radius:12px;padding:16px;margin:12px 0}
+.activity-job strong{font-size:13px}
+.activity-job p,.activity-connection,.feedback-empty{font-size:12px;line-height:1.75;color:#65748b;overflow-wrap:anywhere}
+.activity-job small{display:block;font-size:11px;color:#7d8a9c;margin-top:8px;overflow-wrap:anywhere}
+.activity-state{font-size:10px;color:#5666ce;background:#eef1ff;border-radius:5px;padding:4px 6px;white-space:nowrap}
+.activity-state.done{background:#eaf6f0;color:#28806c}
+.activity-state.failed,.activity-state.cancelled{background:#fff1ee;color:#ae5141}
+.activity-connection:empty{display:none}
+button:is([data-busy=true],[data-action-pending=true]){cursor:progress;position:relative}
+button:is([data-busy=true],[data-action-pending=true])::before,.feedback-toast.loading .feedback-icon::before{content:'';display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:feedback-spin .8s linear infinite;flex-shrink:0}
+button:is([data-busy=true],[data-action-pending=true])::before{margin-right:7px;vertical-align:-2px}
+@keyframes feedback-spin{to{transform:rotate(360deg)}
+}
+@keyframes feedback-enter{from{opacity:0;transform:translateY(-5px)}
+to{opacity:1;transform:translateY(0)}
+}
+@media(max-width:760px){.feedback-stack{top:auto;bottom:16px;right:12px;width:calc(100vw - 24px);gap:8px}
+.feedback-toast{padding:14px}
+.activity-panel{top:0;padding:20px 16px;z-index:550}
+.activity-toggle{font-size:10px!important;min-height:28px!important;padding:4px 7px!important}
+.activity-state{white-space:normal}
+}
+@media(prefers-reduced-motion:reduce){.feedback-toast,button:is([data-busy=true],[data-action-pending=true])::before,.feedback-toast.loading .feedback-icon::before{animation:none}
+}
+
+.activity-job{min-height:0;box-shadow:none}
+

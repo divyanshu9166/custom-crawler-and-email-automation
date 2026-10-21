@@ -60,7 +60,7 @@ async def execute_job(db, settings, job):
         elif job["kind"] == "verify":
             await verify_contact(db, settings, payload["contact_id"])
         elif job["kind"] == "discover":
-            await discover_leads(db, settings, **payload)
+            await discover_leads(db, settings, **payload, job_id=job['id'])
         elif job["kind"] == "screenshot":
             await screenshot(db, settings, payload["lead_id"])
         elif job["kind"] == "performance":

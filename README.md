@@ -291,6 +291,9 @@ Copy backups and relevant screenshot files to private off-host storage. Preserve
 
 ## Tests and readiness
 
+The dashboard now has visible action notifications and an **Activity** panel for queued,
+running and completed work. See [action feedback and job-status meanings](docs/ACTION_FEEDBACK.md).
+
 See [VALIDATION.md](VALIDATION.md) for the latest full-suite, Chromium desktop/mobile and live VPS checks. Controlled browser fixtures establish application behavior, not universal source coverage or mailbox deliverability. The [platform verification record](docs/PLATFORM_BROWSER.md) distinguishes those checks from native browser access.
 
 ```sh

@@ -375,7 +375,7 @@ async def research_lead(db, settings, lead_id, continuation=False, protect_revie
         db.enqueue('professional_research',{'lead_id':lead_id})
 
 
-async def discover_leads(db, settings, query, campaign, country_hint, limit, campaign_id=None, profile_first=False, discovery_source='mixed'):
+async def discover_leads(db, settings, query, campaign, country_hint, limit, campaign_id=None, profile_first=False, discovery_source='mixed', job_id=None):
     from .campaign_manager import assert_target
     assert_target(db, campaign_id, campaign)
     if discovery_source == 'google_maps':
@@ -388,6 +388,8 @@ async def discover_leads(db, settings, query, campaign, country_hint, limit, cam
     else:
         from .discovery import prospect_candidates
     context = {"run_id": secrets.token_hex(12), "base_query": query, "campaign": campaign, "country_hint": country_hint}
+    if job_id is not None:
+        context['job_id'] = job_id
     if discovery_source != 'mixed':
         context['discovery_source'] = discovery_source
     if campaign_id:

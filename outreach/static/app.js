@@ -9,20 +9,35 @@ const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 const stamp = value => value ? new Date(Number(value) * 1000).toLocaleString() : "—";
 const link = url => /^https?:\/\//i.test(url || "") ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(url)}</a>` : esc(url);
-function notice(text, bad=false){$("#notice").textContent=text;$("#notice").className=bad?"error":"";}
+function notice(text, bad=false){$("#notice").textContent=text;$("#notice").className=bad?"error":"";window.WorkbenchFeedback.notice(text,bad);}
 async function api(path, method="GET", payload, options={}){
-  const response=await fetch(path,{method,headers:payload?{"Content-Type":"application/json"}:{},body:payload?JSON.stringify(payload):undefined,signal:options.signal});
-  let result;try{result=await response.json();}catch{throw new Error(`Unexpected server response (HTTP ${response.status}). Check the app/tunnel connection.`);}
-  if(!response.ok)throw new Error(typeof result.detail==="string"?result.detail:JSON.stringify(result.detail));
-  return result;
+  const feedback=options.feedback===false?null:window.WorkbenchFeedback.begin(path,method);
+  try{
+    const response=await fetch(path,{method,headers:payload?{"Content-Type":"application/json"}:{},body:payload?JSON.stringify(payload):undefined,signal:options.signal});
+    let result;try{result=await response.json();}catch{throw new Error(`Unexpected server response (HTTP ${response.status}). Check the app/tunnel connection.${method==='GET'?'':' Request status is unknown; check the saved result or Operations before repeating it.'}`);}
+    if(!response.ok){const error=new Error(typeof result.detail==='string'?result.detail:Array.isArray(result.detail)?result.detail.map(v=>(v.loc||[]).filter(k=>k!=='body').join('.')+': '+v.msg).join('; '):'The request could not be completed.');error.status=response.status;throw error;}
+    if(feedback)window.WorkbenchFeedback.finish(feedback,result);
+    return result;
+  }catch(error){
+    if(error instanceof TypeError)error=new Error(method==='GET'?'Connection unavailable. Displayed information may be outdated.':'Connection interrupted. Request status is unknown; it may already have been accepted. Check the saved result or Operations before repeating it.');
+    if(error.name==='AbortError')error=new Error('Stopped waiting for the response. The server may still finish the request; check its result before retrying.');
+    if(feedback)window.WorkbenchFeedback.fail(feedback,error);
+    throw error;
+  }
 }
 async function act(fn, message="Saved") {
-  notice("Working…");
-  try{await fn();}catch(error){notice(error.message,true);return;}
-  try{await refresh();}catch(error){notice(`${message} Dashboard refresh failed: ${error.message}`,true);return;}
-  notice(message);
+  const release=window.WorkbenchFeedback.action();
+  try{
+    notice("Working…");
+    let result;try{result=await fn();}catch(error){notice(error.message,true);return;}
+    const text=typeof message==='function'?message(result):message;
+    try{await refresh();}catch(error){notice(`${text} Dashboard refresh failed: ${error.message}`,true);return;}
+    notice(text);
+  }finally{release();}
 }
 function view(name){document.querySelectorAll(".view").forEach(el=>el.hidden=el.id!==name);document.querySelectorAll("nav button").forEach(el=>el.classList.toggle("selected",el.dataset.view===name));if(name==='campaigns'){history.replaceState(null,'','#campaigns');window.WorkbenchCampaigns.refresh();}else if(location.hash==='#campaigns')history.replaceState(null,'',location.pathname+location.search);if(name==="pipeline")refreshPipeline();if(name==="operations")operations();if(name==="discovery"){schedules();window.WorkbenchCampaigns.loadTargets();}if(name==="workflow")window.WorkbenchFlow.refresh();if(name==="settings")window.WorkbenchSettings.load();if(name==="learning")loadLearning();}
+
+window.WorkbenchFeedback.init({api,view,workerEnabled:()=>researchRunning,completed:async()=>{await refresh({reloadDetail:false});await window.WorkbenchCampaigns.refresh();},openLead:id=>{view('pipeline');loadLead(id).catch(e=>notice(e.message,true));}});
 document.querySelectorAll("nav button").forEach(button=>button.onclick=()=>view(button.dataset.view));
 $("#start-discovery").onclick=()=>view("discovery");
 $("#pipeline-find").onclick=()=>view("discovery");
@@ -43,7 +58,7 @@ $("#profile-lead-form").onsubmit=event=>{event.preventDefault();act(()=>api("/ap
 $("#browser-reference-form").onsubmit=event=>{event.preventDefault();const value=formObject(event.target);value.observed_at=new Date(value.observed_at).getTime()/1000;value.public_business_confirmed=event.target.elements.public_business_confirmed.checked;act(()=>api('/api/browser-references','POST',value),'Business reference saved. Check the company research queue.');};
 $("#browser-reference-form").elements.observed_at.value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
 $("#lead-form").onsubmit=event=>{event.preventDefault();act(()=>api("/api/leads","POST",{...formObject(event.target),source_url:event.target.elements.source_url.value||event.target.elements.website.value}),"Company queued for research.");};
-$("#csv-form").onsubmit=event=>{event.preventDefault();act(async()=>{const file=$("#csv-file").files[0];if(!file)return;if(file.size>1_000_000)throw new Error("CSV must be under 1 MB");const result=await api("/api/import","POST",{content:await file.text()});$("#import-result").textContent=JSON.stringify(result,null,2);},"Import processed; inspect any row errors below.");};
+$("#csv-form").onsubmit=event=>{event.preventDefault();act(async()=>{const file=$("#csv-file").files[0];if(!file)throw new Error('Choose a CSV file before importing.');if(file.size>1_000_000)throw new Error("CSV must be under 1 MB");const result=await api("/api/import","POST",{content:await file.text()});$("#import-result").textContent=JSON.stringify(result,null,2);return result;},result=>`Import processed: ${result.ids.length} rows accepted; ${result.errors.length} rows need attention. Review row details below.`);};
 async function connectorReferences(){
   const file=$("#connector-file").files[0];
   if(!file||file.size>1_000_000)throw new Error("Choose a connector JSON export under 1 MB.");
@@ -58,8 +73,8 @@ $("#connector-import-form").onsubmit=event=>{event.preventDefault();const form=e
   if(!form.elements.confirmed.checked)throw new Error("Review the references before importing.");
   const refs=await connectorReferences(),result={imported:[],errors:[]};
   for(const [index,r] of refs.entries()){try{const saved=await api('/api/browser-references','POST',{...r,campaign:form.elements.campaign.value,country_hint:form.elements.country_hint.value,public_business_confirmed:true});result.imported.push({row:index+1,company:r.company,...saved});}catch(e){result.errors.push({row:index+1,company:r.company,error:e.message});}}
-  $("#connector-result").textContent=JSON.stringify(result,null,2);
-},"Connector import processed; inspect successes and errors below.");};
+  $("#connector-result").textContent=JSON.stringify(result,null,2);return result;
+},result=>`Connector import processed: ${result.imported.length} references accepted; ${result.errors.length} rows need attention. Review row details below.`);};
 function renderSourceCoverage(coverage){
   const rows=coverage?.rows||[];
   $("#discovery-source-coverage").innerHTML=rows.length?`<div class="source-coverage-scroll"><table><thead><tr><th>Source</th><th>Signals</th><th>Captured</th><th>Unavailable / stale</th><th>Website candidates</th><th>Recovered via independent sources</th><th>Published email candidates</th></tr></thead><tbody>${rows.map(r=>`<tr><th>${esc(r.source)}</th><td>${Number(r.signals)}</td><td>${Number(r.captured)}</td><td>${Number(r.unavailable)}</td><td>${Number(r.website_candidates)}</td><td>${Number(r.failover_candidates)}</td><td>${Number(r.published_email_candidates)}</td></tr>`).join('')}</tbody></table></div><p class="small">${esc(coverage.scope)}. ${esc(coverage.note)}</p>`:'<p>No platform capture observations recorded yet. Search-run failures remain visible in Workflow → Recent search runs.</p>';

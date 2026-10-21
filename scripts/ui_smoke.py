@@ -218,7 +218,9 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             expect(page.locator('#platform-browser-mode')).to_contain_text('Operator attention needed')
             expect(page.locator('#fxembed-mode')).to_contain_text('free FxEmbed community source')
             expect(page.locator('#platform-browser-mode')).to_contain_text('login_or_challenge')
-            page.unroute('**/api/status',managed_status)
+            # Background activity can refresh status concurrently. Drain this
+            # fixture handler before reloading instead of abandoning a fetch.
+            page.unroute_all(behavior='wait')
             page.reload()
             page.locator('nav [data-view="discovery"]').click()
             reference = page.locator('#browser-reference-form')
@@ -487,6 +489,7 @@ with tempfile.TemporaryDirectory(prefix="outreach-ui-") as tmp:
             page.set_viewport_size({'width':1440,'height':1000})
             page.locator('#flow-fit').click()
             before = page.locator('[data-node="discovery"]').evaluate('e=>e.style.left')
+            page.locator('[data-node="discovery"]').scroll_into_view_if_needed()
             box = page.locator('[data-node="discovery"]').bounding_box()
             page.mouse.move(box['x']+40,box['y']+35)
             page.mouse.down()

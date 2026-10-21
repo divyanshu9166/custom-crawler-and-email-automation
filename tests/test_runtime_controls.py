@@ -78,6 +78,9 @@ def test_runtime_storage_failure_leaves_flags_unchanged_and_sending_paused(setti
 
 def test_worker_can_enable_from_dashboard_drain_and_resume_without_restart(settings, db, monkeypatch):
     settings.sending_enabled = False
+    # This checks the runtime switches, not this machine's transient CPU load.
+    # Resource-pressure admission is exercised separately with controlled probes.
+    settings.crawl_adaptive_concurrency = False
     first = db.enqueue('research', {'lead_id': 1})
     started, release, finished, second_finished = Event(), Event(), Event(), Event()
     executed = []

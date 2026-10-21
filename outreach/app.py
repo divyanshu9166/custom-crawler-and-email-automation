@@ -511,9 +511,9 @@ def create_app(settings=None):
     @app.get("/static/{name}")
     def static(name: str, request: Request, creds: HTTPBasicCredentials | None = Depends(basic),
                token: HTTPAuthorizationCredentials | None = Depends(bearer)):
-        if name not in {"app.js", "campaigns-dashboard.js", "campaigns-dashboard.css", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js", "style.css", "login.js"}:
+        if name not in {"app.js", "feedback.js", "feedback.css", "campaigns-dashboard.js", "campaigns-dashboard.css", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js", "style.css", "login.js"}:
             raise HTTPException(404)
-        if name in {"app.js", "campaigns-dashboard.js", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js"}:
+        if name in {"app.js", "feedback.js", "campaigns-dashboard.js", "workspace.js", "sales.js", "growth.js", "workflow.js", "settings.js"}:
             auth(request, creds, token)
         return FileResponse(Path(__file__).parent / "static" / name)
 
@@ -1172,6 +1172,14 @@ def create_app(settings=None):
     @app.get("/api/jobs", dependencies=[Depends(auth)])
     def jobs():
         return db.all("SELECT * FROM jobs ORDER BY id DESC LIMIT 100")
+
+    @app.get('/api/jobs/{job_id}', dependencies=[Depends(auth)])
+    def job_activity(job_id: int):
+        from .activity import job_status
+        result = job_status(db, settings, job_id)
+        if result is None:
+            raise HTTPException(status_code=404, detail='Background job not found')
+        return result
 
     @app.post("/api/jobs/{job_id}/retry", dependencies=[Depends(auth)])
     def retry(job_id: int):

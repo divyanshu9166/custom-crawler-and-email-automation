@@ -183,6 +183,9 @@ class DB:
                 BEGIN SELECT RAISE(ABORT,'Campaign business goal does not match prospect'); END;
             ''')
             con.execute("PRAGMA user_version=8")
+            con.execute("""CREATE INDEX IF NOT EXISTS events_job_activity ON events
+                ((CASE WHEN json_valid(detail) THEN json_extract(detail,'$.job_id') END),id)
+                WHERE kind IN ('discovery_started','discovery_progress','discovery')""")
 
     @contextmanager
     def connect(self):
