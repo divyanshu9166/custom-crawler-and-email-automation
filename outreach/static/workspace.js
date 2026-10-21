@@ -1,5 +1,42 @@
 /* A focused prospect workspace; existing research and sales tools remain available. */
 window.WorkbenchWorkspace = {
+  researchLabel(job) {
+    const names = {research:'Research',screenshot:'Screenshots',performance:'PageSpeed audit',contact_research:'Contact research',professional_research:'Profile research',social_research:'Post research'};
+    return (names[job.kind] || 'Research')+' '+(job.state === 'running' ? 'running' : 'queued');
+  },
+  updateResearchActivity(activity, {esc, reload, refreshNeeded=false}) {
+    const panel = document.querySelector('#prospect-research-status');
+    if (!panel || !activity) return;
+    const job = activity.job, busy = activity.active_jobs.length > 0;
+    const inconsistent = !busy && activity.lead_status === 'researching';
+    const failed = !busy && (job?.state === 'failed' || activity.lead_status === 'research_failed' || inconsistent);
+    const cancelled = !busy && job?.state === 'cancelled';
+    const title = busy ? this.researchLabel(job) : failed ? 'Research needs attention' : cancelled ? 'Research cancelled' : activity.saved_pages ? 'Research saved' : 'Not researched yet';
+    const waiting = busy && job.state === 'pending';
+    const note = busy ? !activity.worker_enabled ? 'Research automation is OFF. This work is saved in the queue; turn Research ON in Settings to continue.' : waiting ?
+      (job.due_at*1000 > Date.now()+2000 ? 'Waiting for the next attempt at '+new Date(job.due_at*1000).toLocaleString()+'. No need to start research again.' : 'Waiting for an available worker. No action needed; you can continue collecting prospects.') :
+      'This prospect is being processed. No action needed; saved results and screenshots update here.' : failed ? job?.error || (inconsistent ? 'No active source job is recorded for this prospect. Saved sources are preserved; inspect Research & audits before retrying.' : 'The latest research pass could not finish. Existing sources are preserved; inspect Research & audits before retrying.') : cancelled ? 'This research job was cancelled. Saved sources are preserved.' :
+      activity.saved_pages ? 'Results from the saved research pass are available. Saved pages do not imply complete website coverage or a verified business problem.' : 'Start business research to collect source pages and published contact details.';
+    const capture = activity.screenshots;
+    const labels = {pending:'Screenshots queued',running:'Capturing desktop & mobile',waiting_for_research:'Screenshots waiting for website research',complete:'Screenshots ready',partial:'Screenshots saved · partial capture',stale:'Older screenshots · refresh needed',target_unverified:'Screenshot website match needs review',failed:'Screenshot capture failed',cancelled:'Screenshot capture cancelled',disabled:'Automatic screenshots OFF',unavailable:'Screenshot files unavailable',not_applicable:'Website screenshots not applicable',not_run:'Screenshots not captured yet'};
+    const old = ['pending','running','waiting_for_research','failed','cancelled'].includes(capture.state) || ['stale','target_unverified'].includes(capture.report_state);
+    panel.className = 'research-progress '+(failed || cancelled ? 'needs-attention' : busy ? 'in-progress' : '');
+    panel.innerHTML = `<div class="research-progress-heading"><div><span class="eyebrow">DATA COLLECTION</span><h3>${esc(title)}</h3></div><span class="workspace-pill">${activity.worker_enabled ? 'Research ON' : 'Research OFF'}</span></div><p role="status">${esc(note)}</p><div class="research-progress-facts"><span><strong>${activity.saved_pages}</strong> saved page contents</span><span><strong>${activity.contacts}</strong> contact records</span></div><div class="research-capture-status"><strong>${esc(labels[capture.state] || 'Screenshot status unavailable')}</strong><p class="small">${capture.state === 'waiting_for_research' ? 'Desktop/mobile capture follows a successful website research pass.' : capture.state === 'partial' ? 'Images are saved, but rendering was incomplete. This alone does not prove a website defect.' : 'Page contents and screenshot images are separate records.'}</p>${Object.entries(capture.files).map(([device,name])=>`<a href="/api/screenshots/${encodeURIComponent(name)}" target="_blank" rel="noopener noreferrer">View ${esc(device)} screenshot${old ? ' (previous capture)' : ''}</a>`).join(' · ')}${capture.state === 'failed' && capture.error ? `<p class="error">${esc(capture.error)}</p>` : ''}</div><p class="small">${activity.auto_prepare_enabled ? 'Automatic email preparation is ON. An eligible prospect can proceed to one unsent draft after research.' : 'Data collection mode · automatic email preparation is OFF. Create email is optional when research is ready.'} Nothing is sent by research.</p>${refreshNeeded ? '<p class="small">New results are saved. Your open form has been preserved.</p><button type="button" data-refresh-research>View updated research</button>' : ''}`;
+    panel.querySelector('[data-refresh-research]')?.addEventListener('click',async event=>{
+      event.currentTarget.disabled=true;
+      try {await reload();} catch (error) {window.WorkbenchFeedback.notice('Research refresh failed: '+error.message,true);panel.querySelector('[data-refresh-research]').disabled=false;}
+    });
+    const step = document.querySelector('[data-research-step]');
+    if (step) {const done = !busy && !failed && !cancelled && activity.saved_pages > 0;step.classList.toggle('done',done);step.innerHTML = `<span>${done ? '✓' : '1'}</span>${busy ? esc(this.researchLabel(job)) : 'Research'}`;}
+    const preparation = document.querySelector('[aria-label="Email preparation"]');
+    if (preparation) preparation.hidden = busy && preparation.dataset.preparationActive !== 'true' && !document.querySelector('[data-edit]');
+    for (const id of ['research-again','continue-research','screenshot','performance','prepare-emails']) {
+      const button = document.getElementById(id); if (!button) continue;
+      const blocked = id === 'prepare-emails' ? busy : id === 'research-again' || id === 'continue-research' ? busy : activity.active_jobs.some(j=>j.kind === 'research' || j.kind === (id === 'screenshot' ? 'screenshot' : 'performance'));
+      if (blocked) {if (!button.dataset.researchBlocked) button.dataset.researchWasDisabled=String(button.disabled);button.dataset.researchBlocked='true';button.disabled=true;button.title='This prospect already has work queued or running. Status updates above.';}
+      else if (button.dataset.researchBlocked && id !== 'prepare-emails') {button.disabled=button.dataset.researchWasDisabled === 'true';delete button.dataset.researchBlocked;button.removeAttribute('title');}
+    }
+  },
   initialize() {
     const writer = document.querySelector('#writer-settings-form');
     const column = writer.parentElement;
@@ -80,7 +117,7 @@ window.WorkbenchWorkspace = {
     advancedBody.prepend(guide);
     const sources = document.createElement('details');
     sources.className = 'saved-sources';
-    sources.innerHTML = `<summary>Saved source pages (${data.evidence.length})</summary><p>Current captures can support the review. Historical captures are retained for reference.</p><div class="source-filters"><input type="search" aria-label="Search saved pages" placeholder="Search saved pages"><select aria-label="Source capture period"><option value="current">Current research</option><option value="history">Historical captures</option><option value="all">All saved pages</option></select></div><p class="source-count" role="status"></p><div class="source-results"></div><button type="button" class="source-more">Show more pages</button>`;
+    sources.innerHTML = `<summary>Saved source pages (${data.evidence.length})</summary><p>Saved page text and metadata, separate from screenshot images. Current captures can support the review. Historical captures are retained for reference.</p><div class="source-filters"><input type="search" aria-label="Search saved pages" placeholder="Search saved pages"><select aria-label="Source capture period"><option value="current">Current research</option><option value="history">Historical captures</option><option value="all">All saved pages</option></select></div><p class="source-count" role="status"></p><div class="source-results"></div><button type="button" class="source-more">Show more pages</button>`;
     const intro = document.createElement('section');
     intro.className = 'prospect-header';
     const l = data.lead;
@@ -94,7 +131,7 @@ window.WorkbenchWorkspace = {
     steps.className = 'workspace-steps';
     const hasSource = data.evidence.some(e => e.current_for_review && e.business_for_review !== false);
     const hasEmail = data.messages.some(m => m.step === 0);
-    steps.innerHTML = [['Research', hasSource], ['Match an offer', !!data.offer_workflow?.selected_service], ['Review email', hasEmail]].map(([label,done],i) => `<li class="${done ? 'done' : ''}"><span>${done ? '✓' : i+1}</span>${label}</li>`).join('');
+    steps.innerHTML = [['Research', hasSource], ['Match an offer', !!data.offer_workflow?.selected_service], ['Review email', hasEmail]].map(([label,done],i) => `<li ${i === 0 ? 'data-research-step' : ''} class="${done ? 'done' : ''}"><span>${done ? '✓' : i+1}</span>${label}</li>`).join('');
     const brief = document.createElement('section');
     brief.className = 'business-brief';
     const evidence = data.evidence.find(e => e.id === finding.evidence_id && e.current_for_review);
@@ -256,6 +293,9 @@ window.WorkbenchWorkspace = {
       heading.classList.add('research-tools');
     }
     detail.replaceChildren(intro, steps);
+    if (data.research_activity) {
+      const progress = document.createElement('section');progress.id='prospect-research-status';progress.setAttribute('aria-label','Research progress');detail.append(progress);
+    }
     if (preparation && !hasEmail) detail.append(preparation);
     else if (preparation) researchTools.append(preparation);
     detail.append(pitch);
@@ -303,6 +343,7 @@ window.WorkbenchWorkspace = {
       detail.append(empty);
     }
     detail.append(advanced);
+    this.updateResearchActivity(data.research_activity, {esc,reload});
     let sourceLimit = 12;
     const sourceNodes = [...sources.querySelectorAll('[data-evidence-id]')];
     const sourceById = new Map(data.evidence.map(e => [String(e.id),e]));

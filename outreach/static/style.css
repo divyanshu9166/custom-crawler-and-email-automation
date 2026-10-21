@@ -47,3 +47,14 @@ body{font-size:14px}header{min-height:76px;padding:16px 28px}header h1{font-size
 @media(max-width:760px){.campaign-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.campaign-cards{grid-template-columns:1fr}.campaign-filters{grid-template-columns:1fr}.campaign-bulk{align-items:stretch;flex-direction:column}.campaign-bulk label{min-width:0;width:100%}.campaign-pagination{align-items:flex-start;flex-direction:column}.campaign-card{padding:18px}.campaign-prospects{padding:18px}.campaign-prospects>.section-head{align-items:flex-start;flex-direction:column}nav button[data-view=campaigns]{order:0}}
 
 .prospect-header:has(.google-business-summary){flex-wrap:wrap}.google-business-summary{flex-basis:100%;padding:16px 18px;border:1px solid var(--line);border-radius:10px;background:#fff;overflow-wrap:anywhere}.google-business-summary p{margin:7px 0;font-size:12px}
+.research-progress{padding:24px 28px;background:#fff;border:1px solid var(--line);border-radius:14px;overflow-wrap:anywhere}
+.research-progress.in-progress{border-color:#cbd3f7;background:#fafbff}
+.research-progress.needs-attention{border-color:#ecd9b7;background:#fffaf1}
+.research-progress-heading{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.research-progress h3{font-size:20px;margin:10px 0}
+.research-progress p{font-size:13px;line-height:1.7;margin:8px 0}
+.research-progress-facts{display:flex;gap:22px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:18px 0}
+.research-progress-facts strong{font-size:17px;color:#243752;margin-right:4px}
+.research-capture-status{border-top:1px solid var(--line);padding-top:15px;font-size:13px}
+.research-capture-status a{display:inline-block;margin:4px 8px 4px 0;font-size:12px}
+@media(max-width:760px){.research-progress{padding:19px}.research-progress-heading{align-items:flex-start;flex-direction:column;gap:3px}.research-progress h3{font-size:18px}.research-progress-facts{gap:12px}}

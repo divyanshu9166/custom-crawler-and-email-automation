@@ -16,7 +16,7 @@ def dashboard(settings):
     settings.sending_enabled = settings.followups_enabled = False
     client = TestClient(create_app(settings), base_url=settings.public_url,
                         headers={'Authorization':'Bearer '+settings.api_token})
-    controls = {'hold': False, 'pending': [], 'mutations': [], 'offline': False, 'failure': None}
+    controls = {'hold': False, 'pending': [], 'mutations': [], 'offline': False, 'activity_offline': False, 'failure': None}
     errors = []
     with sync_playwright() as runtime:
         browser = runtime.chromium.launch()
@@ -31,6 +31,9 @@ def dashboard(settings):
         def route(r):
             assert r.request.url.startswith(settings.public_url+'/')
             path = r.request.url.removeprefix(settings.public_url)
+            if controls['activity_offline'] and path.startswith('/api/leads/') and path.endswith('/activity'):
+                r.abort('failed')
+                return
             if controls['offline'] and path.startswith('/api/jobs/'):
                 r.abort('failed')
                 return
@@ -114,7 +117,116 @@ def test_visible_queue_running_completion_and_refresh_persistence(settings,db,da
     expect(page.locator('#pipeline')).to_be_visible()
     assert not db.one('SELECT 1 FROM send_attempts')
     assert not errors
+
+
+@pytest.mark.parametrize('mobile',[False,True])
+def test_prospect_research_and_screenshot_states_update_in_place_without_losing_edits(settings,db,dashboard,mobile):
+    from outreach.activity import lead_activity
+    settings.auto_prepare_enabled=False
+    page,controls,_,errors=dashboard
+    lid=add_lead(db,'Fictional Swift Fixture','https://swift.example.com','A','https://swift.example.com')
+    db.execute("UPDATE leads SET status='review' WHERE id=?",(lid,))
+    db.execute('INSERT INTO evidence(lead_id,url,title,text,sha256,fetched_at) VALUES(?,?,?,?,?,?)',
+               (lid,'https://swift.example.com/','Fixture source','UK business enquiry source','fixture',time.time()))
+    jid=db.enqueue('research',{'lead_id':lid})
+    lead=db.one('SELECT * FROM leads WHERE id=?',(lid,))
+    previous=lead_activity(db,settings,lead)
+    page.set_viewport_size({'width':390 if mobile else 1440,'height':1000})
+    page.goto(settings.public_url+'/?prospect='+str(lid))
+    panel=page.get_by_role('region',name='Research progress')
+    expect(panel).to_contain_text('Research queued')
+    expect(page.locator('[data-lead="'+str(lid)+'"]')).to_contain_text('Research queued')
+    expect(panel).to_contain_text('No action needed')
+    expect(panel).to_contain_text('Screenshots waiting for website research')
+    expect(panel).to_contain_text('automatic email preparation is OFF')
+    expect(page.locator('[data-research-step]')).not_to_have_class('done')
+    expect(page.locator('#prepare-emails')).to_be_disabled()
+    db.execute("UPDATE jobs SET state='running',started_at=? WHERE id=?",(time.time(),jid))
+    page.evaluate('([id,previous])=>{clearTimeout(researchActivityTimer);return pollResearchActivity(id,previous);}',[lid,previous])
+    expect(panel).to_contain_text('Research running')
+    previous=lead_activity(db,settings,lead)
+    db.execute("UPDATE jobs SET state='done' WHERE id=?",(jid,))
+    capture_id=db.enqueue('screenshot',{'lead_id':lid})
+    page.evaluate('([id,previous])=>{clearTimeout(researchActivityTimer);return pollResearchActivity(id,previous);}',[lid,previous])
+    expect(panel).to_contain_text('Screenshots queued')
+    page.locator('#advanced-research > summary').click()
+    page.locator('#qualification-tools-group > summary').click()
+    page.locator('#review-form').locator('..').locator('summary').first.click()
+    name=page.locator('#review-form [name=company]')
+    name.fill('Unsaved fictional company edit')
+    previous=lead_activity(db,settings,lead)
+    folder=settings.data_dir/'screenshots'
+    folder.mkdir(exist_ok=True)
+    filename=f'lead-{lid}-123456-abcdef-desktop.png'
+    (folder/filename).write_bytes(b'fictional image fixture')
+    db.event('screenshot',{'lead_id':lid,'url':lead['website'],'complete':False,'issues':['fixture rendering issue'],'files':{'desktop':filename}})
+    db.execute("UPDATE jobs SET state='done' WHERE id=?",(capture_id,))
+    page.evaluate('([id,previous])=>{clearTimeout(researchActivityTimer);return pollResearchActivity(id,previous);}',[lid,previous])
+    expect(panel).to_contain_text('Research saved')
+    expect(panel).to_contain_text('Screenshots saved · partial capture')
+    expect(panel.get_by_role('link',name='View desktop screenshot')).to_have_attribute('href','/api/screenshots/'+filename)
+    expect(panel.get_by_role('button',name='View updated research')).to_be_visible()
+    expect(name).to_have_value('Unsaved fictional company edit')
+    expect(page.locator('[data-lead="'+str(lid)+'"]')).to_contain_text('Research saved')
+    expect(page.locator('[data-research-step]')).to_have_class('done')
+    assert not controls['mutations'] and not errors
     assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+1')
+    panel.scroll_into_view_if_needed()
+    output=Path('data/research-status-ui')
+    output.mkdir(parents=True,exist_ok=True)
+    panel.screenshot(path=str(output/('status-mobile.png' if mobile else 'status-desktop.png')))
+    page.screenshot(path=str(output/('mobile.png' if mobile else 'desktop.png')),full_page=True)
+
+
+def test_prospect_status_reports_pause_offline_and_failure_without_repeating_research(settings,db,dashboard):
+    from outreach.activity import lead_activity
+    page,controls,_,errors=dashboard
+    settings.worker_enabled=False
+    lid=add_lead(db,'Fictional Paused Fixture','https://paused.example.com','A','https://paused.example.com')
+    jid=db.enqueue('research',{'lead_id':lid})
+    lead=db.one('SELECT * FROM leads WHERE id=?',(lid,))
+    previous=lead_activity(db,settings,lead)
+    page.goto(settings.public_url+'/?prospect='+str(lid))
+    panel=page.get_by_role('region',name='Research progress')
+    expect(panel).to_contain_text('Research automation is OFF')
+    controls['activity_offline']=True
+    page.evaluate('([id,previous])=>{clearTimeout(researchActivityTimer);return pollResearchActivity(id,previous);}',[lid,previous])
+    expect(panel).to_contain_text('Live status is unavailable')
+    expect(panel).to_contain_text('Research queued')
+    controls['activity_offline']=False
+    db.execute("UPDATE jobs SET state='failed',error=? WHERE id=?",('Fictional source failed <script>bad()</script>',jid))
+    page.locator('#advanced-research > summary').click()
+    page.evaluate('([id,previous])=>{clearTimeout(researchActivityTimer);return pollResearchActivity(id,previous);}',[lid,previous])
+    expect(panel).to_contain_text('Research needs attention')
+    expect(panel).to_contain_text('Fictional source failed <script>bad()</script>')
+    expect(panel).not_to_contain_text('Live status is unavailable')
+    assert panel.locator('script').count()==0
+    assert page.evaluate("leadState({status:'researching',source_job:{state:'failed',kind:'research'}})[0]") == 'Needs attention'
+    assert page.evaluate("leadState({status:'researching',source_job:null})[0]") == 'Research status needs checking'
+    assert not controls['mutations'] and not errors
+    assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+1')
+
+
+def test_finished_research_refreshes_clean_workspace_automatically(settings,db,dashboard):
+    from outreach.activity import lead_activity
+    page,controls,_,errors=dashboard
+    settings.auto_prepare_enabled=False
+    lid=add_lead(db,'Fictional Completed Fixture','https://completed.example.com','A','https://completed.example.com')
+    jid=db.enqueue('research',{'lead_id':lid})
+    lead=db.one('SELECT * FROM leads WHERE id=?',(lid,))
+    previous=lead_activity(db,settings,lead)
+    page.goto(settings.public_url+'/?prospect='+str(lid))
+    expect(page.locator('#prospect-research-status')).to_contain_text('Research queued')
+    db.execute('INSERT INTO evidence(lead_id,url,title,text,sha256,fetched_at) VALUES(?,?,?,?,?,?)',
+               (lid,lead['website'],'Saved fixture','Current UK business fixture','fixture',time.time()))
+    db.execute("UPDATE jobs SET state='done' WHERE id=?",(jid,))
+    db.execute("UPDATE leads SET status='review' WHERE id=?",(lid,))
+    page.evaluate('([id,previous])=>{clearTimeout(researchActivityTimer);return pollResearchActivity(id,previous);}',[lid,previous])
+    expect(page.locator('#prospect-research-status')).to_contain_text('Research saved')
+    expect(page.locator('#prospect-research-status')).to_contain_text('1 saved page contents')
+    expect(page.locator('[aria-label="Email preparation"]')).to_be_visible()
+    expect(page.locator('#detail')).to_contain_text('Saved source pages (1)')
+    assert not controls['mutations'] and not errors
 
 
 @pytest.mark.parametrize('failure',[503,None])

@@ -1,3 +1,9 @@
+## Prospect research status and screenshot readiness — 21 October 2026
+
+Pipeline now shows actual queued/running source jobs, saved page/contact counts and separate screenshot availability. Selected-prospect polling preserves open forms and draft edits; completed research refreshes a clean workspace. Active journey/email preparation remains visible alongside screenshot jobs. Labels no longer infer active research from a stale lead status. The authenticated read-only activity endpoint exposes safe existing screenshot files, distinguishes partial/stale captures, and does not run providers or change settings. Schema 8 is retained with a compatible lead-job lookup index.
+
+The full regression run recorded 1667 passing cases and two journey-preparation visibility failures. After fixing the conflict, all 77 focused journey, activity, browser and priority cases passed, including both previously failing cases. Full browser smoke passed with zero JavaScript errors. Ruff and JavaScript syntax checks passed. This validates controlled UI/state behavior, not guaranteed completeness of external website research.
+
 # Visible action feedback and background activity — 21 October 2026
 
 Added shared viewport notifications, accessible button loading states, guarded repeated

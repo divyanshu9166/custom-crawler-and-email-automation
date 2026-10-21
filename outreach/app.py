@@ -825,6 +825,14 @@ def create_app(settings=None):
         from .browser_references import save_reference
         return save_reference(db, **value.model_dump())
 
+    @app.get('/api/leads/{lead_id}/activity', dependencies=[Depends(auth)])
+    def prospect_activity(lead_id: int):
+        from .activity import lead_activity
+        row = db.one('SELECT * FROM leads WHERE id=?', (lead_id,))
+        if not row:
+            raise HTTPException(404)
+        return lead_activity(db, settings, row)
+
     @app.get("/api/leads/{lead_id}", dependencies=[Depends(auth)])
     def lead_detail(lead_id: int):
         from .professionals import captures,reviewed_publication
@@ -874,7 +882,9 @@ def create_app(settings=None):
                 artifact['current_for_review'] = False
         from .preparation import latest as preparation_status
         from .diagnostics import snapshot as audit_snapshot
+        from .activity import lead_activity
         return {"lead": row, "evidence": evidence, "crawl": crawl,
+                'research_activity': lead_activity(db, settings, row),
                 "diagnostics": {**audit_snapshot(db, row), 'journey_audit_available': settings.browser_enabled and settings.journey_audit_enabled and settings.auto_visual_audit},
                 'preparation': preparation_status(db, lead_id),
                 'professional_captures':professional_captures,

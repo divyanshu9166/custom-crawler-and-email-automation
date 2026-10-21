@@ -42,12 +42,36 @@ operator checks the result before repeating it. Validation notifications omit th
 raw `input` values, which can contain credentials. Mixed import results show accepted
 and attention-needed row counts instead of an unconditional success message.
 
+## Status inside each prospect
+
+The prospect list and workspace read actual research/audit jobs even when they were
+started by another tab or before this session. An old `review` record cannot hide a
+queued/running source job. Idle research with saved sources is labelled **Research saved**;
+this means stored results, not complete coverage, qualification or a confirmed client pain.
+
+A **Data collection** card shows the active task, worker OFF or retry waiting information,
+saved page-content/contact counts, screenshot status and links to existing desktop/mobile
+files. Saved source pages are text/metadata, not screenshot images. Pending captures,
+partial rendering, older reports, missing files and failures have separate labels. Profile-only
+prospects do not imply an applicable website screenshot. Existing captures do not prove
+that a later screenshot attempt succeeded.
+
+Status updates in place every five seconds while the workspace is visible, backing off
+after network failure. When source jobs finish, a clean workspace reloads its saved results.
+An open advanced section, email composer or edited form is preserved with **View updated
+research** instead. Pending work disables duplicate research/audit actions and premature
+email preparation. Automatic preparation OFF is explicitly called **Data collection mode**;
+creating an email stays optional. No automation preference is changed by viewing status.
+
 ## Implementation and checks
 
 `GET /api/jobs/{id}` is authenticated, read-only and returns a bounded status projection,
 not the job payload. Discovery events carry their actual worker job ID, so identical
 queries and concurrent campaigns cannot borrow each other's progress. A compatible
 event index supports these lookups; schema version 8 and existing records are preserved.
+`GET /api/leads/{id}/activity` provides the same read-only projection for a selected
+prospect. Batched source-job lookup uses a compatible per-lead index, without changing
+schema version 8 or rewriting job history.
 
 Real Chromium tests cover desktop/mobile queue acknowledgement, repeat-click prevention,
 running/completed transitions, refreshed-tab tracking, paused workers, unknown request

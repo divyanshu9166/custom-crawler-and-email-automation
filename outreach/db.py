@@ -186,6 +186,8 @@ class DB:
             con.execute("""CREATE INDEX IF NOT EXISTS events_job_activity ON events
                 ((CASE WHEN json_valid(detail) THEN json_extract(detail,'$.job_id') END),id)
                 WHERE kind IN ('discovery_started','discovery_progress','discovery')""")
+            con.execute("""CREATE INDEX IF NOT EXISTS jobs_lead_activity ON jobs
+                ((CASE WHEN json_valid(payload) THEN json_extract(payload,'$.lead_id') END),kind,id)""")
 
     @contextmanager
     def connect(self):

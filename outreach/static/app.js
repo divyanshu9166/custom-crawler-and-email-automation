@@ -5,6 +5,7 @@ let allLeads = [];
 let pipelineRefreshInFlight = false;
 let researchRunning = false;
 let preparationTimer=null, detailDirty=false, prepBatchAfter=0;
+let researchActivityTimer=null, researchActivityRequest=0;
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 const stamp = value => value ? new Date(Number(value) * 1000).toLocaleString() : "—";
@@ -113,20 +114,23 @@ async function refreshPipeline(){
   finally{pipelineRefreshInFlight=false;}
 }
 function leadState(l){
+  if(['pending','running'].includes(l.source_job?.state))return [window.WorkbenchWorkspace.researchLabel(l.source_job),'working'];
   if(l.initial_email_state==='draft'||l.preparation_state==='drafts_ready')return ['Draft saved','ready'];
   if(['pending','running'].includes(l.preparation_job))return ['Preparing email','working'];
-  if(l.status==='researching')return ['Researching','working'];
-  if(['needs_attention','needs_evidence'].includes(l.preparation_state)||l.status==='research_failed')return ['Needs attention','attention'];
-  return [l.status==='qualified'?'Ready to draft':'Research review','neutral'];
+  if(['needs_attention','needs_evidence'].includes(l.preparation_state)||l.status==='research_failed'||['failed','cancelled'].includes(l.source_job?.state))return ['Needs attention','attention'];
+  if(l.status==='researching')return ['Research status needs checking','attention'];
+  return [l.status==='qualified'?'Ready to draft':l.status==='new'?'Not researched yet':'Research saved','neutral'];
 }
 function renderLeads(){
+  const listScroll=$('#leads').scrollTop;
   const query=$('#filter').value.toLowerCase();
   const rows=[...allLeads].sort((a,b)=>$('#lead-sort').value==='newest'?b.id-a.id:$('#lead-sort').value==='company'?a.company.localeCompare(b.company):0).filter(l=>{
     const p=$('#preparation-filter').value, state=leadState(l)[1];
-    return (p==='all'||p==='ready'&&state==='ready'||p==='pending'&&state==='working'||p==='attention'&&state==='attention')&&(l.company+' '+l.domain+' '+l.status).toLowerCase().includes(query);
+    return (p==='all'||p==='ready'&&state==='ready'||p==='pending'&&state==='working'||p==='attention'&&state==='attention')&&(l.company+' '+l.domain+' '+l.status+' '+leadState(l)[0]).toLowerCase().includes(query);
   });
   $('#leads').innerHTML=rows.map(l=>{const [label,state]=leadState(l);return `<button class="lead ${l.id===currentId?'current':''}" data-lead="${l.id}"><span class="company-monogram" aria-hidden="true">${esc(l.company.trim().charAt(0).toUpperCase())}</span><span class="lead-info"><strong>${esc(l.company)}</strong><small>${esc(l.lead_kind==='profile'?'Business profile':l.domain)}</small><span class="lead-state ${state}"><i></i>${label}</span></span></button>`;}).join('')||`<div class="list-empty">${allLeads.length?'No prospects match these filters.':'No prospects yet. Start with Find prospects.'}</div>`;
   document.querySelectorAll('[data-lead]').forEach(b=>b.onclick=()=>loadLead(Number(b.dataset.lead)).catch(e=>notice(e.message,true)));
+  $('#leads').scrollTop=listScroll;
 }
 const options = (values, selected) => values.map(v=>`<option value="${esc(v)}" ${v===selected?"selected":""}>${esc(v === "ai_calling_agent" ? "AI calling agent" : v.replaceAll("_"," "))}</option>`).join("");
 function preparationHTML(data,finding){
@@ -136,14 +140,14 @@ function preparationHTML(data,finding){
   const failed=!ready&&!busy&&(j?.state==='failed'||['needs_attention','needs_evidence'].includes(r?.state));
   const title=ready?'Your email is ready to review':busy?(researchRunning?'Preparing your email':'Email preparation is queued'):failed?'This prospect needs a closer look':!hasSource?'Start with the business research':!data.contacts.length?'Find a published business contact':'Create a relevant first email';
   const explanation=ready?'Research and the draft are saved. Review the wording below before any sending decision.':busy?(researchRunning?'Checking the business, matching one offer and writing one personalized draft. Nothing will be sent.':'Research automation is OFF. Turn it on in Settings to process this email; nothing will be sent.'):failed?'We could not safely finish preparation. Your saved research is preserved.':!hasSource?'Research the business and save the sources before choosing an offer.':!data.contacts.length?'A published contact is needed before a personalized email can be prepared.':'Use the saved research to match one useful offer and write one personalized email.';
-  return `<section class="next-action ${ready?'is-ready':failed?'is-attention':''}" aria-label="Email preparation"><div><span class="eyebrow">${ready?'READY FOR YOUR REVIEW':busy?'IN PROGRESS':'NEXT STEP'}</span><h3>${title}</h3><p>${explanation}</p>${failed?`<details><summary>What needs attention?</summary><p>${esc(j?.error||r?.reason||'Inspect current research before retrying.')}</p></details>`:''}${busy&&r?`<details><summary>Previous attempt: ${esc(r.state.replaceAll('_',' '))}</summary><p>${esc(r.reason)}</p></details>`:''}</div><div class="next-action-controls">${ready?'<a class="button primary" href="#email-sequence">Review email</a>':busy?'<span class="workspace-pill">Preparing…</span>':''}</div></section>`;
+  return `<section class="next-action ${ready?'is-ready':failed?'is-attention':''}" aria-label="Email preparation" data-preparation-active="${Boolean(busy)}"><div><span class="eyebrow">${ready?'READY FOR YOUR REVIEW':busy?'IN PROGRESS':'NEXT STEP'}</span><h3>${title}</h3><p>${explanation}</p>${failed?`<details><summary>What needs attention?</summary><p>${esc(j?.error||r?.reason||'Inspect current research before retrying.')}</p></details>`:''}${busy&&r?`<details><summary>Previous attempt: ${esc(r.state.replaceAll('_',' '))}</summary><p>${esc(r.reason)}</p></details>`:''}</div><div class="next-action-controls">${ready?'<a class="button primary" href="#email-sequence">Review email</a>':busy?'<span class="workspace-pill">Preparing…</span>':''}</div></section>`;
 }
 async function pollPreparation(id){
   if(currentId!==id||document.hidden||$('#pipeline').hidden)return;
   try{const p=await api(`/api/leads/${id}/preparation`);if(currentId!==id)return;
     if(p.research_pending){
       const panel=document.querySelector('[aria-label="Email preparation"]');
-      if(panel){panel.querySelector('h3').textContent=researchRunning?'Checking the enquiry journey':'Journey audit is queued';panel.querySelector('p').textContent='Checking public enquiry links, form labels and mobile layout before writing. Nothing will be sent.';}
+      if(panel){panel.hidden=false;panel.dataset.preparationActive='true';panel.querySelector('h3').textContent=researchRunning?'Checking the enquiry journey':'Journey audit is queued';panel.querySelector('p').textContent='Checking public enquiry links, form labels and mobile layout before writing. Nothing will be sent.';}
       const button=$('#prepare-emails');if(button){button.disabled=true;button.textContent='Checking enquiry journey…';}
     }
     if(p.research_pending||(p.job&&['pending','running'].includes(p.job.state))){preparationTimer=setTimeout(()=>pollPreparation(id),4000);return;}
@@ -152,8 +156,37 @@ async function pollPreparation(id){
     if(p.result?.state==='drafts_ready')$('#email-sequence')?.scrollIntoView({block:'start'});
   }catch(e){notice('Preparation status unavailable: '+e.message,true);}
 }
+async function pollResearchActivity(id, previous, refreshNeeded=false){
+  if(currentId!==id)return;
+  if(document.hidden||$('#pipeline').hidden){researchActivityTimer=setTimeout(()=>pollResearchActivity(id,previous,refreshNeeded),5000);return;}
+  const turn=researchActivityRequest;
+  try{
+    const activity=await api(`/api/leads/${id}/activity`,'GET',undefined,{feedback:false});
+    if(currentId!==id||turn!==researchActivityRequest)return;
+    const changed=JSON.stringify(previous)!==JSON.stringify(activity);
+    const finished=previous.active_jobs.length>0&&activity.active_jobs.length===0;
+    if(finished&&!detailDirty&&!document.querySelector('#detail details[open],#detail [data-edit]')){
+      await refresh({reloadDetail:false,includeDiagnostics:false});
+      if(currentId===id&&turn===researchActivityRequest)await loadLead(id);
+      return;
+    }
+    refreshNeeded=refreshNeeded||finished;
+    if(changed||finished){
+      window.WorkbenchWorkspace.updateResearchActivity(activity,{esc,reload:()=>loadLead(id),refreshNeeded});
+      const lead=allLeads.find(l=>l.id===id);if(lead){lead.source_job=activity.job;lead.status=activity.lead_status;renderLeads();}
+    }
+    $('#prospect-research-status')?.querySelector('[data-status-unavailable]')?.remove();
+    researchActivityTimer=setTimeout(()=>pollResearchActivity(id,activity,refreshNeeded),5000);
+  }catch{
+    if(currentId!==id||turn!==researchActivityRequest)return;
+    const panel=$('#prospect-research-status');
+    if(panel&&!panel.querySelector('[data-status-unavailable]')){const p=document.createElement('p');p.dataset.statusUnavailable='';p.className='error';p.setAttribute('role','status');p.textContent='Live status is unavailable. Displayed results may be outdated; queued work may still run. Reconnecting automatically.';panel.append(p);}
+    researchActivityTimer=setTimeout(()=>pollResearchActivity(id,previous,refreshNeeded),15000);
+  }
+}
 async function loadLead(id){
   clearTimeout(preparationTimer);
+  clearTimeout(researchActivityTimer);researchActivityRequest++;
   currentId=id;const request=++detailRequest;renderLeads();const data=await api(`/api/leads/${id}`);if(request!==detailRequest||currentId!==id)return;const l=data.lead;const address=new URL(location.href);address.searchParams.set('prospect',String(id));history.replaceState(null,'',address.pathname+address.search+address.hash);
   if(l.deleted_at){$('#detail').innerHTML=`<section class="panel"><span class="badge">Deleted prospect</span><h2>${esc(l.company)}</h2><p>Deleted ${stamp(l.deleted_at)} · ${esc(l.delete_reason)}</p><p>Pending emails are cancelled. History and suppression are preserved. Restore from Campaigns → Deleted prospects before reviewing further outreach.</p><button id="deleted-campaigns">Open campaigns</button>${data.messages.map(m=>`<details><summary>${esc(m.subject)} · ${esc(m.state)}</summary><pre>${esc(m.body)}</pre></details>`).join('')}</section>`;$('#deleted-campaigns').onclick=()=>view('campaigns');return;}
   let finding=JSON.parse(l.findings||"[]")[0]||{};
@@ -216,6 +249,7 @@ async function loadLead(id){
   window.WorkbenchWorkspace.organize(data,finding,{esc,link,api,reload:()=>loadLead(id)});
   document.querySelectorAll('[data-source-text]').forEach(node=>node.closest('details').addEventListener('toggle',()=>{if(node.closest('details').open&&!node.dataset.loaded){node.textContent=data.evidence.find(e=>e.id===Number(node.dataset.sourceText))?.text||'';node.dataset.loaded='true';}}));
   detailDirty=false;$('#detail').oninput=()=>{detailDirty=true;};
+  if(data.research_activity)researchActivityTimer=setTimeout(()=>pollResearchActivity(id,data.research_activity),5000);
   if(data.preparation?.research_pending||(data.preparation?.job&&['pending','running'].includes(data.preparation.job.state)))preparationTimer=setTimeout(()=>pollPreparation(id),4000);
   $('#prepare-emails').onclick=()=>act(()=>api(`/api/leads/${id}/prepare`,'POST'),'Preparation queued. One email will be created; nothing will be sent.');
   document.querySelectorAll('[data-single-email]').forEach(b=>b.onclick=()=>act(()=>api(`/api/contacts/${b.dataset.singleEmail}/single-email`,'POST'),'Initial email kept. Old follow-ups archived; nothing sent.'));
@@ -227,7 +261,7 @@ async function loadLead(id){
   if($('#professional-research-form'))$('#professional-research-form').onsubmit=e=>{e.preventDefault();act(()=>api(`/api/leads/${id}/professional-research`,'POST',formObject(e.target)),'Public professional-profile research queued. Published emails remain candidates.');};
   document.querySelectorAll('[data-professional-review]').forEach(f=>f.onsubmit=e=>{e.preventDefault();const obj=formObject(f);obj.capture_id=Number(f.dataset.professionalReview);obj.company_evidence_id=Number(obj.company_evidence_id);obj.reviewed_current_employer_and_publication=!!f.elements.reviewed_current_employer_and_publication.checked;act(()=>api(`/api/leads/${id}/professional-review`,'POST',obj),'Reviewed professional contact imported; technical verification queued. Sending remains controlled separately.');});
   $("#check-verifier").onclick=async()=>{notice("Checking verifier…");try{const result=await api("/api/providers/reacher");notice(result.reason,!result.ready);}catch(error){notice(error.message,true);}};
-  $("#screenshot").onclick=()=>act(()=>api(`/api/leads/${id}/screenshot`,"POST"),"Screenshot queued; view the saved image from Operations activity.");
+  $("#screenshot").onclick=()=>act(()=>api(`/api/leads/${id}/screenshot`,"POST"),"Screenshots queued; desktop/mobile links will appear in this prospect's research status.");
   $("#performance").onclick=()=>act(()=>api(`/api/leads/${id}/performance`,"POST"),"PageSpeed audit queued; provider quota/key may be required. Refresh after the job finishes.");
   const reviewForm=$("#review-form");
   const updateChannelReview=()=>{const needed=reviewForm.elements.service.value.startsWith('whatsapp_');$('#whatsapp-review').hidden=!needed;reviewForm.elements.channel_fit_notes.required=needed;reviewForm.elements.channel_fit_notes.minLength=needed?20:0;};

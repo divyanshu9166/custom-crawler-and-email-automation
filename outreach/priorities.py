@@ -26,9 +26,12 @@ def ranked(db, settings, lead_id=None):
         suppressed = {r['email'] for r in view.all('SELECT email FROM suppression')}
         sales = {r['lead_id']:r for r in view.all('SELECT lead_id,stage,cold_email_hold FROM sales')}
         grouped = {}
+        from .activity import source_jobs, source_job
+        jobs = source_jobs(view, [lead['id'] for lead in leads])
         for contact in contacts:
             grouped.setdefault(contact['lead_id'], []).append(contact)
         for lead in leads:
+            lead['source_job'] = source_job(jobs.get(lead['id'], []))
             reasons, blockers = [], []
             def add(points, reason):
                 reasons.append({'points': points, 'reason': reason})
