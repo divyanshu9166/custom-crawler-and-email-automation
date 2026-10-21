@@ -32,3 +32,18 @@ def test_draft_lane_preserves_same_prospect_exclusion_and_serial_claims(db):
     other = db.enqueue('prepare', {'lead_id': 2})
     assert db.claim({'prepare'})['id']==other
     assert db.claim({'prepare'}) is None
+
+
+async def test_parser_bug_is_not_requeued_as_another_crawl_pass(db, settings, monkeypatch):
+    settings.auto_prepare_enabled = False
+    async def broken(*args, **kwargs):
+        raise AttributeError('controlled malformed parser state')
+    def unexpected(*args):
+        raise AssertionError('Deterministic bugs must not consume continuation passes')
+    monkeypatch.setattr(worker, 'research_lead', broken)
+    monkeypatch.setattr(worker, 'reschedule', unexpected)
+    db.enqueue('research', {'lead_id': 1})
+    job = db.claim({'research'})
+    await worker.execute_job(db, settings, job)
+    result = db.one('SELECT state,error FROM jobs WHERE id=?', (job['id'],))
+    assert result == {'state':'failed','error':'AttributeError'}

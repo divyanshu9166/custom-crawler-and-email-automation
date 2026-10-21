@@ -68,7 +68,7 @@ def parse_public_html(url, html):
     for node in list(soup.select('script,style,nav,aside,button,dialog,[role="dialog"],[hidden],[aria-hidden="true"]')):
         node.decompose()
     for node in list(soup.select("[style]")):
-        if re.search(r"display\s*:\s*none|visibility\s*:\s*hidden", node.get("style", ""), re.I):
+        if node.attrs is not None and re.search(r"display\s*:\s*none|visibility\s*:\s*hidden", node.get("style", ""), re.I):
             node.decompose()
     h = soup.select_one('main [data-testid="UserName"]') if platform == 'x.com' else None
     h = h or soup.select_one("main h1")

@@ -132,7 +132,7 @@ def people_from_html(url, html):
     for node in list(soup.select('script,style,nav,footer,aside,blockquote,dialog,[role="dialog"],form,[hidden],[aria-hidden="true"]')):
         node.decompose()
     for node in list(soup.select('[style]')):
-        if re.search(r'display\s*:\s*none|visibility\s*:\s*hidden', node.get('style', ''), re.I):
+        if node.attrs is not None and re.search(r'display\s*:\s*none|visibility\s*:\s*hidden', node.get('style', ''), re.I):
             node.decompose()
     # Official team sites often lack semantic <main>. Use their cleaned body
     # while preserving the existing small-card/one-heading identity boundary.

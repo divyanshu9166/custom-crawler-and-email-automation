@@ -91,12 +91,13 @@ async def execute_job(db, settings, job):
             if job['kind'] == 'research' and settings.crawl_auto_continue:
                 schedule_final_audits(db, settings, json.loads(current_job['payload']))
     except Exception as exc:
-        if job['kind'] == 'research' and not isinstance(exc, ValueError) and reschedule(db, settings, db.one('SELECT * FROM jobs WHERE id=?', (job['id'],))):
+        deterministic_failure = isinstance(exc, (ValueError, AttributeError, TypeError, KeyError))
+        if job['kind'] == 'research' and not deterministic_failure and reschedule(db, settings, db.one('SELECT * FROM jobs WHERE id=?', (job['id'],))):
             return
         # Error type only: provider exception strings can contain API keys and private URLs.
         error = str(exc)[:350] if isinstance(exc, ValueError) else type(exc).__name__
         attempts = job["attempts"] + 1
-        retry = attempts < 3 and not isinstance(exc, ValueError)
+        retry = attempts < 3 and not deterministic_failure
         if isinstance(exc, httpx.HTTPStatusError) and exc.response.status_code in {401, 403, 404, 410}:
             retry = False
         delay = 60 * 2 ** attempts

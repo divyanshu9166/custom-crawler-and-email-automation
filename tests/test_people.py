@@ -257,3 +257,13 @@ async def test_named_person_queries_require_sourced_company_match_and_preserve_b
     assert len(result['captures']) == 1 and result['state'] == 'held'
     assert all(q['rejected_company_mismatch'] == 1 for q in result['queries'])
     assert not db.one("SELECT 1 FROM jobs WHERE kind='verify'")
+
+
+@pytest.mark.parametrize('style', ['display:none', 'visibility:hidden'])
+def test_nested_hidden_staff_elements_do_not_crash_or_publish_people(style):
+    hidden = '<section style="'+style+'"><div style="color:red"><h2>Hidden Person</h2><p>Director</p></div></section>'
+    html = '<main>'+hidden+'<article><h2>Alex Doe</h2><p>Director</p></article></main>'
+    page = extract_page(URL, html)
+    assert [p['name'] for p in page['named_people']] == ['Alex Doe']
+    result = professionals.parse_public_html('https://www.linkedin.com/in/alex-doe/', '<main>'+hidden+'<h1>Alex Doe</h1><p>Director at Bright Studio in London</p></main>')
+    assert 'Hidden Person' not in str(result)

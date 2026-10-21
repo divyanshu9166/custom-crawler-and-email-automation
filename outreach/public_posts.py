@@ -74,7 +74,7 @@ async def public_post_snapshot(settings, url):
         for element in list(block.select('script,style,iframe,form,svg,[hidden],[aria-hidden="true"]')):
             element.decompose()
         for element in list(block.select('[style]')):
-            if re.search(r'display\s*:\s*none|visibility\s*:\s*hidden', element.get('style', ''), re.I):
+            if element.attrs is not None and re.search(r'display\s*:\s*none|visibility\s*:\s*hidden', element.get('style', ''), re.I):
                 element.decompose()
         paragraphs = block.find_all('p', recursive=False)
         if len(paragraphs) != 1 or paragraphs[0].find('blockquote'):

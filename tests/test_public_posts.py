@@ -158,3 +158,12 @@ async def test_unavailable_post_does_not_guess_author_or_search_from_stale_index
     result = await resolve_signal(settings, {'url':POST,'title':'Stale company','snippet':'hello@bright-demo.com'}, 'UK', ['x.com'])
     assert result['state'] == 'public_post_unavailable'
     assert not result['website'] and 'company' not in result
+
+
+async def test_nested_hidden_post_elements_preserve_visible_publication(settings, monkeypatch):
+    html = '<blockquote class="twitter-tweet"><p>Business hello@bright-demo.com <span style="display:none"><span style="color:red">hidden@other-demo.com</span></span></p><a href="'+POST+'">Date</a></blockquote>'
+    transport(monkeypatch, lambda request: httpx.Response(200, json=payload(html=html)))
+    result = await public_posts.public_post_snapshot(settings, POST)
+    assert result['state'] == 'captured'
+    assert result['published_emails'] == ['hello@bright-demo.com']
+    assert 'hidden@other-demo.com' not in result['text']

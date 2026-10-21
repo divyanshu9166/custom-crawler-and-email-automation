@@ -1,3 +1,18 @@
+## Nested hidden HTML and deterministic crawl failures — 21 October 2026
+
+Reproduced AttributeError against the current Dazzle homepage and Total Clean
+company-values page: decomposing a hidden parent invalidated styled descendants
+still in the selector snapshot. Guarded removed elements in staff, professional
+profile and public-post extractors. Both live HTTP captures now extract successfully.
+Added nested-hidden-content regressions that retain visible content and exclude
+hidden identities/contact data. Deterministic parser/programming errors now stop
+with a failed job instead of consuming automatic crawl continuation/retry rounds.
+
+158 people/post/discovery/crawl tests and 48 worker/continuation/platform-discovery
+tests passed; Ruff passed. The separate queued-to-running email UI checks passed
+on desktop and mobile (2 cases). Live preparation for lead 18 finished with a
+needs_evidence result and no draft; this is not a provider-success or pitch-quality claim.
+
 ## Independent email preparation worker — 21 October 2026
 
 Added one serial preparation lane separate from long browser research. Existing
