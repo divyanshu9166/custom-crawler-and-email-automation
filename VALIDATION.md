@@ -1,3 +1,36 @@
+# Google Business Profile intake in Campaign 3 — 21 October 2026
+
+Campaign 3 now has its own Find prospects form, named A-goal campaign, public Maps
+search/listing reader, independent website resolution, bounded batch filtering and
+recurring-source persistence. Matched websites are excluded. Captured candidates with
+incomplete/ambiguous lookups remain held; website absence is never asserted from a
+missing button or search result. Public phone/category/address are visible in the
+prospect workspace. Phone-only records cannot generate guessed email addresses.
+
+Controlled checks cover current scoped fields and source hashes, review/hidden-email
+exclusion, nested hidden HTML, duplicate listing aliases, closed/blocked sources,
+known-site exclusion on refresh, positive published-business-email preparation,
+Campaign A launch selection without overriding Campaign B, schema 7→8 preservation,
+recurring execution and desktop/mobile form/API behavior. The final complete suite
+passed **1,642 tests in 615.45 seconds**; Ruff, JavaScript syntax, all 35 workflow-node
+mappings and the full Chromium application smoke passed with zero JavaScript errors.
+The existing Starlette/httpx deprecation warning remains. The first wider run exposed
+an index-based provider assertion after adding Google and a screenshot during initial
+page updates; provider-name checks and waiting for completed requests passed the final run.
+
+Native isolated VPS checks captured two public Maps searches and four current listings.
+Three listings exposed a website link; another exposed a public phone without an observed
+Website field. Its independent lookup was incomplete, so it does not establish website
+absence. No published email appeared in these native samples. Controlled tests establish
+the hold/preparation behavior; these native checks do not establish email-ready yield,
+provider-wide access, delivery or conversion performance. No sample lead was inserted into
+the production database and no email, mailbox probe or call was made.
+
+A fresh private schema-7 SQLite backup was taken before rollout. Schema 8 adds only the
+recurring discovery-source field. Deployment checks compare existing records and the
+Spotless draft digest, database integrity, named Campaign 3 availability and collect-first
+flags: research ON, automatic preparation OFF, sending/follow-ups OFF.
+
 # Profile-first bulk preparation — 21 October 2026
 
 The previous mandatory profile-only hold is replaced by current first-party business,

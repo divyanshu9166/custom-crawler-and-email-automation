@@ -30,7 +30,7 @@ def evidence_context(db, lead):
     if snapshot.get('state') != 'captured' or not source_allowed(lead, snapshot.get('url', '')):
         raise ValueError('Current first-party business-profile capture is unavailable; indexed and community hints cannot qualify a business')
     if snapshot.get('capture_method') not in {'public_html', 'managed_browser_public_profile',
-                                             'managed_browser_professional_profile', 'public_professional_http'}:
+                                             'managed_browser_professional_profile', 'public_professional_http', 'google_business_visible_listing'}:
         raise ValueError('Profile-only automation requires a current first-party capture method')
     title = snapshot.get('name') or company_title(snapshot.get('title', ''))
     if not name_matches(lead['company'], title):
@@ -130,6 +130,9 @@ def prepare_profile(db, settings, lead_id, *, cancelled=lambda: False):
         context = evidence_context(db, lead)
         choices = publication_candidates(db, lead, context)
         if not choices:
+            phone = context['page']['text']
+            if 'Phone: ' in phone and 'google.com/maps' in lead.get('profile_url', ''):
+                raise ValueError('Public business phone saved, but no current published business email is available for a draft. A phone number is not an email address; no address will be guessed')
             raise ValueError('No current explicitly published business inbox on this profile; contact is missing, ambiguous, shared or suppressed. No address will be guessed')
         discovery = db.one("SELECT detail FROM events WHERE (kind='prospect_signal' AND json_extract(detail,'$.lead_id')=?) OR (kind='discovery' AND EXISTS(SELECT 1 FROM json_each(events.detail,'$.lead_ids') WHERE value=?)) ORDER BY id DESC LIMIT 1", (lead_id, lead_id))
         target_query = json.loads(discovery['detail']).get('query', '') if discovery else ''

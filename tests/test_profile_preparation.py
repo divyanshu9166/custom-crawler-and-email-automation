@@ -296,7 +296,7 @@ def test_schema_six_schedule_migration_preserves_existing_drafts_and_suppression
     db.execute('ALTER TABLE schedules DROP COLUMN profile_first')
     db.execute('PRAGMA user_version=6')
     reopened = DB(db.path)
-    assert reopened.one('PRAGMA user_version')['user_version'] == 7
+    assert reopened.one('PRAGMA user_version')['user_version'] == 8
     assert reopened.all('SELECT * FROM messages') == before
     assert reopened.one('SELECT reason FROM suppression')['reason'] == 'opt-out'
     assert not reopened.all('PRAGMA foreign_key_check')

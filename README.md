@@ -291,7 +291,7 @@ Copy backups and relevant screenshot files to private off-host storage. Preserve
 
 ## Tests and readiness
 
-Latest local verification: **795 tests passed**, including 32 professional-source cases, 24 VPS-browser cases and 19 source-failover/recovery/coverage cases; Ruff and Chromium UI checks passed. The browser-mode checks use fictional intercepted pages, not an authenticated VPS deployment. See [the verification record](docs/PLATFORM_BROWSER.md).
+See [VALIDATION.md](VALIDATION.md) for the latest full-suite, Chromium desktop/mobile and live VPS checks. Controlled browser fixtures establish application behavior, not universal source coverage or mailbox deliverability. The [platform verification record](docs/PLATFORM_BROWSER.md) distinguishes those checks from native browser access.
 
 ```sh
 pip install -e '.[test]'
@@ -307,6 +307,11 @@ The preflight prints missing configuration, not secrets. With `--network`, Reach
 Important API routes are listed by authenticated `GET /api/openapi`. API clients use Bearer or Basic authentication; browser access uses the sign-in form and signed cookie over HTTPS plus same-origin write checks. A single-admin credential model is intentional; this is not a multi-tenant deployment.
 
 ## Businesses without a known website
+
+For local UK/US businesses, use **Find prospects → Campaign 3 · Google Business Profiles**.
+It checks current public Maps listings and independently searches for an official website;
+matched websites are excluded and incomplete lookups stay held. Phone-only records are
+saved without inventing email addresses. See [Campaign 3 setup and limits](docs/GOOGLE_BUSINESS_CAMPAIGN.md).
 
 The separate [public professional-contact workflow](docs/PROFESSIONAL_CONTACTS.md) supports LinkedIn `/in/` and X public bios for an existing website prospect. It reuses observed company-page profile links, adds bounded free discovery and requires current employer/role/inbox review before contact import. Captures create no probes or contacts; reviewed imports remain technically unverified. This is not hidden-email discovery or proprietary database enrichment.
 

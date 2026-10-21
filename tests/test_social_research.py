@@ -480,7 +480,8 @@ def test_source_status_filters_lead_before_history_limit_and_preserves_partial(s
         con.executemany('INSERT INTO events(kind,detail,created_at) VALUES(?,?,?)', [
             ('source_observation', json.dumps({'lead_id': 2}), time.time()) for _ in range(1001)])
     result = source_status.snapshot(db, settings, 1)
-    assert result['providers'][2]['last_state'] == 'captured'
+    website = next(row for row in result['providers'] if row['provider'] == 'website')
+    assert website['last_state'] == 'captured'
     assert len(result['observations']) == 1 and result['observations'][0]['partial']
 
 

@@ -158,6 +158,13 @@ def _assessment(settings, lead, pages, before_request, target_query='', audit_co
                          'do not put a no-website claim in those fields. The writer separately discloses search uncertainty. '
                          'Do not invent profile ownership or contact permission; current source checks are performed by the application. '
                          'A proposed website/store should connect the published enquiry/order process to one concrete useful next step.')
+        from .google_business import is_listing
+        if lead['campaign'] == 'A' and is_listing(lead.get('profile_url', '')):
+            instructions += ('\nThis Google Business listing belongs to the website-launch prospect route. '
+                             'The primary service must be website_build with website_scope=website_launch. '
+                             'Use its published business category/address as current listing evidence; a phone alone '
+                             'does not prove a calling-agent need. Website absence remains unconfirmed. '
+                             'Do not propose a speed audit/redesign without a matched website.')
     packet = {'business': {k: lead[k] for k in ('company', 'campaign', 'lead_kind', 'website_status')},
               'target_query': target_query, 'audit_context': audit_context or {},
               'crawl_limit': 'Only supplied captures are established. Missing features cannot be inferred.',
@@ -225,6 +232,9 @@ def _validate_review(lead, result, pages):
         raise ValueError('AI assessment changed the business identity')
     if lead.get('lead_kind') == 'profile':
         from .profile_preparation import ACTIVITY
+        from .google_business import is_listing
+        if lead['campaign'] == 'A' and is_listing(lead.get('profile_url', '')) and review['service'] != 'website_build':
+            raise ValueError('Google business website-launch prospects need website_build as the primary service')
         activity = review.get('profile_activity_quote') or review.get('quote', '')
         if (lead.get('website_status') != 'website_not_found' or not ACTIVITY.search(activity)
                 or not any(activity and activity in p['text'] for p in pages)):

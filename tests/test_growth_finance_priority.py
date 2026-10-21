@@ -209,7 +209,7 @@ def test_additive_v4_upgrade_keeps_existing_mail_and_records(db, active):
     db.execute('DROP TABLE client_plans')
     db.execute('PRAGMA user_version=3')
     reopened = DB(db.path)
-    assert reopened.one('PRAGMA user_version')['user_version'] == 7
+    assert reopened.one('PRAGMA user_version')['user_version'] == 8
     assert reopened.all('SELECT * FROM messages') == before
     assert reopened.one('SELECT count(*) n FROM financial_entries')['n'] == 0
 

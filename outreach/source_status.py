@@ -22,6 +22,7 @@ def record(db, provider, operation, target, result, *, lead_id=None, elapsed=Non
 def snapshot(db, settings, lead_id=None):
     configured = {'managed_browser:linkedin.com': settings.platform_browser_enabled,
                   'managed_browser:x.com': settings.platform_browser_enabled,
+                  'google_maps': True,
                   'website': True, 'fxembed_profiles': settings.fxembed_profiles_enabled}
     seen, latest = set(), []
     sql = "SELECT detail FROM events WHERE kind='source_observation'"

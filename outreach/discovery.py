@@ -72,6 +72,9 @@ def official_root(url):
 
 
 async def public_snapshot(settings, url, platform=False):
+    if platform and platform_of(url) == 'google.com':
+        from .google_business import snapshot
+        return await snapshot(settings, url)
     if platform and platform_of(url) == 'linkedin.com' and '/in/' in urlsplit(url).path:
         from .professionals import profile_snapshot
         return await profile_snapshot(settings, url)
@@ -275,6 +278,10 @@ def relaxed_profile_query(query, country_hint):
 def profile_key(url):
     parts = urlsplit(url)
     domain = domain_of(url)
+    if domain == 'google.com':
+        from .google_business import is_listing, listing_key
+        if is_listing(url):
+            return domain, listing_key(url)
     if domain == 'linkedin.com' or domain.endswith('.linkedin.com'):
         domain = "linkedin.com"
     if domain in {"twitter.com", "x.com"}:
@@ -353,7 +360,7 @@ async def resolve_signal(settings, row, country_hint, platforms):
     if len({domain_of(u) for u in direct}) > 1:
         signal["state"] = "ambiguous_websites"
         return signal
-    name = snapshot['title'] if public_post or personal_business else company_title(row.get("title", ""))
+    name = snapshot['title'] if public_post or personal_business or snapshot.get('capture_method') == 'google_business_visible_listing' and snapshot.get('state') == 'captured' else company_title(row.get("title", ""))
     if managed:
         name=snapshot['title'] if snapshot.get('state')=='captured' else name
         if not settings.platform_browser_public_fallback:

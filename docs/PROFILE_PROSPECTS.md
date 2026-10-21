@@ -67,6 +67,12 @@ search/deduplication/campaign attribution, recurring execution, source/contact r
 source hashes, suppression/shared inboxes, employee exclusion and the real writer validator.
 Desktop/mobile Chromium exercises the actual search form and recurring-search payloads.
 These fictional-source tests do not establish live LinkedIn/X coverage or deliverability.
-Database schema 7 adds only the saved search-focus flag; migration preserves existing
+Database schema 8 also preserves the Google Business discovery source on recurring searches;
+schema 7 introduced the saved search-focus flag. Migration preserves existing
 campaigns, drafts, suppression and delivery history. Back up before deployment because
 older application images reject newer schemas.
+
+Google Business Profile candidates have a separate [Campaign 3 intake](GOOGLE_BUSINESS_CAMPAIGN.md).
+Its current scoped listing capture can establish category/address/phone evidence, while
+the same independent website-lookup and published-business-inbox gates still apply.
+Known websites are excluded from that launch shortlist; phone-only candidates stay research records.

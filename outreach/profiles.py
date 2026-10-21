@@ -18,6 +18,9 @@ def canonical_profile(url):
     url = crawl_url(url)
     parts = urlsplit(url)
     platform = platform_of(url)
+    if platform == 'google.com':
+        from .google_business import listing_url
+        return listing_url(url)
     segments = parts.path.strip("/").split("/")
     if platform == 'linkedin.com' and len(segments) == 3 and segments[0] == 'company' and segments[2] == 'about':
         parts = parts._replace(path='/'+ '/'.join(segments[:2]))
@@ -63,6 +66,9 @@ def source_allowed(lead, url, db=None, email=None):
     from .web import domain_of
     if lead.get("lead_kind") == "profile":
         try:
+            if platform_of(lead['profile_url']) == 'google.com':
+                from .google_business import listing_key
+                return listing_key(url) == listing_key(lead['profile_url'])
             return canonical_profile(url) == canonical_profile(lead["profile_url"]) or (
                 platform_of(url) != "google.com" and profile_key(canonical_profile(url)) == profile_key(lead["profile_url"]))
         except ValueError:
@@ -82,7 +88,8 @@ def add_profile_lead(db, company, profile_url, campaign, country_hint="", campai
     if campaign not in {"A", "B"} or len(company.strip()) < 2 or country_hint not in {"US", "UK"}:
         raise ValueError("Provide a business name and Campaign A or B")
     # Internal identity key only; website stays empty and no pretend domain is created.
-    identity = (canonical_profile(profile_url) if platform_of(profile_url) == "google.com"
+    from .google_business import listing_key
+    identity = (listing_key(profile_url) if platform_of(profile_url) == "google.com"
                 else repr(profile_key(profile_url)))
     key = "profile:" + hashlib.sha256(identity.encode()).hexdigest()
     now = time.time()
@@ -176,13 +183,17 @@ async def research_profile(db, settings, lead):
             finding = None
             report["errors"].append({"stage": "profile", "reason": snapshot.get("state", "unavailable")})
         if signal.get("website"):
-            target = add_lead(db, lead["company"], signal["website"], lead["campaign"], lead["profile_url"], _country_hint(lead), campaign_id=lead.get("campaign_id"))
-            if db.one("SELECT status FROM leads WHERE id=?", (target,))["status"] == "new":
-                payload = {'lead_id': target}
-                if signal.get('official_match_url') and crawl_url(signal['official_match_url']) != crawl_url(signal['website']):
-                    payload['seed_urls'] = [signal['official_match_url']]
-                db.enqueue("research", payload)
-            report["website_lead_id"] = target
+            from .google_business import is_campaign
+            if is_campaign(db, lead):
+                report['campaign_exclusion'] = 'Official website found; excluded from Campaign 3 website-launch preparation'
+            else:
+                target = add_lead(db, lead["company"], signal["website"], lead["campaign"], lead["profile_url"], _country_hint(lead), campaign_id=lead.get("campaign_id"))
+                if db.one("SELECT status FROM leads WHERE id=?", (target,))["status"] == "new":
+                    payload = {'lead_id': target}
+                    if signal.get('official_match_url') and crawl_url(signal['official_match_url']) != crawl_url(signal['website']):
+                        payload['seed_urls'] = [signal['official_match_url']]
+                    db.enqueue("research", payload)
+                report["website_lead_id"] = target
         notes = (f"Profile research: {website_status}; public snapshot {snapshot.get('state', 'unavailable')}. "
                  "Website not found means not found in this search, not confirmed absent. Confirm business identity, current activity, geography and contact ownership. Indexed-only emails cannot be imported.")
         db.execute("UPDATE leads SET status=?,website_status=?,findings=?,research_notes=?,updated_at=? WHERE id=?",

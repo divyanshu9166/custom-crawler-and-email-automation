@@ -85,6 +85,11 @@ window.WorkbenchWorkspace = {
     intro.className = 'prospect-header';
     const l = data.lead;
     intro.innerHTML = `<div><span class="eyebrow">PROSPECT WORKSPACE</span><h2>${esc(l.company)}</h2>${link(l.website || l.profile_url)}</div><span class="workspace-pill">${l.country ? esc(l.country) : 'Market needs review'} · ${l.campaign === 'B' ? 'Ecommerce' : 'Business enquiries'}</span>`;
+    const mapsReport = data.crawl ? JSON.parse(data.crawl.report) : {};
+    const maps = mapsReport.signal?.public_snapshot;
+    if (maps?.capture_method === 'google_business_visible_listing') {
+      intro.insertAdjacentHTML('beforeend', `<div class="google-business-summary"><strong>Google Business Profile</strong><p>${esc(maps.business_category || '')}${maps.address ? ' · '+esc(maps.address) : ''}</p><p>${maps.public_phone ? 'Public phone: '+esc(maps.public_phone) : 'No public phone captured'} · ${esc(l.website_status.replaceAll('_',' '))}</p><p class="small">A missing Website field is a research clue. The website lookup and published-email checks still apply; phone-only records do not generate guessed email addresses.</p></div>`);
+    }
     const steps = document.createElement('ol');
     steps.className = 'workspace-steps';
     const hasSource = data.evidence.some(e => e.current_for_review && e.business_for_review !== false);

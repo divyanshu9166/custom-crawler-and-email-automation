@@ -375,11 +375,21 @@ async def research_lead(db, settings, lead_id, continuation=False, protect_revie
         db.enqueue('professional_research',{'lead_id':lead_id})
 
 
-async def discover_leads(db, settings, query, campaign, country_hint, limit, campaign_id=None, profile_first=False):
+async def discover_leads(db, settings, query, campaign, country_hint, limit, campaign_id=None, profile_first=False, discovery_source='mixed'):
     from .campaign_manager import assert_target
     assert_target(db, campaign_id, campaign)
-    from .discovery import prospect_candidates
+    if discovery_source == 'google_maps':
+        from .google_business import campaign as google_campaign, prospect_candidates
+        if campaign != 'A':
+            raise ValueError('Campaign 3 Google business prospects use website/inquiry goal A')
+        campaign_id = google_campaign(db, campaign_id)
+    elif discovery_source != 'mixed':
+        raise ValueError('Unsupported discovery source')
+    else:
+        from .discovery import prospect_candidates
     context = {"run_id": secrets.token_hex(12), "base_query": query, "campaign": campaign, "country_hint": country_hint}
+    if discovery_source != 'mixed':
+        context['discovery_source'] = discovery_source
     if campaign_id:
         context['campaign_id'] = campaign_id
     db.event("discovery_started", {**context, "limit": limit})
@@ -418,6 +428,8 @@ async def discover_leads(db, settings, query, campaign, country_hint, limit, cam
         from .source_status import record
         snap = signal.get('public_snapshot', {})
         provider = 'managed_browser:' + signal.get('platform', '') if snap.get('capture_method', '').startswith('managed_browser') else 'website'
+        if signal.get('discovery_source') == 'google_maps':
+            provider = 'google_maps'
         record(db, provider, 'company_profile', signal.get('source_url', ''), snap,
                lead_id=match['id'] if match else None, contacts=len(snap.get('published_emails', [])))
         return len(added) >= limit
@@ -425,11 +437,23 @@ async def discover_leads(db, settings, query, campaign, country_hint, limit, cam
         rows, report = await prospect_candidates(settings, query, country_hint, limit,
                         on_candidate=import_candidate, on_signal=save_signal,
                         on_progress=lambda progress: db.event("discovery_progress", {**progress, **context}),
-                        **({'profile_first': True} if profile_first else {}))
+                        **({'profile_first': True} if profile_first and discovery_source == 'mixed' else {}))
     except (Exception, asyncio.CancelledError) as exc:
         db.event("discovery_interrupted", {**context, "lead_ids": added, "error_type": type(exc).__name__})
         raise
     db.event("discovery", {**context, "query": query, "lead_ids": added, "candidates": len(rows), "report": report})
+    if discovery_source == 'google_maps':
+        from .source_status import record
+        captured = any(v.get('public_snapshot', {}).get('state') == 'captured' for v in report.get('signals', []))
+        source_state = 'captured' if captured else report.get('stop_reason') or 'no_captured_listing'
+        record(db, 'google_maps', 'business_discovery', query, {'state': source_state, 'reason': report.get('note', '')})
+    if discovery_source == 'google_maps' and not added:
+        issues = report.get('errors', [])
+        denied = next((i.get('state') for i in issues if i.get('state') in {'robots_denied', 'login_or_challenge', 'consent_or_challenge', 'http_401', 'http_403', 'http_429', 'source_unavailable'}), None)
+        if denied:
+            raise ValueError('Google Business source access held: '+denied+'. No website-absence claim, guessed contact or repeated listing requests were made')
+        if report.get('skipped'):
+            return  # Completed filtering can legitimately find no launch prospects.
     if not rows and not added:
         if report["signals"]:
             raise ValueError("Search returned no usable official company websites; unresolved platform signals were saved for review")

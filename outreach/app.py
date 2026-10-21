@@ -137,6 +137,7 @@ class SearchInput(Input):
     limit: int = Field(default=10, ge=1, le=30)
     campaign_id: int | None = Field(default=None, ge=1)
     profile_first: bool = False
+    discovery_source: Literal['mixed', 'google_maps'] = 'mixed'
 
 
 class CampaignCreateInput(Input):
@@ -778,7 +779,15 @@ def create_app(settings=None):
         from .campaign_manager import assert_target
         assert_target(db, value.campaign_id, value.campaign)
         payload = value.model_dump(exclude_none=True)
-        if not value.profile_first:
+        if value.discovery_source == 'google_maps':
+            from .google_business import campaign
+            if value.campaign != 'A':
+                raise ValueError('Campaign 3 Google business prospects use website/inquiry goal A')
+            payload['campaign_id'] = campaign(db, value.campaign_id)
+            payload['profile_first'] = True
+        else:
+            payload.pop('discovery_source')
+        if not payload['profile_first']:
             payload.pop('profile_first')
         return {"job_id": db.enqueue("discover", payload)}
 
@@ -790,8 +799,14 @@ def create_app(settings=None):
     def add_schedule(value: ScheduleInput):
         from .campaign_manager import assert_target
         assert_target(db, value.campaign_id, value.campaign)
-        sid = db.execute("INSERT INTO schedules(query,campaign,country_hint,result_limit,interval_hours,next_run,campaign_id,profile_first) VALUES(?,?,?,?,?,?,?,?)",
-                         (value.query, value.campaign, value.country_hint, value.limit, value.interval_hours, time.time(), value.campaign_id, int(value.profile_first)))
+        target = value.campaign_id
+        if value.discovery_source == 'google_maps':
+            from .google_business import campaign
+            if value.campaign != 'A':
+                raise ValueError('Campaign 3 Google business prospects use website/inquiry goal A')
+            target = campaign(db, target)
+        sid = db.execute("INSERT INTO schedules(query,campaign,country_hint,result_limit,interval_hours,next_run,campaign_id,profile_first,discovery_source) VALUES(?,?,?,?,?,?,?,?,?)",
+                         (value.query, value.campaign, value.country_hint, value.limit, value.interval_hours, time.time(), target, int(value.profile_first or value.discovery_source == 'google_maps'), value.discovery_source))
         return {"id": sid}
 
     @app.delete("/api/schedules/{schedule_id}", dependencies=[Depends(auth)])
