@@ -1,3 +1,14 @@
+# Profile-first bulk preparation — 21 October 2026
+
+Find prospects can collect a batch with **Business profiles first** and save it to a named
+campaign or recurring search. Eligible current first-party profiles pass automatic business,
+activity, country, website-lookup and published-inbox checks, then reach one unscheduled email.
+CR/CE no longer require per-prospect copying of ownership/qualification notes on that supported
+path. Unsupported evidence stays held; final recipient/message approval remains separate.
+Collect-first mode is preserved when automatic preparation is OFF; campaign bulk Prepare
+runs the same checks later. See [exact source gates and limits](PROFILE_PROSPECTS.md).
+The older dated verification counts and live boundaries below remain historical.
+
 # Current live discovery boundaries
 
 Supported-niche searches require industry terms rather than generic adjectives. Explicit conflicting indexed market signals are excluded; an empty relevant search gets one focused retry. Geography and buyer fit still require current official source review. Job/category/search routes cannot establish a website-less business identity. The 575-test current audit and actual eight-segment captures, continuation and restricted-source limits are in [LIVE_LEAD_ACCEPTANCE.md](LIVE_LEAD_ACCEPTANCE.md). No real website-less recipient was accepted.
@@ -32,9 +43,9 @@ flowchart TD
     B --> CP[Business profile · no known website]
     CP --> CS[Public snapshot and named-company website search]
     CS -->|Website matched| C
-    CS -->|No website matched| CR[Review profile identity, activity and search limits]
+    CS -->|No website matched| CR[Validate profile identity, activity and search limits]
     CS -->|Blocked, failed or ambiguous| H
-    CR --> CE[Published profile email candidate · no automatic probe]
+    CR --> CE[Check published business inbox · no automatic probe]
     CE --> E3
     CR --> G
     C --> D[Robots + sitemaps + HTTP + Chromium]

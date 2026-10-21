@@ -9,8 +9,9 @@ not require a separate research-AI key. Worker must be ON; Sending can remain OF
 ## What happens
 
 1. Check current official business evidence, published contact ownership, suppression,
-   contact history and pending source jobs. No address is guessed or automatically imported
-   from an unreviewed external/profile candidate.
+   contact history and pending source jobs. No address is guessed. Profile-first automation can import an explicitly labelled
+   business inbox only after current first-party identity/activity/country/search checks;
+   indexed, community and unsupported external candidates remain held.
 2. Prioritize up to twelve saved official pages (home/about/contact/services/products first)
    and send bounded context to the configured model. Remove email strings from that input.
    Include the original discovery query when available so segment relevance is considered.
@@ -54,7 +55,7 @@ not require a separate research-AI key. Worker must be ON; Sending can remain OF
 AI reasoning is fallible. Matching quotes do not prove that an inference is useful, that a
 buyer has authority, that a feature is absent or that conversions will increase. The final
 review is necessary; this feature removes repetitive data copying rather than guaranteeing
-sales relevance. Profile-only ownership/activity/search-limit review, uncertain US timezone,
+sales relevance. Unsupported profile ownership/activity/search evidence, uncertain US timezone,
 missing contacts, weak business fit and insufficient context remain explicit exceptions.
 
 ## Existing prospects and bulk work
@@ -145,3 +146,11 @@ configured. No new database service or Docker daemon/network change is needed.
 Tests use isolated databases, fictional providers and real Chromium desktop/mobile fixtures.
 See VALIDATION.md for results. The developer environment cannot establish the VPS's live
 NVIDIA account access, active LinkedIn coverage, Reacher readiness or actual delivery.
+
+## Profile-first batches
+
+Business profiles now use automatic qualification and contact-source checks before drafting,
+with no per-prospect copying of country/activity/ownership notes on the supported path.
+Use Find prospects → Business profiles first, then automatic preparation or the campaign
+bulk Prepare action. Manual advanced review remains available for exceptions.
+See [Profile-first bulk flow](PROFILE_PROSPECTS.md) for exact source gates and limits.

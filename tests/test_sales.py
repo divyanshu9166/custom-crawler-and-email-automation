@@ -166,6 +166,6 @@ def test_schema_upgrade_preserves_existing_approved_sequence(db, active):
     db.execute("PRAGMA user_version=1")
     reopened = DB(db.path)
     assert reopened.all("SELECT * FROM messages ORDER BY id") == before
-    assert reopened.one("PRAGMA user_version")["user_version"] == 6
+    assert reopened.one("PRAGMA user_version")["user_version"] == 7
     assert reopened.one("SELECT COUNT(*) n FROM activities")["n"] == 0
     assert json.loads(reopened.one("SELECT findings FROM leads")["findings"])

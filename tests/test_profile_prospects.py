@@ -177,7 +177,7 @@ async def test_reviewed_profile_contact_can_verify_and_queue_with_all_existing_g
         assert_contact_ownership(db, db.one("SELECT * FROM contacts WHERE id=?", (cid,)), db.one("SELECT * FROM leads WHERE id=?", (lid,)))
 
 
-@pytest.mark.parametrize("url", ["https://linkedin.com/in/person", "https://x.com/name/status/123", "https://www.facebook.com/",
+@pytest.mark.parametrize("url", ["https://x.com/name/status/123", "https://www.facebook.com/",
                                  "https://google.com/maps/search/plumbers", "https://instagram.com/p/post"])
 def test_non_business_profile_paths_rejected(url):
     with pytest.raises(ValueError):
@@ -196,4 +196,4 @@ def test_v2_database_migrates_without_losing_data(tmp_path):
     db = DB(path)
     lead = db.one("SELECT * FROM leads")
     assert lead["website"] == "https://bright-demo.com/" and lead["lead_kind"] == "website"
-    assert db.one("PRAGMA user_version")["user_version"] == 6
+    assert db.one("PRAGMA user_version")["user_version"] == 7

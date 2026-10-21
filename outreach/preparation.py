@@ -146,6 +146,18 @@ def _pages(db, lead):
 
 
 def _assessment(settings, lead, pages, before_request, target_query='', audit_context=None):
+    instructions = INSTRUCTIONS
+    if lead.get('lead_kind') == 'profile':
+        instructions += '\nThis is a profile-first business with no website matched in a completed bounded search. '
+        instructions += ('Use the exact current business profile as the country/activity source. Website absence is unconfirmed. '
+                         'For Campaign A choose website_build with website_scope=website_launch, or a separately evidenced customer-question/calling task. '
+                         'For Campaign B confirm owned consumer products and a starting-ecommerce stage before proposing store_launch. '
+                         'Never choose website/store improvement without a website, invent a speed audit, or say the business has no website. '
+                         'Return profile_activity_quote as an exact published service/product/business statement. '
+                         'Keep observation and suggestion focused on the published business process and proposed work; '
+                         'do not put a no-website claim in those fields. The writer separately discloses search uncertainty. '
+                         'Do not invent profile ownership or contact permission; current source checks are performed by the application. '
+                         'A proposed website/store should connect the published enquiry/order process to one concrete useful next step.')
     packet = {'business': {k: lead[k] for k in ('company', 'campaign', 'lead_kind', 'website_status')},
               'target_query': target_query, 'audit_context': audit_context or {},
               'crawl_limit': 'Only supplied captures are established. Missing features cannot be inferred.',
@@ -155,7 +167,7 @@ def _assessment(settings, lead, pages, before_request, target_query='', audit_co
         encoded = re.sub(EMAIL_RE, '[contact omitted]', json.dumps(packet, ensure_ascii=True))
         # Provider/network failures are not retried. Only one locally rejected
         # assessment gets a correction request, before any qualification write.
-        raw = email_writer.chat(settings, INSTRUCTIONS, encoded, before_request=before_request)
+        raw = email_writer.chat(settings, instructions, encoded, before_request=before_request)
         try:
             try:
                 # Accept a complete JSON code fence, but never extract a guessed object
@@ -211,10 +223,18 @@ def _validate_review(lead, result, pages):
         raise ValueError('AI assessment fields incomplete; no qualification saved') from None
     if review['company'] != lead['company']:
         raise ValueError('AI assessment changed the business identity')
+    if lead.get('lead_kind') == 'profile':
+        from .profile_preparation import ACTIVITY
+        activity = review.get('profile_activity_quote') or review.get('quote', '')
+        if (lead.get('website_status') != 'website_not_found' or not ACTIVITY.search(activity)
+                or not any(activity and activity in p['text'] for p in pages)):
+            raise ValueError('Profile-only qualification needs current business activity and a completed website lookup')
     by_id = {p['id']: p for p in pages}
     from .web import crawl_url
-    country_source = crawl_url(review['country_source'])
-    country_page = next((p for p in pages if crawl_url(p['url']) == country_source), None)
+    from .profiles import canonical_profile
+    source_key = canonical_profile if lead.get('lead_kind') == 'profile' else crawl_url
+    country_source = source_key(review['country_source'])
+    country_page = next((p for p in pages if source_key(p['url']) == country_source), None)
     quote = review.get('country_quote', '').strip()
     pattern = r'\b(?:UK|United Kingdom|England|Scotland|Wales|Northern Ireland)\b' if review['country'] == 'UK' else r'\b(?:USA|United States)\b|\bU\.S\.(?=\W|$)'
     if not country_page or quote not in country_page['text'] or not re.search(pattern, quote, re.I):
@@ -280,6 +300,9 @@ def prepare(db, settings, lead_id, *, cancelled=lambda: False):
     lead = db.one('SELECT * FROM leads WHERE id=?', (lead_id,))
     if not lead:
         raise ValueError('Prospect not found')
+    if lead.get('lead_kind') == 'profile':
+        from .profile_preparation import prepare_profile
+        return prepare_profile(db, settings, lead_id, cancelled=cancelled)
     pages = _pages(db, lead)
     audit_context = diagnostics.snapshot(db, lead)
     digest = fingerprint(lead, fresh_evidence(db, lead_id), audit_context)
@@ -298,8 +321,6 @@ def prepare(db, settings, lead_id, *, cancelled=lambda: False):
     try:
         if db.get('demo') == 'true':
             raise ValueError('Offline demo cannot prepare live emails')
-        if lead['lead_kind'] == 'profile':
-            raise ValueError('Profile-only prospect requires ownership/activity and website-search exception review')
         if not pages or lead['status'] in {'new', 'researching', 'research_failed'} or source_busy(db, lead_id):
             raise ValueError('Wait for current business research before preparing emails')
         if db.one("SELECT 1 FROM contacts WHERE lead_id=? AND status<>'new'", (lead_id,)):

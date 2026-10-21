@@ -1,6 +1,7 @@
 """Profile-first prospects: absence of a search result is not absence of a site."""
 import hashlib
 import json
+import re
 import time
 from urllib.parse import urlsplit, urlunsplit
 
@@ -26,13 +27,13 @@ def canonical_profile(url):
         'trustpilot.com': 'review', 'yelp.com': 'biz', 'peopleperhour.com': 'freelancer',
     }
     if (platform not in PROFILE_PLATFORMS or not parts.path.strip("/")
-            or (platform == "linkedin.com" and (not parts.path.startswith("/company/") or len(segments) != 2))
+            or (platform == "linkedin.com" and (segments[0] not in {'company', 'in'} or len(segments) != 2))
             or (platform == "google.com" and not parts.path.startswith("/maps/place/"))
             or (platform in {"x.com", "twitter.com", "instagram.com"} and (len(segments) != 1 or segments[0].lower() in {"search", "explore", "home", "i", "p", "reel", "messages", "notifications", "settings", "compose", "login", "logout"}))
             or (platform == "facebook.com" and any(p in segments for p in {"posts", "search", "login", "watch", "groups", "reel"}))
             or (platform in specific_routes and (segments[0] != specific_routes[platform] or len(segments) < 2))
             or (platform == 'bbb.org' and ('profile' not in segments or segments.index('profile') >= len(segments)-2))):
-        raise ValueError("Use a specific public business profile or listing, not a platform home/search or personal LinkedIn profile")
+        raise ValueError("Use a specific public business profile or listing, not a platform home/search or post URL")
     # Google listing IDs can live in the query. Preserve them to avoid merging listings.
     query = parts.query if platform == "google.com" else ""
     return urlunsplit((parts.scheme, parts.netloc, parts.path.rstrip("/"), query, ""))
@@ -44,6 +45,11 @@ def business_profile_links(links):
     for link in links[:1000]:
         try:
             value = canonical_profile(link)
+            # Employee links on a company page are professional-research hints,
+            # not additional owned business presences. Self-selling individuals
+            # enter through explicit profile discovery and its identity checks.
+            if platform_of(value) == 'linkedin.com' and '/in/' in urlsplit(value).path:
+                continue
             if value not in found:
                 found.append(value)
         except ValueError:
@@ -102,6 +108,20 @@ def assert_profile_review(db, lead):
             or len(review.get("ownership_notes", "")) < 30
             or len(review.get("activity_quote", "")) < 8 or review["activity_quote"] not in page["text"]):
         raise ValueError("Review current business profile identity/activity and website-search limitations before contact verification or outreach")
+    if review.get('method') == 'research_ai_profile':
+        from .profile_preparation import evidence_context
+        if evidence_context(db, lead)['crawl_id'] != review.get('research_crawl_id'):
+            raise ValueError('Automatic profile review no longer matches current research')
+
+
+def personal_business_snapshot(snapshot):
+    """An employee/founder keyword alone does not turn a person into a business."""
+    if snapshot.get('state') != 'captured':
+        return False
+    text = snapshot.get('headline', '')+' '+snapshot.get('text', '')[:1000]
+    if re.search(r'\b(?:formerly|previously|retired|used to)\b', text, re.I):
+        return False
+    return bool(re.search(r'\b(?:self[- ]employed|independent consultant|freelance\s+(?:designer|developer|consultant|photographer|writer)|I\s+(?:offer|provide|sell)|my\s+(?:business|shop))\b', text, re.I))
 
 
 async def research_profile(db, settings, lead):
@@ -133,7 +153,8 @@ async def research_profile(db, settings, lead):
             digest = hashlib.sha256(text.encode()).hexdigest()
             db.execute("INSERT INTO evidence(lead_id,url,title,text,sha256,fetched_at) VALUES(?,?,?,?,?,?) ON CONFLICT(lead_id,url) DO UPDATE SET title=excluded.title,text=excluded.text,sha256=excluded.sha256,fetched_at=excluded.fetched_at",
                        (lid, url, snapshot.get("title", lead["company"]), text, digest, time.time()))
-            for email in snapshot.get("published_emails", []):
+            from .web import EMAIL_RE
+            for email in dict.fromkeys([*snapshot.get("published_emails", []), *re.findall(EMAIL_RE, text)]):
                 try:
                     email = normalize_email(email)
                 except ValueError:

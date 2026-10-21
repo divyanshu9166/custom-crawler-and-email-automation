@@ -42,6 +42,8 @@ def profile_target(url):
     parts=urlsplit(value)
     host=domain_of(value)
     if host=='linkedin.com' or host.endswith('.linkedin.com'):
+        if not parts.path.startswith('/company/'):
+            raise ValueError('Use the professional-profile reader for personal LinkedIn business candidates')
         return 'linkedin.com', 'https://www.linkedin.com'+parts.path.rstrip('/')+'/about/'
     if host in {'x.com','twitter.com'}:
         return 'x.com', 'https://x.com'+parts.path.rstrip('/')

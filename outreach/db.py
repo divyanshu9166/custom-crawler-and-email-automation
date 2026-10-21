@@ -134,7 +134,7 @@ class DB:
         path.parent.mkdir(parents=True, exist_ok=True)
         with self.connect() as con:
             version = con.execute("PRAGMA user_version").fetchone()[0]
-            if version > 6:
+            if version > 7:
                 raise RuntimeError("Database belongs to a newer application version")
             con.executescript(SCHEMA)
             columns = {r[1] for r in con.execute("PRAGMA table_info(leads)")}
@@ -167,6 +167,8 @@ class DB:
             con.execute('UPDATE leads SET campaign_id=(SELECT id FROM campaign_groups WHERE goal=leads.campaign AND is_default=1) WHERE campaign_id IS NULL')
             if 'campaign_id' not in {r[1] for r in con.execute('PRAGMA table_info(schedules)')}:
                 con.execute('ALTER TABLE schedules ADD COLUMN campaign_id INTEGER REFERENCES campaign_groups(id)')
+            if 'profile_first' not in {r[1] for r in con.execute('PRAGMA table_info(schedules)')}:
+                con.execute('ALTER TABLE schedules ADD COLUMN profile_first INTEGER NOT NULL DEFAULT 0 CHECK(profile_first IN (0,1))')
             con.executescript('''
                 CREATE INDEX IF NOT EXISTS leads_campaign_group ON leads(campaign_id,deleted_at,id);
                 CREATE TRIGGER IF NOT EXISTS leads_default_campaign AFTER INSERT ON leads WHEN NEW.campaign_id IS NULL
@@ -178,7 +180,7 @@ class DB:
                 WHEN NEW.campaign_id IS NOT NULL AND NOT EXISTS(SELECT 1 FROM campaign_groups WHERE id=NEW.campaign_id AND goal=NEW.campaign)
                 BEGIN SELECT RAISE(ABORT,'Campaign business goal does not match prospect'); END;
             ''')
-            con.execute("PRAGMA user_version=6")
+            con.execute("PRAGMA user_version=7")
 
     @contextmanager
     def connect(self):

@@ -146,7 +146,9 @@ def contact_candidates(db, lead_id):
     return list(found.values())
 
 
-def add_contact(db, lead_id, email, source_url, name="", role="", ownership_notes=""):
+def add_contact(db, lead_id, email, source_url, name="", role="", ownership_notes="", *, review_method='operator'):
+    if review_method not in {'operator', 'source_automation'}:
+        raise ValueError('Unsupported contact source review method')
     from .profiles import assert_profile_review, source_allowed
     email = normalize_email(email)
     if not outreach_email_allowed(email):
@@ -198,7 +200,7 @@ def add_contact(db, lead_id, email, source_url, name="", role="", ownership_note
             con.execute("UPDATE contacts SET source_url=? WHERE id=? AND status='new'", (source_url, cid))
             con.execute("INSERT INTO events(kind,contact_id,detail,created_at) VALUES(?,?,?,?)",
                         ("contact_source_reviewed", cid, json.dumps({"lead_id": lead_id, "source_url": source_url,
-                         "evidence_sha256": proof["sha256"], "ownership_notes": ownership_notes.strip()[:2000]}), time.time()))
+                         "evidence_sha256": proof["sha256"], "ownership_notes": ownership_notes.strip()[:2000], 'method': review_method}), time.time()))
         return cid
 
 
@@ -373,7 +375,7 @@ async def research_lead(db, settings, lead_id, continuation=False, protect_revie
         db.enqueue('professional_research',{'lead_id':lead_id})
 
 
-async def discover_leads(db, settings, query, campaign, country_hint, limit, campaign_id=None):
+async def discover_leads(db, settings, query, campaign, country_hint, limit, campaign_id=None, profile_first=False):
     from .campaign_manager import assert_target
     assert_target(db, campaign_id, campaign)
     from .discovery import prospect_candidates
@@ -422,7 +424,8 @@ async def discover_leads(db, settings, query, campaign, country_hint, limit, cam
     try:
         rows, report = await prospect_candidates(settings, query, country_hint, limit,
                         on_candidate=import_candidate, on_signal=save_signal,
-                        on_progress=lambda progress: db.event("discovery_progress", {**progress, **context}))
+                        on_progress=lambda progress: db.event("discovery_progress", {**progress, **context}),
+                        **({'profile_first': True} if profile_first else {}))
     except (Exception, asyncio.CancelledError) as exc:
         db.event("discovery_interrupted", {**context, "lead_ids": added, "error_type": type(exc).__name__})
         raise

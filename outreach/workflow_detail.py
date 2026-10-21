@@ -16,13 +16,13 @@ STAGES = [
     ('C', 'Official website & deduplication', 'Automatic + review', 'prospect'),
     ('CP', 'Business profile candidate', 'Automatic', 'prospect'),
     ('CS', 'Profile snapshot & website search', 'Automatic', 'prospect'),
-    ('CR', 'Review profile identity & activity', 'Human review', 'prospect'),
-    ('CE', 'Published profile email candidate', 'Extraction + review', 'prospect'),
+    ('CR', 'Validate profile identity & activity', 'Automatic checks + exceptions', 'prospect'),
+    ('CE', 'Published profile business contact', 'Automatic source checks + exceptions', 'prospect'),
     ('D', 'Robots, sitemaps & Chromium', 'Automatic', 'prospect'),
     ('E', 'Saved evidence & public signals', 'Automatic + review', 'prospect'),
     ('E1', 'Company-domain contacts', 'Automatic', 'prospect'),
     ('E2', 'Other-domain email candidates', 'Extraction + review', 'prospect'),
-    ('E3', 'Review source & inbox ownership', 'Human review', 'prospect'),
+    ('E3', 'Validate source & inbox ownership', 'Source checks + exception review', 'prospect'),
     ('F', 'Reacher verification', 'Automatic', 'prospect'),
     ('G', 'Country, buyer & opportunity review', 'AI preparation + exception/final review', 'prospect'),
     ('Q', 'Screenshots & optional lab audit', 'Automatic, optional', 'prospect'),
@@ -189,11 +189,11 @@ def build(db, settings, lead_id):
     if any(lead['status']=='researching' for lead in profiles):
         nodes['CS']['state'] = 'running'
     reviewable_profiles = [lead for lead in profiles if lead['website_status'] != 'website_found']
-    count('CR',len(profile_reviewed),len(reviewable_profiles),'Review current profile identity, activity, country and website-search limitations. Website found: open its matched website record.',bool(profile_reviewed) or any(evidence[lead['id']] for lead in reviewable_profiles))
+    count('CR',len(profile_reviewed),len(reviewable_profiles),'Automatic preparation checks current first-party identity, activity, exact country evidence and completed website-search limitations. Unsupported cases stay held; advanced manual review remains available. Website found: open its matched website record.',bool(profile_reviewed) or any(evidence[lead['id']] for lead in reviewable_profiles))
     if any(lead['website_status'] in {'ambiguous','search_unavailable'} or lead['status']=='profile_unavailable' for lead in reviewable_profiles):
         nodes['CR']['state'] = 'blocked'
     profile_candidates = sum(len(candidates[lead['id']]) for lead in profiles)
-    put('CE','review' if profile_candidates else 'waiting' if profiles else 'not_applicable',f'{profile_candidates} published candidates','Captured public-profile emails remain candidates until current business/profile/inbox ownership is reviewed. No automatic probe from a candidate.')
+    put('CE','review' if profile_candidates else 'waiting' if profiles else 'not_applicable',f'{profile_candidates} published candidates','Eligible profile preparation can import an explicitly labelled published business inbox after current identity/activity/country/search/source checks. Indexed or unsupported candidates stay held. No automatic mailbox probe or sending from preparation.')
     finished_websites = sum(bool(evidence[lead['id']]) and lead['status'] not in {'new','researching'} for lead in websites)
     count('D',finished_websites,len(websites),'Research uses robots, sitemap/page/depth budgets, HTTP and Chromium. Finished research can have partial coverage; inspect its report.',bool(websites))
     website_phase = phase({'research'},{lead['id'] for lead in websites})

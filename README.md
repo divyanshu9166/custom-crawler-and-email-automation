@@ -6,12 +6,19 @@ PageSpeed still depends on provider quota/key. [Live findings and remaining gaps
 
 **Current workspace (20 October 2026):** Campaigns is the home dashboard for named campaigns, delivery totals and bulk operations. Pipeline opens a prospect summary and one initial email for individual review. Research tools, manual qualification and sales history are under **Research details & advanced tools**. New drafting produces one personalized email; automatic follow-ups are OFF. Existing unapproved follow-ups can be archived without changing the initial email or its edits. See [the focused workspace](docs/FOCUSED_WORKSPACE.md).
 
-A cold email system for US/UK prospects. Campaign A covers website development/improvement and inquiry/booking chatbots. Campaign B covers new/existing D2C stores, shopping/support chatbots and permission-based WhatsApp opportunities. Crawler quality takes priority; host size controls concurrency and throughput.
+A cold email system for US/UK prospects. Campaign A covers website development/improvement, inquiry/booking chatbots and source-backed inbound/requested-callback AI calling proposals. Campaign B covers new/existing D2C stores, shopping/support chatbots and permission-based WhatsApp opportunities. Crawler quality takes priority; host size controls concurrency and throughput.
 
 **Research → draft review:** [automatic qualification and AI email preparation](docs/AUTO_PREPARATION.md)
-removes repetitive country/quote/offer copying for supported website prospects. Use **Prepare emails**
+removes repetitive country/quote/offer copying for supported website and profile-first prospects. Use **Prepare emails**
 or bulk **Prepare pending emails**; final recipient, evidence, eligibility and message approval
 remain manual. Missing evidence stays held. Includes NVIDIA connection testing and VPS update steps.
+
+**Profile-first bulk research (21 October):** Find prospects → **Business profiles first**
+collects a batch from an industry/location query, checks for official websites and saves it
+to a named campaign. Eligible profiles can pass automatic business/country/contact checks
+and reach one unscheduled email. Collect research first with automatic preparation OFF,
+then use the campaign bulk Prepare action. No per-business profile entry is required.
+See [source gates, recurring searches and remaining limits](docs/PROFILE_PROSPECTS.md).
 
 **VPS setup:** [copy/paste commands for an existing n8n host](docs/VPS_DEPLOYMENT_COMMANDS.md)
 and [the full deployment/acceptance checklist](docs/VPS_DEPLOYMENT_CHECKLIST.md).
@@ -25,7 +32,7 @@ scroll/Next snapshots, deduplicated partial results and visible search coverage.
 FxEmbed bio caches, rate-limit holds and pacing survive app restarts without
 renewing source timestamps. [Implementation and acceptance limits](docs/PRE_VPS_PLATFORM_UPDATES.md).
 Latest complete-suite results are in VALIDATION.md; older counts below retain
-their historical scopes. Authenticated VPS access remains pending.
+their historical scopes. Current authenticated VPS checks and preserved sending-OFF state are recorded there.
 
 **Email-writing correction:** operational emails now require research-based AI writing from current reviewed business evidence and one selected offer. There is no template fallback. Legacy drafts are visibly held and cannot be approved. Settings includes an AI email writer section. Controlled provider and browser checks passed, while live model quality remains unverified because no endpoint/key/model is configured. Sending remains disabled/paused. See [the correction and acceptance limits](docs/AI_EMAIL_WRITING.md).
 

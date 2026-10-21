@@ -60,8 +60,10 @@ def test_professional_routes_are_separate_and_private_routes_rejected(url):
 
 def test_person_profile_is_not_reclassified_as_a_business_lead():
     assert professional_target("https://uk.linkedin.com/in/alex-doe/")[1] == URL
-    with pytest.raises(ValueError):
-        canonical_profile(URL)
+    # It is a researchable candidate, not automatically an owned business.
+    assert canonical_profile(URL) == URL
+    from outreach.profiles import personal_business_snapshot
+    assert not personal_business_snapshot({'state': 'captured', 'headline': 'Founder at Bright Demo', 'text': 'Employee profile'})
 
 
 def test_guest_html_parser_extracts_published_bio_and_mailto_without_account_activity_or_hidden_data():

@@ -112,7 +112,10 @@ def review_lead(db, lead_id, review, *, expected_lead=None, expected_contacts=No
             raise ValueError("Profile-only prospects need website/store launch or a sourced customer-question offer")
         profile_review = {"evidence_id": evidence["id"], "evidence_sha256": evidence["sha256"],
                           "ownership_notes": ownership, "activity_quote": activity, "website_search_notes": search_notes,
-                          "reviewed_at": time.time()}
+                          "reviewed_at": time.time(), 'method': review_method}
+        if review_method == 'research_ai_profile':
+            from .profile_preparation import evidence_context
+            profile_review['research_crawl_id'] = evidence_context(db, lead)['crawl_id']
         finding.update(profile_only=True, website_status="website_not_found",
                        website_search_note="I couldn't find a dedicated website linked from the profile or in our search; please correct me if I missed it.")
     trigger = review.get("recent_trigger", "").strip()

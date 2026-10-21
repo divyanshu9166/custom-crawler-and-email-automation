@@ -1,3 +1,36 @@
+# Profile-first bulk preparation — 21 October 2026
+
+The previous mandatory profile-only hold is replaced by current first-party business,
+activity, country, completed website-lookup and published-business-inbox checks. Profile-first
+search and recurring mode preserve named campaigns. The supported path no longer asks the
+operator to copy qualification/ownership notes for every prospect. Final recipient/message
+approval remains separate; unsupported source evidence stays held.
+
+Executed focused checks cover automatic Campaign A/B qualification, source/identity hashes,
+blocked/ambiguous/stale captures, suppressed/shared contacts, employee exclusion, cancellation,
+source/configuration races, one unscheduled draft, history preservation, automatic/bulk
+scheduling, recurring worker payloads, schema 6→7 preservation and real writer validation.
+Chromium desktop/mobile checks submit a profile-first batch and recurring search using the
+actual application/API; the legacy full browser smoke also passed with zero JavaScript errors.
+The wider run exposed company-reader/reference/employee-link assumptions affected by allowing
+self-selling personal candidates; those company-specific boundaries were restored and their
+focused regressions passed. **Final complete suite: 1,601 passed in 597.30 seconds**, with the existing Starlette/httpx
+warning. Ruff, JavaScript syntax and diff checks passed. All 35 workflow nodes were mapped
+to executed passing checks, including the new automatic profile qualification/contact paths.
+
+Candidate modules were executed in an isolated process on the VPS with synthetic first-party
+captures/search reports and the saved live Nemotron configuration. A Campaign A website-launch
+sample and Campaign B store-launch sample each reached `drafts_ready`, with one `draft`,
+no due/sent timestamp and zero send attempts. The actual leads/contacts/messages digest was
+unchanged. The launch writer retains bounded-search uncertainty; no matched website is not
+proof of absence. The ordinary profile-based calling proposal also passed a controlled live
+writer sample. These are live model/application rehearsals with fictional sources, not evidence
+of native LinkedIn/X acquisition yield, real mailbox deliverability or conversion performance.
+
+The VPS has automatic preparation OFF for collect-first use, research ON, sending and follow-ups
+OFF. Deployment preserves those choices and the existing Spotless draft. Schema 7 adds only a
+recurring-search focus flag; a fresh private SQLite backup was taken before rollout.
+
 # Final audit-reference feedback check — 19 October 2026
 
 A live response cited an unavailable audit observation and was rejected after its bounded

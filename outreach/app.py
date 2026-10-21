@@ -136,6 +136,7 @@ class SearchInput(Input):
     country_hint: Literal["US", "UK"]
     limit: int = Field(default=10, ge=1, le=30)
     campaign_id: int | None = Field(default=None, ge=1)
+    profile_first: bool = False
 
 
 class CampaignCreateInput(Input):
@@ -776,7 +777,10 @@ def create_app(settings=None):
     def discover(value: SearchInput):
         from .campaign_manager import assert_target
         assert_target(db, value.campaign_id, value.campaign)
-        return {"job_id": db.enqueue("discover", value.model_dump(exclude_none=True))}
+        payload = value.model_dump(exclude_none=True)
+        if not value.profile_first:
+            payload.pop('profile_first')
+        return {"job_id": db.enqueue("discover", payload)}
 
     @app.get("/api/schedules", dependencies=[Depends(auth)])
     def schedules():
@@ -786,8 +790,8 @@ def create_app(settings=None):
     def add_schedule(value: ScheduleInput):
         from .campaign_manager import assert_target
         assert_target(db, value.campaign_id, value.campaign)
-        sid = db.execute("INSERT INTO schedules(query,campaign,country_hint,result_limit,interval_hours,next_run,campaign_id) VALUES(?,?,?,?,?,?,?)",
-                         (value.query, value.campaign, value.country_hint, value.limit, value.interval_hours, time.time(), value.campaign_id))
+        sid = db.execute("INSERT INTO schedules(query,campaign,country_hint,result_limit,interval_hours,next_run,campaign_id,profile_first) VALUES(?,?,?,?,?,?,?,?)",
+                         (value.query, value.campaign, value.country_hint, value.limit, value.interval_hours, time.time(), value.campaign_id, int(value.profile_first)))
         return {"id": sid}
 
     @app.delete("/api/schedules/{schedule_id}", dependencies=[Depends(auth)])

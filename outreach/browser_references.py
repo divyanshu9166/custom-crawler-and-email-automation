@@ -31,6 +31,10 @@ def save_reference(db, *, company, source_url, website, campaign, country_hint,
         raise ValueError('Use the public profile URL without query parameters')
     # Keep the exact About source in history; validate its company profile root.
     profile_source = source_url
+    if platform_of(source_url) == 'linkedin.com' and parts.path.startswith('/in/'):
+        # This form saves an unverified company-link hint, without a profile
+        # capture. Personal business identities need the profile research path.
+        raise ValueError('Use profile research to establish a personal business identity before linking its website')
     if platform_of(source_url) == 'linkedin.com' and parts.path.rstrip('/').endswith('/about'):
         profile_source = urlunsplit((parts.scheme, parts.netloc, parts.path.rstrip('/')[:-6], '', ''))
     canonical_profile(profile_source)

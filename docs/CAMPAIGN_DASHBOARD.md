@@ -124,7 +124,7 @@ authentication and mutation-origin checks:
 - `GET /api/campaign-export` with the same filters, without page limits.
 
 Campaign responses do not expose unsubscribe tokens or mailbox credentials.
-Back up the database before deploying schema 6. Older images refuse newer schemas;
+Back up the database before deploying schema 7. Schema 7 adds the recurring profile-first search flag to the existing schema 6 campaign tables. Older images refuse newer schemas;
 rollback requires a matching backup. Existing SMTP/IMAP, stable HTTPS unsubscribe
 URL, DKIM checks, mailbox limits, sending-OFF state and disabled follow-ups remain
 independent of the dashboard. Do not infer production inbox delivery from the

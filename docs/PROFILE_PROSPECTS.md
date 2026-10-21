@@ -1,28 +1,72 @@
-# Businesses without a known website
+# Profile-first bulk research and email preparation
 
-Profile-first prospects enter the same acquisition pipeline without a fabricated website/domain. Campaign A supports website development and Campaign B supports store launches; a customer-question chatbot offer still needs a sourced observation.
+Use **Find prospects → Automatic prospect research**, enter an industry/location, select
+**Business profiles first**, choose a market, count (up to 30) and named campaign, and
+select **Start research**. There is no requirement to enter each business name/profile URL.
+The repeat-search option retains the same focus and campaign. The advanced single-business
+form remains optional for a business you already know.
 
-## Research and contact flow
+## Automatic path
 
-1. Search public business profiles/listings automatically, or use **Find prospects → Add a business without a known website**. Supply a specific business-profile URL, company name, A/B campaign and US/UK market. Personal LinkedIn profiles, platform home/search pages and individual X/Instagram posts are rejected.
-2. Deduplicate by profile identity. Keep an internal profile key, an empty website and the original profile URL. Country selection is a search hint, not qualification. Indexed emails remain held signals.
-3. Research the profile only when publicly accessible and robots permits it. Save current text, source URL and hash. Check published website links and search the named company for its official website; record result counts, engine issues and uncertainty.
-4. If a website is matched, retain profile/source history and create or reuse a normal website prospect for deep research. Do not merge inboxes or bypass qualification.
-5. **Website not found** means no company website matched this search, not confirmed absence. Ambiguous, failed or blocked research remains held. Indexed-only evidence cannot replace a captured business source.
-6. Save emails published in the captured profile as ownership-review candidates, including a public business Gmail inbox. No contact or Reacher job is created automatically from a profile email.
-7. Review business/profile identity, a business activity/service quote, the country quote, the inquiry/order observation, one suggestion and search limitations. Website/store launch and sourced customer-question offers are available; website/store improvement is unavailable for profile-only prospects.
-8. Import a published contact only with current source proof and inbox ownership notes. Reacher verification, buyer relevance, eligibility and review of all four messages still apply. Changed research invalidates profile/contact review; verification, approval/resume and SMTP submission recheck ownership.
+1. Search the configured business-profile sources, instead of filling the batch with
+   ordinary website results first. Deduplicate profile identities and retain campaign ownership.
+2. Capture accessible current business fields and check published links plus a bounded
+   named-business website search. A matched website enters normal website research.
+3. When no site matches, retain the profile URL, current text/hash, activity, published
+   contact candidates and website-search report. The website field stays empty; internal
+   profile keys are not displayed/exported as websites.
+4. With **Settings → Automatically prepare one email after research** enabled, the worker
+   schedules eligible profile records after research finishes. Otherwise collect research
+   first, then select prospects in **Campaigns → Prospects → Prepare** or use Pipeline's
+   batch preparation control. These paths use the same automatic qualification logic.
+5. Require a matching name in a current first-party capture, actual business activity,
+   a completed unambiguous website lookup without engine errors, an exact current
+   US/UK country quote, campaign/offer fit and a currently published business inbox.
+   An indexed snippet, community mirror or selected market does not qualify the source.
+6. Assess one offer using the existing AI writer and source packet. Campaign A can propose
+   a website launch or an independently sourced customer-question/calling task. Campaign B
+   needs owned-product and starting-ecommerce evidence for a store launch. A profile-only
+   prospect cannot receive an invented PageSpeed result or a website-improvement diagnosis.
+7. Import only an explicitly labelled published business email from that same current
+   source/hash. Check suppression, unique-inbox ownership and outreach history. Machine
+   checks are recorded as `research_ai_profile` / `source_automation`, never operator approval.
+8. Prepare one initial unscheduled email by default. Retain the website-search uncertainty:
+   no matched website is not proof that no website exists. Explain the sourced business
+   process and a useful proposed launch/change. Final recipient/message review remains.
 
-## Pitch and dashboard
+Existing drafts, human edits, contact holds and sending history are preserved. Preparation
+never enables sending, approves a recipient, calls a real mailbox verifier or creates
+follow-ups unless the separate existing follow-up setting was explicitly enabled.
 
-The first draft identifies the business profile and says: “I couldn't find a dedicated website linked from the profile or in our search; please correct me if I missed it.” It then uses the reviewed inquiry/order observation and suggestion. It does not invent lost customers, website absence, conversion rates or guaranteed sales growth. Three follow-ups retain the existing service-specific suggestions and reply/stop calendar.
+## LinkedIn personal profiles
 
-Website screenshots and PageSpeed are unavailable for a profile-only record. Existing concept artifacts can use reviewed profile evidence. CSV exports include profile URL, prospect kind and website status; internal profile keys are not presented as domains.
+A specific `/in/...` URL can be researched as a candidate. Automatic business qualification
+requires explicit current self-selling evidence, such as an independent consultant,
+self-employed provider or a person describing their own services. An employee/founder
+keyword alone does not establish a personally owned business. Ordinary employee profiles
+continue through the existing employer/official-company resolution path. Personal-profile
+search in this mode also respects the existing LinkedIn people-search setting.
 
-## Evidence and limits
+## Held cases and limits
 
-Tests cover both launch campaigns, reviewed-contact verification/approval, stale sources, blocked/ambiguous profiles, failed searches, website-found routing, canonical identity, database migration, API controls and exports. The actual Chromium smoke exercises the profile form, qualification, published Gmail candidate import, four drafts and mobile layout with fictional evidence. Fixtures are not real businesses or live verification results.
+Blocked/login-only sources, mismatched identity, stale captures, ambiguous/failed website
+searches, unsupported country, missing business activity, unlabelled/personal contact details,
+shared or suppressed inboxes and weak offers stay held with a reason. No address is guessed.
+Changed research/configuration/contact state discards stale AI output. Published contact
+ownership does not establish buying authority or mailbox deliverability.
 
-A real LinkedIn-company-profile run found the already researched IMAGE Skincare UK website and reused its website record. Its platform snapshot was robots-denied; no profile email was imported or probed. This checks website-found/blocked-source handling, not real website-less acquisition. Live profile-email coverage, independent recipient approval, actual Reacher/mailbox and deployed sending/VPS acceptance remain unfinished.
+This automates repetitive source checks and preparation; platform accessibility and the
+strength of each business's public evidence still determine coverage. Website screenshots
+and PageSpeed are unavailable until an actual website is matched. No CAPTCHA or login
+restriction is bypassed.
 
-See [the dated feature check](profile-prospects-check.json). Apify/Apollo are not dependencies; free search depends on accessible public indexes/pages. Sending remains disabled in the development server.
+## Validation
+
+Controlled tests exercise both launch campaigns, automatic and bulk scheduling, profile-first
+search/deduplication/campaign attribution, recurring execution, source/contact races,
+source hashes, suppression/shared inboxes, employee exclusion and the real writer validator.
+Desktop/mobile Chromium exercises the actual search form and recurring-search payloads.
+These fictional-source tests do not establish live LinkedIn/X coverage or deliverability.
+Database schema 7 adds only the saved search-focus flag; migration preserves existing
+campaigns, drafts, suppression and delivery history. Back up before deployment because
+older application images reject newer schemas.

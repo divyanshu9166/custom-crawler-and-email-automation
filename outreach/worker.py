@@ -181,7 +181,8 @@ async def job_loop(db, settings, stop, kinds, schedules=False, admission=None):
                 for schedule in db.all("SELECT * FROM schedules WHERE enabled=1 AND next_run<=?", (time.time(),)):
                     db.enqueue("discover", {"query": schedule["query"], "campaign": schedule["campaign"],
                                            "country_hint": schedule["country_hint"], "limit": schedule["result_limit"],
-                                           **({'campaign_id': schedule['campaign_id']} if schedule.get('campaign_id') else {})})
+                                           **({'campaign_id': schedule['campaign_id']} if schedule.get('campaign_id') else {}),
+                                           **({'profile_first': True} if schedule.get('profile_first') else {})})
                     db.execute("UPDATE schedules SET next_run=? WHERE id=?",
                                (time.time() + schedule["interval_hours"] * 3600, schedule["id"]))
             admitted = settings.worker_enabled and (not admission or admission.acquire())

@@ -72,6 +72,9 @@ def official_root(url):
 
 
 async def public_snapshot(settings, url, platform=False):
+    if platform and platform_of(url) == 'linkedin.com' and '/in/' in urlsplit(url).path:
+        from .professionals import profile_snapshot
+        return await profile_snapshot(settings, url)
     if platform and settings.platform_browser_enabled and platform_of(url) in {'linkedin.com','x.com','twitter.com'}:
         from .platform_browser import browser_snapshot
         return await browser_snapshot(settings,url)
@@ -333,18 +336,24 @@ async def resolve_signal(settings, row, country_hint, platforms):
         except ValueError:
             pass
     signal["indexed_sha256"] = hashlib.sha256((signal["source_title"] + "\n" + signal["indexed_snippet"]).encode()).hexdigest()
+    personal_business = False
     if signal['platform'] == 'linkedin.com' and '/in/' in urlsplit(row['url']).path:
-        from .linkedin_recovery import resolve_person_signal
-        return await resolve_person_signal(settings, row, country_hint, signal)
+        from .profiles import personal_business_snapshot
+        if not personal_business_snapshot(snapshot):
+            from .linkedin_recovery import resolve_person_signal
+            return await resolve_person_signal(settings, row, country_hint, signal)
+        # Explicit self-selling activity can be researched as this person's own
+        # business presence. An employer/founder title alone still uses recovery.
+        personal_business = True
     # Explicit platform website links take precedence. Multiple distinct companies stay held.
     direct = snapshot.get("outgoing_websites", []) if not public_post else []
     if len({domain_of(u) for u in direct}) == 1:
-        signal.update(website=direct[0], state="linked_website_candidate", company=snapshot['title'] if managed else company_title(row.get("title", "")))
+        signal.update(website=direct[0], state="linked_website_candidate", company=snapshot['title'] if managed or personal_business else company_title(row.get("title", "")))
         return signal
     if len({domain_of(u) for u in direct}) > 1:
         signal["state"] = "ambiguous_websites"
         return signal
-    name = snapshot['title'] if public_post else company_title(row.get("title", ""))
+    name = snapshot['title'] if public_post or personal_business else company_title(row.get("title", ""))
     if managed:
         name=snapshot['title'] if snapshot.get('state')=='captured' else name
         if not settings.platform_browser_public_fallback:
@@ -365,7 +374,7 @@ async def resolve_signal(settings, row, country_hint, platforms):
     hints = website_hints(row)
     if community.get('state') == 'public_mirror_hint':
         hints = list(dict.fromkeys(website_hints({'snippet': community.get('description', '')+' '+community.get('published_website_hint', '')}) + hints))[:6]
-    if public_post:
+    if public_post or personal_business:
         hints = list(dict.fromkeys(snapshot.get('outgoing_websites', [])+website_hints({'snippet': snapshot.get('text', '')})+hints))[:6]
     hint_roots = {domain_of(h) for h in hints}
     signal['indexed_website_hints'] = hints
@@ -491,7 +500,7 @@ async def resolve_signal(settings, row, country_hint, platforms):
     return signal
 
 
-async def prospect_candidates(settings, query, country_hint, limit, on_signal=None, on_candidate=None, on_progress=None):
+async def prospect_candidates(settings, query, country_hint, limit, on_signal=None, on_candidate=None, on_progress=None, profile_first=False):
     # Consumers may return True once their retained website/profile record
     # quota is met. False means they own that mixed-record budget; None keeps
     # the default unique-website budget for observers and read-only callers.
@@ -505,8 +514,14 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
         raise ValueError("Configure up to eight valid public platform domains")
     paths = {"linkedin.com": "linkedin.com/company/", "google.com": "google.com/maps/"}
     queries = [market_query] + [f"site:{paths.get(p, p)} {market_query}" for p in platforms]
+    if profile_first:
+        queries = [q for q in queries if q != market_query]
     if 'linkedin.com' in platforms:
-        queries.append(f'site:linkedin.com/in/ {market_query} (founder OR owner OR director OR marketing)')
+        if profile_first:
+            if settings.linkedin_people_search_enabled:
+                queries.append(f'site:linkedin.com/in/ {market_query} ("self-employed" OR "independent consultant")')
+        else:
+            queries.append(f'site:linkedin.com/in/ {market_query} (founder OR owner OR director OR marketing)')
     managed_queries={}
     if settings.platform_browser_enabled:
         managed_queries={f'browser:{p} {market_query}':p for p in ('linkedin.com','x.com')}
@@ -599,6 +614,9 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
                     candidate = {"url": signal["website"], "source_url": row["url"], "title": signal.get("company") or row.get("title", ""),
                                  'research_seed_url': signal.get('official_match_url', signal['website'])}
                 else:
+                    if profile_first:
+                        skipped.append({'url': row['url'], 'reason': 'profile_first_requires_business_profile'})
+                        continue
                     candidate = {**row, "url": official_root(row["url"]), "source_url": row["url"],
                                  'research_seed_url': row['url'],
                                  "identity_status": "indexed_candidate_needs_review"}
@@ -621,12 +639,12 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
             on_progress({"stage": "query_finished", "query": search, "candidate_domains": len(found), "signals": len(signals)})
         if stop_reason == 'requested_limit':
             break
-        if search == queries[0] and not found and not settings.platform_browser_enabled:
+        if search == queries[0] and not found and not settings.platform_browser_enabled and not profile_first:
             retry = focused_query(query, country_hint)
             if retry and retry.lower() != market_query.lower():
                 queries.insert(1, retry)
     return list(found.values())[:limit], {"queries": queries, "signals": signals, "errors": errors, "skipped": skipped, "engine_reports": engine_reports,
                                        'relaxed_queries': relaxed_queries,
-                                       'stop_reason': stop_reason, 'requested_limit': limit, 'executed_queries': executed_queries,
+                                       'stop_reason': stop_reason, 'requested_limit': limit, 'executed_queries': executed_queries, 'profile_first': profile_first,
                                        "candidate_domains_before_limit": len(found), "country_hint": country_hint,
                                        "note": "Automatic indexed/public research. Every company, geography, contact owner and offer remains unqualified until reviewed; indexed snippets can be stale."}
