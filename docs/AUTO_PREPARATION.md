@@ -166,3 +166,12 @@ business-location assertion. The packet also states whether the supplied company
 name satisfies the existing corporate-name gate; a search-result title must not
 be treated as a confirmed incorporated identity. No model output is repaired into
 a supported claim automatically.
+
+
+Assessment can select explicit c/q source references instead of generating quote
+text or evidence IDs. The server resolves each selected reference to the exact
+saved span and page ID, then applies all normal review validators. Unknown refs,
+audit-event refs and conflicting generated quote fields are rejected. Business
+source quotes remain distinct from measurements, which belong in the observation
+and proposed-fix context. Existing exact-quote responses remain validated for
+compatibility; they are never fuzzy-matched to a nearby source.

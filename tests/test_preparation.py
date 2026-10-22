@@ -479,3 +479,33 @@ def test_assessment_supplies_exact_country_candidates_without_inventing_corporat
         return json.dumps({'ready':False,'reason':'controlled hold'})
     monkeypatch.setattr(email_writer,'chat',chat)
     assert not preparation._assessment(settings,lead,pages,lambda:None)['ready']
+
+def test_assessment_resolves_explicit_source_references_before_normal_validation(db,settings,prospect,monkeypatch):
+    lid,_,eid=prospect
+    lead=db.one('SELECT * FROM leads WHERE id=?',(lid,))
+    def chat(settings,instructions,packet,**kwargs):
+        data=json.loads(packet)
+        result=assessment(eid)
+        for key in ('country_source','country_quote','evidence_id','quote'):
+            del result['review'][key]
+        result['source_selection']={'country':data['country_evidence_candidates'][0]['ref'],
+                                    'opportunity':data['opportunity_evidence_candidates'][0]['ref']}
+        return json.dumps(result)
+    monkeypatch.setattr(email_writer,'chat',chat)
+    result=preparation._assessment(settings,lead,preparation._pages(db,lead),lambda:None)
+    assert result['ready'] and result['review']['evidence_id']==eid
+    page=db.one('SELECT text FROM evidence WHERE id=?',(eid,))
+    assert result['review']['quote'] in page['text'] and result['review']['country_quote'] in page['text']
+    assert not db.one('SELECT id FROM messages')
+
+
+@pytest.mark.parametrize('selection,review',[
+    ({'country':'c0','opportunity':'performance:3757:mobile'},{}),
+    ({'country':[], 'opportunity':'q0'},{}),
+    ({'country':'c0','opportunity':'q0'},{'quote':'Invented business statement'}),
+])
+def test_source_reference_binding_rejects_unknown_audit_refs_or_conflicting_quotes(selection,review):
+    c=[{'ref':'c0','source_url':'https://bright-demo.com/','quote':'Cleaning across the UK.','evidence_id':1}]
+    o=[{**c[0],'ref':'q0'}]
+    with pytest.raises(ValueError):
+        preparation.bind_source_selection({'review':review,'source_selection':selection},c,o)

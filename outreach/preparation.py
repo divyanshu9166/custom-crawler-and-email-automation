@@ -43,13 +43,13 @@ Website/store improvement requires a current reproducible diagnostic finding.
 If diagnostics establish no issue, hold that pitch; do not switch to an unrelated
 service merely to produce an email. Other offers still need their own positive evidence.
 Return ONLY JSON. Either {"ready":false,"reason":"specific missing evidence"}, or
-{"ready":true,"review":{"company":"unchanged supplied company","country":"UK or US",
-"country_source":"supplied source URL","country_quote":"exact source quote with country",
+{"ready":true,"source_selection":{"country":"supplied c-reference","opportunity":"supplied q-reference"},
+"review":{"company":"unchanged supplied company","country":"UK or US",
 "timezone":"Europe/London or supported US timezone","business_type":"corporate/sole_trader/other",
 "service":"ai_calling_agent/website_improvement/chatbot/website_build/store_launch/store_improvement/whatsapp_marketing/whatsapp_automation",
 "website_scope":"auto",
 "primary_goal":"inquiries_bookings or d2c_growth","fit_notes":"concrete business/offer relevance",
-"industry":"only if supported","evidence_id":1,"quote":"exact source quote",
+"industry":"only if supported",
 "observation":"only observed facts; no unobserved deficiencies",
 "suggestion":"one relevant, useful proposed assessment or change; no performance promise",
 "selling_stage":"unknown/starting_ecommerce/selling_online",
@@ -172,6 +172,46 @@ def country_candidates(pages):
     return candidates
 
 
+def opportunity_candidates(pages):
+    """Business-source anchors; audit event IDs never enter this list."""
+    from .web import EMAIL_RE
+    rows = country_candidates(pages)
+    for page in pages:
+        for match in re.finditer(r'[^.!?\n|]+(?:[.!?]|$)', page['text'][:8000]):
+            quote = match[0].strip()
+            if (not 12 <= len(quote) <= 350 or re.search(EMAIL_RE, quote)
+                    or re.search(r'https?://|www\.', quote, re.I)
+                    or not re.search(r'cleaning|service|quote|quotation|enquir|inquir|book|appointment|support|product|shop|order|launch|whatsapp', quote, re.I)):
+                continue
+            item = {'evidence_id': page['id'], 'source_url': page['url'], 'quote': quote}
+            if item not in rows:
+                rows.append(item)
+            if len(rows) >= 16:
+                return rows
+    return rows
+
+
+def bind_source_selection(result, country, opportunity):
+    """Resolve explicit source references, never fuzzy-match or repair fabricated quotes."""
+    selection = result.get('source_selection')
+    if selection is None:
+        return result  # Existing exact-quote assessments still pass the same validator.
+    if (not isinstance(selection, dict) or set(selection) != {'country', 'opportunity'}
+            or not all(isinstance(v, str) for v in selection.values())
+            or not isinstance(result.get('review'), dict)):
+        raise ValueError('Select one supplied country and opportunity source reference')
+    c = next((r for r in country if r['ref'] == selection['country']), None)
+    o = next((r for r in opportunity if r['ref'] == selection['opportunity']), None)
+    if c is None or o is None:
+        raise ValueError('Source selection must reference supplied business-source candidates, not audit event IDs')
+    fields = {'country_source': c['source_url'], 'country_quote': c['quote'],
+              'evidence_id': o['evidence_id'], 'quote': o['quote']}
+    review = result['review']
+    if any(key in review and review[key] != value for key, value in fields.items()):
+        raise ValueError('Selected source reference conflicts with generated quote fields; omit those fields')
+    return {**result, 'review': {**review, **fields}}
+
+
 def _assessment(settings, lead, pages, before_request, target_query='', audit_context=None):
     instructions = INSTRUCTIONS
     if lead.get('lead_kind') == 'profile':
@@ -192,18 +232,29 @@ def _assessment(settings, lead, pages, before_request, target_query='', audit_co
                              'Use its published business category/address as current listing evidence; a phone alone '
                              'does not prove a calling-agent need. Website absence remains unconfirmed. '
                              'Do not propose a speed audit/redesign without a matched website.')
-    instructions += ('\nUse country_evidence_candidates to select a verbatim country_quote and its paired source_url. '
+    instructions += ('\nUse country_evidence_candidates to select a country reference paired with a verbatim quote and source URL. '
                      'Check that the span describes the business rather than an unrelated person/customer. '
                      'Do not invent registered-office text or use a copyright line without a country. '
                      'When corporate_name_supported is false, do not choose corporate: use other unless '
                      'sole-trader status is explicitly established. This does not establish a legal entity type.')
     packet = {'business': {k: lead[k] for k in ('company', 'campaign', 'lead_kind', 'website_status')},
               'country_evidence_candidates': country_candidates(pages),
+              'opportunity_evidence_candidates': opportunity_candidates(pages),
               'corporate_name_supported': bool(re.search(r'\b(?:Ltd|Limited|LLC|Inc\.?|Incorporated|PLC)\b', lead['company'], re.I)
                                                and lead['company'].casefold() in ' '.join(p['text'][:8000] for p in pages).casefold()),
               'target_query': target_query, 'audit_context': audit_context or {},
               'crawl_limit': 'Only supplied captures are established. Missing features cannot be inferred.',
               'sources': [{'id': p['id'], 'url': p['url'], 'title': p['title'], 'text': p['text'][:8000]} for p in pages]}
+    for prefix, key in [('c', 'country_evidence_candidates'), ('q', 'opportunity_evidence_candidates')]:
+        for index, row in enumerate(packet[key]):
+            row['ref'] = prefix+str(index)
+    instructions += ('\nFor ready:true, use this response structure: '
+                     '{"ready":true,"source_selection":{"country":"c0","opportunity":"q0"},"review":{...}}. '
+                     'Choose actual supplied refs, not necessarily c0/q0. The server supplies country_source, '
+                     'country_quote, evidence_id and quote from those references: OMIT these four fields from review. '
+                     'All other review fields remain required. Measurements belong in observation/suggestion only. '
+                     'Never use a performance/screenshot event ID as a business evidence_id. '
+                     'If no candidates support the business/country/offer, return ready:false.')
     from .web import EMAIL_RE
     for attempt in range(2):
         encoded = re.sub(EMAIL_RE, '[contact omitted]', json.dumps(packet, ensure_ascii=True))
@@ -225,6 +276,7 @@ def _assessment(settings, lead, pages, before_request, target_query='', audit_co
             if not isinstance(result, dict) or type(result.get('ready')) is not bool:
                 raise ValueError('AI assessment must explicitly select ready or hold')
             if result['ready']:
+                result = bind_source_selection(result, packet['country_evidence_candidates'], packet['opportunity_evidence_candidates'])
                 _validate_review(lead, result, pages)
             return result
         except ValueError as exc:

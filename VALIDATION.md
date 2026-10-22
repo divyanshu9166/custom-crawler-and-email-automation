@@ -1,3 +1,14 @@
+## Explicit business source references — 22 October 2026
+
+Further live assessment isolated audit/source ID confusion: a performance event
+ID and lab sentence were submitted as a website evidence ID/quote. Source
+candidates now have explicit country/opportunity refs; assessment may choose refs
+and the server resolves exact saved text/page IDs before normal validation. The
+response instructions use refs rather than a sample numeric evidence ID. Unknown
+refs, audit IDs and conflicting supplied fields fail closed. Existing drafts are
+not overwritten. 139 preparation/profile/diagnostic cases passed, including the
+new reference protocol and invalid/conflicting reference regressions; Ruff passed.
+
 ## Live managed-key PageSpeed and grounded country inputs — 22 October 2026
 
 The key saved through Settings passed a live mobile/desktop audit for lead 18.
