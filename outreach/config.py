@@ -108,6 +108,8 @@ class Settings(BaseSettings):
     draft_api_key: str = ""
     draft_model: str = ""
     draft_timeout_seconds: float = Field(90, ge=5, le=180)
+    # Playbook score (outreach/copywriting.py) below which one rewrite is requested. 0 disables it.
+    copy_min_score: int = Field(75, ge=0, le=100)
     browser_enabled: bool = True
     platform_browser_enabled: bool = False
     platform_browser_public_fallback: bool = True

@@ -1,3 +1,8 @@
+**22 October copywriting playbook:** five classic copywriting books are distilled into
+`outreach/copywriting.py`: a per-email copy plan, generated prompt rules and a 0-100 copy score
+that triggers one rewrite below `COPY_MIN_SCORE`. Quality no longer depends on one model. See
+[the copywriting playbook](COPYWRITING_PLAYBOOK.md).
+
 **22 October pain-led initial email (prompt v17):** live drafts read like audit reports
 ("mobile loading observation and proposed website work", render-blocking jargon, no reason to
 care, a second add-on offer and self-defeating hedges). The writer now receives a deterministic
