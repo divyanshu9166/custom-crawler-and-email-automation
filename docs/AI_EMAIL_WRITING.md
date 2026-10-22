@@ -1,3 +1,17 @@
+**22 October pain-led initial email (prompt v17):** live drafts read like audit reports
+("mobile loading observation and proposed website work", render-blocking jargon, no reason to
+care, a second add-on offer and self-defeating hedges). The writer now receives a deterministic
+`pitch_brief` for the strongest measured finding (`outreach/stakes.py`): a plain-English hook
+naming the business and page, a verified reason it matters (Google's 2.5 s / 4 s main-content
+thresholds and 90+ PageSpeed band, WCAG contrast minimums, or the direct consequence such as a
+404 link being a dead end), the plain fix and its effort. The prompt orders the email as hook,
+why it matters, fix, one small yes/no question, in 55-95 words with a 2-6 word subject and one
+offer. New hard checks reject report-title subjects, sender-first openers, technical jargon,
+defensive hedges and percentages absent from sources. All earlier truth validators are unchanged:
+no claimed lost customers, sales or visitor behaviour. Greetings drop legal suffixes and SEO
+taglines. A body written literally from each brief passes every validator (tests cover six finding
+types). Live model output is not yet reviewed: regenerate a few drafts after deploying.
+
 **19 October audit-input correction:** assessment and email writing now receive scoped
 PageSpeed and render diagnostics separately from HTML source quotes. Failed/partial reports
 cannot establish business pain. Valid measured observations need a report reference and test

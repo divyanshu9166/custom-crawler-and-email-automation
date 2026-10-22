@@ -82,6 +82,7 @@ def test_greeting_uses_published_domain_matched_homepage_brand_without_renaming_
             'text':'At Skweeky Kleen, we provide commercial cleaning services.'}
     assert email_writer.display_name(lead,[source])=='Skweeky Kleen'
     assert lead['company']=='Office Cleaning London – Expert Commercial Cleaners'
-    assert email_writer.display_name(lead,[{**source,'url':'https://other-company.com/'}])==lead['company']
-    assert email_writer.display_name(lead,[{**source,'title':'Commercial Cleaning | Other Company'}])==lead['company']
-    assert email_writer.display_name(lead,[{**source,'text':'Unrelated imported content'}])==lead['company']
+    # Without a verified brand, the fallback drops the SEO tagline but keeps the stored identity.
+    assert email_writer.display_name(lead,[{**source,'url':'https://other-company.com/'}])=='Office Cleaning London'
+    assert email_writer.display_name(lead,[{**source,'title':'Commercial Cleaning | Other Company'}])=='Office Cleaning London'
+    assert email_writer.display_name(lead,[{**source,'text':'Unrelated imported content'}])=='Office Cleaning London'

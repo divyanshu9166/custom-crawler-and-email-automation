@@ -143,10 +143,9 @@ def validate_copy(plan, text, *, initial=False):
 
 WRITER_INSTRUCTIONS = """
 Use prospect_solution to compose ONE coherent solution, not a menu of everything we sell.
-Keep the selected primary service central. You may briefly include up to TWO relevant
-optional_services as supporting additions, only from this supplied plan. They are optional,
-not additional diagnosed problems. Website redesign/build may be the main project and an
-assistant/calling agent a supporting feature; one primary service does not forbid additions.
+Keep the selected primary service central. optional_services are for a later conversation:
+leave them out of an initial email unless one directly fixes the same finding. They are
+optional, not additional diagnosed problems, and never a second offer in the first email.
 Follow the optional calling use_case: a helpdesk route supports approved support answers
 and human handoff, not an assumed sales-qualification or booking workflow.
 For a website project, explain the observed page-specific problem and its concrete
@@ -175,5 +174,5 @@ existing enquiry route. Do not force a redesign/layout claim when only loading e
 For an optional_fit_check calling agent, keep it conditional: if phone enquiries are relevant,
 it could collect requirement details and route a summary to the team. Do not infer a phone
 bottleneck from a listed number. Keep optional additions to one short sentence, with one
-final next-step question for the overall proposal. Aim for about 90-130 words when bundling.
+final next-step question for the overall proposal. Stay within the 55-95 word target.
 """
