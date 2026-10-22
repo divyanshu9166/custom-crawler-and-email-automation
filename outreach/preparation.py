@@ -145,6 +145,33 @@ def _pages(db, lead):
     return selected
 
 
+def country_candidates(pages):
+    """Offer short verbatim source spans, never infer country from email/domain suffixes."""
+    from .web import EMAIL_RE
+    candidates = []
+    pattern = r'\b(?:UK|USA|United Kingdom|United States|England|Scotland|Wales|Northern Ireland)\b'
+    for page in pages:
+        text = page['text'][:8000]
+        for match in re.finditer(pattern, text):
+            start, end = max(0, match.start()-100), min(len(text), match.end()+80)
+            # Keep intact words and retain a contiguous span of the actual source.
+            if start:
+                space = text.find(' ', start, match.start())
+                start = space+1 if space >= 0 else match.start()
+            if end < len(text):
+                space = text.rfind(' ', match.end(), end)
+                end = space if space >= 0 else match.end()
+            quote = text[start:end].strip()
+            if re.search(EMAIL_RE, quote) or re.search(r'https?://|www\.', quote, re.I):
+                continue
+            item = {'evidence_id': page['id'], 'source_url': page['url'], 'quote': quote}
+            if item not in candidates:
+                candidates.append(item)
+            if len(candidates) >= 8:
+                return candidates
+    return candidates
+
+
 def _assessment(settings, lead, pages, before_request, target_query='', audit_context=None):
     instructions = INSTRUCTIONS
     if lead.get('lead_kind') == 'profile':
@@ -165,7 +192,15 @@ def _assessment(settings, lead, pages, before_request, target_query='', audit_co
                              'Use its published business category/address as current listing evidence; a phone alone '
                              'does not prove a calling-agent need. Website absence remains unconfirmed. '
                              'Do not propose a speed audit/redesign without a matched website.')
+    instructions += ('\nUse country_evidence_candidates to select a verbatim country_quote and its paired source_url. '
+                     'Check that the span describes the business rather than an unrelated person/customer. '
+                     'Do not invent registered-office text or use a copyright line without a country. '
+                     'When corporate_name_supported is false, do not choose corporate: use other unless '
+                     'sole-trader status is explicitly established. This does not establish a legal entity type.')
     packet = {'business': {k: lead[k] for k in ('company', 'campaign', 'lead_kind', 'website_status')},
+              'country_evidence_candidates': country_candidates(pages),
+              'corporate_name_supported': bool(re.search(r'\b(?:Ltd|Limited|LLC|Inc\.?|Incorporated|PLC)\b', lead['company'], re.I)
+                                               and lead['company'].casefold() in ' '.join(p['text'][:8000] for p in pages).casefold()),
               'target_query': target_query, 'audit_context': audit_context or {},
               'crawl_limit': 'Only supplied captures are established. Missing features cannot be inferred.',
               'sources': [{'id': p['id'], 'url': p['url'], 'title': p['title'], 'text': p['text'][:8000]} for p in pages]}

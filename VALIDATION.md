@@ -1,3 +1,19 @@
+## Live managed-key PageSpeed and grounded country inputs — 22 October 2026
+
+The key saved through Settings passed a live mobile/desktop audit for lead 18.
+Mobile score 71 with LCP 4577.13 ms; desktop score 83. Both strategies flagged
+render-blocking requests. The saved diagnostic conclusion now has a measured
+finding. These are lab observations, not measured customer or revenue impact.
+
+Subsequent preparation exposed a model source-selection failure: generated
+registered-office/copyright country quotes did not match supplied evidence or
+state a country. Assessment now receives up to eight short exact country-source
+spans and the existing corporate-name support gate result. All source/country
+validators remain enforced. Regression coverage checks quote continuity,
+email/domain exclusion and search-title identity handling. 135 preparation,
+profile and diagnostic cases passed after correcting a helper's regex invocation;
+Ruff passed. Live draft completion is verified separately after deployment.
+
 ## Managed PageSpeed API key — 22 October 2026
 
 Added Settings → PageSpeed Insights and an authenticated settings endpoint using

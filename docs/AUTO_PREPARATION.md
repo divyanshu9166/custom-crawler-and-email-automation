@@ -154,3 +154,15 @@ with no per-prospect copying of country/activity/ownership notes on the supporte
 Use Find prospects → Business profiles first, then automatic preparation or the campaign
 bulk Prepare action. Manual advanced review remains available for exceptions.
 See [Profile-first bulk flow](PROFILE_PROSPECTS.md) for exact source gates and limits.
+
+## Country evidence supplied to assessment
+
+Assessment receives bounded verbatim country quote candidates, paired with the
+saved source URL and ID. Candidates use the same text budget as the source packet;
+email/domain suffixes are excluded. They are input suggestions only: the existing
+country, exact-quote, business relevance and source checks still validate the
+selected review. A source span about a customer or unrelated person is not a
+business-location assertion. The packet also states whether the supplied company
+name satisfies the existing corporate-name gate; a search-result title must not
+be treated as a confirmed incorporated identity. No model output is repaired into
+a supported claim automatically.

@@ -450,3 +450,32 @@ def test_us_country_and_named_location_select_timezone_without_defaulting(db, se
     lead = db.one('SELECT * FROM leads WHERE id=?', (lid,))
     assert lead['country'] == 'US' and lead['timezone'] == 'America/New_York'
     assert preparation.latest(db, lid)['result']['state'] == 'drafts_ready'
+
+def test_country_candidates_are_verbatim_and_exclude_domain_and_email_hints():
+    text = 'Business enquiries hello@fixture.co.uk. Visit https://fixture.co.uk/. We provide commercial cleaning across the UK. Our team operates nationwide with local service teams.'
+    pages=[{'id':1,'url':'https://fixture.co.uk/','text':text},
+           {'id':2,'url':'https://fixture.co.uk/about','text':'Commercial cleaning specialists in Bristol and UK Operating since 2006.'}]
+    rows=preparation.country_candidates(pages)
+    assert rows
+    for row in rows:
+        page=next(p for p in pages if p['id']==row['evidence_id'])
+        assert row['quote'] in page['text'] and row['source_url']==page['url']
+        assert '@' not in row['quote'] and 'https://' not in row['quote']
+    assert not preparation.country_candidates([{'id':3,'url':'https://fixture.co.uk/','text':'Email hello@fixture.co.uk or visit https://fixture.co.uk/'}])
+
+
+def test_assessment_supplies_exact_country_candidates_without_inventing_corporate_identity(db,settings,prospect,monkeypatch):
+    lid,_,_=prospect
+    lead=db.one('SELECT * FROM leads WHERE id=?',(lid,))
+    lead['company']='Office Cleaning – Expert Cleaners'
+    pages=preparation._pages(db,lead)
+    def chat(settings,instructions,packet,**kwargs):
+        value=json.loads(packet)
+        assert value['country_evidence_candidates']
+        assert value['corporate_name_supported'] is False
+        assert 'registered-office' in instructions
+        for row in value['country_evidence_candidates']:
+            assert row['quote'] in next(p for p in pages if p['id']==row['evidence_id'])['text']
+        return json.dumps({'ready':False,'reason':'controlled hold'})
+    monkeypatch.setattr(email_writer,'chat',chat)
+    assert not preparation._assessment(settings,lead,pages,lambda:None)['ready']
