@@ -50,7 +50,7 @@ def test_review_running_failures_and_actual_approval_visible(db, settings, prepa
 
 def test_profile_website_routing_and_unknown_verdict_not_complete(db,settings):
     from outreach.profiles import add_profile_lead
-    lid = add_profile_lead(db,'Fictional profile','https://x.com/fictional_business','A','UK')
+    lid = add_profile_lead(db,'Fictional profile','https://x.com/fictional_biz','A','UK')
     db.execute("UPDATE leads SET status='profile_unavailable',website_status='website_found' WHERE id=?", (lid,))
     db.execute('INSERT INTO crawls(lead_id,report,created_at) VALUES(?,?,?)',(lid,json.dumps({'website_lead_id':42}),time.time()))
     result = snapshot(db,settings,lid)

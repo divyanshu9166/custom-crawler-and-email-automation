@@ -56,7 +56,9 @@ async def test_failed_fallback_and_email_domain_hint_never_establish_website_abs
 
 async def test_held_browser_search_still_discovers_public_websites_and_filters_irrelevant_results(settings,monkeypatch):
     settings.platform_browser_enabled=True
-    settings.discovery_platforms=''
+    # Managed browser searches run only for selected platforms; selecting them
+    # also adds their public site: queries to the fallback.
+    settings.discovery_platforms='linkedin.com,x.com'
     settings.discovery_query_delay_seconds=.001
     async def held(*args,**kwargs):return SearchRows([],[['platform','operator_attention']])
     async def search(s,*args,**kwargs):
@@ -68,7 +70,9 @@ async def test_held_browser_search_still_discovers_public_websites_and_filters_i
     rows,report=await prospect_candidates(settings,'dental clinic','UK',5)
     assert len(rows)==1 and rows[0]['url']=='https://bright-demo.com/'
     assert report['skipped'][0]['reason']=='no_query_term_in_indexed_result'
-    assert len(report['engine_reports'])==3 and report['engine_reports'][0]['engine_issues']
+    managed=report['engine_reports'][:2]
+    assert [r['query'].split()[0] for r in managed]==['browser:linkedin.com','browser:x.com']
+    assert all(r['engine_issues'] for r in managed) and len(report['engine_reports'])==6
 
 
 def test_source_metrics_deduplicate_latest_signal_and_exclude_index_email_and_stale_capture(db):

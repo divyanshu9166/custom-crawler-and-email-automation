@@ -81,7 +81,7 @@ def test_one_strategy_or_screenshot_is_partial_audit(db,settings,prepared):
 
 def test_profile_block_and_inactive_branches_are_scoped(db,settings,prepared):
     from outreach.profiles import add_profile_lead
-    lid=add_profile_lead(db,'Fictional profile','https://x.com/fictional_profile','B','UK')
+    lid=add_profile_lead(db,'Fictional profile','https://x.com/fictional_prof','B','UK')
     db.execute("UPDATE leads SET status='profile_unavailable',website_status='search_unavailable' WHERE id=?",(lid,))
     mapped=nodes(db,settings,lid)
     assert mapped['CS']['state']=='blocked'
