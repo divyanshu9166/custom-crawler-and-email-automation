@@ -98,3 +98,13 @@ missing PageSpeed run, a quota block, or an unavailable/stale report. Audit acti
 are visible next to the held offer. Retry offer assessment is not a promise of a
 draft; a site without a supported relevant finding remains held. Profile-only and
 existing-draft flows are preserved.
+
+### PageSpeed credentials in Settings
+
+Settings → PageSpeed Insights accepts the Google PageSpeed API key. Save replaces
+a supplied key; a blank field keeps the current key. Use the explicit removal
+checkbox to remove it. Only the configured/not-configured status is returned to
+the browser. The key uses the existing private VPS workspace settings file and
+loads again after restart; no .env edit or restart is needed when saving. Future
+audit jobs use the saved value. Saving does not call Google or queue an audit.
+Run PageSpeed audit on a prospect after saving to validate provider access/quota.

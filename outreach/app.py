@@ -90,6 +90,11 @@ class WriterSettingsInput(Input):
     clear_draft_api_key: bool = False
 
 
+class PageSpeedSettingsInput(Input):
+    pagespeed_api_key: str | None = Field(default=None, max_length=1000, pattern=r'^\S*$')
+    clear_pagespeed_api_key: bool = Field(default=False, strict=True)
+
+
 class LeadInput(Input):
     company: str = Field(min_length=2, max_length=200)
     website: str = Field(max_length=2000)
@@ -534,6 +539,10 @@ def create_app(settings=None):
     @app.put('/api/settings/writer', dependencies=[Depends(auth)])
     def writer_settings(value: WriterSettingsInput):
         return preferences.update_writer(db, value.model_dump(exclude_none=True))
+
+    @app.put('/api/settings/pagespeed', dependencies=[Depends(auth)])
+    def pagespeed_settings(value: PageSpeedSettingsInput):
+        return preferences.update_pagespeed(db, value.model_dump(exclude_none=True))
 
     @app.post('/api/providers/writer/test', dependencies=[Depends(auth)])
     async def test_writer():

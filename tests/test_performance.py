@@ -21,7 +21,8 @@ def allow_robots(monkeypatch):
 
 @pytest.mark.parametrize("desktop", ["ok", "quota", "cross_domain"])
 async def test_pagespeed_preserves_lab_evidence_and_partial_results(db, settings, prepared, allow_robots, monkeypatch, desktop):
-    settings.pagespeed_api_key = "private-fixture-key"
+    client = TestClient(create_app(settings), headers={"Authorization": "Bearer " + settings.api_token})
+    assert client.put("/api/settings/pagespeed", json={"pagespeed_api_key":"private-fixture-key"}).status_code == 200
     async def get(self, url, params):
         assert url == "https://www.googleapis.com/pagespeedonline/v5/runPagespeed"
         assert params["key"] == settings.pagespeed_api_key

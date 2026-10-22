@@ -343,3 +343,33 @@ def test_evidence_hold_explains_missing_audit_and_hides_generic_offer(settings,d
     expect(page.locator('.pitch-summary')).to_contain_text('More evidence needed')
     expect(page.locator('.pitch-summary #performance')).to_be_visible()
     assert not controls['mutations'] and not errors
+
+@pytest.mark.parametrize('mobile',[False,True])
+def test_pagespeed_settings_save_keep_and_remove_without_showing_key(settings,db,dashboard,mobile):
+    page, controls, _, errors = dashboard
+    page.set_viewport_size({'width':390 if mobile else 1440,'height':1000})
+    page.goto(settings.public_url+'/')
+    page.get_by_role('button',name='Settings',exact=True).click()
+    form=page.locator('#pagespeed-settings-form')
+    key=form.locator('[name=pagespeed_api_key]')
+    secret='fictional-ui-pagespeed-key'
+    key.fill(secret)
+    form.get_by_role('button',name='Save PageSpeed settings',exact=True).click()
+    expect(form.locator('[role=status]')).to_contain_text('PageSpeed key saved')
+    expect(key).to_have_value('')
+    expect(key).to_have_attribute('placeholder','Saved · leave blank to keep')
+    assert settings.pagespeed_api_key==secret
+    assert secret not in page.locator('body').inner_text()
+    page.reload()
+    page.get_by_role('button',name='Settings',exact=True).click()
+    expect(key).to_have_attribute('placeholder','Saved · leave blank to keep')
+    form.get_by_role('button',name='Save PageSpeed settings',exact=True).click()
+    expect(form.locator('[role=status]')).to_contain_text('PageSpeed key saved')
+    assert settings.pagespeed_api_key==secret
+    form.locator('[name=clear_pagespeed_api_key]').check()
+    form.get_by_role('button',name='Save PageSpeed settings',exact=True).click()
+    expect(form.locator('[role=status]')).to_contain_text('not configured')
+    assert not settings.pagespeed_api_key and not errors
+    assert not db.one("SELECT id FROM jobs WHERE kind='performance'")
+    assert controls['mutations']==['/api/settings/pagespeed']*3
+    assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')

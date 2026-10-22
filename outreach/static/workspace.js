@@ -41,6 +41,7 @@ window.WorkbenchWorkspace = {
     const writer = document.querySelector('#writer-settings-form');
     const column = writer.parentElement;
     column.prepend(writer);
+    writer.after(document.getElementById('pagespeed-settings-form'));
     for (const [id, title, note] of [
       ['mail-settings-form', 'Connect a sending mailbox', 'Only needed when you are ready to send'],
       ['research-settings-form', 'Research sources & automation preferences', 'Advanced source controls'],

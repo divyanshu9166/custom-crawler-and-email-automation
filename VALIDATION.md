@@ -1,3 +1,19 @@
+## Managed PageSpeed API key — 22 October 2026
+
+Added Settings → PageSpeed Insights and an authenticated settings endpoint using
+the existing private atomic VPS workspace settings store. Blank retains the key;
+explicit removal persists across restart, including when an environment default
+exists. API responses expose configured status only; event history stores field
+names, never key values. Saving makes no provider request and does not start an
+audit. Subsequent audits and automatic scheduling use the shared saved setting.
+
+30 settings/API/browser cases and 34 performance/diagnostic cases passed. Coverage
+includes desktop/mobile save/reload/keep/remove, restart persistence, same-origin
+cookie protection, sanitized validation, and a mocked performance request using
+the key saved through the settings API. Ruff and changed JavaScript syntax checks
+passed. Live Google quota/key acceptance is separate and requires the user's key;
+no placeholder key was installed on production.
+
 ## Explain unsupported website offers — 21 October 2026
 
 Lead 18 has saved source text, a partial screenshot capture and a checked journey

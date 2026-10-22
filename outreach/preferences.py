@@ -14,6 +14,7 @@ MAIL_FIELDS = {"sender_name", "sender_company", "sender_email", "sender_website"
                "daily_send_limit", "hourly_send_limit", "min_send_interval_seconds", "send_hour_start", "send_hour_end", "domain_auth_confirmed"}
 AUTH_FIELDS = {"admin_user", "admin_password_hash", "session_version"}
 WRITER_FIELDS = {'draft_api_url', 'draft_api_key', 'draft_model', 'draft_timeout_seconds'}
+PAGESPEED_FIELDS = {'pagespeed_api_key'}
 RUNTIME_FIELDS = {'worker_enabled', 'sending_enabled'}
 RESEARCH_FIELDS = {'auto_prepare_enabled', 'linkedin_people_search_enabled', 'linkedin_profile_experience_enabled',
                    'linkedin_contact_info_enabled', 'social_posts_enabled', 'social_posts_max_profiles',
@@ -44,7 +45,7 @@ class Preferences:
         self.saved = {}
         if self.path.exists():
             self.saved = json.loads(self.path.read_text(encoding="utf-8"))
-            if not isinstance(self.saved, dict) or set(self.saved) - MAIL_FIELDS - AUTH_FIELDS - WRITER_FIELDS - RUNTIME_FIELDS - RESEARCH_FIELDS:
+            if not isinstance(self.saved, dict) or set(self.saved) - MAIL_FIELDS - AUTH_FIELDS - WRITER_FIELDS - PAGESPEED_FIELDS - RUNTIME_FIELDS - RESEARCH_FIELDS:
                 raise RuntimeError("Invalid managed workspace settings")
             checked = Settings.model_validate({**settings.model_dump(), **self.saved})
             for key in self.saved:
@@ -55,6 +56,7 @@ class Preferences:
             values = {k: getattr(self.settings, k) for k in (MAIL_FIELDS | WRITER_FIELDS | RESEARCH_FIELDS) - {"smtp_password", "imap_password", 'draft_api_key'}}
             return {**values, "smtp_password_configured": bool(self.settings.smtp_password),
                     'draft_api_key_configured': bool(self.settings.draft_api_key),
+                    'pagespeed_api_key_configured': bool(self.settings.pagespeed_api_key),
                     "imap_password_configured": bool(self.settings.imap_password), "admin_user": self.settings.admin_user,
                     "public_url": self.settings.public_url, "sending_enabled": self.settings.sending_enabled,
                     "worker_enabled": self.settings.worker_enabled,
@@ -129,6 +131,23 @@ class Preferences:
             db.set('paused', 'true')
             self.persist({key: getattr(checked, key) for key in patch})
             db.event('workspace_writer_settings_changed', {'fields': sorted(patch), 'sending_paused': True})
+            return self.public()
+
+    def update_pagespeed(self, db, patch):
+        with self.lock:
+            clear = patch.pop('clear_pagespeed_api_key', False)
+            if clear and patch.get('pagespeed_api_key'):
+                raise ValueError('Choose either replacement or removal for the PageSpeed API key')
+            if clear:
+                patch['pagespeed_api_key'] = ''
+            elif 'pagespeed_api_key' in patch and not patch['pagespeed_api_key']:
+                del patch['pagespeed_api_key']
+            if set(patch) - PAGESPEED_FIELDS:
+                raise ValueError('Unsupported PageSpeed setting')
+            checked = Settings.model_validate({**self.settings.model_dump(), **patch})
+            db.set('paused', 'true')
+            self.persist({key: getattr(checked, key) for key in patch})
+            db.event('workspace_pagespeed_settings_changed', {'fields': sorted(patch), 'sending_paused': True})
             return self.public()
 
     def update_research(self, db, patch):
