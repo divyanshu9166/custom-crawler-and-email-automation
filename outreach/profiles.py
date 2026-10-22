@@ -22,6 +22,12 @@ def canonical_profile(url):
         from .google_business import listing_url
         return listing_url(url)
     segments = parts.path.strip("/").split("/")
+    if platform in {'x.com', 'twitter.com'} and (
+            len(segments) != 1 or not re.fullmatch(r'[A-Za-z0-9_]{1,15}', segments[0])
+            or segments[0].lower() in {'search', 'explore', 'home', 'i', 'messages', 'notifications',
+                'settings', 'compose', 'login', 'logout', 'intent', 'tos', 'privacy', 'share',
+                'hashtag', 'download', 'account', 'signup', 'oauth'}):
+        raise ValueError('Use a specific public business profile or listing, not an invalid X handle or platform route')
     if platform == 'linkedin.com' and len(segments) == 3 and segments[0] == 'company' and segments[2] == 'about':
         parts = parts._replace(path='/'+ '/'.join(segments[:2]))
         segments = segments[:2]
@@ -32,7 +38,7 @@ def canonical_profile(url):
     if (platform not in PROFILE_PLATFORMS or not parts.path.strip("/")
             or (platform == "linkedin.com" and (segments[0] not in {'company', 'in'} or len(segments) != 2))
             or (platform == "google.com" and not parts.path.startswith("/maps/place/"))
-            or (platform in {"x.com", "twitter.com", "instagram.com"} and (len(segments) != 1 or segments[0].lower() in {"search", "explore", "home", "i", "p", "reel", "messages", "notifications", "settings", "compose", "login", "logout"}))
+            or (platform == "instagram.com" and (len(segments) != 1 or segments[0].lower() in {"search", "explore", "home", "i", "p", "reel", "messages", "notifications", "settings", "compose", "login", "logout"}))
             or (platform == "facebook.com" and any(p in segments for p in {"posts", "search", "login", "watch", "groups", "reel"}))
             or (platform in specific_routes and (segments[0] != specific_routes[platform] or len(segments) < 2))
             or (platform == 'bbb.org' and ('profile' not in segments or segments.index('profile') >= len(segments)-2))):

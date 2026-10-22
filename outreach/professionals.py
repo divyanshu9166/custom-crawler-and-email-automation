@@ -429,7 +429,13 @@ async def research_professionals(db, settings, lead_id, profile_url=""):
                elapsed=time.monotonic()-started, contacts=len(value['published_emails']))
         if settings.fxembed_profiles_enabled and professional_target(target)[0] == 'x.com' and state != 'captured':
             from .fxembed import profile_hint
-            hint = await profile_hint(settings, target)
+            try:
+                hint = await profile_hint(settings, target)
+            except Exception as exc:
+                # Optional community hints must not discard native captures or
+                # prevent subsequent profiles from being researched. Keep only
+                # the exception type: provider errors can contain private data.
+                hint = {'state': 'unavailable', 'profile_url': target, 'error_type': type(exc).__name__}
             eligible_lead(db, lead_id)
             # Keep the original denial and the community response separately.
             # These hints cannot enter first-party source review or verify/send.

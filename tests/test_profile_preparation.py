@@ -12,7 +12,7 @@ from outreach.app import create_app
 from outreach.profiles import add_profile_lead, personal_business_snapshot
 from outreach.research import research_lead, discover_leads
 
-PROFILE = 'https://x.com/fictional_bright'
+PROFILE = 'https://x.com/fictionalbright'
 TEXT = ('Bright Studio. We offer UK consulting services. Call us to arrange a consultation. '
         'We sell our own handmade products through business messages. Business email: bright-fixture@gmail.com')
 

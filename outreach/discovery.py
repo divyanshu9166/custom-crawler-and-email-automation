@@ -352,10 +352,12 @@ async def resolve_signal(settings, row, country_hint, platforms):
         # Explicit self-selling activity can be researched as this person's own
         # business presence. An employer/founder title alone still uses recovery.
         personal_business = True
+    captured_name = (snapshot.get('title') if snapshot.get('state') == 'captured' and
+                     (managed or personal_business or snapshot.get('capture_method') == 'google_business_visible_listing') else '')
     # Explicit platform website links take precedence. Multiple distinct companies stay held.
     direct = snapshot.get("outgoing_websites", []) if not public_post else []
     if len({domain_of(u) for u in direct}) == 1:
-        signal.update(website=direct[0], state="linked_website_candidate", company=snapshot['title'] if managed or personal_business else company_title(row.get("title", "")))
+        signal.update(website=direct[0], state="linked_website_candidate", company=captured_name or company_title(row.get("title", "")))
         return signal
     if len({domain_of(u) for u in direct}) > 1:
         signal["state"] = "ambiguous_websites"
@@ -531,7 +533,8 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
             queries.append(f'site:linkedin.com/in/ {market_query} (founder OR owner OR director OR marketing)')
     managed_queries={}
     if settings.platform_browser_enabled:
-        managed_queries={f'browser:{p} {market_query}':p for p in ('linkedin.com','x.com')}
+        enabled = {'x.com' if p in {'x.com', 'twitter.com'} else p for p in platforms}
+        managed_queries={f'browser:{p} {market_query}':p for p in ('linkedin.com','x.com') if p in enabled}
         queries=list(managed_queries)+(queries if settings.platform_browser_public_fallback else [])
         if settings.platform_browser_public_fallback:
             settings=settings.model_copy(update={'search_provider':'searxng','serpapi_key':''})
@@ -590,21 +593,22 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
                     try:
                         if platform in {'x.com', 'twitter.com'} and '/status/' in urlsplit(row['url']).path:
                             from .public_posts import x_post_url
-                            x_post_url(row['url'])
+                            signal_target = x_post_url(row['url'])
                         elif platform == 'linkedin.com' and '/in/' in urlsplit(row['url']).path:
                             from .professionals import professional_target
                             from .people import indexed_person_name
-                            professional_target(row['url'])
+                            signal_target = professional_target(row['url'])[1]
                             if not indexed_person_name(company_title(row.get('title', ''))):
                                 raise ValueError('Individual result lacks a usable named-person hint')
                         else:
-                            canonical_profile(row["url"])
+                            signal_target = canonical_profile(row["url"])
                     except ValueError:
                         skipped.append({"url": row["url"], "reason": "not_a_supported_specific_business_profile"})
                         continue
-                    if row["url"] in seen_signals:
+                    signal_identity = profile_key(signal_target)
+                    if signal_identity in seen_signals:
                         continue
-                    seen_signals.add(row["url"])
+                    seen_signals.add(signal_identity)
                     if len(signals) >= settings.discovery_max_signals:
                         skipped.append({"url": row["url"], "reason": "signal_budget"})
                         continue
