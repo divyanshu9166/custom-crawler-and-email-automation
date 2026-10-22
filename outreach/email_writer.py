@@ -107,6 +107,8 @@ Return ONLY JSON: {"messages":[{"step":0,"subject":"...","body":"...",
 "support":[{"evidence_id":1,"quote":"one exact contiguous quote from supplied source"}],"diagnostic_refs":[]}]}.
 Return exactly ONE message with step 0. At least one genuine quote must support its observation
 or proposed idea. Quotes are metadata and need not appear in the email. No invented quotes.
+Copy each support quote character for character from sources[].context; reviewed_finding.quote is
+already exact and can be reused. Never quote pitch_brief or copy_plan, and never shorten a quote with "...".
 """
 
 
@@ -363,6 +365,37 @@ def timing_mentioned(observation, text):
     return False
 
 
+QUOTE_CHARS = str.maketrans({'‘': "'", '’': "'", '“': '"', '”': '"', '–': '-', '—': '-', ' ': ' '})
+
+
+def source_span(text, quote):
+    """Exact page text for a model quote that differs only in quote marks, dashes, spacing,
+    case or a cut-off "..."; None when the words are not on the page."""
+    if not isinstance(quote, str) or not isinstance(text, str):
+        return None
+    if quote in text:
+        return quote
+    def normalise(value):
+        chars, index = [], []
+        for i, ch in enumerate(value.translate(QUOTE_CHARS)):
+            if ch.isspace():
+                if chars and chars[-1] == ' ':
+                    continue
+                ch = ' '
+            lowered = ch.lower()
+            chars.append(lowered if len(lowered) == 1 else ch)
+            index.append(i)
+        return ''.join(chars), index
+    page, index = normalise(text)
+    parts = [p.strip(' .,"\'') for p in re.split(r'\.{3}|…', quote.translate(QUOTE_CHARS))]
+    part = max(parts, key=len) if parts else ''
+    wanted = normalise(part)[0].strip()
+    start = page.find(wanted) if len(wanted) >= 8 else -1
+    if start < 0:
+        return None
+    return text[index[start]:index[start+len(wanted)-1]+1]
+
+
 def writing_quality(subject, body, evidence, observations):
     """Reject the patterns that made real drafts read like audit reports."""
     if len(subject) > 70 or re.search(r'\b(?:observations?|findings|audit|analysis|assessment|proposed|report|diagnostics?)\b', subject, re.I):
@@ -484,15 +517,20 @@ def validate_output(value, lead, contact, evidence, *, message_count=1, audit_co
         support = item.get('support')
         if not isinstance(support, list) or not support or len(support) > 6:
             raise ValueError('AI writing needs source support for every touch')
-        support = [dict(fact) if isinstance(fact, dict) else fact for fact in support]
-        ids = set()
+        if any(not isinstance(fact, dict) or type(fact.get('evidence_id')) is not int for fact in support):
+            raise ValueError('AI writing returned invalid source support')
+        # Keep genuine quotes, saved as the exact page text; drop any that are not on the page.
+        # At least one must be genuine: quotes are metadata, but a draft without one is unsupported.
+        checked_support, ids = [], set()
         for fact in support:
-            if not isinstance(fact, dict) or type(fact.get('evidence_id')) is not int:
-                raise ValueError('AI writing returned invalid source support')
-            source, quote = by_id.get(fact['evidence_id']), fact.get('quote')
-            if not source or not isinstance(quote, str) or not 8 <= len(quote) <= 700 or quote not in source['text']:
-                raise ValueError('AI writing cited an invented or unavailable source quote')
-            ids.add(source['id'])
+            source = by_id.get(fact['evidence_id'])
+            span = source_span(source['text'], fact.get('quote')) if source else None
+            if span and 8 <= len(span) <= 700:
+                checked_support.append({**fact, 'quote': span})
+                ids.add(source['id'])
+        if not checked_support:
+            raise ValueError('AI writing cited an invented or unavailable source quote')
+        support = checked_support
         if step == 0 and lead.get('service') == 'ai_calling_agent' and not any(source_signal(fact['quote']) for fact in support):
             raise ValueError('Support the calling-agent offer with an exact phone-process quote, not a generic business fact')
         if lead.get('campaign') == 'A':
@@ -554,7 +592,9 @@ def generate_sequence(settings, lead, contact, finding, evidence, *, before_requ
             before_request()
         assert_configuration_unchanged()
     def feedback(error, **extra):
-        return {'error': error, **extra,
+        verified = [{'evidence_id': e['id'], 'quote': finding['quote']} for e in evidence
+                    if (finding or {}).get('quote') and e['id'] == finding.get('evidence_id') and finding['quote'] in e['text']]
+        return {'error': error, **extra, 'verified_support_quotes': verified,
                 'allowed_diagnostic_refs': [o['ref'] for o in (audit_context or {}).get('observations', [])],
                 'diagnostic_reference_rule': 'If this allowed list is empty, return diagnostic_refs: [] for every message. Failed/partial/stale reports are not citable observations.',
                 'action': f'Return exactly {message_count} corrected message(s). Include business.display_name in the first '

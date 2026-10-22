@@ -6,6 +6,8 @@ import pytest
 from outreach import diagnostics, email_writer, journey
 from outreach.stakes import colour, page_label, short_name
 
+# Capture the real writer before conftest installs controlled workflow copy.
+REAL_GENERATE = email_writer.generate_sequence
 URL = 'https://bright-demo.com/'
 KINDS = ['font_timing', 'blocking_timing', 'broken_cta', 'text_contrast', 'form_labels', 'page_overflow']
 
@@ -162,3 +164,52 @@ def test_page_labels_and_colour_names_stay_plain():
     assert colour([47, 163, 151]) == 'teal' and colour([255, 255, 255]) == 'white'
     assert colour([68, 197, 148]) == 'teal' and colour([225, 210, 180]) == 'beige' and colour([20, 30, 90]) == 'dark blue'
     assert colour([150, 60, 200]) == 'purple' and colour([240, 240, 240]) == 'white'
+
+
+@pytest.mark.parametrize('quote,saved', [
+    ('Contact us for a consultation.', 'Contact us for a consultation.'),
+    ('“contact us for a  consultation”', 'Contact us for a consultation'),
+    ('We offer UK consulting services...', 'We offer UK consulting services'),
+    ('We lose customers because the booking process fails.', None),
+])
+def test_support_quotes_match_page_text_despite_quote_marks_spacing_and_ellipses(db, prepared, quote, saved):
+    lead, audit, finding, evidence, packet = packet_for(db, prepared, 'broken_cta')
+    output = email_from(packet['pitch_brief'], prepared)
+    output['messages'][0]['support'] = [{'evidence_id': prepared['evidence_id'], 'quote': quote}]
+    contact = db.one('SELECT * FROM contacts WHERE id=?', (prepared['contact_id'],))
+    if saved is None:
+        with pytest.raises(ValueError, match='invented or unavailable source quote'):
+            email_writer.validate_output(output, lead, contact, evidence, audit_context=audit, finding=finding)
+        return
+    message = email_writer.validate_output(output, lead, contact, evidence, audit_context=audit, finding=finding)[0]
+    assert message['support'][0]['quote'] == saved
+    assert saved in next(e['text'] for e in evidence if e['id'] == prepared['evidence_id'])
+
+
+def test_one_invented_quote_is_dropped_when_a_genuine_quote_remains(db, prepared):
+    lead, audit, finding, evidence, packet = packet_for(db, prepared, 'broken_cta')
+    output = email_from(packet['pitch_brief'], prepared)
+    output['messages'][0]['support'] = [{'evidence_id': prepared['evidence_id'], 'quote': 'An invented customer complaint here.'},
+                                        {'evidence_id': prepared['evidence_id'], 'quote': 'Contact us for a consultation.'}]
+    contact = db.one('SELECT * FROM contacts WHERE id=?', (prepared['contact_id'],))
+    message = email_writer.validate_output(output, lead, contact, evidence, audit_context=audit, finding=finding)[0]
+    assert [s['quote'] for s in message['support']] == ['Contact us for a consultation.']
+
+
+def test_retry_after_a_bad_quote_offers_the_verified_finding_quote(db, prepared, settings, monkeypatch):
+    lead, audit, finding, evidence, packet = packet_for(db, prepared, 'broken_cta')
+    good = email_from(packet['pitch_brief'], prepared)
+    bad = json.loads(json.dumps(good))
+    bad['messages'][0]['support'] = [{'evidence_id': prepared['evidence_id'], 'quote': 'Nothing like this is on the page.'}]
+    settings.followups_enabled, settings.draft_api_key, settings.draft_model = False, 'fixture-key', 'fixture-model'
+    monkeypatch.setattr(email_writer, 'generate_sequence', REAL_GENERATE)
+    sent = []
+    def chat(_settings, instructions, encoded, **kwargs):
+        sent.append((instructions, json.loads(encoded)))
+        return json.dumps([bad, good][len(sent)-1])
+    monkeypatch.setattr(email_writer, 'chat', chat)
+    contact = db.one('SELECT * FROM contacts WHERE id=?', (prepared['contact_id'],))
+    email_writer.generate_sequence(settings, lead, contact, finding, evidence, audit_context=audit)
+    assert 'character for character' in sent[0][0]
+    assert sent[1][1]['validation_feedback']['verified_support_quotes'] == [
+        {'evidence_id': prepared['evidence_id'], 'quote': 'Contact us for a consultation.'}]
