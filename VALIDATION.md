@@ -1,3 +1,15 @@
+## Natural rounding of measured draft timings — 22 October 2026
+
+Live source selection/qualification passed for lead 18, then correctly worded
+4.6-second LCP copy was rejected because validation required the six-significant-
+digit anchor 4.57713. Timing validation now accepts the actual numeric measurement
+rounded to 1–3 decimal places with seconds and LCP/main-content wording. Wrong
+values, multiplied values, milliseconds and total-page-load wording remain rejected;
+the separate lab/capture qualification check is unchanged. The captured live copy
+passes the corrected timing check. 148 diagnostic/writer/preparation cases passed,
+including eight correct/incorrect rounding and unit cases; Ruff passed. No draft
+completion is claimed by this test alone.
+
 ## Explicit business source references — 22 October 2026
 
 Further live assessment isolated audit/source ID confusion: a performance event

@@ -241,3 +241,17 @@ def test_bounded_writer_correction_explicitly_supplies_allowed_empty_audit_refs(
     create_drafts(db,settings,cid)
     assert len(calls)==2 and len(db.all('SELECT * FROM messages'))==1
     assert db.one('SELECT state,due_at,sent_at FROM messages')=={'state':'draft','due_at':None,'sent_at':None}
+
+@pytest.mark.parametrize('copy,valid',[
+    ('In a mobile Lighthouse lab test, largest visible content appeared at 4.6 seconds.',True),
+    ('The mobile lab LCP was 4.58 seconds.',True),
+    ('The mobile lab LCP was 4.577 seconds.',True),
+    ('The mobile lab LCP was 4.57713 seconds.',True),
+    ('The mobile lab LCP was 4.5 seconds.',False),
+    ('The mobile lab LCP was 14.6 seconds.',False),
+    ('The mobile lab LCP was 4.6 milliseconds.',False),
+    ('The whole page loaded in 4.6 seconds in our lab test.',False),
+])
+def test_measured_timing_accepts_correct_rounding_but_rejects_changed_fact(copy,valid):
+    observation={'primary_measurement':{'value':4.57713146505203,'anchor':'4.57713'}}
+    assert email_writer.timing_mentioned(observation,copy) is valid

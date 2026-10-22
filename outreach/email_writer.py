@@ -241,9 +241,20 @@ def validate_offer_intent(lead, finding, text):
 
 def timing_mentioned(observation, text):
     timing = observation.get('primary_measurement')
-    return bool(timing and isinstance(text, str) and
-        re.search(r'(?<![0-9])'+re.escape(timing['anchor'])+r'\s*(?:seconds?|secs?|s\b)', text, re.I) and
-        re.search(r'largest|main (?:visible )?content|\bLCP\b', text, re.I))
+    if not (timing and isinstance(text, str) and
+            re.search(r'largest|main (?:visible )?content|\bLCP\b', text, re.I)):
+        return False
+    for match in re.finditer(r'(?<![0-9.])(\d+(?:\.\d+)?)\s*(?:seconds?\b|secs?\b|s\b)', text, re.I):
+        number = match[1]
+        if number == timing['anchor']:
+            return True
+        decimals = len(number.split('.')[1]) if '.' in number else 0
+        value = timing.get('value')
+        # Natural email copy may round a lab timing, but only to its actual
+        # rounded value at 1–3 decimal places. Never accept a different metric/unit.
+        if type(value) in (int, float) and 1 <= decimals <= 3 and round(value, decimals) == float(number):
+            return True
+    return False
 
 
 def validate_output(value, lead, contact, evidence, *, message_count=1, audit_context=None, finding=None):
@@ -410,7 +421,7 @@ Use conclusion.findings.help_plan and intended_benefit as proposed work and a go
 never as a result already achieved or a guarantee. Avoid generic faster-site wording.
 When primary_measurement is supplied, prefer that
 ONE underlying timing (largest visible content / LCP, with seconds and lab qualifier)
-over the aggregate score. Never call LCP total page-load time. Do not include both numbers.
+over the aggregate score. You may round that timing accurately to 1-3 decimal places. Never call LCP total page-load time. Do not include both numbers.
 For font-loading findings, explain
 adjusting font-loading behaviour so text appears sooner while checking icons still work.
 For blocking resources, explain changing which CSS/scripts load before visible content,
