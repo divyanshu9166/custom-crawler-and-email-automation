@@ -61,6 +61,10 @@ def build(audit, service):
                 fix = 'Add clear persistent labels connected to the observed form fields, retaining their existing validation and integration; check the form with keyboard and mobile layouts.'
                 test = 'Repeat the same form capture and confirm each observed control has a nonempty associated label or accessible name; do not submit real enquiries.'
                 benefit = 'Make the enquiry fields clearer to identify and revisit, including with assistive technology; actual completion improvement remains to be measured.'
+            elif code == 'text_contrast':
+                fix = 'Adjust the sampled text and background colors to increase contrast while preserving the brand palette; check the service copy on mobile and desktop before applying the change across matching panels.'
+                test = 'Repeat the computed-color contrast check at the same selector and font size; inspect the saved screenshots and confirm the text remains readable in the actual layout.'
+                benefit = 'Make the affected service information easier to distinguish from its background; customer comprehension and enquiry impact still need testing.'
             else:
                 fix = 'Identify the element extending the mobile layout, then adjust its width, wrapping or overflow rules while retaining intentional scrolling components.'
                 test = 'Repeat both viewport samples and verify the document fits while the existing enquiry controls remain visible and usable.'

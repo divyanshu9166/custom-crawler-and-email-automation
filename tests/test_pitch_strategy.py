@@ -105,13 +105,12 @@ def test_calling_addition_from_number_alone_stays_conditional():
     strategy.validate_copy(plan, 'If phone enquiries are relevant, an AI-powered voice assistant could help.')
 
 
-def test_initial_website_pitch_cannot_omit_the_project_or_all_relevant_additions():
+def test_initial_website_pitch_keeps_primary_project_without_forcing_additions():
     lead, finding, pages = inputs('Phone 0330 094 7733.')
     plan = strategy.build(lead, finding, pages)
     with pytest.raises(ValueError, match='primary website project'):
         strategy.validate_copy(plan, 'We can adjust fonts. If useful, an AI calling agent could help.', initial=True)
-    with pytest.raises(ValueError, match='optional feature'):
-        strategy.validate_copy(plan, 'We can refresh the mobile enquiry layout and improve loading.', initial=True)
+    strategy.validate_copy(plan, 'We can refresh the mobile enquiry layout and improve loading.', initial=True)
     strategy.validate_copy(plan, 'We can refresh the mobile enquiry layout. If phone enquiries are relevant, an AI calling agent could collect details for the team.', initial=True)
     strategy.validate_copy(plan, 'We can improve mobile loading so service information appears sooner. If phone enquiries are relevant, an AI calling agent could collect details for the team.', initial=True)
     strategy.validate_copy(plan, 'We can adjust font loading so the existing quote option appears sooner. If phone enquiries are relevant, an AI calling agent could help.', initial=True)

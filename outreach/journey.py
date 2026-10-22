@@ -6,6 +6,28 @@ from urllib.parse import urlsplit, urljoin
 from .web import crawl_url, domain_of
 
 
+def contrast_valid(proof):
+    """Recompute solid-color evidence; transparent/image/gradient cases are not inferred."""
+    if not isinstance(proof, dict):
+        return False
+    colors = [proof.get('foreground'), proof.get('background')]
+    if any(not isinstance(c, list) or len(c) != 3 or any(type(v) not in (int, float) or not 0 <= v <= 255 for v in c) for c in colors):
+        return False
+    size, weight, ratio = (proof.get(k) for k in ('font_size', 'font_weight', 'ratio'))
+    if not all(type(v) in (int, float) and 0 < v < 10000 for v in (size, weight, ratio)):
+        return False
+    minimum = 3 if size >= 24 or size >= 18.66 and weight >= 700 else 4.5
+    def luminance(color):
+        channels = [v/255 for v in color]
+        return sum((v/12.92 if v <= .04045 else ((v+.055)/1.055)**2.4)*w
+                   for v, w in zip(channels, (.2126, .7152, .0722)))
+    a, b = map(luminance, colors)
+    actual = (max(a, b)+.05)/(min(a, b)+.05)
+    return (proof.get('minimum') == minimum and actual < minimum and abs(actual-ratio) < .001
+            and isinstance(proof.get('selector'), str) and bool(proof['selector'])
+            and isinstance(proof.get('text'), str) and 20 <= len(proof['text']) <= 140)
+
+
 def capture(first, second, device, screenshot):
     """Only repeatable observations on a loaded, styled page can support copy."""
     valid = (first.get('ready') is True and second.get('ready') is True and
@@ -30,6 +52,13 @@ def capture(first, second, device, screenshot):
         result['findings'].append({'code': 'page_overflow', 'anchor': str(width),
             'fact': f'In two {device} captures at {width}px width, the document extended beyond the viewport.',
             'selector': 'html', 'viewport_width': width, 'document_widths': widths})
+    for proof in second.get('contrast', [])[:6]:
+        if proof in first.get('contrast', []) and contrast_valid(proof):
+            result['findings'].append({'code': 'text_contrast', 'anchor': 'contrast',
+                'fact': f'In two {device} DOM samples, text "{proof["text"]}" had solid-color contrast {proof["ratio"]:.2f}:1, below the {proof["minimum"]}:1 reference for its sampled font size.',
+                'selector': proof['selector'], 'contrast': proof})
+            break  # One representative affected text block per viewport, not a repeated issue dump.
+    result['contrast_checked'] = min(first.get('contrast_checked', 0), second.get('contrast_checked', 0))
     result['ctas'] = [c for c in second.get('ctas', []) if c in first.get('ctas', [])]
     return result
 
@@ -168,13 +197,15 @@ def observations(report, lead, event_id, captured_at):
                 continue
             if code == 'form_labels' and not finding.get('controls'):
                 continue
+            if code == 'text_contrast' and not contrast_valid(finding.get('contrast')):
+                continue
             if code == 'page_overflow' and not (type(finding.get('viewport_width')) is int and
                     len(finding.get('document_widths', [])) == 2 and
                     all(type(w) is int and w > finding['viewport_width']+8 for w in finding['document_widths'])):
                 continue
-            if code not in {'broken_cta','form_labels','page_overflow'}:
+            if code not in {'broken_cta','form_labels','page_overflow','text_contrast'}:
                 continue
-            priority = {'broken_cta':100,'page_overflow':85,'form_labels':75}[code]+(sample['device']=='mobile')
+            priority = {'broken_cta':100,'text_contrast':90,'page_overflow':85,'form_labels':75}[code]+(sample['device']=='mobile')
             result.append({'ref':f'screenshot:{event_id}:journey{len(result)}', 'kind':'journey_observation',
                 'code':code, 'fact':finding['fact'], 'anchor':finding['anchor'], 'url':url,
                 'device':sample['device'], 'selector':finding['selector'], 'screenshot':image,

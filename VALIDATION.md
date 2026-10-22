@@ -1,3 +1,21 @@
+## Page-specific website findings and focused initial emails — 22 October 2026
+
+A real Skweeky Kleen homepage render produced repeated desktop/mobile paragraph
+contrast of 3.0852:1 (white foreground on RGB 47,163,151 at 15.2px normal weight).
+The new DOM styling check carries the affected text, selector, colors and screenshot
+through diagnostic consumption, conclusion, proof preview and writer context.
+Ambiguous backgrounds are skipped and RGB/font proof is recomputed at consumption.
+Strongest journey findings are supplied ahead of generic speed observations.
+Optional add-ons are no longer mandatory, and homepage brand names can replace
+SEO titles only under the strict source/domain match documented in
+PROSPECT_READABILITY.md. No general poor-design or conversion-loss claim is made.
+
+158 style/strategy/journey/diagnostic/writer checks passed. A final 26-case focused
+run passed after the last context/brand adjustments. Ruff and journey-reader
+syntax checks passed. One initial style fixture failed because its about:blank URL
+was outside the business domain; the fixture was corrected to its explicit
+fictional business URL. Live audit/draft replacement is checked after deployment.
+
 ## Natural rounding of measured draft timings — 22 October 2026
 
 Live source selection/qualification passed for lead 18, then correctly worded

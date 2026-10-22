@@ -124,11 +124,9 @@ def build(lead, finding, pages, audit_context=None, review=None):
 
 def validate_copy(plan, text, *, initial=False):
     if initial and plan.get('primary_service') in {'website_improvement', 'website_build'} and plan.get('optional_services'):
-        project = r'layout|redesign|journey|service.to.(?:enquir|quot)|enquir.{0,20}(?:flow|page)|(?:website|site|mobile).{0,50}(?:load|speed|perform|optim)|(?:service|quote|enquir).{0,45}(?:information|text|content|visible|appear|option|route)'
+        project = r'layout|redesign|journey|service.to.(?:enquir|quot)|enquir.{0,20}(?:flow|page)|(?:website|site|mobile).{0,50}(?:load|speed|perform|optim)|(?:service|quote|enquir).{0,45}(?:information|text|content|visible|appear|option|route)|(?:paragraph|introductory|service).{0,35}(?:text|copy|read|contrast)|(?:contrast|colou?r).{0,35}(?:text|panel|paragraph|background)'
         if plan['primary_service'] == 'website_improvement' and not re.search(project, text, re.I):
             raise ValueError('Explain the primary website project and enquiry journey, not just a technical audit fix')
-        if not any(option_mentioned(o, text) for o in plan['optional_services']):
-            raise ValueError('Briefly include one supplied relevant optional feature alongside the primary website project')
     if plan.get('chatbot_status') == 'present' and re.search(r'(?:add|build|install|introduc\w*|set up|deploy)\s+(?:a\s+|an\s+|new\s+|an? new\s+)?(?:AI\s+)?chatbot|(?:missing|no|without|lack\w*)\s+(?:a\s+|an\s+)?chatbot', text, re.I):
         raise ValueError('The prospect already has a chatbot; preserve it instead of pitching a new or missing chatbot')
     if re.search(r'(?:your|the|current)\s+(?:UI|design|website|site).{0,30}(?:ugly|outdated|poorly designed|not CRO optimised|not CRO optimized|losing conversions|needs (?:a )?redesign)', text, re.I):
@@ -151,9 +149,11 @@ not additional diagnosed problems. Website redesign/build may be the main projec
 assistant/calling agent a supporting feature; one primary service does not forbid additions.
 Follow the optional calling use_case: a helpdesk route supports approved support answers
 and human handoff, not an assumed sales-qualification or booking workflow.
-For a website project, use project_scope to explain the project, not just its font/CSS
-tasks. If optional_services is nonempty, include the strongest ONE relevant addition
-in one short sentence, clearly optional; do not omit all additions or make a service menu.
+For a website project, explain the observed page-specific problem and its concrete
+fix before any wider project scope. Available optional_services are context, never
+a requirement to include an add-on. In the initial email, focus on one current finding
+and omit unrelated chatbot/calling-agent offers. A phone route alone does not make
+calling automation relevant to a readability, layout or loading finding.
 When a current chatbot is present, briefly say it can be retained. A useful website
 proposal can refresh the mobile service-to-enquiry layout while fixing the measured
 loading issue; this is proposed scope, not proof that a full redesign is necessary.
