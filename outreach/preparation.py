@@ -464,6 +464,8 @@ def prepare(db, settings, lead_id, *, cancelled=lambda: False):
         else:
             unchanged()
         create_drafts(db, settings, contact['id'], cancelled=cancelled, preserve_existing=True)
+        from .campaigns import maybe_auto_approve
+        maybe_auto_approve(db, settings, contact['id'])
         record('drafts_ready', 'AI preparation complete. Review the recipient, source-backed offer and email.',
                contact_id=contact['id'], service=review['service'], source_ids=[p['id'] for p in pages])
     except ValueError as exc:

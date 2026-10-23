@@ -512,10 +512,16 @@ async def verify_contact(db, settings, contact_id):
             current_contact(Reader(con))
             con.execute("UPDATE contacts SET verification=?,verification_raw=?,verified_at=? WHERE id=?",
                         (verdict, json.dumps(raw), time.time(), contact_id))
-            if verdict != 'safe':
+            from .mailboxes import sendable
+            if not sendable(settings, verdict):
                 con.execute("UPDATE contacts SET status='hold' WHERE id=? AND status='active'", (contact_id,))
             con.execute("INSERT INTO events(kind,detail,contact_id,created_at) VALUES(?,?,?,?)",
                         ('verification', json.dumps({'verdict': verdict}), contact_id, time.time()))
+        try:
+            from .campaigns import maybe_auto_approve
+            maybe_auto_approve(db, settings, contact_id)
+        except Exception as exc:  # Optional approval must never undo the saved verification.
+            db.event('auto_approve_skipped', {'reason': type(exc).__name__}, contact_id)
     except Exception as exc:
         db.execute("""UPDATE contacts SET verification='unknown',verification_raw=?,verified_at=?,
                    status=CASE WHEN status='active' THEN 'hold' ELSE status END

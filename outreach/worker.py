@@ -5,7 +5,7 @@ import time
 import httpx
 
 from .research import research_lead, discover_leads, verify_contact
-from .mail import poll_inbox, send_one
+from .mail import poll_all, send_one
 from .browser import screenshot
 from .performance import performance_audit
 from .web import retry_after_seconds
@@ -161,7 +161,7 @@ async def mail_loop(db, settings, stop):
             if settings.worker_enabled:
                 db.set("worker_heartbeat", time.time())
                 if time.time() - last_poll >= 30:
-                    await asyncio.to_thread(mail_call, poll_inbox)
+                    await asyncio.to_thread(mail_call, poll_all)
                     last_poll = time.time()
                 await asyncio.to_thread(mail_call, send_one)
         except Exception as exc:

@@ -328,7 +328,8 @@ def approve(db, settings, contact_id, basis, contact_relevance):
         raise ValueError('Review current source evidence and offer context before approval')
     if lead["service"].startswith("whatsapp_") and len(findings[0].get("channel_fit_notes", "")) < 20:
         raise ValueError("Review WhatsApp channel fit and qualification questions again")
-    if (contact["verification"] != "safe" or not contact["verified_at"]
+    from .mailboxes import sendable
+    if (not sendable(settings, contact["verification"]) or not contact["verified_at"]
             or time.time() - contact["verified_at"] > settings.verification_max_age_hours * 3600):
         raise ValueError("Fresh safe Reacher result required")
     if len(basis.strip()) < 20 or len(contact_relevance.strip()) < 12:
@@ -353,7 +354,7 @@ def approve(db, settings, contact_id, basis, contact_relevance):
         assert_contact_ownership(db, dict(current_contact), dict(current_lead))
         current_messages = [dict(m) for m in con.execute("SELECT * FROM messages WHERE contact_id=? ORDER BY step", (contact_id,))]
         assert_outreach_open(con, lead["id"])
-        if (current_contact["status"] != "new" or current_contact["verification"] != "safe"
+        if (current_contact["status"] != "new" or current_contact["verification"] != contact["verification"]
                 or current_contact["verified_at"] != contact["verified_at"]
                 or current_lead["status"] != "qualified" or current_lead["findings"] != lead["findings"]
                 or current_messages != messages
@@ -377,6 +378,33 @@ def approve(db, settings, contact_id, basis, contact_relevance):
                      "context": {"lead_id": lead['id'], "campaign": lead['campaign'], "country": lead['country'],
                                  "service": lead['service'], "industry": findings[0].get('industry', ''),
                                  "prospect_kind": lead.get('lead_kind', 'website')}}), time.time()))
+
+
+AUTO_BASIS = ('Approved by operator-enabled bulk/automatic approval: B2B outreach to a published business '
+              'address with an opt-out link; the draft passed source, truth and copy checks.')
+
+
+def approve_ready(db, settings, contact_id, origin='bulk'):
+    """Approve one prepared contact with a recorded automatic basis. Every approve() check still applies."""
+    contact, lead = context(db, contact_id)
+    relevance = f"{contact.get('role') or 'Published business contact'} for {lead['company']}, published at {contact['source_url']}"
+    approve(db, settings, contact_id, AUTO_BASIS, relevance)
+    db.event(origin + '_approved', {'lead_id': lead['id']}, contact_id)
+
+
+def maybe_auto_approve(db, settings, contact_id):
+    """With auto-approve ON, queue a prepared draft as soon as every approval check passes."""
+    if not settings.auto_approve_enabled:
+        return False
+    contact = db.one('SELECT status FROM contacts WHERE id=?', (contact_id,))
+    if not contact or contact['status'] != 'new' or not db.one("SELECT 1 FROM messages WHERE contact_id=? AND state='draft'", (contact_id,)):
+        return False
+    try:
+        approve_ready(db, settings, contact_id, 'auto')
+        return True
+    except ValueError as exc:
+        db.event('auto_approve_skipped', {'reason': str(exc)[:300]}, contact_id)
+        return False
 
 
 def resume_contact(db, settings, contact_id, note, next_at):

@@ -11,12 +11,14 @@ from .web import normalize_email
 MAIL_FIELDS = {"sender_name", "sender_company", "sender_email", "sender_website", "postal_address",
                "smtp_host", "smtp_port", "smtp_user", "smtp_password", "smtp_security",
                "imap_host", "imap_port", "imap_user", "imap_password", "imap_folder",
-               "daily_send_limit", "hourly_send_limit", "min_send_interval_seconds", "send_hour_start", "send_hour_end", "domain_auth_confirmed"}
+               "daily_send_limit", "hourly_send_limit", "min_send_interval_seconds", "send_hour_start", "send_hour_end", "domain_auth_confirmed",
+               "catch_all_share"}
 AUTH_FIELDS = {"admin_user", "admin_password_hash", "session_version"}
 WRITER_FIELDS = {'draft_api_url', 'draft_api_key', 'draft_model', 'draft_timeout_seconds'}
 PAGESPEED_FIELDS = {'pagespeed_api_key'}
 RUNTIME_FIELDS = {'worker_enabled', 'sending_enabled'}
-RESEARCH_FIELDS = {'auto_prepare_enabled', 'linkedin_people_search_enabled', 'linkedin_profile_experience_enabled',
+MAILBOX_FIELDS = {'extra_mailboxes'}
+RESEARCH_FIELDS = {'auto_prepare_enabled', 'auto_approve_enabled', 'linkedin_people_search_enabled', 'linkedin_profile_experience_enabled',
                    'linkedin_contact_info_enabled', 'social_posts_enabled', 'social_posts_max_profiles',
                    'social_posts_max_posts'}
 
@@ -45,7 +47,7 @@ class Preferences:
         self.saved = {}
         if self.path.exists():
             self.saved = json.loads(self.path.read_text(encoding="utf-8"))
-            if not isinstance(self.saved, dict) or set(self.saved) - MAIL_FIELDS - AUTH_FIELDS - WRITER_FIELDS - PAGESPEED_FIELDS - RUNTIME_FIELDS - RESEARCH_FIELDS:
+            if not isinstance(self.saved, dict) or set(self.saved) - MAIL_FIELDS - AUTH_FIELDS - WRITER_FIELDS - PAGESPEED_FIELDS - RUNTIME_FIELDS - RESEARCH_FIELDS - MAILBOX_FIELDS:
                 raise RuntimeError("Invalid managed workspace settings")
             checked = Settings.model_validate({**settings.model_dump(), **self.saved})
             for key in self.saved:
@@ -60,7 +62,8 @@ class Preferences:
                     "imap_password_configured": bool(self.settings.imap_password), "admin_user": self.settings.admin_user,
                     "public_url": self.settings.public_url, "sending_enabled": self.settings.sending_enabled,
                     "worker_enabled": self.settings.worker_enabled,
-                    "sending_gaps": self.settings.sending_gaps()}
+                    "sending_gaps": self.settings.sending_gaps(),
+                    "mailboxes": __import__("outreach.mailboxes", fromlist=["public"]).public(self.settings)}
 
     def persist(self, patch):
         value = {**self.saved, **patch}
@@ -174,6 +177,69 @@ class Preferences:
             self.persist(patch)
             db.event('workspace_runtime_settings_changed', {**patch, 'sending_paused': True})
             return {**self.public(), 'paused': True, 'demo': db.get('demo') == 'true'}
+
+    def update_mailbox(self, db, box_id, patch):
+        """Create (box_id='new') or edit an extra sending mailbox. Saving pauses sending."""
+        from .mailboxes import FIELDS, SECRETS
+        from .mail import mailbox_key
+        with self.lock:
+            if set(patch) - set(FIELDS) - {'clear_smtp_password', 'clear_imap_password'}:
+                raise ValueError('Unsupported mailbox setting')
+            boxes = [dict(b) for b in self.settings.extra_mailboxes]
+            if box_id == 'new':
+                if len(boxes) >= 20:
+                    raise ValueError('Up to 20 extra mailboxes are supported')
+                box = {'id': 'mb' + secrets.token_hex(4), 'enabled': True, 'smtp_port': 587, 'smtp_security': 'starttls',
+                       'imap_port': 993, 'imap_folder': 'INBOX', 'daily_limit': 20, 'hourly_limit': 10}
+                boxes.append(box)
+            else:
+                box = next((b for b in boxes if b['id'] == box_id), None)
+                if not box:
+                    raise ValueError('Mailbox not found')
+            for key in SECRETS:
+                if patch.pop('clear_' + key, False):
+                    patch[key] = ''
+                elif key in patch and not patch[key]:
+                    del patch[key]
+            box.update(patch)
+            if box.get('sender_email'):
+                box['sender_email'] = normalize_email(box['sender_email'])
+            if not box.get('sender_email') or not box.get('smtp_host') or not box.get('smtp_user'):
+                raise ValueError('Enter the sender email, SMTP host and SMTP username')
+            if box.get('smtp_security') not in {'ssl', 'starttls'} or not all(
+                    type(box.get(k)) is int and 1 <= box[k] <= 65535 for k in ('smtp_port', 'imap_port')):
+                raise ValueError('Use TLS SMTP and valid mailbox ports')
+            if not all(type(box.get(k)) is int and 1 <= box[k] <= 500 for k in ('daily_limit', 'hourly_limit')):
+                raise ValueError('Daily and hourly limits must be between 1 and 500')
+            keys = [mailbox_key(self.settings)] if self.settings.smtp_user or self.settings.sender_email else []
+            for other in boxes:
+                key = mailbox_key(self.settings.model_copy(update={'smtp_user': other.get('smtp_user', ''),
+                                                                   'sender_email': other.get('sender_email', '')}))
+                if key in keys:
+                    raise ValueError('This mailbox is already configured')
+                keys.append(key)
+            if not self.settings._mailbox_lock.acquire(blocking=False):
+                raise ValueError("Mailbox activity is in progress; retry after it finishes")
+            try:
+                db.set('paused', 'true')
+                self.persist({'extra_mailboxes': boxes})
+                prefix = f"mailbox:{box['id']}:"
+                db.set(prefix + 'imap_caught_up', 'false')
+                db.set(prefix + 'imap_last_success', '0')
+                db.event('workspace_mailbox_changed', {'mailbox': box['id'], 'fields': sorted(patch), 'sending_paused': True})
+            finally:
+                self.settings._mailbox_lock.release()
+            return self.public()
+
+    def remove_mailbox(self, db, box_id):
+        with self.lock:
+            boxes = [b for b in self.settings.extra_mailboxes if b['id'] != box_id]
+            if len(boxes) == len(self.settings.extra_mailboxes):
+                raise ValueError('Mailbox not found')
+            db.set('paused', 'true')
+            self.persist({'extra_mailboxes': boxes})
+            db.event('workspace_mailbox_removed', {'mailbox': box_id, 'sending_paused': True})
+            return self.public()
 
     def update_credentials(self, db, username, password, current_password):
         with self.lock:

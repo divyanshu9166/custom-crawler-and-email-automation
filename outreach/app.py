@@ -2,6 +2,7 @@ import asyncio
 import csv
 import io
 import json
+import re
 import secrets
 import time
 from contextlib import asynccontextmanager
@@ -48,12 +49,34 @@ class RuntimeSettingsInput(Input):
 
 class ResearchSettingsInput(Input):
     auto_prepare_enabled: bool | None = Field(default=None, strict=True)
+    auto_approve_enabled: bool | None = Field(default=None, strict=True)
     linkedin_people_search_enabled: bool | None = Field(default=None, strict=True)
     linkedin_profile_experience_enabled: bool | None = Field(default=None, strict=True)
     linkedin_contact_info_enabled: bool | None = Field(default=None, strict=True)
     social_posts_enabled: bool | None = Field(default=None, strict=True)
     social_posts_max_profiles: int | None = Field(default=None, ge=1, le=4, strict=True)
     social_posts_max_posts: int | None = Field(default=None, ge=1, le=10, strict=True)
+
+
+class MailboxInput(Input):
+    label: str | None = Field(default=None, max_length=80)
+    sender_name: str | None = Field(default=None, max_length=150)
+    sender_email: str | None = Field(default=None, max_length=254)
+    smtp_host: str | None = Field(default=None, max_length=254)
+    smtp_port: int | None = Field(default=None, ge=1, le=65535)
+    smtp_user: str | None = Field(default=None, max_length=254)
+    smtp_password: str | None = Field(default=None, max_length=1000)
+    clear_smtp_password: bool = False
+    smtp_security: Literal["starttls", "ssl"] | None = None
+    imap_host: str | None = Field(default=None, max_length=254)
+    imap_port: int | None = Field(default=None, ge=1, le=65535)
+    imap_user: str | None = Field(default=None, max_length=254)
+    imap_password: str | None = Field(default=None, max_length=1000)
+    clear_imap_password: bool = False
+    imap_folder: str | None = Field(default=None, max_length=150)
+    daily_limit: int | None = Field(default=None, ge=1, le=500)
+    hourly_limit: int | None = Field(default=None, ge=1, le=500)
+    enabled: bool | None = None
 
 
 class MailSettingsInput(Input):
@@ -74,6 +97,7 @@ class MailSettingsInput(Input):
     imap_folder: str | None = Field(default=None, max_length=150)
     daily_send_limit: int | None = Field(default=None, ge=1, le=500)
     hourly_send_limit: int | None = Field(default=None, ge=1, le=500)
+    catch_all_share: int | None = Field(default=None, ge=0, le=100)
     min_send_interval_seconds: int | None = Field(default=None, ge=60, le=86400)
     send_hour_start: int | None = Field(default=None, ge=0, le=23)
     send_hour_end: int | None = Field(default=None, ge=1, le=24)
@@ -156,7 +180,7 @@ class CampaignStateInput(Input):
 
 class CampaignBulkInput(Input):
     lead_ids: list[Annotated[int, Field(ge=1, strict=True)]] = Field(min_length=1, max_length=200)
-    action: Literal['assign', 'delete', 'restore', 'prepare']
+    action: Literal['assign', 'delete', 'restore', 'prepare', 'approve']
     campaign_id: int | None = Field(default=None, ge=1)
     reason: str = Field(default='', max_length=500)
 
@@ -536,6 +560,16 @@ def create_app(settings=None):
     def mail_settings(value: MailSettingsInput):
         return preferences.update_mail(db, value.model_dump(exclude_none=True))
 
+    @app.put('/api/settings/mailboxes/{box_id}', dependencies=[Depends(auth)])
+    def mailbox_settings(box_id: str, value: MailboxInput):
+        if box_id != 'new' and not re.fullmatch(r'mb[0-9a-f]{8}', box_id):
+            raise HTTPException(404)
+        return preferences.update_mailbox(db, box_id, value.model_dump(exclude_none=True))
+
+    @app.delete('/api/settings/mailboxes/{box_id}', dependencies=[Depends(auth)])
+    def remove_mailbox(box_id: str):
+        return preferences.remove_mailbox(db, box_id)
+
     @app.put('/api/settings/writer', dependencies=[Depends(auth)])
     def writer_settings(value: WriterSettingsInput):
         return preferences.update_writer(db, value.model_dump(exclude_none=True))
@@ -696,7 +730,9 @@ def create_app(settings=None):
                 'suppression': [dict(r) for r in con.execute('SELECT email,reason,created_at FROM suppression ORDER BY created_at DESC,email LIMIT ? OFFSET ?', (limit, offset))],
                 'attempts': [dict(r) for r in con.execute('SELECT * FROM send_attempts ORDER BY id DESC LIMIT ? OFFSET ?', (limit, offset))],
                 'limit': limit, 'offset': offset,
-                'note': 'SENT means SMTP accepted, not inbox placement. Unknown submissions require manual reconciliation. Budgets use rolling windows; suppression is permanent.'}
+                'mailboxes': __import__('outreach.mailboxes', fromlist=['public']).public(settings, db),
+                'catch_all_open': __import__('outreach.mailboxes', fromlist=['catch_all_open']).catch_all_open(con, settings, now),
+                'note': 'SENT means SMTP accepted, not inbox placement. Unknown submissions require manual reconciliation. Budgets use rolling windows per mailbox; suppression is permanent.'}
 
     @app.post('/api/suppression', dependencies=[Depends(auth)])
     def add_suppression(value: SuppressionEntryInput):
@@ -866,7 +902,8 @@ def create_app(settings=None):
         from .email_writer import assert_ai_origin, configuration as writer_configuration
         contacts = db.all("SELECT * FROM contacts WHERE lead_id=?", (lead_id,))
         for contact in contacts:
-            contact['verification_fresh'] = bool(contact['verification'] == 'safe' and contact['verified_at']
+            from .mailboxes import sendable
+            contact['verification_fresh'] = bool(sendable(settings, contact['verification']) and contact['verified_at']
                 and 0 <= time.time()-contact['verified_at'] <= settings.verification_max_age_hours*3600)
             origin = db.one("SELECT detail FROM events WHERE kind='drafts_created' AND contact_id=? ORDER BY id DESC LIMIT 1", (contact['id'],))
             contact['draft_origin'] = json.loads(origin['detail']) if origin else {}

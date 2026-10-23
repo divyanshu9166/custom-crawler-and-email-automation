@@ -131,34 +131,70 @@ def due_candidates(db, now):
         due, message_id = rows[-1]["due_at"], rows[-1]["id"]
 
 
+def interval_key_for(key):
+    return 'mailbox_last_attempt:' + hashlib.sha256(key.encode()).hexdigest()
+
+
+def mailbox_block(con, settings, box, values, now, *, hourly=True):
+    """Why this mailbox cannot send now, or None. Order matches the original single-mailbox gates."""
+    prefix = box['prefix']
+    if now - float(values.get(prefix+'imap_last_success', '0') or 0) > 180 or values.get(prefix+'imap_caught_up') != 'true':
+        return 'inbox_stale'
+    if now - last_attempt(con, interval_key_for(box['key'])) < settings.min_send_interval_seconds:
+        return 'rate_limited'
+    if mailbox_usage(con, box['key'], now - 86400) >= box['daily_limit']:  # Rolling 24 hours.
+        return 'daily_limit'
+    if hourly and mailbox_usage(con, box['key'], now - 3600) >= box['hourly_limit']:
+        return 'hourly_limit'
+    return None
+
+
+def previous_mailbox(con, contact_id):
+    """Follow-ups and threads stay on the mailbox that sent the first email."""
+    row = con.execute("""SELECT a.mailbox FROM send_attempts a JOIN messages m ON m.id=a.message_id
+        WHERE m.contact_id=? AND a.outcome IN ('sent','uncertain') ORDER BY a.id DESC LIMIT 1""", (contact_id,)).fetchone()
+    return row[0] if row else None
+
+
 def send_one(db, settings, now=None, sender=smtp_send):
+    from .mailboxes import catch_all_cap, catch_all_open, catch_all_usage, sendable, views
     now = time.time() if now is None else now
     if db.get("demo") == "true":
         return "demo"
     if not settings.sending_enabled or settings.sending_gaps() or db.get("paused", "true") != "false":
         return "disabled"
-    if now - float(db.get("imap_last_success", "0")) > 180 or db.get("imap_caught_up") != "true":
-        return "inbox_stale"
-    day_start = now - 86400  # Rolling 24 hours; midnight cannot reset a full budget.
-    mailbox = mailbox_key(settings)
-    interval_key = 'mailbox_last_attempt:' + hashlib.sha256(mailbox.encode()).hexdigest()
+    boxes = views(settings)
+    if not boxes:
+        return 'disabled'
     with db.connect() as con:
-        if now - last_attempt(con, interval_key) < settings.min_send_interval_seconds:
-            return 'rate_limited'
-        count = mailbox_usage(con, mailbox, day_start)
-    if count >= settings.daily_send_limit:
-        return "daily_limit"
+        values = dict(con.execute('SELECT key,value FROM settings'))
+        blocked = {b['id']: mailbox_block(con, settings, b, values, now, hourly=False) for b in boxes}
+        ready = [b for b in boxes if not blocked[b['id']]]
+        usage = {b['id']: mailbox_usage(con, b['key'], now - 86400) for b in ready}
+        catch_all = catch_all_open(con, settings, now)
+    if not ready:
+        return blocked[boxes[0]['id']]
     for row in due_candidates(db, now):
         if row['step'] > 0 and not settings.followups_enabled:
             continue
         if not eligible_now(settings, row["timezone"], now):
             continue
-        if row["verification"] != "safe":
+        if not sendable(settings, row["verification"]):
             db.execute("UPDATE contacts SET status='hold' WHERE id=? AND status='active'", (row["contact_id"],))
             continue
         if not row["verified_at"] or now - row["verified_at"] > settings.verification_max_age_hours * 3600:
             db.enqueue("verify", {"contact_id": row["contact_id"]})
             continue
+        with db.connect() as con:
+            earlier = previous_mailbox(con, row['contact_id'])
+            options = [b for b in ready if earlier is None or b['key'] == earlier]
+            if row['verification'] == 'catch_all':
+                options = [b for b in options if catch_all and
+                           catch_all_usage(con, b['key'], now - 86400) < catch_all_cap(settings, b)]
+        if not options:
+            continue
+        box = min(options, key=lambda b: (usage[b['id']], boxes.index(b)))
+        view, mailbox, interval_key = box['view'], box['key'], interval_key_for(box['key'])
         with db.connect() as con:
             con.execute("BEGIN IMMEDIATE")
             contact = con.execute("SELECT * FROM contacts WHERE id=?", (row["contact_id"],)).fetchone()
@@ -166,17 +202,18 @@ def send_one(db, settings, now=None, sender=smtp_send):
             values = dict(con.execute('SELECT key,value FROM settings'))
             if not settings.sending_enabled or settings.sending_gaps() or values.get('paused', 'true') != 'false':
                 return 'disabled'
-            if now-float(values.get('imap_last_success', '0')) > 180 or values.get('imap_caught_up') != 'true':
-                return 'inbox_stale'
-            if now-last_attempt(con, interval_key) < settings.min_send_interval_seconds:
-                return 'rate_limited'
-            reserved = mailbox_usage(con, mailbox, day_start)
-            if reserved >= settings.daily_send_limit:
-                return 'daily_limit'
-            if mailbox_usage(con, mailbox, now - 3600) >= settings.hourly_send_limit:
-                return 'hourly_limit'
-            if contact['verification'] != 'safe':
+            # Recheck against the mailbox's current settings: limits may change, or the mailbox may be removed.
+            box = next((b for b in views(settings) if b['id'] == box['id'] and b['key'] == mailbox), None)
+            if box is None:
+                return 'disabled'
+            reason = mailbox_block(con, settings, box, values, now)
+            if reason:
+                return reason
+            if not sendable(settings, contact['verification']):
                 con.execute("UPDATE contacts SET status='hold' WHERE id=? AND status='active'", (contact['id'],))
+                continue
+            if contact['verification'] == 'catch_all' and (not catch_all_open(con, settings, now) or
+                    catch_all_usage(con, mailbox, now - 86400) >= catch_all_cap(settings, box)):
                 continue
             if not contact['verified_at'] or now-contact['verified_at'] > settings.verification_max_age_hours*3600:
                 continue
@@ -224,7 +261,7 @@ def send_one(db, settings, now=None, sender=smtp_send):
         previous = db.one("SELECT message_id FROM messages WHERE contact_id=? AND state='sent' ORDER BY step DESC LIMIT 1", (contact["id"],))
         try:
             try:
-                message = build_message(settings, contact, row, previous)
+                message = build_message(view, contact, row, previous)
             except Exception as exc:
                 raise BeforeSubmissionError("MessageBuild" + type(exc).__name__) from exc
             def still_allowed():
@@ -240,10 +277,10 @@ def send_one(db, settings, now=None, sender=smtp_send):
                             or bool(held and held[0]) or bool(scope and (scope['deleted_at'] or scope['state'] == 'paused'))):
                         raise SubmissionCancelled()
             if sender is smtp_send:
-                sender(settings, message, before_submission=still_allowed)
+                sender(view, message, before_submission=still_allowed)
             else:
                 still_allowed()
-                sender(settings, message)
+                sender(view, message)
         except SubmissionCancelled:
             finish_attempt(db, attempt_id, 'cancelled', now, 'Contact stopped before SMTP submission')
             # A global pause defers an unsent item. Only a contact/sales stop
@@ -451,7 +488,8 @@ def record_inbound(db, raw, external_id, _dsn_recipient=None):
                     (external_id, kind, contact["id"], __import__('json').dumps({"subject": str(msg.get('Subject', ''))[:250], "text": text}), time.time()))
 
 
-def poll_inbox(db, settings):
+def poll_inbox(db, settings, prefix=''):
+    """Poll one mailbox; prefix namespaces its cursor/health keys (empty for the primary)."""
     if not settings.imap_host or not settings.imap_user or not settings.imap_password:
         return False
     client = None
@@ -466,16 +504,16 @@ def poll_inbox(db, settings):
         if not validity:
             raise ValueError("Missing IMAP UIDVALIDITY")
         identity = hashlib.sha256(f"{settings.imap_host}|{settings.imap_user}|{settings.imap_folder}".encode()).hexdigest()[:20]
-        if db.get("imap_identity") != identity:
-            db.set("imap_last_uid", 0)
-            db.set("imap_caught_up", "false")
-            db.set("imap_identity", identity)
-        old = db.get("imap_uidvalidity")
+        if db.get(prefix+"imap_identity") != identity:
+            db.set(prefix+"imap_last_uid", 0)
+            db.set(prefix+"imap_caught_up", "false")
+            db.set(prefix+"imap_identity", identity)
+        old = db.get(prefix+"imap_uidvalidity")
         if old and old != validity:
-            db.set("imap_last_uid", 0)
-            db.set("imap_caught_up", "false")
-        db.set("imap_uidvalidity", validity)
-        last = int(db.get("imap_last_uid", "0"))
+            db.set(prefix+"imap_last_uid", 0)
+            db.set(prefix+"imap_caught_up", "false")
+        db.set(prefix+"imap_uidvalidity", validity)
+        last = int(db.get(prefix+"imap_last_uid", "0"))
         typ, data = client.uid("search", None, "UID", f"{last + 1}:*")
         if typ != "OK":
             raise ValueError("IMAP search failed")
@@ -490,14 +528,14 @@ def poll_inbox(db, settings):
             if not payloads:
                 raise ValueError("Missing message payload")
             record_inbound(db, b"".join(payloads), f"imap:{identity}:{validity}:{uid}")
-            db.set("imap_last_uid", uid)
-        db.set("imap_caught_up", "true" if len(ids) <= 100 else "false")
-        db.set("imap_last_success", time.time())
-        db.set("imap_error", "")
+            db.set(prefix+"imap_last_uid", uid)
+        db.set(prefix+"imap_caught_up", "true" if len(ids) <= 100 else "false")
+        db.set(prefix+"imap_last_success", time.time())
+        db.set(prefix+"imap_error", "")
         return True
     except Exception as exc:
-        db.set("imap_caught_up", "false")
-        db.set("imap_error", type(exc).__name__)
+        db.set(prefix+"imap_caught_up", "false")
+        db.set(prefix+"imap_error", type(exc).__name__)
         return False
     finally:
         if client:
@@ -505,3 +543,10 @@ def poll_inbox(db, settings):
                 client.logout()
             except Exception:
                 pass
+
+
+def poll_all(db, settings):
+    """Poll every configured mailbox; one failing inbox does not stop the others."""
+    from .mailboxes import views
+    results = [poll_inbox(db, box['view'], prefix=box['prefix']) for box in views(settings)]
+    return bool(results) and all(results)

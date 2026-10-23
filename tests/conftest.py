@@ -41,7 +41,8 @@ def settings(tmp_path):
                     postal_address="123 Example Street, Test City", domain_auth_confirmed=True,
                     smtp_host="smtp.example.com", smtp_user="test", smtp_password="test",
                     imap_host="imap.example.com", imap_user="test", imap_password="test",
-                    copy_min_score=0)  # Copy-score rewrites are covered in test_copywriting.py.
+                    copy_min_score=0,  # Copy-score rewrites are covered in test_copywriting.py.
+                    catch_all_share=0)  # Catch-all sending is covered in test_mailboxes.py.
 
 
 @pytest.fixture

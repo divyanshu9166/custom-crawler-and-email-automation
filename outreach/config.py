@@ -39,6 +39,12 @@ class Settings(BaseSettings):
     imap_folder: str = "INBOX"
     daily_send_limit: int = Field(20, ge=1, le=500)
     hourly_send_limit: int = Field(10, ge=1, le=500)
+    # Additional sending mailboxes (managed in Settings), each with its own daily/hourly limit.
+    extra_mailboxes: list[dict] = Field(default_factory=list)
+    # Share (%) of each mailbox's daily limit that may go to catch-all addresses; 0 = safe only.
+    catch_all_share: int = Field(20, ge=0, le=100)
+    # Approve prepared drafts automatically once every approval check passes.
+    auto_approve_enabled: bool = False
     min_send_interval_seconds: int = Field(180, ge=60)
     send_hour_start: int = Field(9, ge=0, le=23)
     send_hour_end: int = Field(17, ge=1, le=24)

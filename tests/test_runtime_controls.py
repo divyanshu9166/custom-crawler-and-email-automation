@@ -93,7 +93,7 @@ def test_worker_can_enable_from_dashboard_drain_and_resume_without_restart(setti
         database.execute("UPDATE jobs SET state='done' WHERE id=?", (job['id'],))
         (finished if job['id'] == first else second_finished).set()
     monkeypatch.setattr('outreach.worker.execute_job', execute)
-    monkeypatch.setattr('outreach.worker.poll_inbox', lambda *args: False)
+    monkeypatch.setattr('outreach.worker.poll_all', lambda *args: False)
     monkeypatch.setattr('outreach.worker.send_one', lambda *args: 'disabled')
     app = create_app(settings)
     with TestClient(app, headers={'Authorization': 'Bearer ' + settings.api_token}) as client:
@@ -124,7 +124,7 @@ async def test_worker_off_blocks_mail_and_switch_during_poll_prevents_next_send(
         calls.append('poll')
         settings.worker_enabled = False
         polled.set()
-    monkeypatch.setattr('outreach.worker.poll_inbox', poll)
+    monkeypatch.setattr('outreach.worker.poll_all', poll)
     monkeypatch.setattr('outreach.worker.send_one', lambda *args: calls.append('send'))
     task = asyncio.create_task(mail_loop(db, settings, stop))
     try:
@@ -148,7 +148,7 @@ async def test_sending_off_keeps_inbox_monitoring_without_submitting_mail(settin
     def send(database, configured):
         calls.append(send_one(database, configured, sender=forbidden_sender))
         loop.call_soon_threadsafe(stop.set)
-    monkeypatch.setattr('outreach.worker.poll_inbox', lambda *args: calls.append('poll'))
+    monkeypatch.setattr('outreach.worker.poll_all', lambda *args: calls.append('poll'))
     monkeypatch.setattr('outreach.worker.send_one', send)
     await asyncio.wait_for(mail_loop(db, settings, stop), timeout=3)
     assert calls == ['poll', 'disabled']

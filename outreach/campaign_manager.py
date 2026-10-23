@@ -168,7 +168,7 @@ def bulk(db, settings, lead_ids, action, reason='', campaign_id=None):
     ids = list(dict.fromkeys(lead_ids))
     if not ids or len(ids) > 200:
         raise ValueError('Select between 1 and 200 prospects')
-    if action not in {'assign', 'delete', 'restore', 'prepare'}:
+    if action not in {'assign', 'delete', 'restore', 'prepare', 'approve'}:
         raise ValueError('Unsupported bulk action')
     if action == 'delete' and len(reason.strip()) < 3:
         raise ValueError('Give a deletion reason')
@@ -206,11 +206,19 @@ def bulk(db, settings, lead_ids, action, reason='', campaign_id=None):
                     con.execute("UPDATE contacts SET status='hold' WHERE lead_id=? AND status='deleted'", (lead_id,))
                 else:
                     if lead['deleted_at']:
-                        raise ValueError('Deleted prospects cannot prepare email')
-                if action != 'prepare':
+                        raise ValueError('Deleted prospects cannot prepare or approve email')
+                if action not in {'prepare', 'approve'}:
                     con.execute('INSERT INTO events(kind,detail,created_at) VALUES(?,?,?)',
                                 ('campaign_bulk_' + action, json.dumps({'lead_id': lead_id, 'campaign_id': campaign_id, 'reason': reason}), time.time()))
-            if action == 'prepare':
+            if action == 'approve':
+                from .campaigns import approve_ready
+                contacts = db.all("""SELECT DISTINCT c.id FROM contacts c JOIN messages m ON m.contact_id=c.id
+                    WHERE c.lead_id=? AND c.status='new' AND m.state='draft' ORDER BY c.id""", (lead_id,))
+                if not contacts:
+                    raise ValueError('No prepared email to approve')
+                approve_ready(db, settings, contacts[0]['id'])
+                results.append({'lead_id': lead_id, 'ok': True, 'contact_id': contacts[0]['id']})
+            elif action == 'prepare':
                 from .preparation import queue
                 job_id = queue(db, settings, lead_id)
                 results.append({'lead_id': lead_id, 'ok': True, 'job_id': job_id})
@@ -218,7 +226,9 @@ def bulk(db, settings, lead_ids, action, reason='', campaign_id=None):
                 results.append({'lead_id': lead_id, 'ok': True})
         except ValueError as exc:
             results.append({'lead_id': lead_id, 'ok': False, 'reason': str(exc)})
-    return {'results': results, 'succeeded': sum(r['ok'] for r in results), 'note': 'No emails sent. Deletion preserves history and suppression; restore never resumes sending automatically.'}
+    note = ('Approved emails are queued; they send only while Sending is ON and resumed, within each mailbox limit.'
+            if action == 'approve' else 'No emails sent. Deletion preserves history and suppression; restore never resumes sending automatically.')
+    return {'results': results, 'succeeded': sum(r['ok'] for r in results), 'note': note}
 
 
 def export_csv(db, **filters):

@@ -5,6 +5,7 @@ import time
 from .research import assert_contact_ownership
 from .offers import selected_offer
 from .sequence import assert_approved
+from .mailboxes import sendable
 
 
 DEFINITIONS = [
@@ -106,7 +107,7 @@ def snapshot(db, settings, lead_id=None):
     lead_by_id = {lead['id']: lead for lead in leads}
     safe_ids = set()
     for contact in contacts:
-        if (contact['status'] == 'suppressed' or contact['verification'] != 'safe' or not contact['verified_at']
+        if (contact['status'] == 'suppressed' or not sendable(settings, contact['verification']) or not contact['verified_at']
                 or not 0 <= now-contact['verified_at'] <= settings.verification_max_age_hours*3600
                 or db.one('SELECT 1 FROM suppression WHERE email=?', (contact['email'],))):
             continue

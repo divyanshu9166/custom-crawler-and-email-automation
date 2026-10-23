@@ -4,6 +4,7 @@ import time
 from .research import assert_contact_ownership
 from .offers import selected_offer
 from .workflow_detail import ReadView
+from .mailboxes import sendable
 
 
 def ranked(db, settings, lead_id=None):
@@ -57,7 +58,7 @@ def ranked(db, settings, lead_id=None):
                 except ValueError:
                     continue
                 usable.append(contact)
-                if (contact['verification'] == 'safe' and contact['verified_at']
+                if (sendable(settings, contact['verification']) and contact['verified_at']
                         and 0 <= now-contact['verified_at'] <= settings.verification_max_age_hours*3600):
                     safe.append(contact)
             if usable:

@@ -544,7 +544,7 @@ async def test_worker_monitors_inbox_during_long_research_and_recovers_shutdown(
         started.set()
         await asyncio.sleep(60)
     monkeypatch.setattr(worker, "execute_job", execute)
-    monkeypatch.setattr(worker, "poll_inbox", lambda *a: polled.append(True))
+    monkeypatch.setattr(worker, "poll_all", lambda *a: polled.append(True))
     monkeypatch.setattr(worker, "send_one", lambda *a: sends.append(True))
     task = asyncio.create_task(run(db, settings, stop))
     await asyncio.wait_for(started.wait(), timeout=3)
