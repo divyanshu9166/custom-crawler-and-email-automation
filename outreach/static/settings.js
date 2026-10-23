@@ -18,12 +18,14 @@ window.WorkbenchSettings=(()=>{
   let mailboxes=[],editingMailbox='new';
   function mailboxRow(m,u){
     const usage=u?`${u.used_24h??0}/${m.daily_limit} today · ${u.used_1h??0}/${m.hourly_limit} this hour · catch-all ${u.catch_all_24h??0}/${u.catch_all_cap??0} · inbox ${u.inbox_current?'current':'not current'}${u.inbox_error?' ('+cfg.esc(u.inbox_error)+')':''}`:`${m.daily_limit}/day · ${m.hourly_limit}/hour`;
-    return `<div class="item"><strong>${cfg.esc(m.primary?'Primary mailbox':(m.label||m.sender_email||'Mailbox'))}</strong> <span class="small">${cfg.esc(m.sender_email||'not configured')}${m.enabled===false?' · paused':''}${m.configured?'':' · incomplete'}</span><p class="small">${usage}</p>${m.primary?'':`<button type="button" data-mailbox-edit="${cfg.esc(m.id)}">Edit</button> <button type="button" data-mailbox-remove="${cfg.esc(m.id)}">Remove</button>`}</div>`;
+    const status=!m.configured?' · incomplete':m.enabled===false?' · paused':!m.domain_confirmed?' · not sending: confirm SPF/DKIM/DMARC for '+cfg.esc(m.domain):m.sending===false?' · not sending':' · sending';
+    return `<div class="item"><strong>${cfg.esc(m.primary?'Primary mailbox':(m.label||m.sender_email||'Mailbox'))}</strong> <span class="small">${cfg.esc(m.sender_email||'not configured')}${m.alias?' · alias (shares its login\'s limits)':''}${status}</span><p class="small">${usage}</p>${m.primary?'':`<button type="button" data-mailbox-edit="${cfg.esc(m.id)}">Edit</button> <button type="button" data-mailbox-remove="${cfg.esc(m.id)}">Remove</button>`}</div>`;
   }
   async function populateMailboxes(list){
-    if(list)mailboxes=list;const usage={};
-    try{const d=await cfg.api('/api/delivery');for(const m of d.mailboxes||[])usage[m.id]=m;}catch(_){}
+    if(list)mailboxes=list;const usage={};let domainUsage=[];
+    try{const d=await cfg.api('/api/delivery');for(const m of d.mailboxes||[])usage[m.id]=m;domainUsage=d.domains||[];}catch(_){}
     el('mailbox-list').innerHTML=mailboxes.map(m=>mailboxRow(m,usage[m.id])).join('')||'<p>No mailbox configured yet.</p>';
+    el('domain-list').innerHTML=(domainUsage||[]).map(d=>`<form class="item" data-domain-cap="${cfg.esc(d.domain)}"><strong>${cfg.esc(d.domain)}</strong> <span class="small">${d.mailboxes} mailbox(es) · ${d.auth_confirmed?'SPF/DKIM/DMARC confirmed':'not confirmed: its mailboxes do not send'} · ${d.used_24h??0} sent in 24 h</span> <label>Daily cap<input name="daily_cap" type="number" min="0" max="5000" value="${Number(d.daily_cap)||0}"></label> <button type="submit">Save cap</button></form>`).join('')||'<p class="small">No sender domains yet.</p>';
   }
   function editMailbox(id){
     const f=el('mailbox-form'),m=mailboxes.find(x=>x.id===id&&!x.primary);editingMailbox=m?id:'new';f.reset();
@@ -74,10 +76,11 @@ window.WorkbenchSettings=(()=>{
       finally{clearInterval(ticking);clearTimeout(deadline);writerBusy=false;b.disabled=save.disabled=preset.disabled=false;b.textContent='Test AI connection';}
     };
     const boxForm=el('mailbox-form');
-    boxForm.onsubmit=async e=>{e.preventDefault();const result=el('mailbox-result'),button=boxForm.querySelector('button[type=submit]');const body=Object.fromEntries(new FormData(boxForm));body.enabled=boxForm.elements.enabled.checked;for(const n of ['smtp_port','imap_port','daily_limit','hourly_limit'])body[n]=Number(body[n]);for(const n of ['smtp_password','imap_password'])if(!body[n])delete body[n];button.disabled=true;result.className='';result.textContent='Saving…';
+    boxForm.onsubmit=async e=>{e.preventDefault();const result=el('mailbox-result'),button=boxForm.querySelector('button[type=submit]');const body=Object.fromEntries(new FormData(boxForm));for(const n of ['enabled','alias','domain_auth_confirmed'])body[n]=boxForm.elements[n].checked;for(const n of ['smtp_port','imap_port','daily_limit','hourly_limit'])body[n]=Number(body[n]);for(const n of ['smtp_password','imap_password'])if(!body[n])delete body[n];button.disabled=true;result.className='';result.textContent='Saving…';
       try{const s=await cfg.api('/api/settings/mailboxes/'+encodeURIComponent(editingMailbox),'PUT',body);await populateMailboxes(s.mailboxes);editMailbox('new');result.textContent='Mailbox saved. Sending is paused; the connection is checked when its inbox is next polled.';}
       catch(err){result.textContent=err.message;result.className='error';}finally{button.disabled=false;}};
     el('mailbox-cancel').onclick=()=>editMailbox('new');
+    el('domain-list').onsubmit=async e=>{e.preventDefault();const f=e.target.closest('[data-domain-cap]'),result=el('mailbox-result');if(!f)return;try{const s=await cfg.api('/api/settings/domain-caps','PUT',{domain:f.dataset.domainCap,daily_cap:Number(f.elements.daily_cap.value)||0});await populateMailboxes(s.mailboxes);result.className='';result.textContent='Domain cap saved. Sending is paused.';}catch(err){result.textContent=err.message;result.className='error';}};
     el('mailbox-list').onclick=async e=>{const edit=e.target.closest('[data-mailbox-edit]'),remove=e.target.closest('[data-mailbox-remove]'),result=el('mailbox-result');
       if(edit)editMailbox(edit.dataset.mailboxEdit);
       if(remove&&confirm('Remove this mailbox? Its sent history is kept.')){try{const s=await cfg.api('/api/settings/mailboxes/'+encodeURIComponent(remove.dataset.mailboxRemove),'DELETE');await populateMailboxes(s.mailboxes);result.className='';result.textContent='Mailbox removed. Sending is paused.';}catch(err){result.textContent=err.message;result.className='error';}}};

@@ -144,33 +144,45 @@ def mailbox_block(con, settings, box, values, now, *, hourly=True):
         return 'rate_limited'
     if mailbox_usage(con, box['key'], now - 86400) >= box['daily_limit']:  # Rolling 24 hours.
         return 'daily_limit'
+    cap = settings.domain_daily_caps.get(box.get('domain', ''))
+    if cap:
+        from .mailboxes import domain_usage
+        if domain_usage(con, box['domain'], now - 86400) >= cap:
+            return 'daily_limit'
     if hourly and mailbox_usage(con, box['key'], now - 3600) >= box['hourly_limit']:
         return 'hourly_limit'
     return None
 
 
 def previous_mailbox(con, contact_id):
-    """Follow-ups and threads stay on the mailbox that sent the first email."""
-    row = con.execute("""SELECT a.mailbox FROM send_attempts a JOIN messages m ON m.id=a.message_id
+    """Follow-ups and threads stay on the mailbox and From address that sent the first email."""
+    row = con.execute("""SELECT a.mailbox,a.sender FROM send_attempts a JOIN messages m ON m.id=a.message_id
         WHERE m.contact_id=? AND a.outcome IN ('sent','uncertain') ORDER BY a.id DESC LIMIT 1""", (contact_id,)).fetchone()
-    return row[0] if row else None
+    return (row[0], row[1]) if row else (None, '')
+
+
+def header_message_id(stored, sender):
+    """Message-ID on the sending address's domain; the stored ID keeps the approval snapshot stable."""
+    local = stored.strip('<>').rsplit('@', 1)[0]
+    domain = sender.rsplit('@', 1)[-1] if '@' in sender else 'outreach.invalid'
+    return f'<{local}@{domain}>'
 
 
 def send_one(db, settings, now=None, sender=smtp_send):
-    from .mailboxes import catch_all_cap, catch_all_open, catch_all_usage, sendable, views
+    from .mailboxes import catch_all_cap, catch_all_open, catch_all_usage, sendable, sender_usage, views
     now = time.time() if now is None else now
     if db.get("demo") == "true":
         return "demo"
     if not settings.sending_enabled or settings.sending_gaps() or db.get("paused", "true") != "false":
         return "disabled"
-    boxes = views(settings)
+    boxes = [b for b in views(settings) if b['auth_confirmed']]
     if not boxes:
         return 'disabled'
     with db.connect() as con:
         values = dict(con.execute('SELECT key,value FROM settings'))
         blocked = {b['id']: mailbox_block(con, settings, b, values, now, hourly=False) for b in boxes}
         ready = [b for b in boxes if not blocked[b['id']]]
-        usage = {b['id']: mailbox_usage(con, b['key'], now - 86400) for b in ready}
+        usage = {b['id']: (mailbox_usage(con, b['key'], now - 86400), sender_usage(con, b['sender'], now - 86400)) for b in ready}
         catch_all = catch_all_open(con, settings, now)
     if not ready:
         return blocked[boxes[0]['id']]
@@ -186,8 +198,9 @@ def send_one(db, settings, now=None, sender=smtp_send):
             db.enqueue("verify", {"contact_id": row["contact_id"]})
             continue
         with db.connect() as con:
-            earlier = previous_mailbox(con, row['contact_id'])
-            options = [b for b in ready if earlier is None or b['key'] == earlier]
+            earlier, earlier_sender = previous_mailbox(con, row['contact_id'])
+            options = [b for b in ready if earlier is None or
+                       (b['key'] == earlier and (not earlier_sender or b['sender'] == earlier_sender))]
             if row['verification'] == 'catch_all':
                 options = [b for b in options if catch_all and
                            catch_all_usage(con, b['key'], now - 86400) < catch_all_cap(settings, b)]
@@ -203,7 +216,7 @@ def send_one(db, settings, now=None, sender=smtp_send):
             if not settings.sending_enabled or settings.sending_gaps() or values.get('paused', 'true') != 'false':
                 return 'disabled'
             # Recheck against the mailbox's current settings: limits may change, or the mailbox may be removed.
-            box = next((b for b in views(settings) if b['id'] == box['id'] and b['key'] == mailbox), None)
+            box = next((b for b in views(settings) if b['id'] == box['id'] and b['key'] == mailbox and b['auth_confirmed']), None)
             if box is None:
                 return 'disabled'
             reason = mailbox_block(con, settings, box, values, now)
@@ -253,15 +266,18 @@ def send_one(db, settings, now=None, sender=smtp_send):
             changed = con.execute("UPDATE messages SET state='sending' WHERE id=? AND state='queued'", (row["id"],)).rowcount
             if not changed:
                 continue
-            attempt_id = con.execute('INSERT INTO send_attempts(message_id,mailbox,started_at) VALUES(?,?,?)',
-                                     (row['id'], mailbox, now)).lastrowid
+            header_id = header_message_id(row['message_id'], box['sender'])
+            attempt_id = con.execute('INSERT INTO send_attempts(message_id,mailbox,started_at,sender,header_message_id) VALUES(?,?,?,?,?)',
+                                     (row['id'], mailbox, now, box['sender'], header_id)).lastrowid
             contact = dict(contact)
             con.execute("INSERT INTO settings(key,value) VALUES('last_send_attempt',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value", (str(now),))
             con.execute('INSERT INTO settings(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value', (interval_key, str(now)))
-        previous = db.one("SELECT message_id FROM messages WHERE contact_id=? AND state='sent' ORDER BY step DESC LIMIT 1", (contact["id"],))
+        previous = db.one("""SELECT COALESCE((SELECT a.header_message_id FROM send_attempts a WHERE a.message_id=m.id
+            AND a.outcome='sent' AND a.header_message_id<>'' ORDER BY a.id DESC LIMIT 1), m.message_id) AS message_id
+            FROM messages m WHERE m.contact_id=? AND m.state='sent' ORDER BY m.step DESC LIMIT 1""", (contact["id"],))
         try:
             try:
-                message = build_message(view, contact, row, previous)
+                message = build_message(view, contact, {**row, 'message_id': header_id}, previous)
             except Exception as exc:
                 raise BeforeSubmissionError("MessageBuild" + type(exc).__name__) from exc
             def still_allowed():
@@ -431,7 +447,9 @@ def record_inbound(db, raw, external_id, _dsn_recipient=None):
         if contact:
             break
     for ref in refs if not contact else []:
-        contact = db.one("SELECT c.* FROM contacts c JOIN messages m ON m.contact_id=c.id WHERE m.message_id=?", (ref,))
+        contact = (db.one("SELECT c.* FROM contacts c JOIN messages m ON m.contact_id=c.id WHERE m.message_id=?", (ref,))
+                   or db.one("""SELECT c.* FROM contacts c JOIN messages m ON m.contact_id=c.id
+                       JOIN send_attempts a ON a.message_id=m.id WHERE a.header_message_id=?""", (ref,)))
         if contact:
             break
     # Parse DSN recipients and status. Only permanent failures suppress; delay notices pause.
@@ -548,5 +566,6 @@ def poll_inbox(db, settings, prefix=''):
 def poll_all(db, settings):
     """Poll every configured mailbox; one failing inbox does not stop the others."""
     from .mailboxes import views
-    results = [poll_inbox(db, box['view'], prefix=box['prefix']) for box in views(settings)]
+    inboxes = {box['prefix']: box for box in views(settings) if not box['alias']}
+    results = [poll_inbox(db, box['view'], prefix=box['prefix']) for box in inboxes.values()]
     return bool(results) and all(results)

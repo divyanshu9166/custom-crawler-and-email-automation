@@ -182,6 +182,12 @@ class DB:
                 WHEN NEW.campaign_id IS NOT NULL AND NOT EXISTS(SELECT 1 FROM campaign_groups WHERE id=NEW.campaign_id AND goal=NEW.campaign)
                 BEGIN SELECT RAISE(ABORT,'Campaign business goal does not match prospect'); END;
             ''')
+            # Actual From address and Message-ID header per send (aliases and multiple domains).
+            columns = {r[1] for r in con.execute('PRAGMA table_info(send_attempts)')}
+            for name in ('sender', 'header_message_id'):
+                if name not in columns:
+                    con.execute(f"ALTER TABLE send_attempts ADD COLUMN {name} TEXT NOT NULL DEFAULT ''")
+            con.execute("CREATE INDEX IF NOT EXISTS attempts_header ON send_attempts(header_message_id) WHERE header_message_id<>''")
             con.execute("PRAGMA user_version=8")
             con.execute("""CREATE INDEX IF NOT EXISTS events_job_activity ON events
                 ((CASE WHEN json_valid(detail) THEN json_extract(detail,'$.job_id') END),id)

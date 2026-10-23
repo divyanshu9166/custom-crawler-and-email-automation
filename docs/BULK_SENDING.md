@@ -26,6 +26,23 @@ message and inbox code runs per mailbox. Sending (`mail.send_one`):
 Per-mailbox usage, catch-all usage and inbox state are shown in the mailbox list and in
 `/api/delivery`.
 
+### Aliases, domains and Message-IDs
+
+- **Separate logins** (e.g. `info@` and `sales@` each with their own password) are separate
+  mailboxes with their own limits.
+- **Aliases** (another address sent through the same SMTP login, e.g. Google Workspace
+  "send mail as") must be ticked as *Alias*. They share that login's daily/hourly limit,
+  minimum gap and inbox; sending rotates the From address across the aliases, and follow-ups
+  keep the exact address that sent the first email. A second non-alias entry on the same login
+  is rejected.
+- **Domain authentication** is confirmed per sender domain (the primary's checkbox, or the
+  mailbox form). A mailbox on an unconfirmed domain does not send.
+- **Domain cap** (optional): a daily total across every mailbox and alias on one domain,
+  set in the Domains list. 0 = no cap.
+- **Message-ID** headers use the sending address's domain. The stored draft ID is unchanged
+  (it is part of the approval snapshot); the header actually sent is recorded on the send
+  attempt, used for follow-up threading, and matched when replies arrive.
+
 ## Catch-all addresses
 
 `CATCH_ALL_SHARE` (Settings → Sending limits, default 20%) is the share of each mailbox's

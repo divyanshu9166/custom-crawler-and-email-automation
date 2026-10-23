@@ -77,6 +77,13 @@ class MailboxInput(Input):
     daily_limit: int | None = Field(default=None, ge=1, le=500)
     hourly_limit: int | None = Field(default=None, ge=1, le=500)
     enabled: bool | None = None
+    alias: bool | None = None
+    domain_auth_confirmed: bool | None = None
+
+
+class DomainCapInput(Input):
+    domain: str = Field(min_length=3, max_length=253, pattern=r'^[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
+    daily_cap: int = Field(ge=0, le=5000)
 
 
 class MailSettingsInput(Input):
@@ -566,6 +573,10 @@ def create_app(settings=None):
             raise HTTPException(404)
         return preferences.update_mailbox(db, box_id, value.model_dump(exclude_none=True))
 
+    @app.put('/api/settings/domain-caps', dependencies=[Depends(auth)])
+    def domain_cap(value: DomainCapInput):
+        return preferences.update_domain_cap(db, value.domain, value.daily_cap)
+
     @app.delete('/api/settings/mailboxes/{box_id}', dependencies=[Depends(auth)])
     def remove_mailbox(box_id: str):
         return preferences.remove_mailbox(db, box_id)
@@ -731,6 +742,7 @@ def create_app(settings=None):
                 'attempts': [dict(r) for r in con.execute('SELECT * FROM send_attempts ORDER BY id DESC LIMIT ? OFFSET ?', (limit, offset))],
                 'limit': limit, 'offset': offset,
                 'mailboxes': __import__('outreach.mailboxes', fromlist=['public']).public(settings, db),
+                'domains': __import__('outreach.mailboxes', fromlist=['public_domains']).public_domains(settings, db),
                 'catch_all_open': __import__('outreach.mailboxes', fromlist=['catch_all_open']).catch_all_open(con, settings, now),
                 'note': 'SENT means SMTP accepted, not inbox placement. Unknown submissions require manual reconciliation. Budgets use rolling windows per mailbox; suppression is permanent.'}
 

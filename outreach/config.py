@@ -41,6 +41,8 @@ class Settings(BaseSettings):
     hourly_send_limit: int = Field(10, ge=1, le=500)
     # Additional sending mailboxes (managed in Settings), each with its own daily/hourly limit.
     extra_mailboxes: list[dict] = Field(default_factory=list)
+    # Optional daily total across every mailbox on one sender domain, e.g. {"autozentic.com": 60}.
+    domain_daily_caps: dict[str, int] = Field(default_factory=dict)
     # Share (%) of each mailbox's daily limit that may go to catch-all addresses; 0 = safe only.
     catch_all_share: int = Field(20, ge=0, le=100)
     # Approve prepared drafts automatically once every approval check passes.

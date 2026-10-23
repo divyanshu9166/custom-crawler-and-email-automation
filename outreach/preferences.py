@@ -17,7 +17,7 @@ AUTH_FIELDS = {"admin_user", "admin_password_hash", "session_version"}
 WRITER_FIELDS = {'draft_api_url', 'draft_api_key', 'draft_model', 'draft_timeout_seconds'}
 PAGESPEED_FIELDS = {'pagespeed_api_key'}
 RUNTIME_FIELDS = {'worker_enabled', 'sending_enabled'}
-MAILBOX_FIELDS = {'extra_mailboxes'}
+MAILBOX_FIELDS = {'extra_mailboxes', 'domain_daily_caps'}
 RESEARCH_FIELDS = {'auto_prepare_enabled', 'auto_approve_enabled', 'linkedin_people_search_enabled', 'linkedin_profile_experience_enabled',
                    'linkedin_contact_info_enabled', 'social_posts_enabled', 'social_posts_max_profiles',
                    'social_posts_max_posts'}
@@ -63,7 +63,8 @@ class Preferences:
                     "public_url": self.settings.public_url, "sending_enabled": self.settings.sending_enabled,
                     "worker_enabled": self.settings.worker_enabled,
                     "sending_gaps": self.settings.sending_gaps(),
-                    "mailboxes": __import__("outreach.mailboxes", fromlist=["public"]).public(self.settings)}
+                    "mailboxes": __import__("outreach.mailboxes", fromlist=["public"]).public(self.settings),
+                    "domains": __import__("outreach.mailboxes", fromlist=["public_domains"]).public_domains(self.settings)}
 
     def persist(self, patch):
         value = {**self.saved, **patch}
@@ -211,13 +212,25 @@ class Preferences:
                 raise ValueError('Use TLS SMTP and valid mailbox ports')
             if not all(type(box.get(k)) is int and 1 <= box[k] <= 500 for k in ('daily_limit', 'hourly_limit')):
                 raise ValueError('Daily and hourly limits must be between 1 and 500')
-            keys = [mailbox_key(self.settings)] if self.settings.smtp_user or self.settings.sender_email else []
+            # One login = one mailbox budget. Extra addresses on the same login must be marked as aliases.
+            logins = {mailbox_key(self.settings)} if self.settings.smtp_user or self.settings.sender_email else set()
+            senders = {self.settings.sender_email.strip().lower()} if self.settings.sender_email else set()
             for other in boxes:
                 key = mailbox_key(self.settings.model_copy(update={'smtp_user': other.get('smtp_user', ''),
                                                                    'sender_email': other.get('sender_email', '')}))
-                if key in keys:
-                    raise ValueError('This mailbox is already configured')
-                keys.append(key)
+                sender = other.get('sender_email', '').strip().lower()
+                if sender in senders:
+                    raise ValueError('This sender address is already configured')
+                senders.add(sender)
+                if other.get('alias'):
+                    continue
+                if key in logins:
+                    raise ValueError("This login is already used by another mailbox. Tick 'Alias' to send from another "
+                                     'address on the same login; aliases share that login\'s limits.')
+                logins.add(key)
+            if box.get('alias') and mailbox_key(self.settings.model_copy(update={
+                    'smtp_user': box.get('smtp_user', ''), 'sender_email': box.get('sender_email', '')})) not in logins:
+                raise ValueError('An alias needs an existing mailbox with the same SMTP login')
             if not self.settings._mailbox_lock.acquire(blocking=False):
                 raise ValueError("Mailbox activity is in progress; retry after it finishes")
             try:
@@ -229,6 +242,21 @@ class Preferences:
                 db.event('workspace_mailbox_changed', {'mailbox': box['id'], 'fields': sorted(patch), 'sending_paused': True})
             finally:
                 self.settings._mailbox_lock.release()
+            return self.public()
+
+    def update_domain_cap(self, db, domain, daily_cap):
+        """Optional daily total across every mailbox on one sender domain; 0 removes the cap."""
+        from .mailboxes import public_domains
+        with self.lock:
+            domain = domain.strip().lower()
+            if domain not in {d['domain'] for d in public_domains(self.settings)}:
+                raise ValueError('Add a mailbox on this domain first')
+            caps = {k: v for k, v in self.settings.domain_daily_caps.items() if k != domain}
+            if daily_cap:
+                caps[domain] = daily_cap
+            db.set('paused', 'true')
+            self.persist({'domain_daily_caps': caps})
+            db.event('workspace_domain_cap_changed', {'domain': domain, 'daily_cap': daily_cap, 'sending_paused': True})
             return self.public()
 
     def remove_mailbox(self, db, box_id):
