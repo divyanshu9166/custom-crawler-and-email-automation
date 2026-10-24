@@ -156,7 +156,10 @@ def public_domains(settings, db=None):
             rows.setdefault(domain, {'domain': domain, 'mailboxes': 0, 'daily_cap': settings.domain_daily_caps.get(domain, 0),
                                      'auth_confirmed': domain in confirmed_domains(settings)})['mailboxes'] += 1
     if db is not None:
+        import json
         with db.connect() as con:
             for row in rows.values():
                 row['used_24h'] = domain_usage(con, row['domain'], now - 86400)
+                saved = con.execute('SELECT value FROM settings WHERE key=?', ('domain_check:' + row['domain'],)).fetchone()
+                row['dns_check'] = json.loads(saved[0]) if saved else None
     return list(rows.values())

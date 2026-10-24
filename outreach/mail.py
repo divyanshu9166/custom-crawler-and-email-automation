@@ -63,6 +63,49 @@ def eligible_now(settings, tz, now):
     return local.weekday() < 5 and settings.send_hour_start <= local.hour < settings.send_hour_end
 
 
+FOOTER_NOTICE = "Business inquiry about our services. To stop these emails, reply 'unsubscribe' or visit"
+QUOTE_RUN = 8  # Consecutive words that, repeated from our own emails, are quoted copy rather than their words.
+
+
+def _words(text):
+    """(line number, normalised word) pairs; URLs and quote markers are ignored."""
+    result = []
+    for number, line in enumerate(text.splitlines()):
+        line = re.sub(r'https?://\S+', ' ', re.sub(r'^[>\s]+', '', line))
+        for word in line.split():
+            word = word.strip('.,;:!?()[]"\'*_').casefold()
+            if word:
+                result.append((number, word))
+    return result
+
+
+def without_our_text(text, ours):
+    """Remove runs of words that repeat what we sent this contact (emails and footer), even when a
+    mail client re-wraps them without quote markers. Their own words, however short, are kept."""
+    own = [w for _, w in _words('\n'.join(ours))]
+    runs = {tuple(own[i:i+QUOTE_RUN]) for i in range(len(own) - QUOTE_RUN + 1)}
+    words = _words(text)
+    covered = set()
+    for i in range(len(words) - QUOTE_RUN + 1):
+        if tuple(w for _, w in words[i:i+QUOTE_RUN]) in runs:
+            covered.update(range(i, i + QUOTE_RUN))
+    if not covered:
+        return text
+    kept_lines = []
+    lines = text.splitlines()
+    by_line = {}
+    for index, (number, word) in enumerate(words):
+        by_line.setdefault(number, []).append((index, word))
+    for number, line in enumerate(lines):
+        tokens = by_line.get(number, [])
+        if tokens and all(index in covered for index, _ in tokens):
+            continue
+        if tokens and any(index in covered for index, _ in tokens):
+            line = ' '.join(word for index, word in tokens if index not in covered)
+        kept_lines.append(line)
+    return '\n'.join(kept_lines)
+
+
 def build_message(settings, contact, row, previous=None):
     message = EmailMessage()
     message["From"] = formataddr((settings.sender_name, settings.sender_email))
@@ -78,8 +121,7 @@ def build_message(settings, contact, row, previous=None):
     message["List-Unsubscribe"] = f"<{url}>"
     message["List-Unsubscribe-Post"] = "List-Unsubscribe=One-Click"
     footer = (f"\n\n{settings.sender_name}\n{settings.sender_company}\n{settings.sender_website}\n"
-              f"{settings.postal_address}\n\nBusiness inquiry about our services. "
-              f"To stop these emails, reply 'unsubscribe' or visit {url}")
+              f"{settings.postal_address}\n\n{FOOTER_NOTICE} {url}")
     message.set_content(row["body"] + footer)
     return message
 
@@ -477,8 +519,11 @@ def record_inbound(db, raw, external_id, _dsn_recipient=None):
         return
     fingerprint = hashlib.sha256(raw + b'\0' + str(contact['id']).encode()).hexdigest()
     text = message_text(msg)
+    # A reply may paste our email and footer back without quote markers; read only their own words.
+    ours = [m['body'] for m in db.all('SELECT body FROM messages WHERE contact_id=?', (contact['id'],))] + [FOOTER_NOTICE]
+    own_words = without_our_text(text, ours)
     # Ignore quoted original/footer when detecting opt-out language.
-    first = re.split(r"(?im)^\s*(?:On .+wrote:|From:|>+|--\s*$)", text)[0][:2000]
+    first = re.split(r"(?im)^\s*(?:On .+wrote:|From:|>+|--\s*$)", own_words)[0][:2000]
     opted_out = bool(re.search(r"\b(unsubscribe|opt[ -]out|remove (?:me|my (?:email|address))|no thanks|not interested|no further emails|stop (?:emailing|contacting|sending)|do not (?:contact|email|send)|don['’]t (?:email|contact)|take me off)\b", first, re.I)
                      or re.fullmatch(r'\s*(?:please\s+)?stop[.!\s]*', first, re.I)
                      or re.fullmatch(r'\s*(?:re:\s*)?(?:unsubscribe|remove me|opt[ -]out|stop)[.!\s]*', str(msg.get('Subject', '')), re.I))

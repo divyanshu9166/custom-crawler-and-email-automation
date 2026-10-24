@@ -84,3 +84,20 @@ conversation (MX accepts mail and the connection succeeded).
 
 Volume is bounded by mailbox limits and your provider's own limits. Domain authentication
 (SPF/DKIM/DMARC) and sending reputation remain your responsibility; no warm-up ramp is applied.
+
+## Domain readiness, quoted replies and the approval guard
+
+- **Check DNS** (Settings → Sending mailboxes → Domains, `POST /api/deliverability/check`) reads public
+  DNS for a sending domain (`outreach/deliverability.py`): one valid SPF record that authorises a sender
+  and is not `+all`; a DKIM key under common provider selectors or your own selector; a DMARC record and
+  its policy; real MX records (a null MX fails); and the Spamhaus DBL, SURBL and URIBL domain blocklists
+  (a refused query is "unknown", not "listed"). The result is saved per domain and shown beside it; a
+  domain marked authenticated whose check fails is flagged. It advises your SPF/DKIM/DMARC confirmation.
+- **Our own text in replies:** before a reply is read for opt-out wording, any run of 8+ words that repeats
+  our emails to that contact or our footer is removed (`mail.without_our_text`), even when a mail client
+  re-wraps it without quote markers. A pasted footer containing "unsubscribe" is no longer an opt-out; a
+  genuine short "unsubscribe" or "remove me" still is.
+- **Approval guard** (`outreach/guard.py`): bulk and automatic approval hold a draft for manual review when
+  it names a domain or address that is neither yours nor the recipient's (including bare `site.com` and
+  "site dot com"), or repeats 12+ consecutive words of the AI writing instructions. The reason is shown and
+  recorded as `approval_held`. Manual approval is unaffected.

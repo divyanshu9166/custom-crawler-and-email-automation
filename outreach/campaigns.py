@@ -388,6 +388,11 @@ def approve_ready(db, settings, contact_id, origin='bulk'):
     """Approve one prepared contact with a recorded automatic basis. Every approve() check still applies."""
     contact, lead = context(db, contact_id)
     relevance = f"{contact.get('role') or 'Published business contact'} for {lead['company']}, published at {contact['source_url']}"
+    from .guard import review
+    held = review(settings, lead, contact, db.all("SELECT subject,body FROM messages WHERE contact_id=? AND state='draft'", (contact_id,)))
+    if held:
+        db.event('approval_held', {'lead_id': lead['id'], 'reasons': held}, contact_id)
+        raise ValueError('Held for manual review: ' + '; '.join(held))
     approve(db, settings, contact_id, AUTO_BASIS, relevance)
     db.event(origin + '_approved', {'lead_id': lead['id']}, contact_id)
 

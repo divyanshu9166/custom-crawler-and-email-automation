@@ -86,6 +86,11 @@ class DomainCapInput(Input):
     daily_cap: int = Field(ge=0, le=5000)
 
 
+class DomainCheckInput(Input):
+    domain: str = Field(min_length=3, max_length=253, pattern=r'^[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
+    dkim_selector: str = Field(default='', max_length=63, pattern=r'^[A-Za-z0-9._-]*$')
+
+
 class MailSettingsInput(Input):
     sender_name: str | None = Field(default=None, max_length=150)
     sender_company: str | None = Field(default=None, max_length=200)
@@ -572,6 +577,14 @@ def create_app(settings=None):
         if box_id != 'new' and not re.fullmatch(r'mb[0-9a-f]{8}', box_id):
             raise HTTPException(404)
         return preferences.update_mailbox(db, box_id, value.model_dump(exclude_none=True))
+
+    @app.post('/api/deliverability/check', dependencies=[Depends(auth)])
+    def deliverability_check(value: DomainCheckInput):
+        from .deliverability import check
+        result = check(value.domain, [value.dkim_selector] if value.dkim_selector else [])
+        db.set('domain_check:' + result['domain'], json.dumps(result))
+        db.event('domain_checked', {'domain': result['domain'], 'ready': result['ready'], 'issues': result['issues']})
+        return result
 
     @app.put('/api/settings/domain-caps', dependencies=[Depends(auth)])
     def domain_cap(value: DomainCapInput):
