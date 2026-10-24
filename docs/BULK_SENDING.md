@@ -60,7 +60,25 @@ the same rule (`mailboxes.sendable`).
   runs without clicks while Sending is ON and resumed.
 
 Both record `bulk_approved`/`auto_approved` events; skipped automatic approvals record
-`auto_approve_skipped` with the reason.
+`auto_approve_skipped` with the reason. Profile-only (Campaign 3) preparation uses the same hook.
+
+When bulk approval meets a missing, stale (older than `VERIFICATION_MAX_AGE_HOURS`) or
+inconclusive mailbox check, it queues a fresh check and approves that contact automatically
+if the check passes, even with auto-approve OFF.
+
+Safeguards: a mailbox at its hourly limit is skipped rather than pausing the round; disabled
+mailboxes keep their inboxes polled for replies/bounces; an owner with aliases cannot be
+removed or re-logged until its aliases are updated; the primary cannot duplicate an extra
+mailbox; a follow-up whose original mailbox was removed continues from another mailbox.
+
+## Email verification prerequisites
+
+Approval and sending need a fresh `safe` (or capped `catch_all`) Reacher result. Reacher must
+be running and reachable at `REACHER_URL`, with `REACHER_FROM_EMAIL` on your sending domain and
+`REACHER_HELLO_NAME` set to a hostname whose reverse DNS points at the verifying server. Reacher
+talks to recipient mail servers on **outbound port 25**; if the host blocks it, nearly every
+result is `unknown` and nothing becomes sendable. `catch_all` is only assigned after a real SMTP
+conversation (MX accepts mail and the connection succeeded).
 
 ## Limits
 

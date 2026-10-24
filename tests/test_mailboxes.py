@@ -261,3 +261,86 @@ def test_domain_cap_settings_only_for_known_domains(db, settings):
     assert next(d for d in saved['domains'] if d['domain'] == 'sender.example.com')['daily_cap'] == 50
     prefs.update_domain_cap(db, 'sender.example.com', 0)
     assert settings.domain_daily_caps == {}
+
+
+def test_mailbox_at_its_hourly_limit_is_skipped_not_blocking_the_rest(db, settings, active):
+    now = ready(db, active['contact_id'])
+    two_mailboxes(db, settings, now)
+    settings.extra_mailboxes[0]['hourly_limit'] = 1
+    other_contact_sent_from(db, active['lead_id'], 'two@sender.example.com', now)  # Second mailbox: hourly limit reached.
+    for i in range(2):
+        other_contact_sent_from(db, active['lead_id'], 'team@sender.example.com', now - 5 * 3600 - i, login=mailbox_key(settings))
+    db.execute('UPDATE send_attempts SET started_at=? WHERE sender=?', (now - 5 * 3600, 'team@sender.example.com'))
+    used, sender = sender_log()
+    assert send_one(db, settings, now, sender) == 'sent' and used[0][0] == 'team@sender.example.com'
+
+
+def test_disabled_mailbox_inbox_is_still_polled_and_its_aliases_stop(db, settings):
+    from outreach import mail
+    settings.extra_mailboxes = [{**SECOND, 'enabled': False},
+                                {**SECOND, 'id': 'mb00000002', 'sender_email': 'alias@sender.example.com', 'alias': True}]
+    assert [v['id'] for v in mailboxes.views(settings)] == ['primary']  # Neither the owner nor its alias sends.
+    polled = []
+    original = mail.poll_inbox
+    mail.poll_inbox = lambda db_, view, prefix='': polled.append(prefix) or True
+    try:
+        mail.poll_all(db, settings)
+    finally:
+        mail.poll_inbox = original
+    assert sorted(polled) == ['', PREFIX]  # Replies and bounces to past sends are still read.
+
+
+def test_follow_up_continues_when_its_original_mailbox_was_removed(db, settings, active):
+    now = ready(db, active['contact_id'])
+    two_mailboxes(db, settings, now)
+    db.set(interval_key_for(mailbox_key(settings)), now - 10)
+    used, sender = sender_log()
+    assert send_one(db, settings, now, sender) == 'sent' and used[0][0] == 'two@sender.example.com'
+    settings.extra_mailboxes = []  # The mailbox that sent the first email is removed.
+    later = now + 4 * 86400
+    db.execute('UPDATE contacts SET verified_at=? WHERE id=?', (later, active['contact_id']))
+    db.set('imap_last_success', later)
+    assert send_one(db, settings, later, sender) == 'sent' and used[1][0] == settings.sender_email
+
+
+def test_mailbox_settings_protect_alias_owners_and_primary_duplicates(db, settings):
+    settings.smtp_user = 'team@sender.example.com'
+    prefs = Preferences(settings)
+    owner = {k: v for k, v in SECOND.items() if k != 'id'}
+    prefs.update_mailbox(db, 'new', dict(owner))
+    owner_id = settings.extra_mailboxes[0]['id']
+    prefs.update_mailbox(db, 'new', {**owner, 'sender_email': 'alias2@sender.example.com', 'alias': True})
+    with pytest.raises(ValueError, match='Remove the aliases'):
+        prefs.remove_mailbox(db, owner_id)
+    with pytest.raises(ValueError, match="previous login"):
+        prefs.update_mailbox(db, owner_id, {'smtp_user': 'changed@sender.example.com'})
+    with pytest.raises(ValueError, match='already uses this login or address'):
+        prefs.update_mail(db, {'smtp_user': 'two@sender.example.com'})
+
+
+def test_auto_approve_hook_never_raises(db, settings, prepared, monkeypatch):
+    import outreach.campaigns as campaigns
+    settings.auto_approve_enabled = True
+    monkeypatch.setattr(campaigns, 'approve_ready', lambda *a, **k: (_ for _ in ()).throw(RuntimeError('database is locked')))
+    assert maybe_auto_approve(db, settings, prepared['contact_id']) is False
+    assert db.one("SELECT detail FROM events WHERE kind='auto_approve_skipped'")['detail'] == '{"reason": "RuntimeError"}'
+
+
+def test_bulk_approve_queues_a_fresh_check_and_approves_when_it_passes(db, settings, prepared):
+    cid = prepared['contact_id']
+    db.execute('UPDATE contacts SET verified_at=? WHERE id=?', (time.time() - 5 * 86400, cid))  # Older than 72 hours.
+    result = bulk(db, settings, [prepared['lead_id']], 'approve')
+    assert result['succeeded'] == 0 and 'Mailbox check queued' in result['results'][0]['reason']
+    assert db.one("SELECT 1 FROM jobs WHERE kind='verify' AND state='pending'")
+    db.execute('UPDATE contacts SET verified_at=? WHERE id=?', (time.time(), cid))  # The check passed.
+    assert maybe_auto_approve(db, settings, cid) is True  # Even with auto-approve OFF: it was bulk-requested.
+    assert db.one('SELECT status FROM contacts WHERE id=?', (cid,))['status'] == 'active'
+
+
+def test_catch_all_needs_a_real_smtp_conversation():
+    from outreach.providers import classify_reacher
+    base = {'is_reachable': 'risky', 'syntax': {'is_valid_syntax': True}, 'mx': {'accepts_mail': True},
+            'misc': {'is_disposable': False}, 'smtp': {'can_connect_smtp': True, 'is_catch_all': True, 'is_disabled': False}}
+    assert classify_reacher(base) == 'catch_all'
+    assert classify_reacher({**base, 'smtp': {**base['smtp'], 'can_connect_smtp': False}}) == 'unknown'
+    assert classify_reacher({**base, 'mx': {'accepts_mail': False}}) == 'unknown'

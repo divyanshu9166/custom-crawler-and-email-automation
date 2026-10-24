@@ -161,6 +161,8 @@ def prepare_profile(db, settings, lead_id, *, cancelled=lambda: False):
                           ownership_notes='Automatic first-party business publication: '+candidate['publication_quote']+'. Final recipient relevance remains unapproved.',
                           review_method='source_automation')
         create_drafts(db, settings, cid, cancelled=cancelled, preserve_existing=True)
+        from .campaigns import maybe_auto_approve
+        maybe_auto_approve(db, settings, cid)
         db.event('preparation', {**state, 'state': 'drafts_ready', 'reason': 'Profile business, country, activity and published inbox checked. One initial email is ready for recipient/message review.',
                                  'contact_id': cid, 'service': review['service'], 'source_ids': [p['id'] for p in pages]})
     except ValueError as exc:

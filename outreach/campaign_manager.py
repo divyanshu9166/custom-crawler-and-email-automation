@@ -216,6 +216,13 @@ def bulk(db, settings, lead_ids, action, reason='', campaign_id=None):
                     WHERE c.lead_id=? AND c.status='new' AND m.state='draft' ORDER BY c.id""", (lead_id,))
                 if not contacts:
                     raise ValueError('No prepared email to approve')
+                from .campaigns import needs_verification
+                contact = db.one('SELECT * FROM contacts WHERE id=?', (contacts[0]['id'],))
+                if needs_verification(settings, contact):
+                    # Approving needs a fresh mailbox check: queue it and approve when it passes.
+                    db.enqueue('verify', {'contact_id': contact['id']})
+                    db.event('approve_after_verification', {'lead_id': lead_id}, contact['id'])
+                    raise ValueError('Mailbox check queued; this email is approved automatically if the check passes')
                 approve_ready(db, settings, contacts[0]['id'])
                 results.append({'lead_id': lead_id, 'ok': True, 'contact_id': contacts[0]['id']})
             elif action == 'prepare':

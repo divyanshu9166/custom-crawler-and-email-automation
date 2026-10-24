@@ -176,7 +176,10 @@ def classify_reacher(data):
     if misc.get("is_disposable") is True:
         return "disposable"
     if smtp.get("is_catch_all") is True:
-        return "catch_all"
+        # Catch-all can be sent under its own budget, so require a real SMTP conversation.
+        return ("catch_all" if syntax.get("is_valid_syntax") is True and mx.get("accepts_mail") is True
+                and smtp.get("can_connect_smtp") is True and smtp.get("is_disabled") is not True
+                else "unknown")
     if data.get("is_reachable") != "safe":
         return "risky" if data.get("is_reachable") == "risky" else "unknown"
     if (syntax.get("is_valid_syntax") is True and mx.get("accepts_mail") is True

@@ -98,6 +98,15 @@ class Preferences:
             checked = Settings.model_validate({**self.settings.model_dump(), **patch})
             if checked.sender_email:
                 patch["sender_email"] = normalize_email(checked.sender_email)
+            from .mailboxes import login_key
+            primary_key = login_key(self.settings, {'smtp_user': checked.smtp_user, 'sender_email': checked.sender_email})
+            for box in self.settings.extra_mailboxes:
+                if box.get('sender_email', '').lower() == (checked.sender_email or '').lower() or (
+                        not box.get('alias') and login_key(self.settings, box) == primary_key):
+                    raise ValueError('An extra mailbox already uses this login or address; remove it first')
+                if box.get('alias') and login_key(self.settings, box) not in {primary_key, *(
+                        login_key(self.settings, b) for b in self.settings.extra_mailboxes if not b.get('alias'))}:
+                    raise ValueError('Aliases use the primary login; update or remove them before changing it')
             if checked.send_hour_end <= checked.send_hour_start:
                 raise ValueError("Sending window end must be later than its start")
             if checked.smtp_security not in {"ssl", "starttls"} or not 1 <= checked.smtp_port <= 65535 or not 1 <= checked.imap_port <= 65535:
@@ -231,6 +240,10 @@ class Preferences:
             if box.get('alias') and mailbox_key(self.settings.model_copy(update={
                     'smtp_user': box.get('smtp_user', ''), 'sender_email': box.get('sender_email', '')})) not in logins:
                 raise ValueError('An alias needs an existing mailbox with the same SMTP login')
+            orphan = [b for b in boxes if b.get('alias') and mailbox_key(self.settings.model_copy(update={
+                'smtp_user': b.get('smtp_user', ''), 'sender_email': b.get('sender_email', '')})) not in logins]
+            if orphan:
+                raise ValueError('Aliases still use this mailbox\'s previous login; update or remove them first')
             if not self.settings._mailbox_lock.acquire(blocking=False):
                 raise ValueError("Mailbox activity is in progress; retry after it finishes")
             try:
@@ -264,6 +277,11 @@ class Preferences:
             boxes = [b for b in self.settings.extra_mailboxes if b['id'] != box_id]
             if len(boxes) == len(self.settings.extra_mailboxes):
                 raise ValueError('Mailbox not found')
+            from .mailboxes import login_key
+            removed = next(b for b in self.settings.extra_mailboxes if b['id'] == box_id)
+            if not removed.get('alias') and any(b.get('alias') and login_key(self.settings, b) == login_key(self.settings, removed)
+                                                for b in boxes):
+                raise ValueError('Remove the aliases that use this login first')
             db.set('paused', 'true')
             self.persist({'extra_mailboxes': boxes})
             db.event('workspace_mailbox_removed', {'mailbox': box_id, 'sending_paused': True})

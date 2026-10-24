@@ -180,7 +180,7 @@ def send_one(db, settings, now=None, sender=smtp_send):
         return 'disabled'
     with db.connect() as con:
         values = dict(con.execute('SELECT key,value FROM settings'))
-        blocked = {b['id']: mailbox_block(con, settings, b, values, now, hourly=False) for b in boxes}
+        blocked = {b['id']: mailbox_block(con, settings, b, values, now) for b in boxes}
         ready = [b for b in boxes if not blocked[b['id']]]
         usage = {b['id']: (mailbox_usage(con, b['key'], now - 86400), sender_usage(con, b['sender'], now - 86400)) for b in ready}
         catch_all = catch_all_open(con, settings, now)
@@ -199,6 +199,8 @@ def send_one(db, settings, now=None, sender=smtp_send):
             continue
         with db.connect() as con:
             earlier, earlier_sender = previous_mailbox(con, row['contact_id'])
+            if earlier is not None and not any(b['key'] == earlier for b in views(settings, include_disabled=True)):
+                earlier = None  # That mailbox was removed or re-logged; do not strand the follow-up.
             options = [b for b in ready if earlier is None or
                        (b['key'] == earlier and (not earlier_sender or b['sender'] == earlier_sender))]
             if row['verification'] == 'catch_all':
@@ -566,6 +568,6 @@ def poll_inbox(db, settings, prefix=''):
 def poll_all(db, settings):
     """Poll every configured mailbox; one failing inbox does not stop the others."""
     from .mailboxes import views
-    inboxes = {box['prefix']: box for box in views(settings) if not box['alias']}
+    inboxes = {box['prefix']: box for box in views(settings, include_disabled=True) if not box['alias']}
     results = [poll_inbox(db, box['view'], prefix=box['prefix']) for box in inboxes.values()]
     return bool(results) and all(results)

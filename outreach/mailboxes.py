@@ -62,8 +62,8 @@ def views(settings, *, include_disabled=False):
             continue
         key = login_key(settings, box)
         owner = owners.get(key)
-        if not owner or (box.get('alias') and owner is box):
-            continue  # An alias needs an existing mailbox with the same login.
+        if not owner or (box.get('alias') and (owner is box or not (owner.get('enabled', True) or include_disabled))):
+            continue  # An alias needs an existing, enabled mailbox with the same login.
         limits = owner if box.get('alias') else box
         update = {k: box[k] for k in FIELDS if k in box and k not in LOCAL}
         update['sender_name'] = box.get('sender_name') or settings.sender_name

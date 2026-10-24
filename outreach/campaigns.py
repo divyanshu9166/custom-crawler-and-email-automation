@@ -392,18 +392,26 @@ def approve_ready(db, settings, contact_id, origin='bulk'):
     db.event(origin + '_approved', {'lead_id': lead['id']}, contact_id)
 
 
+def needs_verification(settings, contact):
+    """A missing, stale or inconclusive mailbox check that a fresh check could change."""
+    return (not contact.get('verified_at') or contact.get('verification') in {'unverified', 'unknown'}
+            or time.time() - contact['verified_at'] > settings.verification_max_age_hours * 3600)
+
+
 def maybe_auto_approve(db, settings, contact_id):
-    """With auto-approve ON, queue a prepared draft as soon as every approval check passes."""
-    if not settings.auto_approve_enabled:
-        return False
-    contact = db.one('SELECT status FROM contacts WHERE id=?', (contact_id,))
-    if not contact or contact['status'] != 'new' or not db.one("SELECT 1 FROM messages WHERE contact_id=? AND state='draft'", (contact_id,)):
-        return False
+    """Approve a prepared draft once every approval check passes, when auto-approve is ON or the
+    operator bulk-approved it pending a mailbox check. Never raises: callers are background jobs."""
     try:
-        approve_ready(db, settings, contact_id, 'auto')
+        requested = db.one("SELECT 1 FROM events WHERE kind='approve_after_verification' AND contact_id=?", (contact_id,))
+        if not (settings.auto_approve_enabled or requested):
+            return False
+        contact = db.one('SELECT status FROM contacts WHERE id=?', (contact_id,))
+        if not contact or contact['status'] != 'new' or not db.one("SELECT 1 FROM messages WHERE contact_id=? AND state='draft'", (contact_id,)):
+            return False
+        approve_ready(db, settings, contact_id, 'bulk' if requested else 'auto')
         return True
-    except ValueError as exc:
-        db.event('auto_approve_skipped', {'reason': str(exc)[:300]}, contact_id)
+    except Exception as exc:  # Optional approval must never fail the job that called it.
+        db.event('auto_approve_skipped', {'reason': str(exc)[:300] if isinstance(exc, ValueError) else type(exc).__name__}, contact_id)
         return False
 
 
