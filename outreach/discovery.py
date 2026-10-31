@@ -521,6 +521,9 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
     platforms = [p.strip().lower() for p in settings.discovery_platforms.split(",") if p.strip()]
     if len(platforms) > 8 or any(not re.fullmatch(r"[a-z0-9.-]+\.[a-z]{2,}", p) for p in platforms):
         raise ValueError("Configure up to eight valid public platform domains")
+    from .google_business import enabled as google_enabled
+    if not google_enabled(settings):
+        platforms = [p for p in platforms if p != 'google.com']
     paths = {"linkedin.com": "linkedin.com/company/", "google.com": "google.com/maps/"}
     queries = [market_query] + [f"site:{paths.get(p, p)} {market_query}" for p in platforms]
     if profile_first:
@@ -544,6 +547,8 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
     executed_queries = []
     stop_reason = 'queries_exhausted'
     for search in queries:
+        if search.startswith('site:google.com/') and not google_enabled(settings):
+            continue
         executed_queries.append(search)
         if on_progress:
             on_progress({"stage": "query_started", "query": search, "candidate_domains": len(found), "signals": len(signals)})
@@ -588,6 +593,9 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
                     skipped.append({"url": row["url"], "reason": exclusion})
                     continue
                 platform = platform_of(row["url"], platforms)
+                if platform == 'google.com' and not google_enabled(settings):
+                    skipped.append({'url': row['url'], 'reason': 'google_business_disabled'})
+                    continue
                 if platform:
                     from .profiles import canonical_profile
                     try:

@@ -5,6 +5,23 @@ in the UK or US for a possible website launch. Enter an industry and town, selec
 the market and requested count, then click **Research Google businesses**.
 The optional repeat interval saves this same source and campaign for later runs.
 
+## Enable or disable Google research
+
+Use **Enable Google Business Profile research** on the Campaign 3 search card.
+The same persisted checkbox is in **Settings → Research sources & automation
+preferences → Research Google Business Profiles (Google Maps)**. It defaults ON
+for existing installations and needs no API key or `.env` edit.
+
+OFF disables the Google search form, skips Google listing queries/results in
+mixed discovery, cancels pending Google discovery/profile-research jobs and pauses
+recurring Google searches. Existing captures, contacts and schedule definitions
+remain saved. An in-flight request may finish; source checks before later listing
+requests and browser startup also apply to Settings copies held by workers.
+Already running work that encounters the switch is marked cancelled rather than
+failed. ON permits new work and resumes due Google schedules; it does not replay
+cancelled jobs. Changing the control pauses sending, without enabling sending,
+automatic email preparation or approval.
+
 Results are saved in the named group **Campaign 3 - Google Business Profiles**,
 using the existing Campaign A website/inquiry service goal. This keeps the shortlist
 separate from other A/B campaigns without creating a second sending engine.
@@ -55,6 +72,11 @@ can be low. Source availability and website-match confidence are reported, not g
 is rejected. Other searches default to `discovery_source: "mixed"` and retain their
 existing behavior. The browser form limits a run to 30 requested prospects.
 
+`PUT /api/settings/research` accepts the strict boolean
+`google_business_enabled`. Explicit Google discovery, scheduling and profile
+research requests are rejected while it is OFF. Status/source endpoints expose
+the current switch; recurring-search responses identify `source_disabled`.
+
 Schema 8 adds `schedules.discovery_source` with the legacy default `mixed`. Back up
 before deployment: older images reject newer schemas. Existing drafts, suppression,
 contacts and sending history are preserved. Research records remain on the VPS data
@@ -71,3 +93,19 @@ and linked websites. Another current listing had no observed Website field and a
 phone, but its independent website lookup was incomplete. Controlled checks verify that
 this state stays held for qualification. No published email was found in those native samples. These checks
 prove those access/extraction paths, not universal access, website absence or email yield.
+
+The October 31 controls also test persistence, authentication, disabled-source
+network guards, copied Settings, pending-job cancellation and recurring-source
+pausing. Primary `mailto:` fields now decode encoded addresses and accept the
+scheme case-insensitively; recipient-query parameters are ignored. Browser launch,
+render and cleanup failures preserve an already captured permitted public HTML
+listing with explicit partial/render issues. Access denials and challenges still
+stop acquisition and are not converted into a successful fallback.
+
+October 31 validation: the full suite ran 1,837 cases (1,836 passed, one
+timing-sensitive contact-recovery fixture failed). That fixture now anchors its
+crawl timestamp to its own saved capture instead of assuming setup takes under
+one second. The final affected-source, GMB-control and desktop/mobile UI run
+passed all 79 cases. Production evidence freshness rules are unchanged. Ruff,
+Python compilation and the changed JavaScript syntax check passed. The existing
+Starlette/httpx deprecation warning remains.

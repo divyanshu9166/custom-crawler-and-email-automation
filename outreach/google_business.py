@@ -1,6 +1,7 @@
 """Google Business Profile discovery from public, visible Maps pages, never hidden RPCs."""
 import asyncio
 import hashlib
+import json
 import re
 from urllib.parse import parse_qs, unquote, urlencode, urljoin, urlsplit, urlunsplit
 
@@ -10,6 +11,34 @@ import httpx
 from .web import PublicWeb, crawl_url, domain_of, normalize_email
 
 CAMPAIGN_NAME = 'Campaign 3 - Google Business Profiles'
+
+
+class GoogleBusinessDisabled(ValueError):
+    pass
+
+
+def enabled(settings):
+    return settings.google_business_enabled and not settings._google_business_disabled.is_set()
+
+
+def ensure_enabled(settings):
+    if not enabled(settings):
+        raise GoogleBusinessDisabled('Google Business Profile research is OFF. Enable it in Find prospects or Settings → Research sources.')
+
+
+def cancel_pending(db):
+    """Keep saved sources and recurring definitions; cancel only unstarted Google intake."""
+    with db.connect() as con:
+        con.execute('BEGIN IMMEDIATE')
+        rows = con.execute("SELECT j.id,j.kind,j.payload,l.lead_kind,l.profile_url FROM jobs j "
+            "LEFT JOIN leads l ON l.id=json_extract(j.payload,'$.lead_id') "
+            "WHERE j.state='pending' AND j.kind IN ('discover','research')").fetchall()
+        ids = [row['id'] for row in rows if (
+            row['kind'] == 'discover' and json.loads(row['payload']).get('discovery_source') == 'google_maps'
+            or row['kind'] == 'research' and row['lead_kind'] == 'profile' and is_listing(row['profile_url']))]
+        con.executemany("UPDATE jobs SET state='cancelled',error='Google Business Profile research switched OFF' WHERE id=? AND state='pending'",
+                        [(jid,) for jid in ids])
+    return len(ids)
 
 
 def listing_url(url):
@@ -142,13 +171,17 @@ def parse_listing(url, html):
         except ValueError:
             if raw.startswith('https://'):
                 profiles.append(raw)
-    for a in main.select('a[data-item-id="email"][href^="mailto:"],a[aria-label^="Email:"][href^="mailto:"]'):
-        try:
-            email = normalize_email(a['href'][7:].split('?')[0])
-        except ValueError:
+    for a in main.select('a[data-item-id="email"][href],a[aria-label^="Email:"][href]'):
+        if not a['href'].lower().startswith('mailto:'):
             continue
-        emails.append(email)
-        lines.append('Business email: '+email)
+        for value in unquote(a['href'][7:].split('?')[0]).split(','):
+            try:
+                email = normalize_email(value.strip())
+            except ValueError:
+                continue
+            if email not in emails:
+                emails.append(email)
+                lines.append('Business email: '+email)
     description = main.select_one('[data-section-id="description"],[data-item-id="description"]')
     if description:
         lines.append(description.get_text(' ', strip=True)[:3000])
@@ -189,13 +222,16 @@ def parse_search(url, html, limit):
 
 async def page(settings, url):
     """One bounded robots-permitted public page; never accept consent or bypass a hold."""
+    ensure_enabled(settings)
     web = PublicWeb(settings, signal_only=True)
     renderer = None
+    render_issues = []
     try:
         robots, delay, _ = await web.robots(url)
         if not robots.can_fetch(settings.crawler_user_agent, url):
             return {'state': 'robots_denied', 'url': url}
         await asyncio.sleep(delay)
+        ensure_enabled(settings)
         final, html, status = await web.get(url, domain_of(url))
         if status != 200:
             return {'state': 'http_'+str(status), 'url': final, 'http_status': status}
@@ -205,15 +241,30 @@ async def page(settings, url):
         if settings.browser_enabled:
             from .browser import RenderSession
             async with settings._platform_browser_lock:
+                ensure_enabled(settings)
                 renderer = RenderSession(web)
                 try:
                     await renderer.start()
                     result = await renderer.render(final, domain_of(final), robots, document=web.last_document)
+                    render_issues.extend({k: issue[k] for k in ('reason', 'error_type') if k in issue}
+                                         for issue in result.get('issues', [])[:20])
                     if result.get('html'):
                         final, html = result['url'], result['html']
+                except (httpx.HTTPStatusError, GoogleBusinessDisabled):
+                    raise
+                except Exception as exc:
+                    # The already fetched robots-permitted HTML remains usable.
+                    # A browser failure is not proof of a bad/absent business.
+                    render_issues.append({'reason': 'browser_unavailable', 'error_type': type(exc).__name__})
                 finally:
-                    await renderer.close()
-        return {'state': 'captured', 'url': final, 'html': html}
+                    try:
+                        await renderer.close()
+                    except Exception as exc:
+                        render_issues.append({'reason': 'browser_cleanup_failed', 'error_type': type(exc).__name__})
+        ensure_enabled(settings)
+        return {'state': 'captured', 'url': final, 'html': html, 'render_issues': render_issues}
+    except GoogleBusinessDisabled:
+        raise
     except httpx.HTTPStatusError as exc:
         status = exc.response.status_code
         return {'state': 'http_'+str(status), 'url': url, 'http_status': status}
@@ -228,10 +279,15 @@ async def snapshot(settings, url):
         return {k: v for k, v in result.items() if k != 'html'}
     if not is_listing(result['url']) or listing_key(result['url']) != listing_key(target):
         return {'state': 'listing_identity_changed', 'url': target}
-    return parse_listing(result['url'], result['html'])
+    parsed = parse_listing(result['url'], result['html'])
+    if result.get('render_issues'):
+        parsed['render_issues'] = result['render_issues']
+        parsed['partial'] = True
+    return parsed
 
 
 async def prospect_candidates(settings, query, country_hint, limit, on_signal=None, on_candidate=None, on_progress=None):
+    ensure_enabled(settings)
     from . import providers
     from .discovery import resolve_signal
     market = 'United Kingdom' if country_hint == 'UK' else 'United States'
@@ -254,6 +310,7 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
     # An independent public index can contribute listing references. Its snippets
     # remain hints; each selected listing still needs its own current capture.
     if len(rows) < limit:
+        ensure_enabled(settings)
         try:
             indexed = await providers.discover(settings, 'site:google.com/maps/place/ '+search, 30, include_platforms=True)
             errors.extend({'stage': 'maps_index', 'reason': str(i)[:150]} for i in getattr(indexed, 'engine_issues', []))
@@ -262,6 +319,7 @@ async def prospect_candidates(settings, query, country_hint, limit, on_signal=No
             errors.append({'stage': 'maps_index', 'error_type': type(exc).__name__})
     retained, pending_lookup, unavailable = 0, 0, 0
     for row in rows[:min(60, max(10, limit*3))]:
+        ensure_enabled(settings)
         try:
             target = listing_url(row['url'])
         except ValueError:

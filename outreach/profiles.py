@@ -139,6 +139,9 @@ def personal_business_snapshot(snapshot):
 
 async def research_profile(db, settings, lead):
     from .research import add_lead
+    from .google_business import is_listing, ensure_enabled
+    if is_listing(lead['profile_url']):
+        ensure_enabled(settings)
     lid = lead["id"]
     settings = settings.model_copy(update={"search_language": "en-US" if _country_hint(lead) == "US" else "en-GB"})
     with db.connect() as con:

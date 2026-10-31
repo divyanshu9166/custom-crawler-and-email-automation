@@ -2,7 +2,7 @@ import asyncio
 from pathlib import Path
 from typing import Literal
 from pydantic import Field, PrivateAttr
-from threading import RLock
+from threading import Event, RLock
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -68,6 +68,9 @@ class Settings(BaseSettings):
     _discovery_lock: asyncio.Lock = PrivateAttr(default_factory=asyncio.Lock)
     _discovery_state: dict = PrivateAttr(default_factory=dict)
     discovery_platforms: str = "linkedin.com,x.com,peopleperhour.com,clutch.co,crunchbase.com,facebook.com,instagram.com,google.com"
+    google_business_enabled: bool = True
+    # Shallow Settings copies used by research share immediate source shutdown.
+    _google_business_disabled: Event = PrivateAttr(default_factory=Event)
     discovery_query_delay_seconds: float = Field(2, ge=0.1)
     discovery_max_signals: int = Field(40, ge=1, le=200)
     auto_contact_research: bool = True

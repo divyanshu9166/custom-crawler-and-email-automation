@@ -91,6 +91,11 @@ async def execute_job(db, settings, job):
             if job['kind'] == 'research' and settings.crawl_auto_continue:
                 schedule_final_audits(db, settings, json.loads(current_job['payload']))
     except Exception as exc:
+        from .google_business import GoogleBusinessDisabled
+        if isinstance(exc, GoogleBusinessDisabled):
+            db.execute("UPDATE jobs SET state='cancelled',error=? WHERE id=?", (str(exc), job['id']))
+            db.event('job_cancelled', {'job': job['id'], 'kind': job['kind'], 'reason': 'google_business_disabled'})
+            return
         deterministic_failure = isinstance(exc, (ValueError, AttributeError, TypeError, KeyError))
         if job['kind'] == 'research' and not deterministic_failure and reschedule(db, settings, db.one('SELECT * FROM jobs WHERE id=?', (job['id'],))):
             return
@@ -180,6 +185,9 @@ async def job_loop(db, settings, stop, kinds, schedules=False, admission=None):
         try:
             if schedules and settings.worker_enabled:
                 for schedule in db.all("SELECT * FROM schedules WHERE enabled=1 AND next_run<=?", (time.time(),)):
+                    from .google_business import enabled
+                    if schedule.get('discovery_source') == 'google_maps' and not enabled(settings):
+                        continue
                     db.enqueue("discover", {"query": schedule["query"], "campaign": schedule["campaign"],
                                            "country_hint": schedule["country_hint"], "limit": schedule["result_limit"],
                                            **({'campaign_id': schedule['campaign_id']} if schedule.get('campaign_id') else {}),

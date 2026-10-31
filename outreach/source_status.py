@@ -20,9 +20,10 @@ def record(db, provider, operation, target, result, *, lead_id=None, elapsed=Non
 
 
 def snapshot(db, settings, lead_id=None):
+    from .google_business import enabled as google_enabled
     configured = {'managed_browser:linkedin.com': settings.platform_browser_enabled,
                   'managed_browser:x.com': settings.platform_browser_enabled,
-                  'google_maps': True,
+                  'google_maps': google_enabled(settings),
                   'website': True, 'fxembed_profiles': settings.fxembed_profiles_enabled}
     seen, latest = set(), []
     sql = "SELECT detail FROM events WHERE kind='source_observation'"

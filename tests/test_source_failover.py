@@ -150,8 +150,10 @@ async def test_contact_recovery_reconciles_failed_url_without_losing_saved_pages
       'checkpoint':{'website':root,'frontier':[], 'retry_urls':[
         {'url':contact,'depth':1,'failures':1,'not_before':0},
         {'url':other,'depth':1,'failures':1,'not_before':time.time()+100}], 'inflight':{'url':contact,'depth':1}}}
-    db.execute('INSERT INTO crawls(lead_id,report,created_at) VALUES(?,?,?)',(lid,json.dumps(report),time.time()-1))
     before=db.one('SELECT * FROM evidence WHERE id=?',(prepared['evidence_id'],))
+    # Draft setup can take over a second on a busy test runner. This capture
+    # belongs to the fixture's crawl regardless of setup wall-clock duration.
+    db.execute('INSERT INTO crawls(lead_id,report,created_at) VALUES(?,?,?)',(lid,json.dumps(report),before['fetched_at']-1))
     async def search(*args,**kwargs):return [{'url':contact,'title':'Contact'}]
     async def get(self,url,*args):
         return (url,'User-agent: *\nAllow: /',200) if url.endswith('/robots.txt') else (url,'<p>Bright Demo UK consulting hello@bright-demo.com</p>',200)

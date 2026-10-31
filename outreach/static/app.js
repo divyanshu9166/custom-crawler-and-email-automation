@@ -6,6 +6,7 @@ let pipelineRefreshInFlight = false;
 let researchRunning = false;
 let preparationTimer=null, detailDirty=false, prepBatchAfter=0;
 let researchActivityTimer=null, researchActivityRequest=0;
+let googleSourceSaving=false;
 const $ = selector => document.querySelector(selector);
 const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 const stamp = value => value ? new Date(Number(value) * 1000).toLocaleString() : "—";
@@ -54,7 +55,31 @@ $("#filter").oninput=renderLeads;
 $("#lead-sort").onchange=renderLeads;
 function formObject(form){const value=Object.fromEntries(new FormData(form));if('campaign_id' in value){if(value.campaign_id)value.campaign_id=Number(value.campaign_id);else delete value.campaign_id;}if('profile_first' in value)value.profile_first=value.profile_first==='true';return value;}
 $("#search-form").onsubmit=event=>{event.preventDefault();const obj=formObject(event.target);obj.limit=Number(obj.limit);const recurring=!!obj.interval_hours;if(recurring)obj.interval_hours=Number(obj.interval_hours);else delete obj.interval_hours;act(()=>api(recurring?"/api/schedules":"/api/discover","POST",obj),recurring?"Recurring research scheduled.":"Search queued.").then(schedules);};
-$('#google-business-form').onsubmit=event=>{event.preventDefault();const obj={...formObject(event.target),campaign:'A',profile_first:true,discovery_source:'google_maps'};obj.limit=Number(obj.limit);const recurring=!!obj.interval_hours;if(recurring)obj.interval_hours=Number(obj.interval_hours);else delete obj.interval_hours;act(()=>api(recurring?'/api/schedules':'/api/discover','POST',obj),recurring?'Campaign 3 Google business search scheduled.':'Campaign 3 Google business research queued.').then(()=>{schedules();window.WorkbenchCampaigns.loadTargets();});};
+function renderGoogleSource(s){
+  const enabled=s.google_business_enabled!==false;
+  $('#google-business-toggle').checked=enabled;
+  $('#google-business-toggle').disabled=googleSourceSaving;
+  $('#google-business-fields').disabled=!enabled||googleSourceSaving;
+  $('#google-business-source-status').textContent=enabled?'ON · Public Google listings can be researched. Access restrictions and website checks still apply.':'OFF · Google listings are skipped. Queued Google research is cancelled; recurring Google searches are paused. Saved research stays available.';
+}
+$('#google-business-toggle').onchange=async event=>{
+  const enabled=event.target.checked;googleSourceSaving=true;event.target.disabled=true;
+  $('#google-business-fields').disabled=true;
+  $('#google-business-source-status').textContent='Saving Google Business Profile source setting…';
+  let saved;
+  try{
+    saved=await api('/api/settings/research','PUT',{google_business_enabled:enabled});
+  }catch(error){
+    googleSourceSaving=false;event.target.disabled=false;
+    $('#google-business-source-status').textContent='Source setting could not be confirmed. Refresh to check its saved state.';
+    notice(error.message,true);refresh({reloadDetail:false}).catch(()=>{});return;
+  }
+  googleSourceSaving=false;renderGoogleSource(saved);
+  notice(`Google Business Profile research ${enabled?'ON':'OFF'}. Sending is paused.`);
+  try{await refresh({reloadDetail:false});await schedules();}
+  catch(error){notice(`Source setting saved. Dashboard refresh failed: ${error.message}`,true);}
+};
+$('#google-business-form').onsubmit=event=>{event.preventDefault();if($('#google-business-fields').disabled){notice('Enable Google Business Profile research first.',true);return;}const obj={...formObject(event.target),campaign:'A',profile_first:true,discovery_source:'google_maps'};obj.limit=Number(obj.limit);const recurring=!!obj.interval_hours;if(recurring)obj.interval_hours=Number(obj.interval_hours);else delete obj.interval_hours;act(()=>api(recurring?'/api/schedules':'/api/discover','POST',obj),recurring?'Campaign 3 Google business search scheduled.':'Campaign 3 Google business research queued.').then(()=>{schedules();window.WorkbenchCampaigns.loadTargets();});};
 $("#profile-lead-form").onsubmit=event=>{event.preventDefault();act(()=>api("/api/profile-leads","POST",formObject(event.target)),"Business profile queued for research.");};
 $("#browser-reference-form").onsubmit=event=>{event.preventDefault();const value=formObject(event.target);value.observed_at=new Date(value.observed_at).getTime()/1000;value.public_business_confirmed=event.target.elements.public_business_confirmed.checked;act(()=>api('/api/browser-references','POST',value),'Business reference saved. Check the company research queue.');};
 $("#browser-reference-form").elements.observed_at.value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
@@ -84,6 +109,7 @@ async function refresh({reloadDetail=true,includeDiagnostics=true,includePipelin
   const selectedAtStart=currentId;
   const diagnostics=includeDiagnostics?Promise.allSettled([api('/api/source-coverage'),api('/api/source-status')]):null;
   const [status, leads]=await Promise.all([api("/api/status"),includePipeline?api("/api/leads"):Promise.resolve(allLeads)]);allLeads=leads;
+  if(!googleSourceSaving)renderGoogleSource(status);
   $("#platform-browser-mode").hidden=!status.platform_browser_enabled;
   $("#fxembed-mode").hidden=!status.fxembed_profiles_enabled;
   $("#fxembed-mode").textContent="X bio research uses the free FxEmbed community source. Returned emails are candidates; current publication, inbox ownership and buyer relevance need review.";
@@ -343,7 +369,7 @@ function contactHTML(c,messages,writer){
   ${c.status==='hold'?`<form data-resume-contact="${c.id}"><label>Reason outreach can resume<textarea name="note" required minlength="20"></textarea></label><label>Next send time<input type="datetime-local" name="next_at" required></label><label class="check"><input type="checkbox" name="reviewed_remaining_messages" required>I reviewed replies and delivery status.</label><button>Resume contact</button></form>`:''}
   ${c.status==='new'&&c.ai_drafts&&messages.length===(writer?.message_count||1)&&messages.every(m=>m.state==='draft')?`<form data-approve="${c.id}" class="sending-approval"><h4>Approve the initial email</h4><p>Approval and global sending controls are separate. Sender details and an opt-out route are added when sending.</p><label>Outreach eligibility basis<textarea name="eligibility_basis" required minlength="20" placeholder="Record applicable business eligibility, sourcing and opt-out checks."></textarea></label><label>Why this recipient is relevant<textarea name="contact_relevance" required minlength="12"></textarea></label><label class="check"><input type="checkbox" name="reviewed_all_messages" required>I reviewed the source, recipient and email claims.</label><button class="primary">Approve email</button></form>`:''}</details></section>`;
 }
-async function schedules(){try{const rows=await api("/api/schedules");$("#schedules").innerHTML=rows.map(s=>`<div class="item"><strong>${esc(s.query)}</strong> · ${esc(s.campaign)} / ${esc(s.country_hint)}<p>Every ${s.interval_hours} hours · ${s.discovery_source==='google_maps'?'Campaign 3 · Google Business Profiles':s.profile_first?'business profiles first':'websites and profiles'} · next ${stamp(s.next_run)} · ${s.enabled?'enabled':'disabled'}</p>${s.enabled?`<button data-disable="${s.id}">Disable</button>`:''}</div>`).join("")||'<p>No recurring searches configured.</p>';document.querySelectorAll("[data-disable]").forEach(b=>b.onclick=()=>act(()=>api(`/api/schedules/${b.dataset.disable}`,"DELETE"),"Schedule disabled.").then(schedules));}catch(e){notice(e.message,true);}}
+async function schedules(){try{const rows=await api("/api/schedules");$("#schedules").innerHTML=rows.map(s=>`<div class="item"><strong>${esc(s.query)}</strong> · ${esc(s.campaign)} / ${esc(s.country_hint)}<p>Every ${s.interval_hours} hours · ${s.discovery_source==='google_maps'?'Campaign 3 · Google Business Profiles':s.profile_first?'business profiles first':'websites and profiles'} · next ${stamp(s.next_run)} · ${!s.enabled?'disabled':s.source_disabled?'paused · Google Business Profile research is OFF':'enabled'}</p>${s.enabled?`<button data-disable="${s.id}">Disable</button>`:''}</div>`).join("")||'<p>No recurring searches configured.</p>';document.querySelectorAll("[data-disable]").forEach(b=>b.onclick=()=>act(()=>api(`/api/schedules/${b.dataset.disable}`,"DELETE"),"Schedule disabled.").then(schedules));}catch(e){notice(e.message,true);}}
 async function operations(){try{const [status,jobs,events,salesReport,delivery]=await Promise.all([api("/api/status"),api("/api/jobs"),api("/api/events"),api("/api/sales/report"),api('/api/delivery')]);const summary={stages:salesReport.stages,recorded_contract_value:salesReport.recorded_contract_value,open_tasks:salesReport.open_tasks,overdue_tasks:salesReport.overdue_tasks,note:salesReport.note};$("#health").innerHTML=`<h3>Deployment readiness</h3><p>Worker heartbeat: ${stamp(status.worker_heartbeat)}<br>Inbox current: ${status.imap_caught_up?'yes':'no'} · ${esc(status.imap_error)}<br>Search: ${esc(status.search_provider)} · AI suggestions: ${status.ai_enabled?'on':'off'} · Browser: ${status.browser_enabled?'on':'off'}</p><p>${status.sending_gaps.length?'Sending configuration still needs: '+esc(status.sending_gaps.join(', ')):'Sender configuration is present. Live provider checks are still necessary.'}</p><pre>${esc(JSON.stringify(status.funnel,null,2))}</pre><h3>Sales and next actions</h3><pre>${esc(JSON.stringify(summary,null,2))}</pre>`;
   $('#delivery-status').innerHTML=`<h3>Email delivery</h3><p>${['SENT','BOUNCED','REPLIED','UNSUBSCRIBED'].map(s=>`${s}: ${Number(delivery.states.find(r=>r.state===s)?.count||0)}`).join(' · ')}</p><p>Mailbox: ${esc(delivery.mailbox||'Not configured')} · Last 24 hours: ${Number(delivery.used_24h)}/${Number(delivery.daily_limit)} · Last hour: ${Number(delivery.used_1h)}/${Number(delivery.hourly_limit)}</p><p class="small">${esc(delivery.note)}</p><details><summary>Sending queue &amp; attempts</summary>${delivery.queue.map(m=>`<p>#${Number(m.id)} · ${esc(m.email)} · ${esc(m.state)} · ${Number(m.attempts)} attempts · ${m.due_at?stamp(m.due_at):'Not scheduled'}<br>${esc(m.error)}</p>`).join('')||'<p>No pending or failed messages.</p>'}<p class="small">Latest 50 queue entries. Uncertain messages are never retried automatically.</p><pre>${esc(JSON.stringify(delivery.attempts,null,2))}</pre></details><details><summary>Suppression list · ${Number(delivery.suppressed_count)}</summary>${delivery.suppression.map(r=>`<p>${esc(r.email)} · ${esc(r.reason)} · ${stamp(r.created_at)}</p>`).join('')||'<p>No suppressed addresses.</p>'}<p class="small">Latest 50 entries. Opt-outs, hard bounces and do-not-contact requests stay blocked after re-import.</p><form id="suppress-address"><label>Email address<input name="email" type="email" required maxlength="254"></label><label>Reason<input name="reason" required minlength="3" maxlength="500" placeholder="Requested no further contact"></label><button>Do not contact</button><p role="status" id="suppress-address-result"></p></form></details>`;
   $('#suppress-address').onsubmit=async e=>{e.preventDefault();const form=e.currentTarget,button=form.querySelector('button');button.disabled=true;try{await api('/api/suppression','POST',Object.fromEntries(new FormData(form)));await operations();}catch(error){$('#suppress-address-result').textContent=error.message;}finally{button.disabled=false;}};

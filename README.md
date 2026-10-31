@@ -312,6 +312,8 @@ Important API routes are listed by authenticated `GET /api/openapi`. API clients
 ## Businesses without a known website
 
 For local UK/US businesses, use **Find prospects → Campaign 3 · Google Business Profiles**.
+Its **Enable Google Business Profile research** checkbox switches Google crawling
+ON/OFF and is also available in Settings → Research sources & automation preferences.
 It checks current public Maps listings and independently searches for an official website;
 matched websites are excluded and incomplete lookups stay held. Phone-only records are
 saved without inventing email addresses. See [Campaign 3 setup and limits](docs/GOOGLE_BUSINESS_CAMPAIGN.md).

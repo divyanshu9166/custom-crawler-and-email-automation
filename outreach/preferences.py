@@ -18,7 +18,7 @@ WRITER_FIELDS = {'draft_api_url', 'draft_api_key', 'draft_model', 'draft_timeout
 PAGESPEED_FIELDS = {'pagespeed_api_key'}
 RUNTIME_FIELDS = {'worker_enabled', 'sending_enabled'}
 MAILBOX_FIELDS = {'extra_mailboxes', 'domain_daily_caps'}
-RESEARCH_FIELDS = {'auto_prepare_enabled', 'auto_approve_enabled', 'linkedin_people_search_enabled', 'linkedin_profile_experience_enabled',
+RESEARCH_FIELDS = {'auto_prepare_enabled', 'auto_approve_enabled', 'google_business_enabled', 'linkedin_people_search_enabled', 'linkedin_profile_experience_enabled',
                    'linkedin_contact_info_enabled', 'social_posts_enabled', 'social_posts_max_profiles',
                    'social_posts_max_posts'}
 
@@ -52,6 +52,13 @@ class Preferences:
             checked = Settings.model_validate({**settings.model_dump(), **self.saved})
             for key in self.saved:
                 setattr(settings, key, getattr(checked, key))
+        self._sync_google_switch(settings.google_business_enabled)
+
+    def _sync_google_switch(self, enabled):
+        if enabled:
+            self.settings._google_business_disabled.clear()
+        else:
+            self.settings._google_business_disabled.set()
 
     def public(self):
         with self.lock:
@@ -78,6 +85,8 @@ class Preferences:
                 os.fsync(stream.fileno())
             os.replace(temp, self.path)
             self.saved = value
+            if 'google_business_enabled' in patch:
+                self._sync_google_switch(patch['google_business_enabled'])
             for key, item in patch.items():
                 setattr(self.settings, key, item)
         finally:
@@ -173,6 +182,9 @@ class Preferences:
             checked = Settings.model_validate({**self.settings.model_dump(), **patch})
             db.set('paused', 'true')
             self.persist({key: getattr(checked, key) for key in patch})
+            if patch.get('google_business_enabled') is False:
+                from .google_business import cancel_pending
+                cancel_pending(db)
             db.event('workspace_research_settings_changed', {'fields': sorted(patch), 'sending_paused': True})
             return self.public()
 

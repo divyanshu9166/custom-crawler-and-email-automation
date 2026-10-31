@@ -48,6 +48,7 @@ class RuntimeSettingsInput(Input):
 
 
 class ResearchSettingsInput(Input):
+    google_business_enabled: bool | None = Field(default=None, strict=True)
     auto_prepare_enabled: bool | None = Field(default=None, strict=True)
     auto_approve_enabled: bool | None = Field(default=None, strict=True)
     linkedin_people_search_enabled: bool | None = Field(default=None, strict=True)
@@ -707,6 +708,7 @@ def create_app(settings=None):
     @app.get("/api/status", dependencies=[Depends(auth)])
     def status():
         from .platform_access import access_status
+        from .google_business import enabled as google_enabled
         access=access_status(settings)
         return {"demo": db.get("demo") == "true", "sending_enabled": settings.sending_enabled,
                 "worker_enabled": settings.worker_enabled, "paused": db.get("paused", "true") != "false",
@@ -714,6 +716,7 @@ def create_app(settings=None):
                 "imap_error": db.get("imap_error"), "imap_caught_up": db.get("imap_caught_up") == "true",
                 "imap_last_success": db.get("imap_last_success"), "search_provider": settings.search_provider,
                 "discovery_platforms": settings.discovery_platforms.split(","),
+                "google_business_enabled": google_enabled(settings),
                 "ai_enabled": bool(settings.openai_api_key and settings.openai_model),
                 "browser_enabled": settings.browser_enabled,
                 'platform_browser_enabled':settings.platform_browser_enabled,
@@ -850,7 +853,8 @@ def create_app(settings=None):
         assert_target(db, value.campaign_id, value.campaign)
         payload = value.model_dump(exclude_none=True)
         if value.discovery_source == 'google_maps':
-            from .google_business import campaign
+            from .google_business import campaign, ensure_enabled
+            ensure_enabled(settings)
             if value.campaign != 'A':
                 raise ValueError('Campaign 3 Google business prospects use website/inquiry goal A')
             payload['campaign_id'] = campaign(db, value.campaign_id)
@@ -863,7 +867,9 @@ def create_app(settings=None):
 
     @app.get("/api/schedules", dependencies=[Depends(auth)])
     def schedules():
-        return db.all("SELECT * FROM schedules ORDER BY id")
+        from .google_business import enabled
+        return [{**row, 'source_disabled': row.get('discovery_source') == 'google_maps' and not enabled(settings)}
+                for row in db.all("SELECT * FROM schedules ORDER BY id")]
 
     @app.post("/api/schedules", dependencies=[Depends(auth)])
     def add_schedule(value: ScheduleInput):
@@ -871,7 +877,8 @@ def create_app(settings=None):
         assert_target(db, value.campaign_id, value.campaign)
         target = value.campaign_id
         if value.discovery_source == 'google_maps':
-            from .google_business import campaign
+            from .google_business import campaign, ensure_enabled
+            ensure_enabled(settings)
             if value.campaign != 'A':
                 raise ValueError('Campaign 3 Google business prospects use website/inquiry goal A')
             target = campaign(db, target)
@@ -887,6 +894,9 @@ def create_app(settings=None):
     @app.post("/api/profile-leads", dependencies=[Depends(auth)])
     def profile_lead(value: ProfileLeadInput):
         from .profiles import add_profile_lead
+        from .google_business import is_listing, ensure_enabled
+        if is_listing(value.profile_url):
+            ensure_enabled(settings)
         lid = add_profile_lead(db, **value.model_dump())
         return {"id": lid, "job_id": db.enqueue("research", {"lead_id": lid})}
 
@@ -1075,6 +1085,10 @@ def create_app(settings=None):
 
     @app.post("/api/leads/{lead_id}/research", dependencies=[Depends(auth)])
     def research(lead_id: int):
+        from .google_business import is_listing, ensure_enabled
+        lead = db.one('SELECT lead_kind,profile_url FROM leads WHERE id=?', (lead_id,))
+        if lead and lead['lead_kind'] == 'profile' and is_listing(lead['profile_url']):
+            ensure_enabled(settings)
         return {"job_id": db.enqueue("research", {"lead_id": lead_id})}
 
     @app.post('/api/leads/{lead_id}/continue-research', dependencies=[Depends(auth)])

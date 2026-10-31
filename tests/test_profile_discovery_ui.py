@@ -10,6 +10,65 @@ from outreach.app import create_app
 
 
 @pytest.mark.parametrize('mobile', [False, True])
+def test_google_source_can_be_switched_off_and_back_on_from_settings(settings, db, mobile):
+    settings.worker_enabled = settings.sending_enabled = settings.followups_enabled = False
+    client = TestClient(create_app(settings), base_url=settings.public_url,
+                        headers={'Authorization': 'Bearer '+settings.api_token})
+    errors = []
+    with sync_playwright() as runtime:
+        browser = runtime.chromium.launch()
+        page = browser.new_page(viewport={'width': 390 if mobile else 1440, 'height': 1000})
+        def route(r):
+            assert r.request.url.startswith(settings.public_url+'/')
+            path = r.request.url.removeprefix(settings.public_url)
+            response = client.request(r.request.method, path, content=r.request.post_data_buffer,
+                headers={k: v for k, v in r.request.headers.items() if k in {'content-type', 'origin'}})
+            r.fulfill(status=response.status_code, body=response.content,
+                      headers={'content-type': response.headers.get('content-type', 'text/plain')})
+        page.route('**/*', route)
+        page.on('pageerror', lambda e: errors.append(str(e)))
+        try:
+            page.goto(settings.public_url+'/')
+            page.get_by_role('button', name='Find prospects', exact=True).first.click()
+            toggle = page.locator('#google-business-toggle')
+            expect(toggle).to_be_checked()
+            expect(toggle).to_be_enabled()
+            toggle.uncheck()
+            expect(page.locator('#google-business-source-status')).to_contain_text('OFF · Google listings are skipped')
+            expect(page.locator('#google-business-fields [name=query]')).to_be_disabled()
+            expect(page.locator('#google-business-fields button[type=submit]')).to_be_disabled()
+            assert not db.one('SELECT 1 FROM jobs')
+            page.reload()
+            page.get_by_role('button', name='Find prospects', exact=True).first.click()
+            expect(toggle).not_to_be_checked()
+            expect(page.locator('#google-business-fields [name=query]')).to_be_disabled()
+            page.wait_for_load_state('networkidle')
+            out = Path('data/gmb-controls-ui')/('mobile.png' if mobile else 'desktop.png')
+            out.parent.mkdir(parents=True, exist_ok=True)
+            page.locator('#google-business-form').screenshot(path=str(out))
+            assert page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1')
+            page.get_by_role('button', name='Settings', exact=True).click()
+            page.locator('#research-settings-form-details > summary').click()
+            form = page.locator('#research-settings-form')
+            enabled = form.locator('[name=google_business_enabled]')
+            expect(enabled).not_to_be_checked()
+            enabled.check()
+            form.get_by_role('button', name='Save research controls', exact=True).click()
+            expect(page.locator('#research-settings-result')).to_contain_text('Research controls saved')
+            page.get_by_role('button', name='Find prospects', exact=True).first.click()
+            expect(toggle).to_be_checked()
+            expect(page.locator('#google-business-fields [name=query]')).to_be_enabled()
+            page.locator('#google-business-fields [name=query]').fill('plumbers in Bristol UK')
+            page.get_by_role('button', name='Research Google businesses', exact=True).click()
+            expect(page.locator('#notice')).to_contain_text('Campaign 3 Google business research queued')
+            assert db.one("SELECT COUNT(*) n FROM jobs WHERE kind='discover'")['n'] == 1
+            assert not db.one('SELECT 1 FROM send_attempts') and not errors
+            page.wait_for_load_state('networkidle')
+        finally:
+            browser.close()
+
+
+@pytest.mark.parametrize('mobile', [False, True])
 def test_one_search_submits_profile_batch_and_recurring_mode(settings, db, mobile):
     settings.worker_enabled = settings.sending_enabled = settings.followups_enabled = False
     gid = db.execute('INSERT INTO campaign_groups(name,goal,created_at,updated_at) VALUES(?,?,?,?)',

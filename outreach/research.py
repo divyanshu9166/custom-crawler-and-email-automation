@@ -379,7 +379,8 @@ async def discover_leads(db, settings, query, campaign, country_hint, limit, cam
     from .campaign_manager import assert_target
     assert_target(db, campaign_id, campaign)
     if discovery_source == 'google_maps':
-        from .google_business import campaign as google_campaign, prospect_candidates
+        from .google_business import campaign as google_campaign, prospect_candidates, ensure_enabled
+        ensure_enabled(settings)
         if campaign != 'A':
             raise ValueError('Campaign 3 Google business prospects use website/inquiry goal A')
         campaign_id = google_campaign(db, campaign_id)
