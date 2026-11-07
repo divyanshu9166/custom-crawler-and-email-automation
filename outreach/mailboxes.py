@@ -17,6 +17,9 @@ REQUIRED = ('sender_email', 'smtp_host', 'smtp_user', 'smtp_password', 'imap_hos
 LOCAL = {'label', 'enabled', 'daily_limit', 'hourly_limit', 'alias', 'domain_auth_confirmed'}
 CATCH_ALL_WINDOW = 14 * 86400
 CATCH_ALL_MIN_SAMPLE, CATCH_ALL_MAX_BOUNCE = 10, 0.05
+DOMAIN_HEALTH_WINDOW = 14 * 86400
+DOMAIN_HEALTH_MIN_BOUNCE_SAMPLE, DOMAIN_HEALTH_MAX_BOUNCE = 10, 0.05
+DOMAIN_HEALTH_MIN_OPT_OUT_SAMPLE, DOMAIN_HEALTH_MAX_OPT_OUT = 20, 0.05
 ACTIVE = "('sending','sent','uncertain')"
 
 
@@ -84,6 +87,35 @@ def domain_usage(con, domain, since):
         AND lower(CASE WHEN sender<>'' THEN sender ELSE mailbox END) LIKE ?""", (since, '%@' + domain)).fetchone()[0]
 
 
+def domain_health(con, domain, now=None):
+    """Recent real recipient outcomes for one sending domain.
+
+    This is a circuit breaker, not a deliverability score. It only holds a domain
+    after a minimum sample of SMTP-accepted initial messages, so one normal opt-out
+    or one mailbox problem cannot freeze the entire pool.
+    """
+    now = time.time() if now is None else now
+    since = now - DOMAIN_HEALTH_WINDOW
+    row = con.execute("""SELECT COUNT(DISTINCT m.contact_id) AS accepted,
+        COUNT(DISTINCT CASE WHEN c.delivery_state='BOUNCED' THEN m.contact_id END) AS bounced,
+        COUNT(DISTINCT CASE WHEN c.delivery_state='UNSUBSCRIBED' THEN m.contact_id END) AS unsubscribed
+        FROM send_attempts a JOIN messages m ON m.id=a.message_id JOIN contacts c ON c.id=m.contact_id
+        WHERE a.started_at>=? AND a.outcome='sent'
+          AND lower(CASE WHEN a.sender<>'' THEN a.sender ELSE a.mailbox END) LIKE ?""",
+        (since, '%@' + domain.lower())).fetchone()
+    accepted, bounced, unsubscribed = (int(row[0] or 0), int(row[1] or 0), int(row[2] or 0))
+    bounce_rate = bounced / accepted if accepted else 0.0
+    unsubscribe_rate = unsubscribed / accepted if accepted else 0.0
+    reason = ''
+    if accepted >= DOMAIN_HEALTH_MIN_BOUNCE_SAMPLE and bounce_rate > DOMAIN_HEALTH_MAX_BOUNCE:
+        reason = 'hard-bounce rate above 5% over the last 14 days'
+    elif accepted >= DOMAIN_HEALTH_MIN_OPT_OUT_SAMPLE and unsubscribe_rate > DOMAIN_HEALTH_MAX_OPT_OUT:
+        reason = 'unsubscribe rate above 5% over the last 14 days'
+    return {'window_days': 14, 'accepted': accepted, 'bounced': bounced, 'unsubscribed': unsubscribed,
+            'bounce_rate': round(bounce_rate, 4), 'unsubscribe_rate': round(unsubscribe_rate, 4),
+            'held': bool(reason), 'reason': reason}
+
+
 def sender_usage(con, sender, since):
     return con.execute(f"SELECT COUNT(*) FROM send_attempts WHERE sender=? AND started_at>=? AND outcome IN {ACTIVE}",
                        (sender, since)).fetchone()[0]
@@ -133,6 +165,14 @@ def public(settings, db=None):
                     sending=bool(view and view['enabled'] and view['auth_confirmed']))
         if view:
             item.update(daily_limit=view['daily_limit'], hourly_limit=view['hourly_limit'])
+        if db is not None:
+            import json
+            prefix = view['prefix'] if view else ('' if box['id'] == 'primary' else f"mailbox:{box['id']}:")
+            raw = db.get(prefix + 'connection_check', '')
+            try:
+                item['connection_check'] = json.loads(raw) if raw else None
+            except (TypeError, ValueError):
+                item['connection_check'] = None
         if db is not None and view:
             with db.connect() as con:
                 item.update(used_24h=mailbox_usage(con, view['key'], now - 86400), used_1h=mailbox_usage(con, view['key'], now - 3600),
@@ -160,6 +200,7 @@ def public_domains(settings, db=None):
         with db.connect() as con:
             for row in rows.values():
                 row['used_24h'] = domain_usage(con, row['domain'], now - 86400)
+                row['health'] = domain_health(con, row['domain'], now)
                 saved = con.execute('SELECT value FROM settings WHERE key=?', ('domain_check:' + row['domain'],)).fetchone()
                 row['dns_check'] = json.loads(saved[0]) if saved else None
     return list(rows.values())

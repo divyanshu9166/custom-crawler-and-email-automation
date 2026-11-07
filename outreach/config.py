@@ -143,18 +143,22 @@ class Settings(BaseSettings):
 
     def sending_gaps(self):
         from urllib.parse import urlsplit
-        required = ["sender_name", "sender_company", "sender_email", "postal_address",
-                    "smtp_host", "smtp_user", "smtp_password", "imap_host", "imap_user", "imap_password"]
+        # Sender connections live on the primary mailbox *or* one of the independent
+        # mailboxes. Requiring the primary connection here made a correctly configured
+        # mailbox pool unusable when the primary was intentionally retired.
+        required = ["sender_name", "sender_company", "postal_address"]
         gaps = [key for key in required if not getattr(self, key)]
-        if not self.domain_auth_confirmed:
+        from .mailboxes import views
+        configured = views(self)
+        if not configured:
+            gaps.append("at least one complete sending mailbox")
+        elif not any(box["auth_confirmed"] for box in configured):
             gaps.append("domain_auth_confirmed")
         if not self.public_url.startswith("https://"):
             gaps.append("public_url must be HTTPS for unsubscribe links")
         host = (urlsplit(self.public_url).hostname or '').lower()
         if host == 'trycloudflare.com' or host.endswith('.trycloudflare.com'):
             gaps.append('public_url must use a stable domain for lasting unsubscribe links; quick tunnels expire')
-        if self.smtp_security not in {"starttls", "ssl"}:
-            gaps.append("smtp_security must be starttls or ssl")
         if self.send_hour_end <= self.send_hour_start:
             gaps.append("send_hour_end must be later than send_hour_start")
         return gaps

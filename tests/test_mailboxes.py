@@ -344,3 +344,94 @@ def test_catch_all_needs_a_real_smtp_conversation():
     assert classify_reacher(base) == 'catch_all'
     assert classify_reacher({**base, 'smtp': {**base['smtp'], 'can_connect_smtp': False}}) == 'unknown'
     assert classify_reacher({**base, 'mx': {'accepts_mail': False}}) == 'unknown'
+
+
+def test_workspace_batch_stages_gmail_accounts_with_safe_pilot_defaults(db, settings):
+    settings.sender_email = settings.smtp_host = settings.smtp_user = settings.smtp_password = ''
+    settings.imap_host = settings.imap_user = settings.imap_password = ''
+    settings.domain_auth_confirmed = False
+    addresses = ['divyanshu@getautozentic.com', 'ayush@getautozentic.com', 'divyansh@getautozentic.com',
+                 'divyanshu@teamautozentic.com', 'divyansh@teamautozentic.com', 'sahil@teamautozentic.com',
+                 'divyanshu@autozentic.tech', 'divyansh@autozentic.tech', 'sahil@autozentic.tech']
+    saved = Preferences(settings).stage_google_workspace_mailboxes(db, addresses)
+    assert settings.sender_email == addresses[0]
+    assert settings.smtp_host == 'smtp.gmail.com' and settings.imap_host == 'imap.gmail.com'
+    assert settings.daily_send_limit == 3 and settings.hourly_send_limit == 1
+    assert len(settings.extra_mailboxes) == 8
+    assert all(box['enabled'] is False and box['daily_limit'] == 3 and box['hourly_limit'] == 1
+               and not box.get('smtp_password') and not box.get('imap_password') for box in settings.extra_mailboxes)
+    assert settings.domain_daily_caps == {'getautozentic.com': 9, 'teamautozentic.com': 9, 'autozentic.tech': 9}
+    assert db.get('paused') == 'true'
+    assert len(saved['mailboxes']) == 9
+    assert db.one("SELECT 1 FROM events WHERE kind='workspace_google_mailboxes_staged'")
+
+
+def test_extra_mailbox_can_be_the_only_complete_sender(settings):
+    settings.sender_email = settings.smtp_host = settings.smtp_user = settings.smtp_password = ''
+    settings.imap_host = settings.imap_user = settings.imap_password = ''
+    settings.domain_auth_confirmed = False
+    settings.extra_mailboxes = [{**SECOND, 'domain_auth_confirmed': True}]
+    gaps = settings.sending_gaps()
+    assert 'sender_email' not in gaps and 'smtp_host' not in gaps and 'domain_auth_confirmed' not in gaps
+    assert not gaps
+
+
+def test_domain_health_hold_blocks_a_sender_domain(db, settings, active):
+    from outreach.mail import mailbox_block
+    now = ready(db, active['contact_id'])
+    for index in range(10):
+        other_contact_sent_from(db, active['lead_id'], settings.sender_email, now - index - 1)
+    bounced = db.one("SELECT id FROM contacts WHERE email LIKE 'other%@bright-demo.com' ORDER BY id LIMIT 1")['id']
+    db.execute("UPDATE contacts SET delivery_state='BOUNCED' WHERE id=?", (bounced,))
+    with db.connect() as con:
+        health = mailboxes.domain_health(con, 'sender.example.com', now)
+        assert health['accepted'] == 10 and health['bounced'] == 1 and health['held']
+        assert mailbox_block(con, settings, mailboxes.views(settings)[0],
+                             {'imap_last_success': str(now), 'imap_caught_up': 'true'}, now) == 'domain_health_hold'
+
+
+def test_connection_check_logs_in_only_and_never_sends(settings, monkeypatch):
+    from outreach import mail
+    calls = []
+    class SMTP:
+        def __init__(self, *_args, **_kwargs):
+            calls.append('smtp_open')
+        def ehlo(self):
+            calls.append('ehlo')
+        def starttls(self, **_kwargs):
+            calls.append('starttls')
+        def login(self, *_args):
+            calls.append('smtp_login')
+        def quit(self):
+            calls.append('smtp_quit')
+    class IMAP:
+        def __init__(self, *_args, **_kwargs):
+            calls.append('imap_open')
+        def login(self, *_args):
+            calls.append('imap_login')
+        def select(self, *_args, **_kwargs):
+            calls.append('imap_select')
+            return 'OK', []
+        def logout(self):
+            calls.append('imap_logout')
+    monkeypatch.setattr(mail.smtplib, 'SMTP', SMTP)
+    monkeypatch.setattr(mail.imaplib, 'IMAP4_SSL', IMAP)
+    check = mail.check_connection(settings)
+    assert check['ready'] and 'smtp_login' in calls and 'imap_select' in calls
+    assert not any('send' in call for call in calls)
+
+
+def test_workspace_batch_endpoint_stages_without_returning_or_requiring_passwords(db, settings):
+    settings.sender_email = settings.smtp_host = settings.smtp_user = settings.smtp_password = ''
+    settings.imap_host = settings.imap_user = settings.imap_password = ''
+    settings.domain_auth_confirmed = False
+    client = TestClient(create_app(settings), headers={'Authorization': 'Bearer ' + settings.api_token})
+    response = client.post('/api/settings/mailboxes/google-workspace', json={
+        'addresses': ['owner@getautozentic.com', 'team@autozentic.tech']})
+    assert response.status_code == 200
+    body = response.json()
+    assert len(body['mailboxes']) == 2
+    assert '"smtp_password":' not in response.text and '"imap_password":' not in response.text
+    primary = client.post('/api/settings/mailboxes/primary/test')
+    assert primary.status_code == 200
+    assert primary.json()['ready'] is False and primary.json()['smtp'] == 'not_configured'

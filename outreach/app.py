@@ -82,6 +82,17 @@ class MailboxInput(Input):
     domain_auth_confirmed: bool | None = None
 
 
+class GoogleWorkspaceMailboxBatchInput(Input):
+    addresses: list[str] = Field(min_length=1, max_length=20)
+
+    @field_validator('addresses')
+    @classmethod
+    def safe_workspace_addresses(cls, value):
+        if any(not address or len(address) > 254 for address in value):
+            raise ValueError('Each Workspace inbox must be a valid email address')
+        return value
+
+
 class DomainCapInput(Input):
     domain: str = Field(min_length=3, max_length=253, pattern=r'^[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
     daily_cap: int = Field(ge=0, le=5000)
@@ -578,6 +589,16 @@ def create_app(settings=None):
         if box_id != 'new' and not re.fullmatch(r'mb[0-9a-f]{8}', box_id):
             raise HTTPException(404)
         return preferences.update_mailbox(db, box_id, value.model_dump(exclude_none=True))
+
+    @app.post('/api/settings/mailboxes/google-workspace', dependencies=[Depends(auth)])
+    def stage_google_workspace_mailboxes(value: GoogleWorkspaceMailboxBatchInput):
+        return preferences.stage_google_workspace_mailboxes(db, value.addresses)
+
+    @app.post('/api/settings/mailboxes/{box_id}/test', dependencies=[Depends(auth)])
+    async def test_mailbox_connection(box_id: str):
+        if box_id != 'primary' and not re.fullmatch(r'mb[0-9a-f]{8}', box_id):
+            raise HTTPException(404)
+        return await asyncio.to_thread(preferences.test_mailbox_connection, db, box_id)
 
     @app.post('/api/deliverability/check', dependencies=[Depends(auth)])
     def deliverability_check(value: DomainCheckInput):

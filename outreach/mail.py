@@ -184,6 +184,9 @@ def mailbox_block(con, settings, box, values, now, *, hourly=True):
         return 'inbox_stale'
     if now - last_attempt(con, interval_key_for(box['key'])) < settings.min_send_interval_seconds:
         return 'rate_limited'
+    from .mailboxes import domain_health
+    if domain_health(con, box.get('domain', ''), now)['held']:
+        return 'domain_health_hold'
     if mailbox_usage(con, box['key'], now - 86400) >= box['daily_limit']:  # Rolling 24 hours.
         return 'daily_limit'
     cap = settings.domain_daily_caps.get(box.get('domain', ''))
@@ -616,3 +619,57 @@ def poll_all(db, settings):
     inboxes = {box['prefix']: box for box in views(settings, include_disabled=True) if not box['alias']}
     results = [poll_inbox(db, box['view'], prefix=box['prefix']) for box in inboxes.values()]
     return bool(results) and all(results)
+
+
+def check_connection(settings):
+    """Safely check one configured mailbox without submitting an email.
+
+    Passwords and provider error text are never returned. A real send still needs
+    all normal approval, inbox-freshness and global-pause gates afterwards.
+    """
+    result = {'checked_at': time.time(), 'smtp': 'not_configured', 'imap': 'not_configured', 'ready': False}
+    smtp = None
+    if settings.smtp_host and settings.smtp_user and settings.smtp_password:
+        try:
+            context = ssl.create_default_context()
+            if settings.smtp_security == 'ssl':
+                smtp = smtplib.SMTP_SSL(settings.smtp_host, settings.smtp_port, timeout=30, context=context)
+            else:
+                smtp = smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=30)
+            smtp.ehlo()
+            if settings.smtp_security == 'starttls':
+                smtp.starttls(context=context)
+                smtp.ehlo()
+            smtp.login(settings.smtp_user, settings.smtp_password)
+            result['smtp'] = 'ready'
+        except Exception as exc:
+            result['smtp'] = type(exc).__name__
+        finally:
+            if smtp:
+                try:
+                    smtp.quit()
+                except Exception:
+                    try:
+                        smtp.close()
+                    except Exception:
+                        pass
+    client = None
+    if settings.imap_host and settings.imap_user and settings.imap_password:
+        try:
+            client = imaplib.IMAP4_SSL(settings.imap_host, settings.imap_port,
+                                       ssl_context=ssl.create_default_context(), timeout=30)
+            client.login(settings.imap_user, settings.imap_password)
+            status, _ = client.select(settings.imap_folder, readonly=True)
+            if status != 'OK':
+                raise ValueError('FolderUnavailable')
+            result['imap'] = 'ready'
+        except Exception as exc:
+            result['imap'] = type(exc).__name__
+        finally:
+            if client:
+                try:
+                    client.logout()
+                except Exception:
+                    pass
+    result['ready'] = result['smtp'] == result['imap'] == 'ready'
+    return result

@@ -284,6 +284,91 @@ class Preferences:
             db.event('workspace_domain_cap_changed', {'domain': domain, 'daily_cap': daily_cap, 'sending_paused': True})
             return self.public()
 
+    def stage_google_workspace_mailboxes(self, db, addresses):
+        """Stage independent Google Workspace inboxes without storing any secret.
+
+        The first address becomes the primary connection when it is empty. The
+        remaining addresses are deliberately disabled and limited to a small pilot
+        pace until the operator adds each account's own app password, tests it,
+        checks DNS and explicitly enables it.
+        """
+        from .mailboxes import domain_of
+        with self.lock:
+            if not 1 <= len(addresses) <= 20:
+                raise ValueError('Add between 1 and 20 Workspace inboxes at once')
+            normalized = []
+            for address in addresses:
+                email = normalize_email(address)
+                if email not in normalized:
+                    normalized.append(email)
+            if not normalized:
+                raise ValueError('Add at least one valid Workspace inbox')
+            existing = {self.settings.sender_email.lower()} if self.settings.sender_email else set()
+            existing.update(str(box.get('sender_email', '')).lower() for box in self.settings.extra_mailboxes)
+            fresh = [email for email in normalized if email not in existing]
+            if not fresh:
+                raise ValueError('Those Workspace inboxes are already staged')
+            primary = ''
+            if not self.settings.sender_email:
+                primary, fresh = fresh[0], fresh[1:]
+            if len(self.settings.extra_mailboxes) + len(fresh) > 20:
+                raise ValueError('Up to 20 extra mailboxes are supported')
+            boxes = [dict(box) for box in self.settings.extra_mailboxes]
+            patch = {}
+            if primary:
+                patch = {'sender_email': primary, 'smtp_host': 'smtp.gmail.com', 'smtp_port': 587,
+                         'smtp_security': 'starttls', 'smtp_user': primary, 'imap_host': 'imap.gmail.com',
+                         'imap_port': 993, 'imap_user': primary, 'imap_folder': 'INBOX',
+                         'daily_send_limit': 3, 'hourly_send_limit': 1, 'catch_all_share': 0,
+                         'min_send_interval_seconds': max(900, self.settings.min_send_interval_seconds),
+                         'domain_auth_confirmed': False}
+            for email in fresh:
+                boxes.append({'id': 'mb' + secrets.token_hex(4), 'label': email, 'sender_email': email,
+                              'smtp_host': 'smtp.gmail.com', 'smtp_port': 587, 'smtp_security': 'starttls',
+                              'smtp_user': email, 'imap_host': 'imap.gmail.com', 'imap_port': 993,
+                              'imap_user': email, 'imap_folder': 'INBOX', 'daily_limit': 3,
+                              'hourly_limit': 1, 'enabled': False, 'alias': False,
+                              'domain_auth_confirmed': False})
+            caps = dict(self.settings.domain_daily_caps)
+            staged = ([primary] if primary else []) + fresh
+            for domain in {domain_of(email) for email in staged}:
+                caps.setdefault(domain, 9)
+            if not self.settings._mailbox_lock.acquire(blocking=False):
+                raise ValueError('Mailbox activity is in progress; retry after it finishes')
+            try:
+                db.set('paused', 'true')
+                self.persist({**patch, 'extra_mailboxes': boxes, 'domain_daily_caps': caps})
+                for box in boxes:
+                    db.set(f"mailbox:{box['id']}:imap_caught_up", 'false')
+                    db.set(f"mailbox:{box['id']}:imap_last_success", '0')
+                db.set('imap_caught_up', 'false')
+                db.set('imap_last_success', '0')
+                db.event('workspace_google_mailboxes_staged', {'added': staged, 'sending_paused': True})
+            finally:
+                self.settings._mailbox_lock.release()
+            return self.public()
+
+    def test_mailbox_connection(self, db, box_id):
+        from .mail import check_connection
+        from .mailboxes import views
+        if box_id != 'primary' and not any(box.get('id') == box_id for box in self.settings.extra_mailboxes):
+            raise ValueError('Mailbox not found')
+        view = next((box for box in views(self.settings, include_disabled=True) if box['id'] == box_id), None)
+        if view is None:
+            result = {'checked_at': __import__('time').time(), 'smtp': 'not_configured', 'imap': 'not_configured', 'ready': False}
+        else:
+            if not self.settings._mailbox_lock.acquire(blocking=False):
+                raise ValueError('Mailbox activity is in progress; retry after it finishes')
+            try:
+                result = check_connection(view['view'])
+            finally:
+                self.settings._mailbox_lock.release()
+        prefix = '' if box_id == 'primary' else f'mailbox:{box_id}:'
+        db.set(prefix + 'connection_check', json.dumps(result))
+        db.event('workspace_mailbox_connection_checked', {'mailbox': box_id, 'ready': result['ready'],
+                                                          'smtp': result['smtp'], 'imap': result['imap']})
+        return result
+
     def remove_mailbox(self, db, box_id):
         with self.lock:
             boxes = [b for b in self.settings.extra_mailboxes if b['id'] != box_id]
